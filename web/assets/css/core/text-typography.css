@@ -1,0 +1,601 @@
+/*--------------------
+    1. BASE CSS
+----------------------*/
+
+.alignleft {
+    float: left;
+    margin-right: 15px;
+}
+
+.alignright {
+    float: right;
+    margin-left: 15px;
+}
+
+.aligncenter {
+    display: block;
+    margin: 0 auto 15px;
+}
+
+a:hover {
+    color: #2775b6;
+}
+
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #1C1C1C;
+    font-weight: 700;
+}
+
+.alt-font {
+    font-family: "Montserrat", sans-serif;
+}
+
+/*h1 { font-size: 2em; margin: .67em 0 }
+h2 { font-size: 1.5em; margin: .75em 0 }
+h3 { font-size: 1.17em; margin: .83em 0 }
+h5 { font-size: .83em; margin: 1.5em 0 }
+h6 { font-size: .75em; margin: 1.67em 0 }*/
+
+html,
+body {
+    height: 100%
+}
+
+body {
+    font-family:  sans-serif;
+    font-size: 14px;
+    line-height: 1.6em;
+    /* OR 1.6em*/
+    font-weight: 400;
+    color: #747b8c;
+}
+
+.alt-font {
+    font-family: "Montserrat", sans-serif;
+}
+
+/* Remove Chrome Input Field's Unwanted Yellow Background Color */
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+}
+
+/*----------------------
+    ALIGN
+-----------------------*/
+
+.left,
+.right,
+.center {
+    position: relative;
+}
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}
+
+.center {
+    text-align: center;
+}
+
+/*------------------------
+    TEXT
+--------------------------*/
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.lowercase {
+    text-transform: lowercase;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+.font12 {
+    font-size: 12px;
+}
+
+.font14 {
+    font-size: 14px;
+}
+
+.font16 {
+    font-size: 16px;
+}
+
+.font18 {
+    font-size: 18px;
+}
+
+.font20 {
+    font-size: 20px;
+}
+
+.font22 {
+    font-size: 22px;
+}
+
+.font24 {
+    font-size: 24px;
+}
+
+.font26 {
+    font-size: 26px;
+}
+
+.font28 {
+    font-size: 28px;
+}
+
+.font32 {
+    font-size: 32px;
+}
+
+.font30 {
+    font-size: 30px;
+}
+
+.font36 {
+    font-size: 36px;
+}
+
+.font38 {
+    font-size: 38px;
+}
+
+.font48 {
+    font-size: 48px;
+}
+
+.font42 {
+    font-size: 42px;
+}
+
+.font48 {
+    font-size: 48px;
+}
+
+.font50 {
+    font-size: 50px;
+}
+
+.font52 {
+    font-size: 52px;
+}
+
+.font60 {
+    font-size: 60px;
+}
+
+.font80 {
+    font-size: 80px;
+}
+
+.font120 {
+    font-size: 120px
+}
+
+.font140 {
+    font-size: 140px
+}
+
+/*------------------------------
+    RESPONSIVE
+-------------------------------*/
+
+@media only screen and (min-width: 1200px) {
+    .lg-center {
+        text-align: center;
+    }
+    .lg-left {
+        text-align: left;
+    }
+    .lg-right {
+        text-align: right;
+    }
+
+    .lg-font12 {
+        font-size: 12px;
+    }
+    .lg-font14 {
+        font-size: 14px;
+    }
+    .lg-font16 {
+        font-size: 16px;
+    }
+    .lg-font18 {
+        font-size: 18px;
+    }
+    .lg-font20 {
+        font-size: 20px;
+    }
+    .lg-font22 {
+        font-size: 22px;
+    }
+    .lg-font24 {
+        font-size: 24px;
+    }
+    .lg-font26 {
+        font-size: 26px;
+    }
+    .lg-font28 {
+        font-size: 28px;
+    }
+    .lg-font32 {
+        font-size: 32px;
+    }
+    .lg-font30 {
+        font-size: 30px;
+    }
+    .lg-font36 {
+        font-size: 36px;
+    }
+    .lg-font38 {
+        font-size: 38px;
+    }
+    .lg-font48 {
+        font-size: 48px;
+    }
+    .lg-font42 {
+        font-size: 42px;
+    }
+    .lg-font48 {
+        font-size: 48px;
+    }
+    .lg-font50 {
+        font-size: 50px;
+    }
+    .lg-font52 {
+        font-size: 52px;
+    }
+    .lg-font60 {
+        font-size: 60px;
+    }
+    .lg-font80 {
+        font-size: 80px;
+    }
+    .lg-font120 {
+        font-size: 120px
+    }
+    .lg-font140 {
+        font-size: 140px
+    }
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+    .md-center {
+        text-align: center;
+    }
+    .md-left {
+        text-align: left;
+    }
+    .md-right {
+        text-align: right;
+    }
+
+    .md-font12 {
+        font-size: 12px;
+    }
+    .md-font14 {
+        font-size: 14px;
+    }
+    .md-font16 {
+        font-size: 16px;
+    }
+    .md-font18 {
+        font-size: 18px;
+    }
+    .md-font20 {
+        font-size: 20px;
+    }
+    .md-font22 {
+        font-size: 22px;
+    }
+    .md-font24 {
+        font-size: 24px;
+    }
+    .md-font26 {
+        font-size: 26px;
+    }
+    .md-font28 {
+        font-size: 28px;
+    }
+    .md-font32 {
+        font-size: 32px;
+    }
+    .md-font30 {
+        font-size: 30px;
+    }
+    .md-font36 {
+        font-size: 36px;
+    }
+    .md-font38 {
+        font-size: 38px;
+    }
+    .md-font48 {
+        font-size: 48px;
+    }
+    .md-font42 {
+        font-size: 42px;
+    }
+    .md-font48 {
+        font-size: 48px;
+    }
+    .md-font50 {
+        font-size: 50px;
+    }
+    .md-font52 {
+        font-size: 52px;
+    }
+    .md-font60 {
+        font-size: 60px;
+    }
+    .md-font80 {
+        font-size: 80px;
+    }
+    .md-font120 {
+        font-size: 120px
+    }
+    .md-font140 {
+        font-size: 140px
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .sm-center {
+        text-align: center;
+    }
+    .sm-left {
+        text-align: left;
+    }
+    .sm-right {
+        text-align: right;
+    }
+
+    .sm-font12 {
+        font-size: 12px;
+    }
+    .sm-font14 {
+        font-size: 14px;
+    }
+    .sm-font16 {
+        font-size: 16px;
+    }
+    .sm-font18 {
+        font-size: 18px;
+    }
+    .sm-font20 {
+        font-size: 20px;
+    }
+    .sm-font22 {
+        font-size: 22px;
+    }
+    .sm-font24 {
+        font-size: 24px;
+    }
+    .sm-font26 {
+        font-size: 26px;
+    }
+    .sm-font28 {
+        font-size: 28px;
+    }
+    .sm-font32 {
+        font-size: 32px;
+    }
+    .sm-font30 {
+        font-size: 30px;
+    }
+    .sm-font36 {
+        font-size: 36px;
+    }
+    .sm-font38 {
+        font-size: 38px;
+    }
+    .sm-font48 {
+        font-size: 48px;
+    }
+    .sm-font42 {
+        font-size: 42px;
+    }
+    .sm-font48 {
+        font-size: 48px;
+    }
+    .sm-font50 {
+        font-size: 50px;
+    }
+    .sm-font52 {
+        font-size: 52px;
+    }
+    .sm-font60 {
+        font-size: 60px;
+    }
+    .sm-font80 {
+        font-size: 80px;
+    }
+    .sm-font120 {
+        font-size: 120px
+    }
+    .sm-font140 {
+        font-size: 140px
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .xs-center {
+        text-align: center;
+    }
+    .xs-left {
+        text-align: left;
+    }
+    .xs-right {
+        text-align: right;
+    }
+
+    .xs-font12 {
+        font-size: 12px;
+    }
+    .xs-font14 {
+        font-size: 14px;
+    }
+    .xs-font16 {
+        font-size: 16px;
+    }
+    .xs-font18 {
+        font-size: 18px;
+    }
+    .xs-font20 {
+        font-size: 20px;
+    }
+    .xs-font22 {
+        font-size: 22px;
+    }
+    .xs-font24 {
+        font-size: 24px;
+    }
+    .xs-font26 {
+        font-size: 26px;
+    }
+    .xs-font28 {
+        font-size: 28px;
+    }
+    .xs-font32 {
+        font-size: 32px;
+    }
+    .xs-font30 {
+        font-size: 30px;
+    }
+    .xs-font36 {
+        font-size: 36px;
+    }
+    .xs-font38 {
+        font-size: 38px;
+    }
+    .xs-font48 {
+        font-size: 48px;
+    }
+    .xs-font42 {
+        font-size: 42px;
+    }
+    .xs-font48 {
+        font-size: 48px;
+    }
+    .xs-font50 {
+        font-size: 50px;
+    }
+    .xs-font52 {
+        font-size: 52px;
+    }
+    .xs-font60 {
+        font-size: 60px;
+    }
+    .xs-font80 {
+        font-size: 80px;
+    }
+    .xs-font120 {
+        font-size: 120px
+    }
+    .xs-font140 {
+        font-size: 140px
+    }
+}
+
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+
+    .xsl-center {
+        text-align: center;
+    }
+    .xsl-left {
+        text-align: left;
+    }
+    .xsl-right {
+        text-align: right;
+    }
+
+    .xsl-font12 {
+        font-size: 12px;
+    }
+    .xsl-font14 {
+        font-size: 14px;
+    }
+    .xsl-font16 {
+        font-size: 16px;
+    }
+    .xsl-font18 {
+        font-size: 18px;
+    }
+    .xsl-font20 {
+        font-size: 20px;
+    }
+    .xsl-font22 {
+        font-size: 22px;
+    }
+    .xsl-font24 {
+        font-size: 24px;
+    }
+    .xsl-font26 {
+        font-size: 26px;
+    }
+    .xsl-font28 {
+        font-size: 28px;
+    }
+    .xsl-font32 {
+        font-size: 32px;
+    }
+    .xsl-font30 {
+        font-size: 30px;
+    }
+    .xsl-font36 {
+        font-size: 36px;
+    }
+    .xsl-font38 {
+        font-size: 38px;
+    }
+    .xsl-font48 {
+        font-size: 48px;
+    }
+    .xsl-font42 {
+        font-size: 42px;
+    }
+    .xsl-font48 {
+        font-size: 48px;
+    }
+    .xsl-font50 {
+        font-size: 50px;
+    }
+    .xsl-font52 {
+        font-size: 52px;
+    }
+    .xsl-font60 {
+        font-size: 60px;
+    }
+    .xsl-font80 {
+        font-size: 80px;
+    }
+    .xsl-font120 {
+        font-size: 120px
+    }
+    .xsl-font140 {
+        font-size: 140px
+    }
+
+}

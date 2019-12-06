@@ -1,0 +1,2939 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%Title: Sequence Logo : 
+%%Creator: 
+%%CreationDate: 
+%%BoundingBox:   0  0  226  141 
+%%Pages: 0
+%%DocumentFonts: 
+%%EndComments
+
+% * globin.fasta: aligned globin sequences
+% * Lamprey GLOBIN V - SEA LAMPREY
+% * Hagfish GLOBIN III - ATLANTIC HAGFISH
+% * Frog HEMOGLOBIN BETA CHAIN - EDIBLE FROG
+% * African Elephant HEMOGLOBIN BETA CHAIN - AFRICAN ELEPHANT
+% * Goat HEMOGLOBIN BETA-A CHAIN - GOAT
+% * Primate HEMOGLOBIN BETA CHAIN - HUMAN, CHIMPANZEES, AND GORILLA
+% * Gibbon HEMOGLOBIN BETA CHAIN - COMMON GIBBON (TENTATIVE SEQUENCE)
+% * Dog HEMOGLOBIN BETA CHAIN - DOG AND COYOTE
+% * Horse HEMOGLOBIN BETA CHAIN - HORSE
+% * Human, Chimp HEMOGLOBIN GAMMA CHAINS - HUMAN AND CHIMPANZEE
+% * Nile Crocodile HEMOGLOBIN BETA CHAIN - NILE CROCODILE
+% * Chicken HEMOGLOBIN BETA CHAIN - CHICKEN
+% * NA Opossum HEMOGLOBIN BETA CHAIN - NORTH AMERICAN OPOSSUM
+% * Carp HEMOGLOBIN BETA CHAINS - CARP
+% * Shark HEMOGLOBIN BETA CHAIN - PORT JACKSON SHARK
+% * Shark HEMOGLOBIN ALPHA CHAIN - PORT JACKSON SHARK
+% * Carp HEMOGLOBIN ALPHA CHAIN - CARP
+% * Bullfrog HEMOGLOBIN ALPHA CHAIN - BULLFROG TADPOLE
+% * Nile Crocodile HEMOGLOBIN ALPHA CHAIN - NILE CROCODILE
+% * Ostrich HEMOGLOBIN ALPHA CHAIN - OSTRICH
+% * Kangaroo HEMOGLOBIN ALPHA CHAIN - EASTERN GRAY KANGAROO
+% * Armadillo HEMOGLOBIN ALPHA CHAIN - NINE-BANDED ARMADILLO
+% * Horse HEMOGLOBIN ALPHA CHAINS - HORSE
+% * Primate HEMOGLOBIN ALPHA CHAIN - HUMAN AND CHIMPANZEES
+% * Macaque HEMOGLOBIN ALPHA CHAIN - RHESUS MACAQUE AND JAPANESE MACAQUE
+% * Badger HEMOGLOBIN ALPHA CHAIN - EURASIAN BADGER
+% * Ind Elephant HEMOGLOBIN ALPHA CHAIN - INDIAN ELEPHANT
+% * Hyrax HEMOGLOBIN ALPHA CHAIN - ABYSSINIAN HYRAX
+% * Tuna MYOGLOBIN - YELLOWFIN TUNA
+% * Shark MYOGLOBIN - PORT JACKSON SHARK
+% * Turtle MYOGLOBIN - MAP TURTLE
+% * Chicken MYOGLOBIN - CHICKEN
+% * Dog MYOGLOBIN - DOG, BAT-EARED FOX, AFRICAN HUNTING DOG, AND CAPE FOX
+% * Badger MYOGLOBIN - EURASIAN BADGER
+% * Dolphin MYOGLOBIN - SADDLEBACK DOLPHIN
+% * Horse, Zebra MYOGLOBIN - HORSE AND PLAINS ZEBRA
+% * African Elephant MYOGLOBIN - AFRICAN ELEPHANT
+% * Aardvark MYOGLOBIN - AARDVARK
+% * Human MYOGLOBIN - HUMAN
+% * Macaque MYOGLOBIN - CRAB-EATING MACAQUE (TENTATIVE SEQUENCE)
+% * NA Opossum MYOGLOBIN - NORTH AMERICAN OPOSSUM
+% * Earthworm GLOBIN AIII - COMMON EARTHWORM
+% * T heterochaetus GLOBIN, EXTRACELLULAR,
+% * SMALL CHAIN - TYLORRHYNCHUS HETEROCHAETUS
+% * BloodwormGLOBIN, MAJOR MONOMERIC COMPONENT - BLOODWORM
+% * Whelk GLOBIN - WHELK
+% * Snail GLOBIN - WATER SNAIL
+% * Clam GLOBIN I - BLOOD CLAM
+% * Midge larvaGLOBIN CTT-II BETA - MIDGE LARVA
+% * Midge larva GLOBINS CTT-I AND CTT-IA - MIDGE LARVA
+% * Bacteria BACTERIAL HEMOGLOBIN - VITREOSCILLA SP
+% * P andersonii ONLEGUME HEMOGLOBIN I - PARASPONIA ANDERSONII
+% * Yellow Lupin LEGHEMOGLOBIN I - YELLOW LUPIN
+% * Garden Pea LEGHEMOGLOBIN I - GARDEN PEA
+% * Broad Bean LEGHEMOGLOBIN I - BROAD BEAN
+% * Soybean LEGHEMOGLOBIN C1 - SOYBEAN
+% * Kidney Bean LEGHEMOGLOBIN A - KIDNEY BEAN
+% * PROTEIN ALIGNMENT
+
+
+% ---- CONSTANTS ----
+/cmfactor 72 2.54 div def % defines points -> cm conversion
+/cm {cmfactor mul} bind def % defines centimeters
+
+
+% ---- VARIABLES ----
+
+/black [0 0 0] def
+/red [0.8 0 0] def
+/green [0 0.8 0] def
+/blue [0 0 0.8] def
+/yellow [1 0.7 1.0] def
+/purple [0.8 0 0.8] def
+/orange [1 0.7 0] def
+
+
+/logoWidth 8 cm def
+/logoHeight 5 cm def
+/logoTitle () def
+
+/yaxis false def
+/yaxisLabel (bits) def
+/yaxisBits  4.3 def % bits
+/yaxisTicBits 1 def
+
+
+/xaxis false def
+/xaxisLabel () def
+/showEnds (-) def % d: DNA, p: PROTEIN, -: none
+
+/showFineprint true def
+/fineprint () def
+
+/charsPerLine 231 def
+/logoLines 1 def
+
+/showingBox (n) def    %n s f
+/shrinking false def
+/shrink  1 def
+/outline false def
+
+/IbeamFraction  1 def
+/IbeamGray      0.50 def
+/IbeamLineWidth 0.5 def
+
+/fontsize       12 def
+/titleFontsize  14 def
+/smallFontsize   6 def
+
+/defaultColor black def 
+
+/colorDict <<
+
+>> def
+
+% Standard DNA/RNA color scheme
+% /colorDict << 
+%   (G)  orange
+%   (T)  red   
+%   (C)  blue  
+%   (A)  green 
+%   (U)  red   
+% >> def
+
+% Standard Amino Acid colors
+%/colorDict << 
+%  (G)  green  
+%  (S)  green  
+%  (T)  green  
+%  (Y)  green  
+%  (C)  green  
+%  (N)  purple 
+%  (Q)  purple 
+%  (K)  blue   
+%  (R)  blue   
+%  (H)  blue   
+%  (D)  red    
+%  (E)  red    
+%  (P)  black  
+%  (A)  black  
+%  (W)  black  
+%  (F)  black  
+%  (L)  black  
+%  (I)  black  
+%  (M)  black  
+%  (V)  black  
+%>> def
+
+
+
+% ---- DERIVED PARAMETERS ----
+
+/leftMargin
+  fontsize 3.5 mul
+
+def 
+
+/bottomMargin
+  fontsize 0.75 mul
+
+  % Add extra room for axis
+  xaxis {fontsize 1.75 mul add } if
+  xaxisLabel () eq {} {fontsize 0.75 mul add} ifelse
+def
+
+
+/topMargin 
+  logoTitle () eq { 10 }{titleFontsize 4 add} ifelse
+def
+
+/rightMargin 
+  %Add extra room if showing ends
+  showEnds (-) eq { fontsize}{fontsize 1.5 mul} ifelse
+def
+
+/yaxisHeight 
+  logoHeight 
+  bottomMargin sub  
+  topMargin sub
+def
+
+/ticWidth fontsize 2 div def
+
+/pointsPerBit yaxisHeight yaxisBits div  def
+
+/isBoxed 
+  showingBox (s) eq
+  showingBox (f) eq or { 
+    true
+  } {
+    false
+  } ifelse
+def
+
+/stackMargin 1 def
+
+% Do not add space aroung characters if characters are boxed
+/charRightMargin 
+  isBoxed { 0.0 } {stackMargin} ifelse
+def
+
+/charTopMargin 
+  isBoxed { 0.0 } {stackMargin} ifelse
+def
+
+/charWidth
+  logoWidth
+  leftMargin sub
+  rightMargin sub
+  charsPerLine div
+  charRightMargin sub
+def
+
+/charWidth4 charWidth 4 div def
+/charWidth2 charWidth 2 div def
+
+/stackWidth 
+  charWidth charRightMargin add
+def
+ 
+/numberFontsize 
+  fontsize charWidth lt {fontsize}{charWidth} ifelse
+def
+
+% movements to place 5'/N and 3'/C symbols
+/leftEndDeltaX  fontsize neg         def
+/leftEndDeltaY  fontsize 1.5 mul neg def
+/rightEndDeltaX fontsize 0.25 mul     def
+/rightEndDeltaY leftEndDeltaY        def
+
+% Outline width is proporional to charWidth, 
+% but no less that 1 point
+/outlinewidth 
+  charWidth 32 div dup 1 gt  {}{pop 1} ifelse
+def
+
+
+% ---- PROCEDURES ----
+
+/StartLogo { 
+  % Save state
+  save 
+  gsave 
+
+  % Print Logo Title, top center 
+  gsave 
+    SetTitleFont
+
+    logoWidth 2 div
+    logoTitle
+    stringwidth pop 2 div sub
+    logoHeight logoLines mul  
+    titleFontsize sub
+    moveto
+
+    logoTitle
+    show
+  grestore
+
+  % Print X-axis label, bottom center
+  gsave
+    SetStringFont
+
+    logoWidth 2 div
+    xaxisLabel stringwidth pop 2 div sub
+    fontsize 3 div
+    moveto
+
+    xaxisLabel
+    show
+  grestore
+
+  % Show Fine Print
+  showFineprint {
+    gsave
+      SetSmallFont
+      logoWidth
+        fineprint stringwidth pop sub
+        smallFontsize sub
+          smallFontsize 3 div
+      moveto
+    
+      fineprint show
+    grestore
+  } if
+
+  % Move to lower left corner of last line, first stack
+  leftMargin bottomMargin translate
+
+  % Move above first line ready for StartLine 
+  0 logoLines logoHeight mul translate
+
+  SetLogoFont
+} bind def
+
+/EndLogo { 
+  grestore 
+  showpage 
+  restore 
+} bind def
+
+
+/StartLine{ 
+  % move down to the bottom of the line:
+  0 logoHeight neg translate
+  
+  gsave 
+    yaxis { MakeYaxis } if
+    xaxis { ShowLeftEnd } if
+} bind def
+
+/EndLine{ 
+    xaxis { ShowRightEnd } if
+  grestore 
+} bind def
+
+
+/MakeYaxis {
+  gsave    
+    stackMargin neg 0 translate
+    ShowYaxisBar
+    ShowYaxisLabel
+  grestore
+} bind def
+
+
+/ShowYaxisBar { 
+  gsave  
+    SetStringFont
+
+    /str 10 string def % string to hold number  
+    /smallgap stackMargin 2 div def
+
+    % Draw first tic and bar
+    gsave    
+      ticWidth neg 0 moveto 
+      ticWidth 0 rlineto 
+      0 yaxisHeight rlineto
+      stroke
+    grestore
+
+   
+    % Draw the tics
+    % initial increment limit proc for
+    0 yaxisTicBits yaxisBits abs %cvi
+    {/loopnumber exch def
+
+      % convert the number coming from the loop to a string
+      % and find its width
+      loopnumber 10 str cvrs
+      /stringnumber exch def % string representing the number
+
+      stringnumber stringwidth pop
+      /numberwidth exch def % width of number to show
+
+      /halfnumberheight
+         stringnumber CharBoxHeight 2 div
+      def
+
+      numberwidth % move back width of number
+      neg loopnumber pointsPerBit mul % shift on y axis
+      halfnumberheight sub % down half the digit
+
+      moveto % move back the width of the string
+
+      ticWidth neg smallgap sub % Move back a bit more  
+      0 rmoveto % move back the width of the tic  
+
+      stringnumber show
+      smallgap 0 rmoveto % Make a small gap  
+
+      % now show the tic mark
+      0 halfnumberheight rmoveto % shift up again
+      ticWidth 0 rlineto
+      stroke
+    } for
+  grestore
+} bind def
+
+/ShowYaxisLabel {
+  gsave
+    SetStringFont
+
+    % How far we move left depends on the size of
+    % the tic labels.
+    /str 10 string def % string to hold number  
+    yaxisBits yaxisTicBits div cvi yaxisTicBits mul 
+    str cvs stringwidth pop
+    ticWidth 1.5 mul  add neg  
+
+
+    yaxisHeight
+    yaxisLabel stringwidth pop
+    sub 2 div
+
+    translate
+    90 rotate
+    0 0 moveto
+    yaxisLabel show
+  grestore
+} bind def
+
+
+/StartStack {  % <stackNumber> startstack
+  xaxis {MakeNumber}{pop} ifelse
+  gsave
+} bind def
+
+/EndStack {
+  grestore
+  stackWidth 0 translate
+} bind def
+
+
+% Draw a character whose height is proportional to symbol bits
+/MakeSymbol{ % charbits character MakeSymbol
+  gsave
+    /char exch def
+    /bits exch def
+
+    /bitsHeight 
+       bits pointsPerBit mul 
+    def
+
+    /charHeight 
+       bitsHeight charTopMargin sub
+       dup 
+       0.0 gt {}{pop 0.0} ifelse % if neg replace with zero 
+    def 
+ 
+    charHeight 0.0 gt {
+      char SetColor
+      charWidth charHeight char ShowChar
+
+      showingBox (s) eq { % Unfilled box
+        0 0 charWidth charHeight false ShowBox
+      } if
+
+      showingBox (f) eq { % Filled box
+        0 0 charWidth charHeight true ShowBox
+      } if
+
+    } if
+
+  grestore
+
+  0 bitsHeight translate 
+} bind def
+
+
+/ShowChar { % <width> <height> <char> ShowChar
+  gsave
+    /tc exch def    % The character
+    /ysize exch def % the y size of the character
+    /xsize exch def % the x size of the character
+
+    /xmulfactor 1 def 
+    /ymulfactor 1 def
+
+  
+    % if ysize is negative, make everything upside down!
+    ysize 0 lt {
+      % put ysize normal in this orientation
+      /ysize ysize abs def
+      xsize ysize translate
+      180 rotate
+    } if
+
+    shrinking {
+      xsize 1 shrink sub 2 div mul
+        ysize 1 shrink sub 2 div mul translate 
+
+      shrink shrink scale
+    } if
+
+    % Calculate the font scaling factors
+    % Loop twice to catch small correction due to first scaling
+    2 {
+      gsave
+        xmulfactor ymulfactor scale
+      
+        ysize % desired size of character in points
+        tc CharBoxHeight 
+        dup 0.0 ne {
+          div % factor by which to scale up the character
+          /ymulfactor exch def
+        } % end if
+        {pop pop}
+        ifelse
+
+        xsize % desired size of character in points
+        tc CharBoxWidth  
+        dup 0.0 ne {
+          div % factor by which to scale up the character
+          /xmulfactor exch def
+        } % end if
+        {pop pop}
+        ifelse
+      grestore
+    } repeat
+
+    % Adjust horizontal position if the symbol is an I
+    tc (I) eq {
+      charWidth 2 div % half of requested character width
+      tc CharBoxWidth 2 div % half of the actual character
+      sub 0 translate
+      % Avoid x scaling for I 
+      /xmulfactor 1 def 
+    } if
+
+
+    % ---- Finally, draw the character
+  
+    newpath
+    xmulfactor ymulfactor scale
+
+    % Move lower left corner of character to start point
+    tc CharBox pop pop % llx lly : Lower left corner
+    exch neg exch neg
+    moveto
+
+    outline {  % outline characters:
+      outlinewidth setlinewidth
+      tc true charpath
+      gsave 1 setgray fill grestore
+      clip stroke
+    } { % regular characters
+      tc show
+    } ifelse
+
+  grestore
+} bind def
+
+
+/ShowBox { % x1 y1 x2 y2 filled ShowBox
+  gsave
+    /filled exch def 
+    /y2 exch def
+    /x2 exch def
+    /y1 exch def
+    /x1 exch def
+    newpath
+    x1 y1 moveto
+    x2 y1 lineto
+    x2 y2 lineto
+    x1 y2 lineto
+    closepath
+
+    clip
+    
+    filled {
+      fill
+    }{ 
+      0 setgray stroke   
+    } ifelse
+
+  grestore
+} bind def
+
+
+/MakeNumber { % number MakeNumber
+  gsave
+    SetNumberFont
+    stackWidth 0 translate
+    90 rotate % rotate so the number fits
+    dup stringwidth pop % find the length of the number
+    neg % prepare for move
+    stackMargin sub % Move back a bit
+    charWidth (0) CharBoxHeight % height of numbers
+    sub 2 div %
+    moveto % move back to provide space
+    show
+  grestore
+} bind def
+
+
+/Ibeam{ % heightInBits Ibeam
+  gsave
+    % Make an Ibeam of twice the given height in bits
+    /height exch  pointsPerBit mul def 
+    /heightDRAW height IbeamFraction mul def
+
+    IbeamLineWidth setlinewidth
+    IbeamGray setgray 
+
+    charWidth2 height neg translate
+    ShowIbar
+    newpath
+      0 0 moveto
+      0 heightDRAW rlineto
+    stroke
+    newpath
+      0 height moveto
+      0 height rmoveto
+      currentpoint translate
+    ShowIbar
+    newpath
+    0 0 moveto
+    0 heightDRAW neg rlineto
+    currentpoint translate
+    stroke
+  grestore
+} bind def
+
+
+/ShowIbar { % make a horizontal bar
+  gsave
+    newpath
+      charWidth4 neg 0 moveto
+      charWidth4 0 lineto
+    stroke
+  grestore
+} bind def
+
+
+/ShowLeftEnd {
+  gsave
+    SetStringFont
+    leftEndDeltaX leftEndDeltaY moveto
+    showEnds (d) eq {(5) show ShowPrime} if
+    showEnds (p) eq {(N) show} if
+  grestore
+} bind def
+
+
+/ShowRightEnd { 
+  gsave
+    SetStringFont
+    rightEndDeltaX rightEndDeltaY moveto
+    showEnds (d) eq {(3) show ShowPrime} if
+    showEnds (p) eq {(C) show} if
+  grestore
+} bind def
+
+
+/ShowPrime {
+  gsave
+    SetPrimeFont
+    (\242) show 
+  grestore
+} bind def
+
+ 
+/SetColor{ % <char> SetColor
+  dup colorDict exch known {
+    colorDict exch get aload pop setrgbcolor
+  } {
+    pop
+    defaultColor aload pop setrgbcolor
+  } ifelse 
+} bind def
+
+% define fonts
+/SetTitleFont {/Times-Bold findfont titleFontsize scalefont setfont} bind def
+/SetLogoFont  {/Helvetica-Narrow-Bold findfont charWidth  scalefont setfont} bind def
+/SetStringFont{/Helvetica-Bold findfont fontsize scalefont setfont} bind def
+/SetPrimeFont {/Symbol findfont fontsize scalefont setfont} bind def
+/SetSmallFont {/Helvetica findfont smallFontsize scalefont setfont} bind def
+
+/SetNumberFont {
+    /Helvetica-Bold findfont 
+    numberFontsize
+    scalefont
+    setfont
+} bind def
+
+%Take a single character and return the bounding box
+/CharBox { % <char> CharBox <lx> <ly> <ux> <uy>
+  gsave
+    newpath
+    0 0 moveto
+    % take the character off the stack and use it here:
+    true charpath 
+    flattenpath 
+    pathbbox % compute bounding box of 1 pt. char => lx ly ux uy
+    % the path is here, but toss it away ...
+  grestore
+} bind def
+
+
+% The height of a characters bounding box
+/CharBoxHeight { % <char> CharBoxHeight <num>
+  CharBox
+  exch pop sub neg exch pop
+} bind def
+
+
+% The width of a characters bounding box
+/CharBoxWidth { % <char> CharBoxHeight <num>
+  CharBox
+  pop exch pop sub neg 
+} bind def
+
+
+% Deprecated names
+/startstack {StartStack} bind  def
+/endstack {EndStack}     bind def
+/makenumber {MakeNumber} bind def
+/numchar { MakeSymbol }  bind def
+
+%%EndProlog
+
+%%Page: 1 1
+StartLogo
+StartLine % line number 1
+
+(1) startstack
+ 4.32192809488736 (P) numchar
+endstack
+
+(2) startstack
+ 4.32192809488736 (I) numchar
+endstack
+
+(3) startstack
+ 1.66096404744368 (V) numchar
+ 1.66096404744368 (T) numchar
+endstack
+
+(4) startstack
+ 4.32192809488736 (D) numchar
+endstack
+
+(5) startstack
+ 1.66096404744368 (T) numchar
+ 1.66096404744368 (H) numchar
+endstack
+
+(6) startstack
+ 4.32192809488736 (G) numchar
+endstack
+
+(7) startstack
+ 1.66096404744368 (S) numchar
+ 1.66096404744368 (Q) numchar
+endstack
+
+(8) startstack
+ 1.66096404744368 (V) numchar
+ 1.66096404744368 (P) numchar
+endstack
+
+(9) startstack
+ 1.66096404744368 (P) numchar
+ 1.66096404744368 (A) numchar
+endstack
+
+(10) startstack
+ 4.32192809488736 (K) numchar
+endstack
+
+(11) startstack
+ 0.0389812442166535 (M) numchar
+ 0.0389812442166535 (K) numchar
+ 0.077962488433307 (P) numchar
+ 0.11694373264996 (T) numchar
+ 0.11694373264996 (A) numchar
+ 0.155924976866614 (S) numchar
+ 0.77962488433307 (V) numchar
+ 0.818606128549723 (G) numchar
+endstack
+
+(12) startstack
+ 0.211771330447206 (Q) numchar
+ 0.211771330447206 (N) numchar
+ 0.211771330447206 (E) numchar
+ 0.423542660894413 (S) numchar
+ 1.48239931313044 (H) numchar
+endstack
+
+(13) startstack
+ 4.32192809488736 (T) numchar
+endstack
+
+(14) startstack
+ 4.32192809488736 (S) numchar
+endstack
+
+(15) startstack
+ 4.32192809488736 (T) numchar
+endstack
+
+(16) startstack
+ 4.32192809488736 (S) numchar
+endstack
+
+(17) startstack
+ 4.32192809488736 (T) numchar
+endstack
+
+(18) startstack
+ 4.32192809488736 (S) numchar
+endstack
+
+(19) startstack
+ 4.32192809488736 (D) numchar
+endstack
+
+(20) startstack
+ 4.32192809488736 (S) numchar
+endstack
+
+(21) startstack
+ 4.32192809488736 (V) numchar
+endstack
+
+(22) startstack
+ 4.32192809488736 (Q) numchar
+endstack
+
+(23) startstack
+ 4.32192809488736 (G) numchar
+endstack
+
+(24) startstack
+ 4.32192809488736 (A) numchar
+endstack
+
+(25) startstack
+ 4.32192809488736 (A) numchar
+endstack
+
+(26) startstack
+ 4.32192809488736 (A) numchar
+endstack
+
+(27) startstack
+ 4.32192809488736 (Q) numchar
+endstack
+
+(28) startstack
+ 4.32192809488736 (N) numchar
+endstack
+
+(29) startstack
+ 4.32192809488736 (K) numchar
+endstack
+
+(30) startstack
+ 0.0499795570752772 (Y) numchar
+ 0.0499795570752772 (Q) numchar
+ 0.0499795570752772 (M) numchar
+ 0.0499795570752772 (D) numchar
+ 0.0999591141505543 (V) numchar
+ 0.0999591141505543 (P) numchar
+ 0.0999591141505543 (F) numchar
+ 0.0999591141505543 (A) numchar
+ 0.149938671225832 (W) numchar
+ 1.79926405470998 (L) numchar
+endstack
+
+(31) startstack
+ 0.0454077860114569 (Q) numchar
+ 0.0908155720229139 (D) numchar
+ 0.0908155720229139 (C) numchar
+ 0.136223358034371 (L) numchar
+ 0.227038930057285 (F) numchar
+ 0.454077860114569 (T) numchar
+ 1.31682579433225 (S) numchar
+endstack
+
+(32) startstack
+ 0.0979536500275612 (E) numchar
+ 0.130604866703415 (S) numchar
+ 0.163256083379269 (G) numchar
+ 0.195907300055122 (T) numchar
+ 0.228558516730976 (P) numchar
+ 0.424465816786098 (A) numchar
+ 0.489768250137806 (D) numchar
+endstack
+
+(33) startstack
+ 0.0296656733247223 (T) numchar
+ 0.0296656733247223 (S) numchar
+ 0.0296656733247223 (I) numchar
+ 0.0296656733247223 (H) numchar
+ 0.0593313466494446 (V) numchar
+ 0.0593313466494446 (Q) numchar
+ 0.0593313466494446 (K) numchar
+ 0.148328366623612 (D) numchar
+ 0.296656733247223 (G) numchar
+ 0.355988079896668 (E) numchar
+ 0.474650773195557 (A) numchar
+endstack
+
+(34) startstack
+ 0.0423750246115822 (S) numchar
+ 0.0847500492231645 (V) numchar
+ 0.0847500492231645 (L) numchar
+ 0.127125073834747 (Q) numchar
+ 0.169500098446329 (K) numchar
+ 0.720375418396898 (D) numchar
+ 1.10175063990114 (E) numchar
+endstack
+
+(35) startstack
+ 0.0402934416674974 (T) numchar
+ 0.0402934416674974 (L) numchar
+ 0.0402934416674974 (F) numchar
+ 0.0805868833349948 (E) numchar
+ 0.120880325002492 (R) numchar
+ 0.322347533339979 (Q) numchar
+ 0.483521300009969 (W) numchar
+ 1.08792292502243 (K) numchar
+endstack
+
+(36) startstack
+ 0.0175372790643656 (V) numchar
+ 0.0175372790643656 (R) numchar
+ 0.0175372790643656 (C) numchar
+ 0.0350745581287312 (N) numchar
+ 0.0350745581287312 (K) numchar
+ 0.0350745581287312 (I) numchar
+ 0.0350745581287312 (H) numchar
+ 0.0350745581287312 (G) numchar
+ 0.0350745581287312 (D) numchar
+ 0.105223674386194 (S) numchar
+ 0.122760953450559 (E) numchar
+ 0.140298232514925 (T) numchar
+ 0.140298232514925 (A) numchar
+ 0.210447348772387 (Q) numchar
+endstack
+
+(37) startstack
+ 0.0255671269860415 (V) numchar
+ 0.0255671269860415 (T) numchar
+ 0.0255671269860415 (S) numchar
+ 0.0255671269860415 (K) numchar
+ 0.0255671269860415 (D) numchar
+ 0.0255671269860415 (C) numchar
+ 0.0511342539720831 (I) numchar
+ 0.0511342539720831 (E) numchar
+ 0.0767013809581246 (Q) numchar
+ 0.102268507944166 (H) numchar
+ 0.230104142874374 (N) numchar
+ 0.306805523832498 (L) numchar
+ 0.460208285748748 (A) numchar
+endstack
+
+(38) startstack
+ 0.0473544894484949 (A) numchar
+ 0.0947089788969899 (K) numchar
+ 0.520899383933444 (L) numchar
+ 0.520899383933444 (I) numchar
+ 1.46798917290334 (V) numchar
+endstack
+
+(39) startstack
+ 0.0262827898951119 (N) numchar
+ 0.0262827898951119 (G) numchar
+ 0.0525655797902239 (S) numchar
+ 0.0525655797902239 (I) numchar
+ 0.0788483696853358 (R) numchar
+ 0.105131159580448 (A) numchar
+ 0.210262319160896 (T) numchar
+ 0.236545109056008 (V) numchar
+ 0.315393478741343 (K) numchar
+ 0.367959058531567 (L) numchar
+endstack
+
+(40) startstack
+ 0.0325546630980751 (I) numchar
+ 0.0651093261961502 (E) numchar
+ 0.0651093261961502 (D) numchar
+ 0.0976639892942253 (T) numchar
+ 0.1302186523923 (S) numchar
+ 0.162773315490375 (K) numchar
+ 0.227882641686526 (G) numchar
+ 0.292991967882676 (N) numchar
+ 0.455765283373051 (A) numchar
+endstack
+
+(41) startstack
+ 0.0301318980260635 (Q) numchar
+ 0.0301318980260635 (C) numchar
+ 0.0903956940781905 (F) numchar
+ 0.150659490130317 (T) numchar
+ 0.150659490130317 (S) numchar
+ 0.210923286182444 (I) numchar
+ 0.210923286182444 (A) numchar
+ 0.241055184208508 (V) numchar
+ 0.301318980260635 (L) numchar
+endstack
+
+(42) startstack
+ 0.0762979973687483 (V) numchar
+ 0.0762979973687483 (S) numchar
+ 0.0762979973687483 (Q) numchar
+ 0.0762979973687483 (F) numchar
+ 0.0762979973687483 (E) numchar
+ 3.20451588948743 (W) numchar
+endstack
+
+(43) startstack
+ 0.029880896027521 (V) numchar
+ 0.029880896027521 (R) numchar
+ 0.029880896027521 (P) numchar
+ 0.029880896027521 (H) numchar
+ 0.029880896027521 (E) numchar
+ 0.059761792055042 (W) numchar
+ 0.059761792055042 (D) numchar
+ 0.0896426880825629 (N) numchar
+ 0.119523584110084 (A) numchar
+ 0.179285376165126 (S) numchar
+ 0.268928064247689 (K) numchar
+ 0.747022400688025 (G) numchar
+endstack
+
+(44) startstack
+ 0.043111626351046 (T) numchar
+ 0.043111626351046 (Q) numchar
+ 0.043111626351046 (D) numchar
+ 0.0862232527020919 (P) numchar
+ 0.0862232527020919 (G) numchar
+ 0.129334879053138 (A) numchar
+ 0.172446505404184 (V) numchar
+ 0.258669758106276 (S) numchar
+ 1.55201854863765 (K) numchar
+endstack
+
+(45) startstack
+ 0.0430269732371488 (T) numchar
+ 0.0430269732371488 (R) numchar
+ 0.0430269732371488 (Q) numchar
+ 0.0430269732371488 (A) numchar
+ 0.172107892948595 (L) numchar
+ 0.301188812660042 (S) numchar
+ 0.34421578589719 (I) numchar
+ 1.41989011682591 (V) numchar
+endstack
+
+(46) startstack
+ 0.0781856443950759 (Y) numchar
+ 0.0781856443950759 (V) numchar
+ 0.0781856443950759 (F) numchar
+ 0.156371288790152 (W) numchar
+ 0.156371288790152 (S) numchar
+ 0.19546411098769 (A) numchar
+ 0.430021044172917 (G) numchar
+ 0.508206688567993 (E) numchar
+endstack
+
+(47) startstack
+ 0.0310805716555847 (N) numchar
+ 0.0310805716555847 (D) numchar
+ 0.0621611433111694 (Y) numchar
+ 0.0621611433111694 (T) numchar
+ 0.0621611433111694 (Q) numchar
+ 0.0621611433111694 (K) numchar
+ 0.124322286622339 (S) numchar
+ 0.124322286622339 (P) numchar
+ 0.124322286622339 (E) numchar
+ 0.217564001589093 (G) numchar
+ 0.435128003178186 (A) numchar
+endstack
+
+(48) startstack
+ 0.0279239008219584 (S) numchar
+ 0.0279239008219584 (L) numchar
+ 0.0279239008219584 (G) numchar
+ 0.0279239008219584 (E) numchar
+ 0.0558478016439168 (V) numchar
+ 0.0558478016439168 (T) numchar
+ 0.0558478016439168 (K) numchar
+ 0.0558478016439168 (A) numchar
+ 0.0837717024658752 (Q) numchar
+ 0.279239008219584 (H) numchar
+ 0.307162909041542 (N) numchar
+ 0.530554115617209 (D) numchar
+endstack
+
+(49) startstack
+ 0.0223682862974804 (S) numchar
+ 0.0223682862974804 (P) numchar
+ 0.0223682862974804 (M) numchar
+ 0.0223682862974804 (E) numchar
+ 0.0223682862974804 (D) numchar
+ 0.0447365725949608 (Y) numchar
+ 0.0447365725949608 (K) numchar
+ 0.0447365725949608 (G) numchar
+ 0.111841431487402 (L) numchar
+ 0.134209717784882 (F) numchar
+ 0.178946290379843 (I) numchar
+ 0.290787721867245 (V) numchar
+ 0.290787721867245 (A) numchar
+endstack
+
+(50) startstack
+ 1.66096404744368 (P) numchar
+ 1.66096404744368 (A) numchar
+endstack
+
+(51) startstack
+ 4.32192809488736 (T) numchar
+endstack
+
+(52) startstack
+ 1.66096404744368 (M) numchar
+ 1.66096404744368 (I) numchar
+endstack
+
+(53) startstack
+ 0.0196438169778817 (T) numchar
+ 0.0196438169778817 (Q) numchar
+ 0.0196438169778817 (M) numchar
+ 0.0392876339557634 (N) numchar
+ 0.0392876339557634 (H) numchar
+ 0.058931450933645 (S) numchar
+ 0.11786290186729 (P) numchar
+ 0.137506718845172 (E) numchar
+ 0.137506718845172 (D) numchar
+ 0.157150535823053 (G) numchar
+ 0.157150535823053 (A) numchar
+ 0.196438169778817 (K) numchar
+endstack
+
+(54) startstack
+ 0.0537759617049527 (T) numchar
+ 0.0537759617049527 (S) numchar
+ 0.0537759617049527 (N) numchar
+ 0.080663942557429 (K) numchar
+ 0.080663942557429 (H) numchar
+ 0.080663942557429 (D) numchar
+ 0.107551923409905 (Q) numchar
+ 0.161327885114858 (A) numchar
+ 0.322655770229716 (G) numchar
+ 0.510871636197051 (E) numchar
+endstack
+
+(55) startstack
+ 0.0199883236644138 (T) numchar
+ 0.0199883236644138 (M) numchar
+ 0.0199883236644138 (D) numchar
+ 0.0399766473288277 (I) numchar
+ 0.0399766473288277 (F) numchar
+ 0.0399766473288277 (C) numchar
+ 0.0399766473288277 (A) numchar
+ 0.0599649709932415 (S) numchar
+ 0.0799532946576554 (L) numchar
+ 0.119929941986483 (V) numchar
+ 0.179894912979725 (Y) numchar
+ 0.219871560308552 (N) numchar
+ 0.239859883972966 (H) numchar
+endstack
+
+(56) startstack
+ 0.0506697607247513 (V) numchar
+ 0.0506697607247513 (Q) numchar
+ 0.0506697607247513 (P) numchar
+ 0.0506697607247513 (L) numchar
+ 0.0506697607247513 (E) numchar
+ 0.0506697607247513 (A) numchar
+ 0.101339521449503 (S) numchar
+ 0.101339521449503 (R) numchar
+ 0.152009282174254 (I) numchar
+ 2.17879971116431 (G) numchar
+endstack
+
+(57) startstack
+ 0.0265540412874314 (T) numchar
+ 0.0265540412874314 (H) numchar
+ 0.0531080825748627 (L) numchar
+ 0.0531080825748627 (E) numchar
+ 0.0796621238622941 (S) numchar
+ 0.132770206437157 (P) numchar
+ 0.159324247724588 (V) numchar
+ 0.238986371586882 (Q) numchar
+ 0.292094454161745 (G) numchar
+ 0.424864660598902 (A) numchar
+endstack
+
+(58) startstack
+ 0.0393174774506712 (N) numchar
+ 0.0393174774506712 (F) numchar
+ 0.0786349549013425 (T) numchar
+ 0.0786349549013425 (Q) numchar
+ 0.0786349549013425 (L) numchar
+ 0.0786349549013425 (K) numchar
+ 0.0786349549013425 (G) numchar
+ 0.157269909802685 (A) numchar
+ 0.235904864704027 (D) numchar
+ 1.33679423332282 (E) numchar
+endstack
+
+(59) startstack
+ 0.0316923940308541 (N) numchar
+ 0.0316923940308541 (K) numchar
+ 0.0316923940308541 (G) numchar
+ 0.0633847880617083 (T) numchar
+ 0.0633847880617083 (F) numchar
+ 0.126769576123417 (Y) numchar
+ 0.126769576123417 (L) numchar
+ 0.190154364185125 (I) numchar
+ 0.38030872837025 (V) numchar
+ 0.728925062709645 (A) numchar
+endstack
+
+(60) startstack
+ 0.0506706217824015 (M) numchar
+ 0.0506706217824015 (I) numchar
+ 0.0506706217824015 (G) numchar
+ 0.0506706217824015 (D) numchar
+ 0.0506706217824015 (A) numchar
+ 0.101341243564803 (T) numchar
+ 0.101341243564803 (F) numchar
+ 0.253353108912008 (S) numchar
+ 2.12816611486087 (L) numchar
+endstack
+
+(61) startstack
+ 0.0189245878184093 (Q) numchar
+ 0.0189245878184093 (M) numchar
+ 0.0189245878184093 (H) numchar
+ 0.0189245878184093 (C) numchar
+ 0.0378491756368187 (Y) numchar
+ 0.056773763455228 (S) numchar
+ 0.056773763455228 (L) numchar
+ 0.0756983512736374 (T) numchar
+ 0.0946229390920467 (V) numchar
+ 0.0946229390920467 (A) numchar
+ 0.170321290365684 (G) numchar
+ 0.189245878184093 (E) numchar
+ 0.208170466002503 (I) numchar
+endstack
+
+(62) startstack
+ 0.0469715758764024 (Y) numchar
+ 0.0469715758764024 (Q) numchar
+ 0.0469715758764024 (K) numchar
+ 0.0469715758764024 (E) numchar
+ 0.0469715758764024 (D) numchar
+ 0.0939431517528047 (V) numchar
+ 0.0939431517528047 (T) numchar
+ 0.0939431517528047 (A) numchar
+ 0.234857879382012 (L) numchar
+ 1.87886303505609 (R) numchar
+endstack
+
+(63) startstack
+ 0.0396739346942326 (C) numchar
+ 0.0793478693884652 (V) numchar
+ 0.0793478693884652 (T) numchar
+ 0.119021804082698 (I) numchar
+ 0.357065412248093 (F) numchar
+ 0.515761151025024 (M) numchar
+ 1.03152230205005 (L) numchar
+endstack
+
+(64) startstack
+ 0.0538571890862892 (W) numchar
+ 0.269285945431446 (Y) numchar
+ 0.807857836294338 (L) numchar
+ 1.83114442893383 (F) numchar
+endstack
+
+(65) startstack
+ 0.0238462442872254 (R) numchar
+ 0.0238462442872254 (Q) numchar
+ 0.0238462442872254 (F) numchar
+ 0.0238462442872254 (C) numchar
+ 0.0476924885744507 (N) numchar
+ 0.0476924885744507 (H) numchar
+ 0.0715387328616761 (A) numchar
+ 0.119231221436127 (L) numchar
+ 0.143077465723352 (I) numchar
+ 0.190769954297803 (V) numchar
+ 0.214616198585028 (T) numchar
+ 0.381539908595606 (K) numchar
+endstack
+
+(66) startstack
+ 0.0241551144777201 (Q) numchar
+ 0.0241551144777201 (L) numchar
+ 0.0483102289554401 (T) numchar
+ 0.0483102289554401 (K) numchar
+ 0.0483102289554401 (I) numchar
+ 0.0483102289554401 (E) numchar
+ 0.0483102289554401 (D) numchar
+ 0.0724653434331602 (N) numchar
+ 0.0966204579108803 (A) numchar
+ 0.217396030299481 (G) numchar
+ 0.265706259254921 (S) numchar
+ 0.386481831643521 (V) numchar
+endstack
+
+(67) startstack
+ 0.0334668858813941 (L) numchar
+ 0.0669337717627882 (V) numchar
+ 0.0669337717627882 (T) numchar
+ 0.100400657644182 (N) numchar
+ 0.133867543525576 (I) numchar
+ 0.401602630576729 (F) numchar
+ 0.468536402339517 (H) numchar
+ 0.602403945865094 (Y) numchar
+endstack
+
+(68) startstack
+ 0.0553747631170228 (Q) numchar
+ 0.0553747631170228 (K) numchar
+ 0.0553747631170228 (A) numchar
+ 0.221499052468091 (F) numchar
+ 0.332248578702137 (L) numchar
+ 2.38111481403198 (P) numchar
+endstack
+
+(69) startstack
+ 0.0296216714600028 (S) numchar
+ 0.0296216714600028 (R) numchar
+ 0.0296216714600028 (P) numchar
+ 0.0296216714600028 (K) numchar
+ 0.118486685840011 (D) numchar
+ 0.118486685840011 (A) numchar
+ 0.148108357300014 (Q) numchar
+ 0.20735170022002 (T) numchar
+ 0.385081728980037 (W) numchar
+ 0.562811757740054 (E) numchar
+endstack
+
+(70) startstack
+ 0.0547060242160921 (Q) numchar
+ 0.164118072648276 (A) numchar
+ 0.218824096864368 (I) numchar
+ 0.328236145296553 (K) numchar
+ 2.29765301707587 (T) numchar
+endstack
+
+(71) startstack
+ 0.0274892758216724 (V) numchar
+ 0.0274892758216724 (N) numchar
+ 0.0274892758216724 (M) numchar
+ 0.0274892758216724 (I) numchar
+ 0.0549785516433449 (T) numchar
+ 0.0549785516433449 (H) numchar
+ 0.0824678274650173 (R) numchar
+ 0.164935654930035 (A) numchar
+ 0.274892758216724 (L) numchar
+ 0.384849861503414 (Q) numchar
+ 0.412339137325086 (K) numchar
+endstack
+
+(72) startstack
+ 0.0269068641328768 (S) numchar
+ 0.0269068641328768 (N) numchar
+ 0.0269068641328768 (I) numchar
+ 0.0269068641328768 (G) numchar
+ 0.0269068641328768 (A) numchar
+ 0.0538137282657537 (K) numchar
+ 0.107627456531507 (D) numchar
+ 0.269068641328768 (P) numchar
+ 0.269068641328768 (E) numchar
+ 0.322882369594522 (T) numchar
+ 0.349789233727399 (R) numchar
+endstack
+
+(73) startstack
+ 0.0252384491257373 (T) numchar
+ 0.0252384491257373 (Q) numchar
+ 0.0252384491257373 (H) numchar
+ 0.0252384491257373 (G) numchar
+ 0.0252384491257373 (D) numchar
+ 0.0504768982514745 (S) numchar
+ 0.0504768982514745 (R) numchar
+ 0.0504768982514745 (L) numchar
+ 0.0504768982514745 (E) numchar
+ 0.100953796502949 (A) numchar
+ 0.252384491257373 (K) numchar
+ 0.27762294038311 (F) numchar
+ 0.454292084263271 (Y) numchar
+endstack
+
+(74) startstack
+ 0.0625867391596358 (V) numchar
+ 0.0625867391596358 (S) numchar
+ 0.0625867391596358 (M) numchar
+ 0.375520434957815 (A) numchar
+ 2.87899000134325 (F) numchar
+endstack
+
+(75) startstack
+ 0.0548652209263051 (T) numchar
+ 0.0548652209263051 (S) numchar
+ 0.0548652209263051 (G) numchar
+ 0.0822978313894576 (R) numchar
+ 0.137163052315763 (E) numchar
+ 0.137163052315763 (A) numchar
+ 0.246893494168373 (K) numchar
+ 0.356623936020983 (D) numchar
+ 0.411489156947288 (P) numchar
+endstack
+
+(76) startstack
+ 0.0274531999484407 (T) numchar
+ 0.0274531999484407 (P) numchar
+ 0.0274531999484407 (G) numchar
+ 0.0549063998968814 (R) numchar
+ 0.0549063998968814 (Q) numchar
+ 0.0549063998968814 (A) numchar
+ 0.0823595998453221 (D) numchar
+ 0.109812799793763 (N) numchar
+ 0.274531999484407 (S) numchar
+ 0.38434479927817 (K) numchar
+ 0.439251199175051 (H) numchar
+endstack
+
+(77) startstack
+ 0.0532246500072814 (W) numchar
+ 0.0532246500072814 (V) numchar
+ 0.106449300014563 (Y) numchar
+ 0.106449300014563 (M) numchar
+ 0.532246500072814 (L) numchar
+ 2.12898600029126 (F) numchar
+endstack
+
+(78) startstack
+ 0.0496192512231624 (S) numchar
+ 0.0496192512231624 (D) numchar
+ 0.198477004892649 (A) numchar
+ 0.496192512231624 (F) numchar
+ 0.694669517124273 (G) numchar
+ 0.744288768347436 (K) numchar
+endstack
+
+(79) startstack
+ 0.033930770946879 (K) numchar
+ 0.033930770946879 (A) numchar
+ 0.0678615418937579 (E) numchar
+ 0.203584625681274 (S) numchar
+ 0.203584625681274 (G) numchar
+ 0.271446167575032 (N) numchar
+ 0.305376938521911 (H) numchar
+ 0.780407731778216 (D) numchar
+endstack
+
+(80) startstack
+ 0.0426820083787842 (Y) numchar
+ 0.0426820083787842 (V) numchar
+ 0.0426820083787842 (A) numchar
+ 0.0853640167575684 (R) numchar
+ 0.0853640167575684 (M) numchar
+ 0.128046025136353 (K) numchar
+ 0.128046025136353 (I) numchar
+ 0.341456067030274 (F) numchar
+ 1.49387029325745 (L) numchar
+endstack
+
+(81) startstack
+ 0.0365916382077192 (H) numchar
+ 0.0731832764154385 (V) numchar
+ 0.0731832764154385 (G) numchar
+ 0.0731832764154385 (D) numchar
+ 0.219549829246315 (T) numchar
+ 0.219549829246315 (L) numchar
+ 0.439099658492631 (K) numchar
+ 0.841607678777543 (S) numchar
+endstack
+
+(82) startstack
+ 0.0213847445076227 (R) numchar
+ 0.0213847445076227 (Q) numchar
+ 0.0213847445076227 (G) numchar
+ 0.0213847445076227 (F) numchar
+ 0.0213847445076227 (D) numchar
+ 0.0427694890152453 (L) numchar
+ 0.064154233522868 (P) numchar
+ 0.064154233522868 (N) numchar
+ 0.0855389780304906 (K) numchar
+ 0.106923722538113 (A) numchar
+ 0.235232189583849 (S) numchar
+ 0.235232189583849 (H) numchar
+ 0.256616934091472 (T) numchar
+endstack
+
+(83) startstack
+ 1.39252472426509 (A) numchar
+ 1.94953461397112 (P) numchar
+endstack
+
+(84) startstack
+ 0.15592519169744 (T) numchar
+ 0.15592519169744 (S) numchar
+ 0.15592519169744 (Q) numchar
+ 0.15592519169744 (E) numchar
+ 0.15592519169744 (A) numchar
+ 0.311850383394879 (G) numchar
+ 0.779625958487198 (D) numchar
+endstack
+
+(85) startstack
+ 4.32192809488736 (A) numchar
+endstack
+
+(86) startstack
+ 1.39252472426509 (I) numchar
+ 1.94953461397112 (V) numchar
+endstack
+
+(87) startstack
+ 0.273423000992884 (C) numchar
+ 0.546846001985768 (L) numchar
+ 2.46080700893596 (M) numchar
+endstack
+
+(88) startstack
+ 0.0600573290107541 (V) numchar
+ 0.0600573290107541 (I) numchar
+ 0.120114658021508 (Q) numchar
+ 0.120114658021508 (N) numchar
+ 0.240229316043016 (G) numchar
+ 0.240229316043016 (D) numchar
+ 0.240229316043016 (A) numchar
+ 0.660630619118295 (E) numchar
+endstack
+
+(89) startstack
+ 0.058663083883555 (Q) numchar
+ 0.058663083883555 (P) numchar
+ 0.058663083883555 (M) numchar
+ 0.058663083883555 (E) numchar
+ 0.11732616776711 (T) numchar
+ 0.175989251650665 (G) numchar
+ 0.23465233553422 (A) numchar
+ 0.293315419417775 (S) numchar
+ 0.58663083883555 (D) numchar
+endstack
+
+(90) startstack
+ 0.0420119564441506 (S) numchar
+ 0.0420119564441506 (P) numchar
+ 0.0420119564441506 (N) numchar
+ 0.0420119564441506 (L) numchar
+ 0.0420119564441506 (I) numchar
+ 0.0840239128883011 (V) numchar
+ 0.0840239128883011 (Q) numchar
+ 0.0840239128883011 (M) numchar
+ 0.0840239128883011 (H) numchar
+ 0.0840239128883011 (A) numchar
+ 0.168047825776602 (D) numchar
+ 0.378107607997355 (E) numchar
+endstack
+
+(91) startstack
+ 0.210865970835806 (I) numchar
+ 0.843463883343223 (L) numchar
+ 2.10865970835806 (M) numchar
+endstack
+
+(92) startstack
+ 0.0642355497126406 (T) numchar
+ 0.0642355497126406 (R) numchar
+ 0.0642355497126406 (P) numchar
+ 0.0642355497126406 (A) numchar
+ 0.128471099425281 (V) numchar
+ 0.192706649137922 (G) numchar
+ 0.192706649137922 (E) numchar
+ 0.192706649137922 (D) numchar
+ 0.899297695976969 (K) numchar
+endstack
+
+(93) startstack
+ 0.0286826472020329 (Y) numchar
+ 0.0286826472020329 (Q) numchar
+ 0.0286826472020329 (K) numchar
+ 0.0286826472020329 (C) numchar
+ 0.0573652944040657 (T) numchar
+ 0.0573652944040657 (N) numchar
+ 0.0860479416060986 (V) numchar
+ 0.0860479416060986 (P) numchar
+ 0.0860479416060986 (H) numchar
+ 0.143413236010164 (S) numchar
+ 0.286826472020329 (A) numchar
+ 0.688383532848789 (G) numchar
+endstack
+
+(94) startstack
+ 0.03799128325529 (P) numchar
+ 0.03799128325529 (E) numchar
+ 0.03799128325529 (A) numchar
+ 0.0759825665105801 (V) numchar
+ 0.0759825665105801 (L) numchar
+ 0.0759825665105801 (D) numchar
+ 0.22794769953174 (T) numchar
+ 0.569869248829351 (N) numchar
+ 0.987773364637541 (S) numchar
+endstack
+
+(95) startstack
+ 0.0392274449355165 (Y) numchar
+ 0.0392274449355165 (S) numchar
+ 0.0392274449355165 (Q) numchar
+ 0.0392274449355165 (D) numchar
+ 0.196137224677583 (G) numchar
+ 0.431501894290682 (P) numchar
+ 0.588411674032748 (E) numchar
+ 0.666866563903781 (A) numchar
+endstack
+
+(96) startstack
+ 0.410444637023168 (N) numchar
+ 1.2313339110695 (Q) numchar
+ 1.2313339110695 (D) numchar
+endstack
+
+(97) startstack
+ 0.705482023721841 (S) numchar
+ 0.705482023721841 (F) numchar
+ 1.41096404744368 (N) numchar
+endstack
+
+(98) startstack
+ 0.407581246303529 (S) numchar
+ 0.407581246303529 (A) numchar
+ 2.44548747782117 (P) numchar
+endstack
+
+(99) startstack
+ 0.0315264259127521 (T) numchar
+ 0.0315264259127521 (S) numchar
+ 0.0315264259127521 (P) numchar
+ 0.0315264259127521 (M) numchar
+ 0.0315264259127521 (G) numchar
+ 0.0630528518255042 (V) numchar
+ 0.0630528518255042 (E) numchar
+ 0.0945792777382564 (A) numchar
+ 0.315264259127521 (Q) numchar
+ 0.472896388691282 (D) numchar
+ 0.567475666429538 (K) numchar
+endstack
+
+(100) startstack
+ 0.088475083216159 (H) numchar
+ 0.088475083216159 (G) numchar
+ 0.088475083216159 (F) numchar
+ 0.221187708040397 (I) numchar
+ 0.88475083216159 (L) numchar
+ 1.06170099859391 (V) numchar
+endstack
+
+(101) startstack
+ 0.0397257637569635 (S) numchar
+ 0.0397257637569635 (N) numchar
+ 0.0397257637569635 (I) numchar
+ 0.0794515275139271 (T) numchar
+ 0.0794515275139271 (L) numchar
+ 0.0794515275139271 (G) numchar
+ 0.119177291270891 (A) numchar
+ 0.198628818784818 (R) numchar
+ 0.198628818784818 (Q) numchar
+ 1.3109502039798 (K) numchar
+endstack
+
+(102) startstack
+ 0.0421924825924966 (W) numchar
+ 0.0421924825924966 (T) numchar
+ 0.0421924825924966 (P) numchar
+ 0.0421924825924966 (L) numchar
+ 0.0421924825924966 (H) numchar
+ 0.0421924825924966 (E) numchar
+ 0.337539860739972 (G) numchar
+ 0.506309791109959 (K) numchar
+ 1.2235819951824 (A) numchar
+endstack
+
+(103) startstack
+ 0.0657362126732542 (K) numchar
+ 0.0657362126732542 (G) numchar
+ 0.131472425346508 (R) numchar
+ 0.131472425346508 (Q) numchar
+ 3.22107442098945 (H) numchar
+endstack
+
+(104) startstack
+ 0.0489338724930473 (P) numchar
+ 0.0489338724930473 (M) numchar
+ 0.0489338724930473 (K) numchar
+ 0.0489338724930473 (I) numchar
+ 0.0978677449860946 (V) numchar
+ 0.0978677449860946 (S) numchar
+ 0.489338724930473 (A) numchar
+ 1.8594871547358 (G) numchar
+endstack
+
+(105) startstack
+ 0.72 (G) numchar
+ 2.88 (E) numchar
+endstack
+
+(106) startstack
+ 0.025026682261868 (S) numchar
+ 0.025026682261868 (R) numchar
+ 0.025026682261868 (M) numchar
+ 0.025026682261868 (L) numchar
+ 0.025026682261868 (I) numchar
+ 0.025026682261868 (G) numchar
+ 0.025026682261868 (D) numchar
+ 0.050053364523736 (N) numchar
+ 0.075080046785604 (Q) numchar
+ 0.100106729047472 (T) numchar
+ 0.12513341130934 (E) numchar
+ 0.12513341130934 (A) numchar
+ 0.175186775833076 (V) numchar
+ 0.575613692022964 (K) numchar
+endstack
+
+(107) startstack
+ 0.0750785836329033 (L) numchar
+ 0.0750785836329033 (G) numchar
+ 0.112617875449355 (R) numchar
+ 0.150157167265807 (A) numchar
+ 0.22523575089871 (V) numchar
+ 0.563089377246775 (T) numchar
+ 0.90094300359484 (K) numchar
+endstack
+
+(108) startstack
+ 0.162253860109874 (L) numchar
+ 0.324507720219747 (I) numchar
+ 0.378592340256372 (F) numchar
+ 2.16338480146498 (V) numchar
+endstack
+
+(109) startstack
+ 0.0317867992206638 (T) numchar
+ 0.0317867992206638 (K) numchar
+ 0.0317867992206638 (E) numchar
+ 0.0635735984413275 (M) numchar
+ 0.0953603976619913 (V) numchar
+ 0.0953603976619913 (I) numchar
+ 0.158933996103319 (F) numchar
+ 0.222507594544646 (G) numchar
+ 0.25429439376531 (A) numchar
+ 0.794669980516594 (L) numchar
+endstack
+
+(110) startstack
+ 0.019326067480959 (Y) numchar
+ 0.019326067480959 (V) numchar
+ 0.019326067480959 (R) numchar
+ 0.019326067480959 (K) numchar
+ 0.019326067480959 (H) numchar
+ 0.019326067480959 (E) numchar
+ 0.0579782024428769 (S) numchar
+ 0.0579782024428769 (M) numchar
+ 0.0773042699238358 (L) numchar
+ 0.0966303374047948 (N) numchar
+ 0.115956404885754 (G) numchar
+ 0.115956404885754 (A) numchar
+ 0.135282472366713 (D) numchar
+ 0.309217079695343 (T) numchar
+endstack
+
+(111) startstack
+ 0.0426165917072372 (K) numchar
+ 0.0852331834144743 (E) numchar
+ 0.127849775121711 (T) numchar
+ 0.170466366828949 (V) numchar
+ 0.213082958536186 (G) numchar
+ 0.340932733657897 (S) numchar
+ 1.40634752633883 (A) numchar
+endstack
+
+(112) startstack
+ 0.042053611848158 (Y) numchar
+ 0.042053611848158 (T) numchar
+ 0.126160835544474 (I) numchar
+ 0.168214447392632 (R) numchar
+ 0.252321671088948 (V) numchar
+ 0.420536118481581 (F) numchar
+ 1.3036619672929 (L) numchar
+endstack
+
+(113) startstack
+ 0.0279602686084189 (V) numchar
+ 0.0279602686084189 (Q) numchar
+ 0.0279602686084189 (L) numchar
+ 0.0279602686084189 (I) numchar
+ 0.0279602686084189 (H) numchar
+ 0.0559205372168377 (N) numchar
+ 0.0559205372168377 (M) numchar
+ 0.0559205372168377 (E) numchar
+ 0.0559205372168377 (A) numchar
+ 0.139801343042094 (S) numchar
+ 0.167761611650513 (D) numchar
+ 0.195721880258932 (T) numchar
+ 0.699006715210472 (G) numchar
+endstack
+
+(114) startstack
+ 0.0160528970388383 (V) numchar
+ 0.0321057940776766 (R) numchar
+ 0.0321057940776766 (Q) numchar
+ 0.0321057940776766 (K) numchar
+ 0.0321057940776766 (I) numchar
+ 0.0321057940776766 (H) numchar
+ 0.0481586911165149 (L) numchar
+ 0.0802644851941915 (A) numchar
+ 0.0963173822330298 (N) numchar
+ 0.112370279271868 (S) numchar
+ 0.128423176310706 (G) numchar
+ 0.128423176310706 (E) numchar
+ 0.128423176310706 (D) numchar
+endstack
+
+(115) startstack
+ 0.0391380447161766 (T) numchar
+ 0.0391380447161766 (Q) numchar
+ 0.0391380447161766 (F) numchar
+ 0.0782760894323531 (M) numchar
+ 0.195690223580883 (L) numchar
+ 0.273966313013236 (G) numchar
+ 0.430518491877942 (I) numchar
+ 1.09586525205294 (A) numchar
+endstack
+
+(116) startstack
+ 0.0378720242992039 (C) numchar
+ 0.0757440485984079 (M) numchar
+ 0.0757440485984079 (G) numchar
+ 0.151488097196816 (A) numchar
+ 0.340848218692835 (I) numchar
+ 0.719568461684875 (V) numchar
+ 0.719568461684875 (L) numchar
+endstack
+
+(117) startstack
+ 0.026730122286348 (T) numchar
+ 0.026730122286348 (H) numchar
+ 0.026730122286348 (E) numchar
+ 0.0534602445726961 (C) numchar
+ 0.0801903668590441 (S) numchar
+ 0.0801903668590441 (N) numchar
+ 0.106920489145392 (D) numchar
+ 0.13365061143174 (A) numchar
+ 0.187110856004436 (Q) numchar
+ 0.213840978290784 (G) numchar
+ 0.561332568013309 (K) numchar
+endstack
+
+(118) startstack
+ 0.0304023817187811 (V) numchar
+ 0.0304023817187811 (T) numchar
+ 0.0304023817187811 (G) numchar
+ 0.0304023817187811 (D) numchar
+ 0.0304023817187811 (A) numchar
+ 0.0608047634375622 (Q) numchar
+ 0.0912071451563433 (S) numchar
+ 0.152011908593906 (N) numchar
+ 0.243219053750249 (L) numchar
+ 0.334426198906592 (K) numchar
+ 0.668852397813184 (H) numchar
+endstack
+
+(119) startstack
+ 0.032260171395177 (S) numchar
+ 0.032260171395177 (P) numchar
+ 0.032260171395177 (E) numchar
+ 0.032260171395177 (D) numchar
+ 0.0645203427903541 (V) numchar
+ 0.129040685580708 (R) numchar
+ 0.129040685580708 (M) numchar
+ 0.193561028371062 (I) numchar
+ 0.483902570927655 (K) numchar
+ 0.677463599298718 (L) numchar
+endstack
+
+(120) startstack
+ 0.0416141261595325 (V) numchar
+ 0.0416141261595325 (N) numchar
+ 0.0416141261595325 (M) numchar
+ 0.0416141261595325 (K) numchar
+ 0.0832282523190649 (T) numchar
+ 0.0832282523190649 (E) numchar
+ 0.16645650463813 (A) numchar
+ 0.540983640073922 (G) numchar
+ 1.29003791094551 (D) numchar
+endstack
+
+(121) startstack
+ 0.0348522064286478 (V) numchar
+ 0.0348522064286478 (T) numchar
+ 0.0348522064286478 (S) numchar
+ 0.0348522064286478 (G) numchar
+ 0.0348522064286478 (A) numchar
+ 0.0697044128572957 (Q) numchar
+ 0.104556619285944 (K) numchar
+ 0.278817651429183 (H) numchar
+ 0.592487509287013 (N) numchar
+ 0.731896335001605 (D) numchar
+endstack
+
+(122) startstack
+ 0.0259227549724239 (V) numchar
+ 0.0259227549724239 (Q) numchar
+ 0.0259227549724239 (P) numchar
+ 0.0259227549724239 (K) numchar
+ 0.0259227549724239 (E) numchar
+ 0.0259227549724239 (D) numchar
+ 0.0518455099448479 (A) numchar
+ 0.0777682649172718 (T) numchar
+ 0.0777682649172718 (M) numchar
+ 0.103691019889696 (I) numchar
+ 0.155536529834544 (G) numchar
+ 0.311073059669087 (H) numchar
+ 0.518455099448479 (L) numchar
+endstack
+
+(123) startstack
+ 0.0292858017421136 (V) numchar
+ 0.0292858017421136 (T) numchar
+ 0.0292858017421136 (R) numchar
+ 0.0292858017421136 (Q) numchar
+ 0.0585716034842272 (S) numchar
+ 0.117143206968454 (D) numchar
+ 0.175714810452682 (A) numchar
+ 0.380715422647477 (P) numchar
+ 0.380715422647477 (E) numchar
+ 0.41000122438959 (K) numchar
+endstack
+
+(124) startstack
+ 0.0286844548578206 (P) numchar
+ 0.0286844548578206 (M) numchar
+ 0.0286844548578206 (K) numchar
+ 0.0286844548578206 (D) numchar
+ 0.0573689097156413 (S) numchar
+ 0.0573689097156413 (C) numchar
+ 0.114737819431283 (T) numchar
+ 0.114737819431283 (N) numchar
+ 0.200791184004744 (V) numchar
+ 0.45895127772513 (G) numchar
+ 0.487635732582951 (A) numchar
+endstack
+
+(125) startstack
+ 0.0198177654865417 (Q) numchar
+ 0.0198177654865417 (K) numchar
+ 0.0198177654865417 (G) numchar
+ 0.0198177654865417 (D) numchar
+ 0.0396355309730834 (N) numchar
+ 0.0594532964596251 (L) numchar
+ 0.0594532964596251 (I) numchar
+ 0.0594532964596251 (H) numchar
+ 0.0792710619461668 (M) numchar
+ 0.0990888274327085 (V) numchar
+ 0.198177654865417 (E) numchar
+ 0.198177654865417 (A) numchar
+ 0.2378131858385 (T) numchar
+endstack
+
+(126) startstack
+ 0.0315079699751011 (N) numchar
+ 0.0315079699751011 (E) numchar
+ 0.0315079699751011 (D) numchar
+ 0.0630159399502022 (S) numchar
+ 0.0630159399502022 (K) numchar
+ 0.0945239099253033 (Y) numchar
+ 0.0945239099253033 (V) numchar
+ 0.0945239099253033 (A) numchar
+ 0.126031879900404 (I) numchar
+ 0.315079699751011 (F) numchar
+ 0.787699249377527 (L) numchar
+endstack
+
+(127) startstack
+ 4.32192809488736 (K) numchar
+endstack
+
+(128) startstack
+ 4.32192809488736 (G) numchar
+endstack
+
+(129) startstack
+ 0.0212850763170052 (V) numchar
+ 0.0212850763170052 (P) numchar
+ 0.0212850763170052 (N) numchar
+ 0.0212850763170052 (M) numchar
+ 0.0212850763170052 (H) numchar
+ 0.0425701526340104 (T) numchar
+ 0.0425701526340104 (G) numchar
+ 0.0425701526340104 (E) numchar
+ 0.0425701526340104 (C) numchar
+ 0.0638552289510156 (Q) numchar
+ 0.0851403052680208 (D) numchar
+ 0.234135839487057 (S) numchar
+ 0.255420915804062 (K) numchar
+ 0.276705992121068 (A) numchar
+endstack
+
+(130) startstack
+ 0.0182526225528703 (Y) numchar
+ 0.0182526225528703 (V) numchar
+ 0.0182526225528703 (R) numchar
+ 0.0365052451057407 (T) numchar
+ 0.0365052451057407 (N) numchar
+ 0.0365052451057407 (G) numchar
+ 0.0365052451057407 (E) numchar
+ 0.054757867658611 (S) numchar
+ 0.054757867658611 (L) numchar
+ 0.054757867658611 (D) numchar
+ 0.0730104902114813 (Q) numchar
+ 0.146020980422963 (K) numchar
+ 0.200778848081574 (A) numchar
+ 0.237284093187314 (P) numchar
+endstack
+
+(131) startstack
+ 0.0537340593454263 (K) numchar
+ 0.0537340593454263 (I) numchar
+ 0.0537340593454263 (D) numchar
+ 0.107468118690853 (T) numchar
+ 0.161202178036279 (V) numchar
+ 0.268670296727132 (A) numchar
+ 2.31056455185333 (L) numchar
+endstack
+
+(132) startstack
+ 0.611984278873168 (D) numchar
+ 3.05992139436584 (L) numchar
+endstack
+
+(133) startstack
+ 0.0461052676492993 (L) numchar
+ 0.0461052676492993 (E) numchar
+ 0.0461052676492993 (D) numchar
+ 0.0922105352985985 (R) numchar
+ 0.322736873545095 (K) numchar
+ 0.691579014739489 (A) numchar
+ 1.15263169123248 (S) numchar
+endstack
+
+(134) startstack
+ 0.0327331413891021 (V) numchar
+ 0.0327331413891021 (T) numchar
+ 0.0327331413891021 (S) numchar
+ 0.0327331413891021 (R) numchar
+ 0.0327331413891021 (N) numchar
+ 0.0981994241673063 (H) numchar
+ 0.196398848334613 (K) numchar
+ 0.327331413891021 (Q) numchar
+ 0.425530838058327 (E) numchar
+ 0.490997120836532 (D) numchar
+endstack
+
+(135) startstack
+ 0.0856005685766218 (Y) numchar
+ 0.0856005685766218 (T) numchar
+ 0.0856005685766218 (M) numchar
+ 0.0856005685766218 (K) numchar
+ 0.0856005685766218 (I) numchar
+ 0.128400852864933 (F) numchar
+ 0.47080312717142 (S) numchar
+ 1.19840796007271 (L) numchar
+endstack
+
+(136) startstack
+ 0.0505734275090872 (V) numchar
+ 0.0505734275090872 (Q) numchar
+ 0.202293710036349 (S) numchar
+ 0.202293710036349 (A) numchar
+ 0.35401399256361 (G) numchar
+ 1.9723636728544 (H) numchar
+endstack
+
+(137) startstack
+ 0.0367287914516997 (Y) numchar
+ 0.0367287914516997 (T) numchar
+ 0.0367287914516997 (K) numchar
+ 0.0367287914516997 (I) numchar
+ 0.0734575829033993 (R) numchar
+ 0.0734575829033993 (G) numchar
+ 0.110186374355099 (V) numchar
+ 0.220372748710198 (S) numchar
+ 0.367287914516997 (C) numchar
+ 1.06513495209929 (A) numchar
+endstack
+
+(138) startstack
+ 0.0184148758562995 (V) numchar
+ 0.0184148758562995 (G) numchar
+ 0.0184148758562995 (F) numchar
+ 0.036829751712599 (Y) numchar
+ 0.036829751712599 (Q) numchar
+ 0.0552446275688986 (S) numchar
+ 0.0552446275688986 (K) numchar
+ 0.0552446275688986 (E) numchar
+ 0.0920743792814976 (I) numchar
+ 0.110489255137797 (N) numchar
+ 0.147319006850396 (H) numchar
+ 0.165733882706696 (D) numchar
+ 0.220978510275594 (T) numchar
+endstack
+
+(139) startstack
+ 0.0524046566554657 (S) numchar
+ 0.104809313310931 (N) numchar
+ 0.104809313310931 (E) numchar
+ 0.83847450648745 (H) numchar
+ 1.8341629829413 (K) numchar
+endstack
+
+(140) startstack
+ 4.32192809488736 (E) numchar
+endstack
+
+(141) startstack
+ 4.32192809488736 (G) numchar
+endstack
+
+(142) startstack
+ 0.122211629389986 (S) numchar
+ 0.122211629389986 (L) numchar
+ 0.122211629389986 (F) numchar
+ 0.122211629389986 (C) numchar
+ 0.122211629389986 (A) numchar
+ 0.244423258779972 (V) numchar
+ 0.244423258779972 (K) numchar
+ 0.366634888169957 (I) numchar
+endstack
+
+(143) startstack
+ 0.19689834815501 (T) numchar
+ 0.19689834815501 (K) numchar
+ 0.39379669631002 (S) numchar
+ 0.39379669631002 (A) numchar
+ 1.18139008893006 (Q) numchar
+endstack
+
+(144) startstack
+ 0.0396347277247128 (T) numchar
+ 0.0396347277247128 (S) numchar
+ 0.0792694554494255 (A) numchar
+ 0.237808366348277 (R) numchar
+ 0.277443094072989 (K) numchar
+ 0.515251460421266 (H) numchar
+ 1.03050292084253 (L) numchar
+endstack
+
+(145) startstack
+ 0.0364149447136124 (T) numchar
+ 0.0364149447136124 (Q) numchar
+ 0.0728298894272248 (A) numchar
+ 0.291319557708899 (G) numchar
+ 0.436979336563349 (R) numchar
+ 0.509809225990573 (H) numchar
+ 0.655469004845023 (K) numchar
+endstack
+
+(146) startstack
+ 0.0532042360672639 (F) numchar
+ 0.0532042360672639 (E) numchar
+ 0.106408472134528 (S) numchar
+ 0.957676249210751 (I) numchar
+ 1.80894402628697 (V) numchar
+endstack
+
+(147) startstack
+ 0.0362343396952368 (L) numchar
+ 0.0362343396952368 (K) numchar
+ 0.0362343396952368 (A) numchar
+ 0.0724686793904736 (V) numchar
+ 0.0724686793904736 (T) numchar
+ 0.0724686793904736 (G) numchar
+ 0.0724686793904736 (F) numchar
+ 0.144937358780947 (S) numchar
+ 0.543515095428552 (P) numchar
+ 0.942092832076157 (D) numchar
+endstack
+
+(148) startstack
+ 0.0334634400534748 (T) numchar
+ 0.0334634400534748 (K) numchar
+ 0.0334634400534748 (G) numchar
+ 0.0669268801069496 (Q) numchar
+ 0.100390320160424 (N) numchar
+ 0.133853760213899 (I) numchar
+ 0.133853760213899 (D) numchar
+ 0.133853760213899 (A) numchar
+ 0.301170960481273 (V) numchar
+ 0.870049441390345 (P) numchar
+endstack
+
+(149) startstack
+ 0.025571797836712 (S) numchar
+ 0.025571797836712 (I) numchar
+ 0.025571797836712 (G) numchar
+ 0.0511435956734239 (Q) numchar
+ 0.0511435956734239 (N) numchar
+ 0.0511435956734239 (D) numchar
+ 0.0767153935101359 (P) numchar
+ 0.230146180530408 (A) numchar
+ 0.281289776203832 (K) numchar
+ 0.306861574040544 (V) numchar
+ 0.306861574040544 (E) numchar
+endstack
+
+(150) startstack
+ 0.0389682253253068 (S) numchar
+ 0.0389682253253068 (R) numchar
+ 0.0389682253253068 (P) numchar
+ 0.0389682253253068 (F) numchar
+ 0.0389682253253068 (E) numchar
+ 0.0389682253253068 (D) numchar
+ 0.155872901301227 (Q) numchar
+ 0.194841126626534 (H) numchar
+ 0.467618703903682 (Y) numchar
+ 1.05214208378328 (N) numchar
+endstack
+
+(151) startstack
+ 0.0635457387534587 (Y) numchar
+ 0.762548865041504 (L) numchar
+ 2.60537528889181 (F) numchar
+endstack
+
+(152) startstack
+ 0.0322908921270949 (Q) numchar
+ 0.0322908921270949 (N) numchar
+ 0.0322908921270949 (L) numchar
+ 0.0645817842541899 (G) numchar
+ 0.0645817842541899 (D) numchar
+ 0.0968726763812848 (P) numchar
+ 0.12916356850838 (V) numchar
+ 0.226036244889665 (R) numchar
+ 0.419781597652234 (E) numchar
+ 0.613526950414804 (K) numchar
+endstack
+
+(153) startstack
+ 0.0340153007672767 (Y) numchar
+ 0.0340153007672767 (P) numchar
+ 0.0340153007672767 (N) numchar
+ 0.0340153007672767 (M) numchar
+ 0.0680306015345534 (K) numchar
+ 0.0680306015345534 (I) numchar
+ 0.0680306015345534 (E) numchar
+ 0.0680306015345534 (A) numchar
+ 0.20409180460366 (V) numchar
+ 0.40818360920732 (F) numchar
+ 0.816367218414641 (L) numchar
+endstack
+
+(154) startstack
+ 0.0459666919539906 (T) numchar
+ 0.0459666919539906 (M) numchar
+ 0.183866767815962 (F) numchar
+ 0.275800151723944 (V) numchar
+ 0.643533687355868 (I) numchar
+ 1.28706737471174 (L) numchar
+endstack
+
+(155) startstack
+ 0.03156168175673 (T) numchar
+ 0.03156168175673 (L) numchar
+ 0.03156168175673 (D) numchar
+ 0.03156168175673 (C) numchar
+ 0.06312336351346 (N) numchar
+ 0.12624672702692 (R) numchar
+ 0.15780840878365 (A) numchar
+ 0.18937009054038 (K) numchar
+ 0.47342522635095 (G) numchar
+ 0.6312336351346 (S) numchar
+endstack
+
+(156) startstack
+ 0.0238161853799833 (Y) numchar
+ 0.0238161853799833 (T) numchar
+ 0.0238161853799833 (G) numchar
+ 0.0238161853799833 (F) numchar
+ 0.0476323707599667 (P) numchar
+ 0.0476323707599667 (K) numchar
+ 0.0476323707599667 (A) numchar
+ 0.119080926899917 (Q) numchar
+ 0.166713297659883 (D) numchar
+ 0.21434566841985 (H) numchar
+ 0.238161853799833 (N) numchar
+ 0.333426595319767 (E) numchar
+endstack
+
+(157) startstack
+ 0.0287901620952608 (T) numchar
+ 0.0287901620952608 (Q) numchar
+ 0.0287901620952608 (P) numchar
+ 0.0287901620952608 (H) numchar
+ 0.0287901620952608 (E) numchar
+ 0.0287901620952608 (D) numchar
+ 0.115160648381043 (S) numchar
+ 0.172740972571565 (I) numchar
+ 0.316691783047869 (V) numchar
+ 0.403062269333652 (C) numchar
+ 0.431852431428912 (A) numchar
+endstack
+
+(158) startstack
+ 0.0446849168791153 (Y) numchar
+ 0.0446849168791153 (A) numchar
+ 0.0893698337582307 (V) numchar
+ 0.0893698337582307 (M) numchar
+ 0.178739667516461 (F) numchar
+ 0.804328503824076 (I) numchar
+ 1.20649275573611 (L) numchar
+endstack
+
+(159) startstack
+ 0.0363850554291433 (T) numchar
+ 0.0363850554291433 (Q) numchar
+ 0.0363850554291433 (P) numchar
+ 0.0363850554291433 (E) numchar
+ 0.0363850554291433 (A) numchar
+ 0.145540221716573 (F) numchar
+ 0.436620665149719 (I) numchar
+ 0.545775831437149 (V) numchar
+ 0.691316053153722 (L) numchar
+endstack
+
+(160) startstack
+ 0.0260435213505923 (N) numchar
+ 0.0260435213505923 (G) numchar
+ 0.0260435213505923 (E) numchar
+ 0.0520870427011846 (T) numchar
+ 0.0781305640517768 (S) numchar
+ 0.0781305640517768 (C) numchar
+ 0.104174085402369 (I) numchar
+ 0.104174085402369 (H) numchar
+ 0.208348170804738 (Q) numchar
+ 0.286478734856515 (K) numchar
+ 0.442739862960069 (V) numchar
+endstack
+
+(161) startstack
+ 0.0415522132987943 (G) numchar
+ 0.0831044265975886 (Y) numchar
+ 0.0831044265975886 (F) numchar
+ 0.0831044265975886 (E) numchar
+ 0.0831044265975886 (C) numchar
+ 0.124656639896383 (A) numchar
+ 0.623283199481915 (T) numchar
+ 1.16346197236624 (V) numchar
+endstack
+
+(162) startstack
+ 0.0503169647858378 (F) numchar
+ 0.0503169647858378 (A) numchar
+ 0.100633929571676 (M) numchar
+ 0.150950894357513 (V) numchar
+ 0.654120542215892 (I) numchar
+ 1.81141073229016 (L) numchar
+endstack
+
+(163) startstack
+ 0.0348332781422793 (T) numchar
+ 0.0348332781422793 (M) numchar
+ 0.0348332781422793 (G) numchar
+ 0.0348332781422793 (E) numchar
+ 0.0696665562845586 (D) numchar
+ 0.104499834426838 (S) numchar
+ 0.104499834426838 (H) numchar
+ 0.278666225138234 (Q) numchar
+ 0.313499503280514 (K) numchar
+ 0.940498509841541 (A) numchar
+endstack
+
+(164) startstack
+ 0.0193192609355063 (T) numchar
+ 0.0193192609355063 (Q) numchar
+ 0.0193192609355063 (M) numchar
+ 0.0193192609355063 (G) numchar
+ 0.0193192609355063 (F) numchar
+ 0.0386385218710126 (V) numchar
+ 0.0386385218710126 (K) numchar
+ 0.0386385218710126 (C) numchar
+ 0.0772770437420252 (I) numchar
+ 0.0772770437420252 (H) numchar
+ 0.0965963046775315 (R) numchar
+ 0.15455408748405 (A) numchar
+ 0.212511870290569 (S) numchar
+ 0.251150392161582 (E) numchar
+endstack
+
+(165) startstack
+ 0.0358962227378971 (Y) numchar
+ 0.0358962227378971 (Q) numchar
+ 0.0358962227378971 (M) numchar
+ 0.0358962227378971 (L) numchar
+ 0.0717924454757942 (R) numchar
+ 0.179481113689485 (V) numchar
+ 0.287169781903177 (A) numchar
+ 0.466650895592662 (K) numchar
+ 0.86150934570953 (H) numchar
+endstack
+
+(166) startstack
+ 0.0303551782579057 (Q) numchar
+ 0.0607103565158114 (Y) numchar
+ 0.0607103565158114 (T) numchar
+ 0.0607103565158114 (S) numchar
+ 0.0910655347737171 (I) numchar
+ 0.151775891289529 (V) numchar
+ 0.364262139094869 (F) numchar
+ 0.394617317352774 (L) numchar
+ 0.455327673868586 (H) numchar
+endstack
+
+(167) startstack
+ 4.32192809488736 (G) numchar
+endstack
+
+(168) startstack
+ 0.0468031489497536 (V) numchar
+ 0.0468031489497536 (K) numchar
+ 0.0936062978995072 (Q) numchar
+ 0.140409446849261 (S) numchar
+ 0.140409446849261 (A) numchar
+ 0.842456681095565 (G) numchar
+ 1.07647242584433 (P) numchar
+endstack
+
+(169) startstack
+ 0.0264063021349112 (R) numchar
+ 0.0264063021349112 (H) numchar
+ 0.0528126042698224 (T) numchar
+ 0.0528126042698224 (N) numchar
+ 0.0792189064047336 (E) numchar
+ 0.184844114944378 (S) numchar
+ 0.184844114944378 (A) numchar
+ 0.21125041707929 (D) numchar
+ 0.237656719214201 (K) numchar
+ 0.343281927753846 (G) numchar
+endstack
+
+(170) startstack
+ 4.32192809488736 (Q) numchar
+endstack
+
+(171) startstack
+ 0.0272872743431676 (R) numchar
+ 0.0272872743431676 (Q) numchar
+ 0.0272872743431676 (M) numchar
+ 0.0545745486863353 (T) numchar
+ 0.0545745486863353 (S) numchar
+ 0.0818618230295029 (G) numchar
+ 0.0818618230295029 (A) numchar
+ 0.109149097372671 (N) numchar
+ 0.218298194745341 (K) numchar
+ 0.382021840804347 (E) numchar
+ 0.436596389490682 (D) numchar
+endstack
+
+(172) startstack
+ 0.0454614310990125 (V) numchar
+ 0.0454614310990125 (N) numchar
+ 0.0454614310990125 (C) numchar
+ 0.136384293297038 (M) numchar
+ 0.136384293297038 (L) numchar
+ 0.136384293297038 (A) numchar
+ 0.3636914487921 (W) numchar
+ 1.59115008846544 (F) numchar
+endstack
+
+(173) startstack
+ 0.0352516697608233 (Y) numchar
+ 0.0352516697608233 (P) numchar
+ 0.0352516697608233 (H) numchar
+ 0.0352516697608233 (F) numchar
+ 0.0705033395216466 (N) numchar
+ 0.0705033395216466 (D) numchar
+ 0.10575500928247 (A) numchar
+ 0.282013358086587 (S) numchar
+ 0.387768367369057 (G) numchar
+ 0.881291744020583 (T) numchar
+endstack
+
+(174) startstack
+ 0.0405981116724503 (L) numchar
+ 0.0811962233449006 (S) numchar
+ 0.121794335017351 (E) numchar
+ 0.162392446689801 (G) numchar
+ 0.202990558362252 (D) numchar
+ 0.568373563414304 (A) numchar
+ 1.01495279181126 (P) numchar
+endstack
+
+(175) startstack
+ 0.0306485656434456 (S) numchar
+ 0.0306485656434456 (L) numchar
+ 0.0306485656434456 (H) numchar
+ 0.0612971312868912 (P) numchar
+ 0.0612971312868912 (N) numchar
+ 0.0919456969303367 (G) numchar
+ 0.122594262573782 (Q) numchar
+ 0.27583709079101 (A) numchar
+ 0.429079919008238 (D) numchar
+ 0.582322747225466 (E) numchar
+endstack
+
+(176) startstack
+ 0.0248160346321755 (Q) numchar
+ 0.0248160346321755 (N) numchar
+ 0.0248160346321755 (I) numchar
+ 0.0248160346321755 (D) numchar
+ 0.0496320692643509 (S) numchar
+ 0.0496320692643509 (M) numchar
+ 0.0496320692643509 (K) numchar
+ 0.0496320692643509 (G) numchar
+ 0.0744481038965264 (T) numchar
+ 0.0744481038965264 (C) numchar
+ 0.223344311689579 (L) numchar
+ 0.223344311689579 (A) numchar
+ 0.496320692643509 (V) numchar
+endstack
+
+(177) startstack
+ 0.0792697735161876 (V) numchar
+ 0.0792697735161876 (E) numchar
+ 1.03050705571044 (H) numchar
+ 1.9024745643885 (Q) numchar
+endstack
+
+(178) startstack
+ 0.135113824851272 (Y) numchar
+ 0.135113824851272 (L) numchar
+ 0.135113824851272 (G) numchar
+ 0.135113824851272 (E) numchar
+ 0.270227649702544 (N) numchar
+ 0.405341474553816 (S) numchar
+ 0.540455299405088 (K) numchar
+endstack
+
+(179) startstack
+ 0.0390441208788347 (N) numchar
+ 0.0390441208788347 (M) numchar
+ 0.0390441208788347 (H) numchar
+ 0.0390441208788347 (C) numchar
+ 0.0780882417576694 (S) numchar
+ 0.117132362636504 (E) numchar
+ 0.117132362636504 (D) numchar
+ 0.156176483515339 (T) numchar
+ 0.273308846151843 (G) numchar
+ 1.28845598900155 (A) numchar
+endstack
+
+(180) startstack
+ 0.0506804484335828 (N) numchar
+ 0.0506804484335828 (I) numchar
+ 0.0506804484335828 (G) numchar
+ 0.0506804484335828 (D) numchar
+ 0.101360896867166 (E) numchar
+ 0.760206726503742 (S) numchar
+ 1.72313524674182 (A) numchar
+endstack
+
+(181) startstack
+ 0.0316913250281425 (V) numchar
+ 0.0316913250281425 (D) numchar
+ 0.0316913250281425 (A) numchar
+ 0.0633826500562851 (I) numchar
+ 0.0950739750844276 (F) numchar
+ 0.221839275196998 (Y) numchar
+ 0.38029590033771 (M) numchar
+ 0.411987225365853 (L) numchar
+ 0.475369875422138 (W) numchar
+endstack
+
+(182) startstack
+ 0.0205029120191321 (H) numchar
+ 0.0410058240382642 (W) numchar
+ 0.0410058240382642 (S) numchar
+ 0.0410058240382642 (R) numchar
+ 0.0410058240382642 (A) numchar
+ 0.0615087360573963 (T) numchar
+ 0.0615087360573963 (N) numchar
+ 0.0820116480765285 (K) numchar
+ 0.102514560095661 (G) numchar
+ 0.184526208172189 (Q) numchar
+ 0.184526208172189 (E) numchar
+ 0.28704076826785 (D) numchar
+endstack
+
+(183) startstack
+ 0.0488529963259847 (Q) numchar
+ 0.0488529963259847 (P) numchar
+ 0.0488529963259847 (N) numchar
+ 0.0488529963259847 (L) numchar
+ 0.0488529963259847 (I) numchar
+ 0.0488529963259847 (D) numchar
+ 0.195411985303939 (V) numchar
+ 0.293117977955908 (A) numchar
+ 1.95411985303939 (K) numchar
+endstack
+
+(184) startstack
+ 0.0333987365919656 (Y) numchar
+ 0.0333987365919656 (W) numchar
+ 0.0333987365919656 (M) numchar
+ 0.0333987365919656 (K) numchar
+ 0.0333987365919656 (H) numchar
+ 0.0333987365919656 (G) numchar
+ 0.233791156143759 (L) numchar
+ 0.300588629327691 (V) numchar
+ 0.467582312287519 (F) numchar
+ 0.667974731839313 (A) numchar
+endstack
+
+(185) startstack
+ 0.0391205368916595 (R) numchar
+ 0.0391205368916595 (I) numchar
+ 0.117361610674978 (M) numchar
+ 0.234723221349957 (F) numchar
+ 0.312964295133276 (Y) numchar
+ 0.391205368916595 (V) numchar
+ 1.05625449607481 (L) numchar
+endstack
+
+(186) startstack
+ 0.026157877851469 (V) numchar
+ 0.026157877851469 (Q) numchar
+ 0.0523157557029381 (R) numchar
+ 0.0784736335544071 (G) numchar
+ 0.0784736335544071 (C) numchar
+ 0.104631511405876 (T) numchar
+ 0.183105144960283 (S) numchar
+ 0.209263022811752 (D) numchar
+ 0.287736656366159 (E) numchar
+ 0.418526045623505 (A) numchar
+endstack
+
+(187) startstack
+ 0.0167534668658667 (Y) numchar
+ 0.0167534668658667 (F) numchar
+ 0.0167534668658667 (D) numchar
+ 0.0335069337317334 (Q) numchar
+ 0.0335069337317334 (M) numchar
+ 0.0335069337317334 (I) numchar
+ 0.0335069337317334 (C) numchar
+ 0.0502604005976001 (E) numchar
+ 0.0670138674634668 (S) numchar
+ 0.0837673343293335 (V) numchar
+ 0.0837673343293335 (N) numchar
+ 0.1005208011952 (A) numchar
+ 0.167534668658667 (G) numchar
+ 0.2010416023904 (L) numchar
+endstack
+
+(188) startstack
+ 4.32192809488736 (D) numchar
+endstack
+
+(189) startstack
+ 4.32192809488736 (G) numchar
+endstack
+
+(190) startstack
+ 4.32192809488736 (F) numchar
+endstack
+
+(191) startstack
+ 4.32192809488736 (A) numchar
+endstack
+
+(192) startstack
+ 4.32192809488736 (R) numchar
+endstack
+
+(193) startstack
+ 4.32192809488736 (V) numchar
+endstack
+
+(194) startstack
+ 0.0440704206805772 (Y) numchar
+ 0.264422524083463 (I) numchar
+ 0.440704206805772 (L) numchar
+ 0.48477462748635 (F) numchar
+ 1.23397177905616 (V) numchar
+endstack
+
+(195) startstack
+ 4.32192809488736 (Q) numchar
+endstack
+
+(196) startstack
+ 4.32192809488736 (D) numchar
+endstack
+
+(197) startstack
+ 4.32192809488736 (N) numchar
+endstack
+
+(198) startstack
+ 0.0294608110797445 (P) numchar
+ 0.0294608110797445 (K) numchar
+ 0.0589216221594889 (I) numchar
+ 0.0589216221594889 (G) numchar
+ 0.0589216221594889 (F) numchar
+ 0.0883824332392334 (C) numchar
+ 0.117843244318978 (V) numchar
+ 0.324068921877189 (S) numchar
+ 0.324068921877189 (R) numchar
+ 0.559755410515145 (A) numchar
+endstack
+
+(199) startstack
+ 0.0225720639172099 (L) numchar
+ 0.0225720639172099 (G) numchar
+ 0.0225720639172099 (E) numchar
+ 0.0451441278344199 (I) numchar
+ 0.0677161917516298 (Q) numchar
+ 0.0677161917516298 (K) numchar
+ 0.0677161917516298 (H) numchar
+ 0.0902882556688398 (S) numchar
+ 0.0902882556688398 (D) numchar
+ 0.15800444742047 (A) numchar
+ 0.248292703089309 (T) numchar
+ 0.361153022675359 (N) numchar
+endstack
+
+(200) startstack
+ 0.0379685763199765 (T) numchar
+ 0.0379685763199765 (Q) numchar
+ 0.0379685763199765 (M) numchar
+ 0.0379685763199765 (I) numchar
+ 0.0379685763199765 (E) numchar
+ 0.0759371526399529 (L) numchar
+ 0.493591492159694 (V) numchar
+ 0.493591492159694 (D) numchar
+ 0.873277255359459 (A) numchar
+endstack
+
+(201) startstack
+ 0.0549288532752987 (F) numchar
+ 0.329573119651792 (M) numchar
+ 0.769003945854182 (I) numchar
+ 1.75772330480956 (L) numchar
+endstack
+
+(202) startstack
+ 0.0333553717574125 (F) numchar
+ 0.066710743514825 (V) numchar
+ 0.066710743514825 (R) numchar
+ 0.066710743514825 (I) numchar
+ 0.100066115272238 (E) numchar
+ 0.13342148702965 (S) numchar
+ 0.2668429740593 (K) numchar
+ 0.333553717574125 (T) numchar
+ 0.700462806905663 (A) numchar
+endstack
+
+(203) startstack
+ 4.32192809488736 (K) numchar
+endstack
+
+(204) startstack
+ 4.32192809488736 (A) numchar
+endstack
+
+(205) startstack
+ 4.32192809488736 (M) numchar
+endstack
+
+(206) startstack
+ 4.32192809488736 (K) numchar
+endstack
+
+(207) startstack
+ 0.0320339899018973 (Q) numchar
+ 0.0320339899018973 (N) numchar
+ 0.0320339899018973 (F) numchar
+ 0.0320339899018973 (E) numchar
+ 0.096101969705692 (T) numchar
+ 0.096101969705692 (R) numchar
+ 0.160169949509487 (K) numchar
+ 0.224237929313281 (H) numchar
+ 0.384407878822768 (A) numchar
+ 0.608645808136049 (S) numchar
+endstack
+
+(208) startstack
+ 0.256204910334764 (L) numchar
+ 0.512409820669528 (N) numchar
+ 2.56204910334764 (K) numchar
+endstack
+
+(209) startstack
+ 4.32192809488736 (Y) numchar
+endstack
+
+(210) startstack
+ 4.32192809488736 (K) numchar
+endstack
+
+(211) startstack
+ 4.32192809488736 (E) numchar
+endstack
+
+(212) startstack
+ 0.256204910334764 (A) numchar
+ 0.512409820669528 (F) numchar
+ 2.56204910334764 (L) numchar
+endstack
+
+(213) startstack
+ 0.0335616837126944 (Y) numchar
+ 0.0335616837126944 (V) numchar
+ 0.0335616837126944 (T) numchar
+ 0.0335616837126944 (N) numchar
+ 0.0335616837126944 (H) numchar
+ 0.0671233674253888 (Q) numchar
+ 0.100685051138083 (R) numchar
+ 0.100685051138083 (A) numchar
+ 0.167808418563472 (E) numchar
+ 0.503425255690416 (G) numchar
+ 0.637671990541194 (K) numchar
+endstack
+
+(214) startstack
+ 4.32192809488736 (E) numchar
+endstack
+
+(215) startstack
+ 4.32192809488736 (A) numchar
+endstack
+
+(216) startstack
+ 4.32192809488736 (D) numchar
+endstack
+
+(217) startstack
+ 4.32192809488736 (L) numchar
+endstack
+
+(218) startstack
+ 4.32192809488736 (Y) numchar
+endstack
+
+(219) startstack
+ 0.0462385538995019 (V) numchar
+ 0.0924771077990038 (M) numchar
+ 0.0924771077990038 (I) numchar
+ 0.0924771077990038 (A) numchar
+ 0.184954215598008 (L) numchar
+ 0.601101200693525 (F) numchar
+ 1.29467950918605 (Y) numchar
+endstack
+
+(220) startstack
+ 0.0524292909038729 (T) numchar
+ 0.0524292909038729 (S) numchar
+ 0.0524292909038729 (K) numchar
+ 0.0524292909038729 (D) numchar
+ 0.629151490846474 (Q) numchar
+ 0.681580781750347 (R) numchar
+ 0.73401007265422 (H) numchar
+endstack
+
+(221) startstack
+ 0.205151827753065 (S) numchar
+ 0.41030365550613 (A) numchar
+ 2.87212558854291 (G) numchar
+endstack
+
+(222) startstack
+ 4.32192809488736 (H) numchar
+endstack
+
+(223) startstack
+ 4.32192809488736 (H) numchar
+endstack
+
+(224) startstack
+ 4.32192809488736 (L) numchar
+endstack
+
+(225) startstack
+ 1.13454408694429 (Q) numchar
+ 2.26908817388858 (K) numchar
+endstack
+
+(226) startstack
+ 4.32192809488736 (P) numchar
+endstack
+
+(227) startstack
+ 0.912321864722069 (S) numchar
+ 0.912321864722069 (D) numchar
+ 0.912321864722069 (A) numchar
+endstack
+
+(228) startstack
+ 0.912321864722069 (V) numchar
+ 0.912321864722069 (S) numchar
+ 0.912321864722069 (A) numchar
+endstack
+
+(229) startstack
+ 0.453299034372349 (T) numchar
+ 0.453299034372349 (E) numchar
+ 2.26649517186175 (A) numchar
+endstack
+
+(230) startstack
+ 4.32192809488736 (Y) numchar
+endstack
+
+(231) startstack
+ 4.32192809488736 (A) numchar
+endstack
+
+
+
+EndLine
+EndLogo
+
+%%EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

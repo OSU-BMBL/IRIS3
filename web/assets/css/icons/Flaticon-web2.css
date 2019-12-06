@@ -1,0 +1,89 @@
+	/*
+  	fl icon font: fl
+  	Creation date: 05/05/2017 11:01
+  	*/
+
+@font-face {
+  font-family: "Fl-WEB2";
+  src: url("../../fonts/Flaticon-web2.eot");
+  src: url("../../fonts/Flaticon-web2.eot?#iefix") format("embedded-opentype"),
+       url("../../fonts/Flaticon-web2.woff") format("woff"),
+       url("../../fonts/Flaticon-web2.ttf") format("truetype"),
+       url("../../fonts/Flaticon-web2.svg#Fl-WEB2") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Fl-WEB2";
+    src: url("../../fonts/Flaticon-web2.svg#Fl-WEB2") format("svg");
+  }
+}
+
+[class^="fl-web2-"],
+[class*=" fl-web2-"],
+[class^="fl-web2-"],
+[class*=" fl-web2-"] {
+    display: inline-block;
+}
+
+[class^="fl-web2-"]:before,
+[class*=" fl-web2-"]:before,
+[class^="fl-web2-"]:after,
+[class*=" fl-web2-"]:after {
+    font-family: Fl-WEB2;
+    font-style: normal;
+    line-height: 1;
+}
+
+.fl-web2-stretch:before { content: "\f100"; }
+.fl-web2-profile:before { content: "\f101"; }
+.fl-web2-folder:before { content: "\f102"; }
+.fl-web2-sitemap:before { content: "\f103"; }
+.fl-web2-tea-cup:before { content: "\f104"; }
+.fl-web2-notebook:before { content: "\f105"; }
+.fl-web2-tablet-1:before { content: "\f106"; }
+.fl-web2-mouse:before { content: "\f107"; }
+.fl-web2-keyboard:before { content: "\f108"; }
+.fl-web2-workplace:before { content: "\f109"; }
+.fl-web2-pantone:before { content: "\f10a"; }
+.fl-web2-compass:before { content: "\f10b"; }
+.fl-web2-dropper:before { content: "\f10c"; }
+.fl-web2-ruler:before { content: "\f10d"; }
+.fl-web2-pencil:before { content: "\f10e"; }
+.fl-web2-portfolio:before { content: "\f10f"; }
+.fl-web2-browser-3:before { content: "\f110"; }
+.fl-web2-loupe:before { content: "\f111"; }
+.fl-web2-diamond:before { content: "\f112"; }
+.fl-web2-rgb:before { content: "\f113"; }
+.fl-web2-shutter:before { content: "\f114"; }
+.fl-web2-background-1:before { content: "\f115"; }
+.fl-web2-crop:before { content: "\f116"; }
+.fl-web2-text-height:before { content: "\f117"; }
+.fl-web2-text:before { content: "\f118"; }
+.fl-web2-text-box:before { content: "\f119"; }
+.fl-web2-drop-1:before { content: "\f11a"; }
+.fl-web2-browser-2:before { content: "\f11b"; }
+.fl-web2-drop:before { content: "\f11c"; }
+.fl-web2-allocation-1:before { content: "\f11d"; }
+.fl-web2-allocation:before { content: "\f11e"; }
+.fl-web2-vector:before { content: "\f11f"; }
+.fl-web2-tap:before { content: "\f120"; }
+.fl-web2-sliders:before { content: "\f121"; }
+.fl-web2-password:before { content: "\f122"; }
+.fl-web2-image:before { content: "\f123"; }
+.fl-web2-line-chart:before { content: "\f124"; }
+.fl-web2-text-editor:before { content: "\f125"; }
+.fl-web2-laptop:before { content: "\f126"; }
+.fl-web2-prototype:before { content: "\f127"; }
+.fl-web2-app:before { content: "\f128"; }
+.fl-web2-tablet:before { content: "\f129"; }
+.fl-web2-smartphone:before { content: "\f12a"; }
+.fl-web2-landing:before { content: "\f12b"; }
+.fl-web2-background:before { content: "\f12c"; }
+.fl-web2-video-player:before { content: "\f12d"; }
+.fl-web2-browser-1:before { content: "\f12e"; }
+.fl-web2-browser:before { content: "\f12f"; }
+.fl-web2-adaptive:before { content: "\f130"; }
+.fl-web2-monitor:before { content: "\f131"; }

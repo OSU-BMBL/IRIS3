@@ -1,0 +1,58 @@
+<html class="gr__amp_pharm_mssm_edu">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <style type="text/css" abt="234"></style>
+</head>
+
+<body data-gr-c-s-loaded="true">
+    <div id="the-basics-content">
+        <h1>How to submit a job</h1>
+        <div class="qa">
+            <h3 class="question">General submission</h3>
+            <div class="answer">
+                <img src="./assets/img/tutorial/2.1submit.png" style="width:100%">
+
+                <p><b>1.</b> Example data can be chosen or downloaded from the drop-down selections.</p>
+
+                <p><b>2.</b> Upload your expression file by selecting or dragging the file from local to the dropzone box.
+                </p>
+                <p><b>3.</b> Choose the species. Either Human or Mouse. Note that, choosimh the wrong species may lead to low gene matching rate or occur errors. In some cases, you may need to wait and re-select the species untill your file finishes upload.
+
+                    <p><b>4.</b> An email is not required to submit the job; however, we strongly suggest you provide your email in order to receive notice once the job is completed.</p>
+
+                    <p><b>5.</b> A preview of your data will show if you upload a text format file.</p>
+                    <p><b>6.</b> The maximum number of upload files is 3, typically designed for your 10X genomics raw gene-barcodes matrix files. Note that do not unzip your files, otherwise our server will consider you uploading a text format gene expression
+                        file and will try to display the preview.</p>
+
+                    <p><b>Note:</b> If the user directly load the <b>example data</b> and leaving all settings as default, it will be directed to the example result page without waiting for the program running.</p> Users who download the example data and
+                    upload for a job run will be regarded as a new job submission.
+                    <img style="width:100%" src="./assets/img/tutorial/2.2conformation.png">
+                    <br>
+                    <br>
+                    <p><b>7.</b> The "Example output" will show you the result page of the Mouse lung epithelial (Zeisel et al. 2015) dataset, without running the program. </p>
+                    <br>
+            </div>
+        </div>
+        <div class="qa">
+            <h3 class="question">Advanced options</h3>
+            <div class="answer">
+                <img src="./assets/img/tutorial/2.4advance.png">
+                <br>
+                <p><b>1.</b> Quick selecting recommended parameter, either a set of parameters with less running time or using default parameters but longer running time.</p>
+                <p><b>2.</b> Select for imputation process (recommended for 10X Genomics data; very time-consuming).</p>
+                <p><b>3.</b> Control the output biclusters from QUBIC.
+                    <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics&q=3"> <b>Details can be found here </b></a>
+                </p>
+                <p><b>4.</b> Users can provide a cell label file with a "cell names" column matching the names in the expression file (optional), and the second column indicating the ground truth cell labels. Cell labels will be used in two ways: (i) assess
+                    the cell type prediction results from Seurat, and (ii) assign CTSRs. If no cell label file is uploaded, the pipeline will automatically use the predicted clusters from Seurat for the following regulon predictions.</p>
+                <p><b>5.</b> Users can choose to use either the prediction cell cluster result from Seurat or the ground truth cell types uploaded above for the following CTSR prediction.</p>
+                <p><b>6.</b> The "upload gene module" function allows users provide their own gene lists and get them analyzed by IRIS3. The uploaded file can includes single/multiple columns, and each column represents a gene module.</p>
+                <p><b>7.</b> The upstream promoter region is open to users to deside the region for motif finding. The default value is 1000 bp. Wider range may cause require longer computational time.</p>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

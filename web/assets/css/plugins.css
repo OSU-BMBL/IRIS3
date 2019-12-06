@@ -1,0 +1,19 @@
+/*--------------------------------------------------------------------------------------
+Name: BDEXPERT FRAMEWORK.
+Theme URI: http://quomodosoft.com
+Author URI: http://quomodosoft.com
+Description: 100% Responsive, Highly Customizable, SEO Friendly CSS Framework Useing Twitter Bootstrap Latest.
+Author: BDEXPERT
+Version: 1.0
+----------------------------------------------------------------------------------------
+                                PLUGINS CSS FILES INDEX
+========================================================================================
+    1. BASE CSS
+----------------------------------------------------------------------------------------*/
+
+@import url("plugins/normalize.css");
+@import url("plugins/animate.css");
+@import url("plugins/modal-video.min.css");
+@import url("plugins/owl.carousel.css");
+@import url("plugins/stellarnav.min.css");
+@import url("plugins/bootstrap.min.css");

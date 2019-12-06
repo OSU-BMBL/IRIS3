@@ -1,0 +1,55 @@
+/*--------------------------------------------------------------------------------------
+Name: BDEXPERT FRAMEWORK.
+Theme URI: http://quomodosoft.com
+Author URI: http://quomodosoft.com
+Description: 100% Responsive, Highly Customizable, SEO Friendly CSS Framework Useing Twitter Bootstrap Latest.
+Author: BDEXPERT
+Version: 1.0
+----------------------------------------------------------------------------------------
+                                CORE CSS FILES INDEX
+========================================================================================
+    1. TEXT TYPOGRAPHY CSS
+    2. MARGIN CSS
+    3. PADDING CSS
+    4. BACKGROUND CSS
+    5. COLOR CSS
+    6. BORDER CSS
+    7. SHADOW CSS
+    8. BEFORE AFTER CSS
+    9. MENU CSS
+    10. FORM & INPUT CSS
+    11. AREA BG CSS
+    12. AREA TITLE CSS
+    13. HOVER CSS
+    14. HOME AREA CSS
+    15. HOME SLIDER CSS
+    16. BOX CSS
+    17. TEAM CSS
+    18. SCREENSHOT CSS
+    19. BLOG CSS
+    20. WIDGETS CSS
+    21. SINGLE PAGE CSS
+----------------------------------------------------------------------------------------*/
+
+@import url("core/text-typography.css");
+@import url("core/default.css");
+@import url("core/margin.css");
+@import url("core/padding.css");
+@import url("core/background.css");
+@import url("core/color.css");
+@import url("core/border.css");
+@import url("core/shadow.css");
+@import url("core/before-after.css");
+@import url("core/menu.css");
+@import url("core/form-and-input.css");
+@import url("core/area-bg.css");
+@import url("core/area-title.css");
+@import url("core/hover.css");
+@import url("core/home-area.css");
+@import url("core/slider-area.css");
+@import url("core/box.css");
+@import url("core/team.css");
+@import url("core/screenshot.css");
+@import url("core/blog.css");
+@import url("core/widgets.css");
+@import url("core/single-page.css");

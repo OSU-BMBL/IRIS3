@@ -1,0 +1,162 @@
+=================
+
+This software provides a biclustering module for gene expression data, including microarray and RNA-seq data. For a set of genes and a set of conditions, the program outputs a block-like structure which shows uniform pattern within the block, the block would 
+contain only subsets of all given genes under subsets of all given conditions. 
+
+Certain parts of the code uses open-source data structure library codes, including:
+- Mark A. Weiss's data structure codes <http://www.cs.fiu.edu/~weiss/>
+
+==================
+Installation
+==================
+Download the source code from https://github.com/maqin2001/qubic2, which will be a zip file named qubic2-master.zip
+Simply put the zip file in any directory, 
+
+    $ unzip qubic2-master.zip
+
+enter the folder "qubic2-master" and type 
+
+    $ make 
+
+then the compiled codes are within the same directory as the source.
+Note that higher version of gcc is needed to compile the code. It is suggested that the gcc version should be higher than 4.8
+
+==================
+Inputs and outputs
+==================
+The major program in the provided package is `qubic`, it can parse two 
+formats of files, discrete data and continuous data, and examples for each
+are provided. See help and look at all available options.
+
+    $ ./qubic -h
+
+Take a look at `toy_example` (discrete data) first. And try to run clustering
+
+    $ ./qubic -i ./data/toy_example -d
+
+-d is important here since it tells the program that this is discrete data.
+
+Then look at a larger file `Ecoli` (continuous data). Try to run
+
+    $ ./qubic -i ./data/example -f .25
+
+This restricts no two blocks overlap more than 0.25 of the size of each one. And the other parameters are default value.
+
+For each input file, our program generates five output files, namely,'.blocks' file, '.chars'file, '.split.chars','.em.chars' and '.rules' file.
+
+In '.blocks' file, you can see all the biclusters the program found, especially, we use a blank line to separate 
+the positively and the negatively (if any) correlated genes in each bicluster. When Dual strategy is used, the blank line is used to seperate core and dual genes.
+
+As to '.split.chars' file, it provides the splited qualitative matrix of the expression data to users with some details of how to 
+discrete the data in '.rules' file. The 'em.chars' file contains the representing row for each gene, with integers denote the most likely distribution the value belongs to. The '.chars' is another qualitative representation for genes, it consists of 0,1, and -1, where 1 means 'highly expressed', -1 means 'lowly expressed' and 0 be 'normally expressed'. You can find further details about how to represent a expression dataset with a qualitative matrix in our paper.
+
+======================
+Parameters of QUBIC 
+======================
+QUBIC has a number of parameters for discretization and biclustering, respectivley. 
+
+**************
+Discretization
+**************
+-F the flap to do discretization without biclustering
+
+-r if use quantile based discretization, r is the range of possible ranks
+
+-q if use quantile discretization for continuous data, q is the percentage of the regulating conditions for each gene
+
+-n the flag to discretize the continuous values by a mixture normal distirbution model. Default: FALSE
+
+-R the flag to log transform the data first and then discretize the data by a mixture of normal distribution model. Default: FALSE
+
+**************
+Biclustering
+**************
+-f overlaps among to-be-identified biclusers. Default: 1
+
+-k minimum column width of the bicluster, default: 5% of columns, minimum 2
+
+-c consistency level of the block (0.5,1.0]. The minimum ratio between the number of identical valid symbols in a column and the total 	    number of rows in the output. Default: 1.0.
+
+-o the desired number o of the output biclusters (default value is 100).
+
+-C the flag to use Dual strategy to expand the core bicluster; Default: FALSE
+
+-N the flag to use QUBIC's objective function(i.e., min(|I|,|J|)) to expand bicluster
+
+
+For each of these parameters, we allow the user to adjust the default value to provide some flexibility.
+In specific, the parameters r and q are used in qunatile-based discretization, they affect the granularity of the biclusters. A user is recommended to start with a small value of r (the default value is 1 so the corresponding data matrix consists of values +1, -1 and 0), 
+evaluate the results, and then use larger values (should not be larger than half of the number of the columns) to look for fine structures within the identified biclusters. The choice of q's value depends on the specific application goals; that is if the goal is to find genes that are responsive to local regulators, we should use a relatively small q-value; otherwise we may want to consider larger q-values. 
+The default value of q is 0.06 in QUBIC (this value is selected based on the optimal biclustering results on simulated data).
+
+We have a parameter f to control the level of overlaps between to-be-identified biclusters, ts default value is set to 1 to ensure that no two reported biclusters overlap more than f.
+
+QUBIC2 also provides the option (-d) that a user can skip the step of using ranks to represent the 
+actual gene expression values to go directly to the biclustering step on the provided matrix. It is noted that distribution based discretization may take a long time, thus if users intend to run biclustering for multiple times, it is recommended that users run discretization first, then take the split.chars file as input file, and add -d to run biclustering on this discretized file. 
+
+
+==================
+Basic usages
+==================
+
+$ ./qubic -i  filename [argument list]
+
+The defualt biclustering method in QUBIC2 uses KL score to control bicluster expansion.
+
+==================
+Advanced usages
+==================
+- A new function that can expand identified biclusters in specific environment. Suppose you have two expression matrices
+ A and B, where B is subset of A, you can extend the biclusters of B in the matrix A as following,
+    
+    $ ./qubic -i A
+    
+    $ ./qubic -i B
+    
+    $ ./qubic -i A.chars -b B.blocks -s
+
+and the program will generate a 'B.blocks.expansion' file, containing the enlarged biclusters in 'B.blocks'.
+
+	==========
+- when we use the parameter -r (>1), we have two methods, quantile_from_sorted_data and quantile_from_sorted_data_value, 
+see details in read_array.c. now the results have each own advantages on GO, KEGG and REGULON.-07.20.2009
+
+	==========
+
+- N: the flag using QUBIC's objective function(i.e., min(|I|,|J|)) to determine when to stop
+    
+    $ ./qubic -i ./data/example -N
+	==========
+
+- C: the flag using Dual strategy to expand core bicluster 
+
+    $ ./qubic -i ./data/example -C
+
+(Note1: when use -C and -N simutaneously, users are using QUBIC's objective function and Dual strategy;
+Note2: when use -C, users should no longer use -c )
+
+	=========
+
+- To descretize data by the mixture of normal distribution model
+
+    $ ./qubic -i ./data/example -n
+
+- To descretize RPKM data by the mixture of normal distribution model
+
+    $ ./qubic -i ./data/example -R
+
+- F: the flag of only doing discretization
+
+    $ ./qubic -i ./data/example -F -R
+
+
+
+==================
+Contact
+==================
+Any questions, problems, bugs are welcome and should be dumped to
+
+Qin Ma <qin.ma@sdstate.edu>
+
+Creation: Oct. 12, 2015
+

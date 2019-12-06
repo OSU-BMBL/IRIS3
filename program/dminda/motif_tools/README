@@ -1,0 +1,16 @@
+For a bobro output closure files, this fold contains scripts for format translation and information paser
+
+Require: perl, python(2.7.4+), biopython(1.6.2)
+
+# closuers to align
+cat promoters.closures | perl bobro2align.pl > promoters.align
+
+# align to information matrix
+cat promoters.align | perl align2matrix.py > promoters.matrix
+# matrix contains additional information for each motif
+
+# align to uniprobe format
+cat promoters.align | perl align2uniprobe.pl > promoters.uniprobe
+
+# uniprobe to meme format
+cat promoters.uniprobe | perl uniprobe2meme  > promoters.meme

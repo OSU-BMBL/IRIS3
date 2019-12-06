@@ -1,0 +1,412 @@
+<html class="gr__amp_pharm_mssm_edu">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <style type="text/css" abt="234"></style>
+    <script type="text/javascript">
+        if (window.location.hash == "") {
+            window.location.href = "https://bmbl.bmi.osumc.edu/iris3/news.php#1version";
+        }
+        $(document).ready(function() {
+            $('#s2').DataTable({
+                dom: 'lBfrtip',
+                buttons: [{
+                    extend: 'copy',
+                    title: 'Supplementary_Table_S2'
+                }, {
+                    extend: 'csv',
+                    title: 'Supplementary_Table_S2'
+                }],
+                "searching": true,
+                "bInfo": true,
+                "aLengthMenu": [
+                    [5, 10, 30, -1],
+                    [5, 10, 30, "All"]
+                ],
+                "iDisplayLength": 30,
+                columnDefs: [{
+                    "targets": [8],
+                    render: function(data, type, row, meta) {
+                        if (type === 'display') {
+                            dat = '<a  href="https://bmbl.bmi.osumc.edu/iris3/results.php?jobid=' + data + '">' + data + '</a>'
+                        }
+                        return dat
+                    }
+                }],
+            })
+        })
+    </script>
+</head>
+
+<body data-gr-c-s-loaded="true">
+    <div id="the-basics-content">
+        <h1>News</h1>
+        <div class="qa">
+            <h3 class="question">11/10/2019</h3>
+            <div class="answer">
+                <p>We are excited to present you the IRIS3 server 1.0! Please feel free to contact us if you encounter any issues. </p>
+            </div>
+
+            <div class="clear"></div>
+        </div>
+
+        <div class="qa">
+            <h3 class="question">11/10/2019</h3>
+            <div class="answer">
+                <p>The test datasets consist of cells ranging from 49 to 7,459 (including nine 10X Genomics datasets) and were collected from Gene Expression Omnibus and the European Bioinformatics Institute. A detailed report and links for each of the 30
+                    datasets can be accessed below, using the job IDs listed in <a href="storage/paper/Supplementary_Table_S2.xlsx">Supplementary Table S2</a>. </p>
+                <table id="s2" class="table table-bordered table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th title="Field #1">Index</th>
+                            <th title="Field #2">Dataset</th>
+                            <th title="Field #3">Species</th>
+                            <th title="Field #4">Tissue</th>
+                            <th title="Field #5">Cell #</th>
+                            <th title="Field #6">Gene #</th>
+                            <th title="Field #7">Seq tech</th>
+                            <th title="Field #8">Data source</th>
+                            <th title="Field #9">IRIS3 JobID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td align="right">1</td>
+                            <td>Biase</td>
+                            <td>Mm</td>
+                            <td>Embryo</td>
+                            <td align="right">49</td>
+                            <td align="right">25737</td>
+                            <td>immunosurgery</td>
+                            <td>GSE57249</td>
+                            <td align="right">2019102482854</td>
+                        </tr>
+                        <tr>
+                            <td align="right">2</td>
+                            <td>Li</td>
+                            <td>Hs</td>
+                            <td>Pancreatic islet cell</td>
+                            <td align="right">60</td>
+                            <td align="right">180253</td>
+                            <td>manual dilution</td>
+                            <td>GSE73727</td>
+                            <td align="right">20191026133354</td>
+                        </tr>
+                        <tr>
+                            <td align="right">3</td>
+                            <td>Treutlein</td>
+                            <td>Mm</td>
+                            <td>mESC</td>
+                            <td align="right">80</td>
+                            <td align="right">23271</td>
+                            <td>C1</td>
+                            <td>GSE52583</td>
+                            <td align="right">20191024222208</td>
+                        </tr>
+                        <tr>
+                            <td align="right">4</td>
+                            <td>Yan</td>
+                            <td>Hs</td>
+                            <td>Embryo</td>
+                            <td align="right">90</td>
+                            <td align="right">20214</td>
+                            <td>manual</td>
+                            <td>GSE36552</td>
+                            <td align="right">20191020160119</td>
+                        </tr>
+                        <tr>
+                            <td align="right">5</td>
+                            <td>Goolam</td>
+                            <td>Mm</td>
+                            <td>Embryo</td>
+                            <td align="right">124</td>
+                            <td align="right">41480</td>
+                            <td>manual</td>
+                            <td>E-MTAB-3321</td>
+                            <td align="right">2019102482928</td>
+                        </tr>
+                        <tr>
+                            <td align="right">6</td>
+                            <td>Guo</td>
+                            <td>Mm</td>
+                            <td>Lung</td>
+                            <td align="right">148</td>
+                            <td align="right">36188</td>
+                            <td>C1</td>
+                            <td>GSE69761</td>
+                            <td align="right">20191026133219</td>
+                        </tr>
+                        <tr>
+                            <td align="right">7</td>
+                            <td>Fan(C1)</td>
+                            <td>Hs</td>
+                            <td>mayoloma-1</td>
+                            <td align="right">172</td>
+                            <td align="right">55860</td>
+                            <td>C1</td>
+                            <td>GSE110499</td>
+                            <td align="right">2019110564805</td>
+                        </tr>
+                        <tr>
+                            <td align="right">8</td>
+                            <td>Deng</td>
+                            <td>Mm</td>
+                            <td>Embryo</td>
+                            <td align="right">268</td>
+                            <td align="right">22457</td>
+                            <td>manual</td>
+                            <td>GSE45719</td>
+                            <td align="right">2019102483152</td>
+                        </tr>
+                        <tr>
+                            <td align="right">9</td>
+                            <td>Pollen</td>
+                            <td>Hs</td>
+                            <td>Brain stem cell</td>
+                            <td align="right">301</td>
+                            <td align="right">23730</td>
+                            <td>C1</td>
+                            <td>SRP041736</td>
+                            <td align="right">2019102483326</td>
+                        </tr>
+                        <tr>
+                            <td align="right">10</td>
+                            <td>Chung</td>
+                            <td>Hs</td>
+                            <td>Immune cells</td>
+                            <td align="right">317</td>
+                            <td align="right">57915</td>
+                            <td>C1</td>
+                            <td>GSE75688</td>
+                            <td align="right">20191026133009</td>
+                        </tr>
+                        <tr>
+                            <td align="right">11</td>
+                            <td>Darmanis</td>
+                            <td>Hs</td>
+                            <td>Brain</td>
+                            <td align="right">466</td>
+                            <td align="right">22088</td>
+                            <td>C1</td>
+                            <td>GSE67835</td>
+                            <td align="right">2019110103233</td>
+                        </tr>
+                        <tr>
+                            <td align="right">12</td>
+                            <td>Usoskin</td>
+                            <td>Mm</td>
+                            <td>Neurons</td>
+                            <td align="right">622</td>
+                            <td align="right">25334</td>
+                            <td>capture in well</td>
+                            <td>GSE59739</td>
+                            <td align="right">20191024223404</td>
+                        </tr>
+                        <tr>
+                            <td align="right">13</td>
+                            <td>Rambow</td>
+                            <td>Hs</td>
+                            <td>Melanoma</td>
+                            <td align="right">675</td>
+                            <td align="right">57445</td>
+                            <td>Smart-Seq2</td>
+                            <td>GSE116237</td>
+                            <td align="right">2019102482213</td>
+                        </tr>
+                        <tr>
+                            <td align="right">14</td>
+                            <td>Kolodziejczyk</td>
+                            <td>Mm</td>
+                            <td>mESC</td>
+                            <td align="right">704</td>
+                            <td align="right">38653</td>
+                            <td>C1</td>
+                            <td>E-MTAB-2600</td>
+                            <td align="right">2019110595153</td>
+                        </tr>
+                        <tr>
+                            <td align="right">15</td>
+                            <td>Rosenzweig</td>
+                            <td>Mm</td>
+                            <td>Alzheimer(PDL1)</td>
+                            <td align="right">1920</td>
+                            <td align="right">52634</td>
+                            <td>Mars-Seq</td>
+                            <td>GSE130008</td>
+                            <td align="right">20191101133117</td>
+                        </tr>
+                        <tr>
+                            <td align="right">16</td>
+                            <td>Mathys</td>
+                            <td>Mm</td>
+                            <td>Alzheimer (microglia)</td>
+                            <td align="right">2209</td>
+                            <td align="right">23952</td>
+                            <td>SMART-seq2</td>
+                            <td>GSE103334</td>
+                            <td align="right">20191026133546</td>
+                        </tr>
+                        <tr>
+                            <td align="right">17</td>
+                            <td>Klein</td>
+                            <td>Mm</td>
+                            <td>mESC</td>
+                            <td align="right">2717</td>
+                            <td align="right">24175</td>
+                            <td>in-drop</td>
+                            <td>GSE65525</td>
+                            <td align="right">20191024222852</td>
+                        </tr>
+                        <tr>
+                            <td align="right">18</td>
+                            <td>Zeisel</td>
+                            <td>Mm</td>
+                            <td>Neurons</td>
+                            <td align="right">3005</td>
+                            <td align="right">19972</td>
+                            <td>C1</td>
+                            <td>GSE60361</td>
+                            <td align="right">20191024223952</td>
+                        </tr>
+                        <tr>
+                            <td align="right">19</td>
+                            <td>Tirosh-1</td>
+                            <td>Hs</td>
+                            <td>Oligodendroglioma tumors</td>
+                            <td align="right">4348</td>
+                            <td align="right">23686</td>
+                            <td>Smart-Seq2</td>
+                            <td>GSE70630</td>
+                            <td align="right">20191102104935</td>
+                        </tr>
+                        <tr>
+                            <td align="right">20</td>
+                            <td>Tirosh-2</td>
+                            <td>Hs</td>
+                            <td>Melanoma</td>
+                            <td align="right">4645</td>
+                            <td align="right">23686</td>
+                            <td>Smart-Seq2</td>
+                            <td>GSE72056</td>
+                            <td align="right">2019102482720</td>
+                        </tr>
+                        <tr>
+                            <td align="right">21</td>
+                            <td>Marques</td>
+                            <td>Mm</td>
+                            <td>Oligodendrocyte</td>
+                            <td align="right">5069</td>
+                            <td align="right">23556</td>
+                            <td>C1</td>
+                            <td>GSE75330</td>
+                            <td align="right">2019110105653</td>
+                        </tr>
+                        <tr>
+                            <td align="right">22</td>
+                            <td>Fan(10X)</td>
+                            <td>Hs</td>
+                            <td>Myeloma-1</td>
+                            <td align="right">1339</td>
+                            <td align="right">33694</td>
+                            <td>10X</td>
+                            <td>GSE110499</td>
+                            <td align="right">20191026133824</td>
+                        </tr>
+                        <tr>
+                            <td align="right">23</td>
+                            <td>Tan</td>
+                            <td>Mm</td>
+                            <td>Immune cells</td>
+                            <td align="right">2018</td>
+                            <td align="right">27998</td>
+                            <td>10X</td>
+                            <td>GSE123400</td>
+                            <td align="right">2019110102532</td>
+                        </tr>
+                        <tr>
+                            <td align="right">24</td>
+                            <td>Schafer</td>
+                            <td>Mm</td>
+                            <td>Immune cells</td>
+                            <td align="right">2553</td>
+                            <td align="right">27997</td>
+                            <td>10X</td>
+                            <td>GSM2883183</td>
+                            <td align="right">2019110105256</td>
+                        </tr>
+                        <tr>
+                            <td align="right">25</td>
+                            <td>Yao-1</td>
+                            <td>Mm</td>
+                            <td>Immune cells</td>
+                            <td align="right">2654</td>
+                            <td align="right">27998</td>
+                            <td>10X</td>
+                            <td>GSM3568588</td>
+                            <td align="right">20191028150458</td>
+                        </tr>
+                        <tr>
+                            <td align="right">26</td>
+                            <td>10X 2700 PBMC</td>
+                            <td>Hs</td>
+                            <td>PBMC</td>
+                            <td align="right">2700</td>
+                            <td align="right">32738</td>
+                            <td>10X</td>
+                            <td>https://support.10xgenomics.com/single-cell-gene-expression/datasets/1.1.0/pbmc3k</td>
+                            <td align="right">2019102895129</td>
+                        </tr>
+                        <tr>
+                            <td align="right">27</td>
+                            <td>Yao-2</td>
+                            <td>Mm</td>
+                            <td>Immune cells</td>
+                            <td align="right">4958</td>
+                            <td align="right">27998</td>
+                            <td>10X</td>
+                            <td>GSM3568592</td>
+                            <td align="right">20191027235455</td>
+                        </tr>
+                        <tr>
+                            <td align="right">28</td>
+                            <td>10X 5000 PBMC</td>
+                            <td>Hs</td>
+                            <td>PMBC</td>
+                            <td align="right">5247</td>
+                            <td align="right">33538</td>
+                            <td>10X</td>
+                            <td>https://support.10xgenomics.com/single-cell-gene-expression/datasets/3.1.0/5k_pbmc_protein_v3</td>
+                            <td align="right">20191027234342</td>
+                        </tr>
+                        <tr>
+                            <td align="right">29</td>
+                            <td>Cao</td>
+                            <td>Hs</td>
+                            <td>Lung</td>
+                            <td align="right">5952</td>
+                            <td align="right">29187</td>
+                            <td>10X</td>
+                            <td>GSM3271044</td>
+                            <td align="right">20191102214257</td>
+                        </tr>
+                        <tr>
+                            <td align="right">30</td>
+                            <td>Gong-Bo</td>
+                            <td>Hs</td>
+                            <td>Liver cell </td>
+                            <td align="right">7459</td>
+                            <td align="right">17469</td>
+                            <td>10X</td>
+                            <td>GSM3209090</td>
+                            <td align="right">20191102124914</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="clear"></div>
+        </div>
+    </div>
+</body>
+
+</html>

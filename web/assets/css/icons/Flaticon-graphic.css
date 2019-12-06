@@ -1,0 +1,85 @@
+	/*
+  	fl icon font: fl
+  	Creation date: 05/01/2018 08:50
+  	*/
+
+@font-face {
+  font-family: "Fl-Graphic";
+  src: url("../../fonts/Flaticon-graphic.eot");
+  src: url("../../fonts/Flaticon-graphic.eot?#iefix") format("embedded-opentype"),
+       url("../../fonts/Flaticon-graphic.woff") format("woff"),
+       url("../../fonts/Flaticon-graphic.ttf") format("truetype"),
+       url("../../fonts/Flaticon-graphic.svg#Fl-Graphic") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Fl-Graphic";
+    src: url("../../fonts/Flaticon-graphic.svg#Fl-Graphic") format("svg");
+  }
+}
+
+[class^="fl-graphic-"], [class*=" fl-graphic-"],
+[class^="fl-graphic-"], [class*=" fl-graphic-"] {   
+    display: inline-block;
+}
+
+[class^="fl-graphic-"]:before, [class*=" fl-graphic-"]:before,
+[class^="fl-graphic-"]:after, [class*=" fl-graphic-"]:after {   
+  font-family: Fl-Graphic;
+font-style: normal;
+    line-height: 1;
+}
+
+.fl-graphic-mouse:before { content: "\f100"; }
+.fl-graphic-wireframe:before { content: "\f101"; }
+.fl-graphic-magic-wand:before { content: "\f102"; }
+.fl-graphic-rgb:before { content: "\f103"; }
+.fl-graphic-book:before { content: "\f104"; }
+.fl-graphic-protractor:before { content: "\f105"; }
+.fl-graphic-text-editor-1:before { content: "\f106"; }
+.fl-graphic-image:before { content: "\f107"; }
+.fl-graphic-sketch-1:before { content: "\f108"; }
+.fl-graphic-paint-bucket:before { content: "\f109"; }
+.fl-graphic-vector-2:before { content: "\f10a"; }
+.fl-graphic-opacity:before { content: "\f10b"; }
+.fl-graphic-settings:before { content: "\f10c"; }
+.fl-graphic-3d-cube:before { content: "\f10d"; }
+.fl-graphic-browser-1:before { content: "\f10e"; }
+.fl-graphic-pantone:before { content: "\f10f"; }
+.fl-graphic-pencil-case:before { content: "\f110"; }
+.fl-graphic-sketch:before { content: "\f111"; }
+.fl-graphic-text-editor:before { content: "\f112"; }
+.fl-graphic-laptop:before { content: "\f113"; }
+.fl-graphic-eraser:before { content: "\f114"; }
+.fl-graphic-idea-1:before { content: "\f115"; }
+.fl-graphic-visibility:before { content: "\f116"; }
+.fl-graphic-creativity:before { content: "\f117"; }
+.fl-graphic-reflect:before { content: "\f118"; }
+.fl-graphic-target:before { content: "\f119"; }
+.fl-graphic-lasso:before { content: "\f11a"; }
+.fl-graphic-browser:before { content: "\f11b"; }
+.fl-graphic-crop:before { content: "\f11c"; }
+.fl-graphic-graphic-design:before { content: "\f11d"; }
+.fl-graphic-layout:before { content: "\f11e"; }
+.fl-graphic-drawing:before { content: "\f11f"; }
+.fl-graphic-compass:before { content: "\f120"; }
+.fl-graphic-ruler:before { content: "\f121"; }
+.fl-graphic-file:before { content: "\f122"; }
+.fl-graphic-idea:before { content: "\f123"; }
+.fl-graphic-vector-1:before { content: "\f124"; }
+.fl-graphic-agenda:before { content: "\f125"; }
+.fl-graphic-graphic-tablet:before { content: "\f126"; }
+.fl-graphic-pipette:before { content: "\f127"; }
+.fl-graphic-layers:before { content: "\f128"; }
+.fl-graphic-tools:before { content: "\f129"; }
+.fl-graphic-paint-palette:before { content: "\f12a"; }
+.fl-graphic-transform:before { content: "\f12b"; }
+.fl-graphic-paint-brush:before { content: "\f12c"; }
+.fl-graphic-paint-spray:before { content: "\f12d"; }
+.fl-graphic-paint-roller:before { content: "\f12e"; }
+.fl-graphic-color-palette:before { content: "\f12f"; }
+.fl-graphic-ideas:before { content: "\f130"; }
+.fl-graphic-vector:before { content: "\f131"; }

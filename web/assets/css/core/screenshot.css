@@ -1,0 +1,103 @@
+/*--------------------------------
+    8. SCREENSHOT AREA
+---------------------------------*/
+
+/*.screenshot-slider-mockup {
+    left: calc(50% - 2px);
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    z-index: 9;
+}
+
+.screenshot-slider-mockup img {
+    display: block;
+    margin: 0 auto;
+    width: 71%;
+}*/
+
+.screenshot-slider {
+    background: rgba(0, 0, 0, 0) url("../../../assest/img/screenshot/screenshot-mobile-mockup.png") no-repeat scroll center center / auto 100%;
+}
+
+.screenshot-slider-2 {
+    background: rgba(0, 0, 0, 0) url("../../../assest/img/screenshot/screenshot-mobile-mockup.png") no-repeat scroll right center / auto 100%;
+}
+
+/*------------------------
+    For FullWidth
+--------------------------*/
+
+/*.screenshot-area .single-screenshot {
+    margin: 70px 0 80px;
+}*/
+
+.screenshot-area .single-screenshot {
+    margin: 46px 0 50px;
+}
+
+.screenshot-area .screenshot-slider-2 .single-screenshot {
+    margin: 40px 16px 50px 0;
+}
+
+.screenshot-area .owl-carousel .owl-item img {
+    margin: 0 auto;
+    max-width: 100%;
+    width: auto;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+}
+
+/*----------------------------------
+    LARGE LAYOUT: 1920px
+-----------------------------------*/
+
+@media only screen and (min-width: 1920px) {
+    /*.screenshot-slider-mockup {
+        left: calc(50% - 2.5px);
+    }
+    .screenshot-slider-mockup img {
+        width: 85%;
+    }*/
+    .screenshot-area .screenshot-slider-2 .single-screenshot {
+        margin: 50px 15px 50px 10px;
+    }
+
+
+}
+
+
+/*----------------------------------
+    MEDIUM LAYOUT: 1280px
+-----------------------------------*/
+
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+
+    /*.screenshot-slider-mockup img {
+        width: 52%;
+    }*/
+    .screenshot-area .single-screenshot {
+        margin: 37px 0;
+    }
+
+}
+
+
+/*----------------------------------
+    TABLET LAYOUT: 768px
+------------------------------------*/
+
+@media (min-width: 768px) and (max-width: 991px) {}
+
+
+/*----------------------------------
+    MOBILE LAYOUT: 320px
+-----------------------------------*/
+
+@media only screen and (max-width: 767px) {
+    /*-----------------*/
+    .screenshot-area .single-screenshot {
+        margin: 52px 30px 56px;
+    }
+}

@@ -1,0 +1,16 @@
+# FontAwesome Icon Docs
+https://fontawesome.com/v4.7.0/icons/
+
+# fl Docs
+https://www.fl.com/packs/essential-set-2
+https://www.fl.com/packs/interaction-set
+
+# Lenea Icon Docs
+http://linea.io/
+
+
+# Bicon Icon Docs
+http://bicon.lab.themebucket.net/
+
+# ThemiFy Icon Docs
+https://themify.me/themify-icons

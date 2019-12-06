@@ -1,0 +1,139 @@
+<html class="gr__amp_pharm_mssm_edu">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <style type="text/css" abt="234"></style>
+</head>
+
+<body data-gr-c-s-loaded="true">
+    <div id="the-basics-content">
+        <h1>The Basics of IRIS3</h1>
+        <div class="qa">
+            <h3 class="question">Pipeline Overview </h3>
+            <div class="answer">
+
+                <img style="width:100%" id="pipeline_img" src="./assets/img/tutorial/1.1.pipeline.png">
+                <p><strong>IRIS3 (Integrated Cell-type-specific Regulon Inference Server from Single-cell RNA-Seq)</strong> is an integrated web server for <a href="https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ&amp;q=0"><strong>cell-type-specific regulon</strong></a>                    (<strong>CTSR</strong>) prediction from Human or Mouse Single-cell RNA-Seq data, which allows researchers to pinpoint crucial regulators and target genes that are involved in the development of complex diseases.</p>
+                <h4>
+                    <p><strong>The unique features of IRIS3 include:</strong></p>
+                </h4>
+                <p>(1) It is an all-in-one pipeline that provides <em>de novo</em> identification of CTSRs, organically integrating biclustering for cell-type-specific gene module detection and <em>de novo</em> motif prediction in support of potential novel
+                    regulons discovery;</p>
+                <p>(2) It provides informative CTSR interpretations with interactive visualizations, in support of in-depth analysis in studying heterogeneous regulatory mechanisms;</p>
+                <p>(3) It is equipped with a user-friendly web interface with a simple submission process and interactive analysis functionalities that requires no programming knowledge.</p>
+                <h4>
+                    <p><strong>Input:</strong></p>
+                </h4>
+                <p><strong>1. scRNA-Seq gene expression matrix (Required):</strong><br> The required input is gene expression data with three acceptable formats</p>
+                <ol>
+                    <li>A single txt, tsv or csv formatted gene expression matrix</li>
+                    <li>An <a href="https://support.10xgenomics.com/single-cell-atac/software/pipelines/latest/advanced/h5_matrices"><strong>hdf5 feature barcode matrix</strong></a></li>
+                    <li>The <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/matrices"><strong>three files</strong></a> recording information of barcodes, features, and gene expressions in the 10X genomics
+                        output folder. <strong>Please upload your raw compressed/zipped files in our submission page.</strong></li>
+                </ol>
+                <p>The gene expression matrix (GEMAT) file with genes as rows and cells as columns. Both Gene Symbols (e.g. HSPA9), Ensembl Gene IDs (e.g. ENSG00000113013), or Transcription IDs (e.g.: ENSMUST00000074805) areallowed. Our server will try to
+                    match your IDs to Human and mouse databases.</p>
+                <p><strong>2. Cell label file (Optional):</strong> a two-column matrix with the first column as the cell names exactly matching the gene expression file, and the second column as ground-truth cell clusters. The cluster indicator could either
+                    be terms (e.g. 2_cell_stage, 4_cell_stage) or numbers (e.g. 1,2). The cell label file will be used to evaluate the predicted cell types (evaluation omitted otherwise) and CTSR inference (or use the predicted cell type instead).<br>
+                </p>
+                <p><strong>3. Custom gene module file (Optional):</strong> a text file, each column should contains one gene list. For those users who have their own gene modules, either collected from literature or generated from other tools, those regulons
+                    will be regarded as "module-specific regulons" and have individual tabs next to the last cell type to show the heatmap and results. In addition to the similar CTSR finding function described below, users can compare CTSRs of interest
+                    with the regulons referred from the self-uploaded gene modules and find any similarities.</p>
+                <h4>
+                    <p><strong>The overall pipeline includes seven steps:</strong><br></h4>
+                Our server organically integrates multiple state-of-the-art tools, including <a href="https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-018-2226-y"><strong>DrImpute</strong></a>, <a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0947-7"><strong>scran</strong></a>,
+                <a href="https://satijalab.org/seurat/"><strong>Seurat</strong></a>, <a href="https://www.ncbi.nlm.nih.gov/pubmed/19509312"><strong>QUBIC2</strong></a>, <a href="http://bmbl.sdstate.edu/DMINDA2/index.php"><strong>DMINDA2</strong></a>,
+                and <a href="http://meme-suite.org/"><strong>MEME</strong></a>. These tools are either reputed or have been justified with the best performance in the <a href="https://www.nature.com/articles/s41592-019-0425-8"><strong>analytical area</strong></a>.</p>
+                <!--<p><img src="./assets/img/tutorial/1.1.table.png" alt=""></p>-->
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="qa">
+            <h3 class="question">Step I: Pre-processing</h3>
+            <div class="answer">
+                <p>The gene expression data is first loaded, and a Seurat object is created. Genes with zero values in more than 0.1% cells and cells with zero values in 200 genes are removed to obtain reliable and robust <a href="https://www.nature.com/articles/nmeth.4612"><strong>analytical performances</strong></a>.
+                    Data normalization status is auto-detection by considering integers as non-normalized values, whereas decimals are normalized. The unnormalized data will be normalized by scran. Gene imputation is setup using DrImpute with default
+                    settings. Although optional and time-consuming, it is highly recommended to perform imputation for 10X data. Finally, the expression values are log-normalized to rescale the data to match its neighbors.</p>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="qa">
+            <h3 class="question">Step II: Cell type prediction</h3>
+            <div class="answer">
+                <p>Cell types are predicted in Seurat (version 3.1) with most parameters set to default. The number of PCs (principal component) is set to ten as suggested by the Seurat tutorial and the elbow plot is generated for each test dataset. Normally,
+                    the top ten PCs can cover 85%-95% of the data variation which is enough for feature selection. The output of this step is a two-column cell label that will be used in Step IV and additional trajectory analysis.</p>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="qa">
+            <h3 class="question">Step III: Gene module detection</h3>
+            <div class="answer">
+                <p>The pre-processed data from <em>Step I</em> is analyzed by our in-house biclustering tool, QUBIC2, for gene module detection. Each of the identified bicluster represents a group of co-expressed genes under a specific subset of cells.</p>
+                <p>Two unique features are addressed in QUBIC: <strong>(1)</strong> it can identify all statistically significant biclusters including biclusters with the so-called 'scaling patterns', a problem considered to be rather challenging; and <strong>(2)</strong>                    the algorithm solves such general biclustering problems very efficiently, capable of solving biclustering problems with tens-of-thousands of genes under to thousands of conditions in a few minutes.</p>
+                <p><strong>Three major parameters control the output biclusters in IRIS3:</strong></p>
+                <p><strong><em>a. Overlap level</em></strong> controls the level (from 0 to 1) of overlaps between the to-be-identified biclusters. 0 means no overlap and 1 indicates complete overlap. The default value is 0.5.</p>
+                <p><strong><em>b. Max biclusters</em></strong> control the maximum number of to-be-identified biclusters. The default value is 500. A smaller value may sufficiently decrease the running time but may identify less regulons.</p>
+                <p><strong><em>c. Minimal cell width</em></strong> the minimal column width of a cell block. The default is 20.</p>
+
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="qa">
+            <h3 class="question">Step IV: Gene module assignment</h3>
+            <div class="answer">
+                <p>We consider the component genes of a bicluster respond to the regulatory signal in a specific cell type if the cells in the bicluster are highly consistent with the cells in the cell type. To determine the consistency, a <a href="https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ&amp;q=2"><strong>hypergeometric enrichment test</strong></a>                    is performed using the cell components of identified biclusters from Step II and the cell types predicted from Seurat from Step III (or the uploaded ground-truth cell types). A bicluster is a so-called CTS-gene-module if its cell components
+                    are significantly consistent with a cell type (p-value &lt; 0.05, Bonferroni adjusted). Thus, a CTS-gene module is possibly found in multiple cell types, as long as it is significantly enriched in those cell types. The output of this
+                    step is the CTS-gene-modules, if present, of each of the identified cell types, which lays a solid foundation of the CTSR identification.</p>
+                <p>Users with developed gene modules that they are interested in or identified by their preferred module detection methods can also upload these modules to IRIS3 and have them analyzed to identify the module-specific regulons. </p>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="qa">
+            <h3 class="question">Step V: Motif finding and comparison</h3>
+            <div class="answer">
+                <p>For each cell type, putative motifs are then identified in each gene module via de novo motif prediction function in MEME and DMINDA2. The default 1,000-bp upstream promoter sequences of each gene are extracted using the hg38/mm10 reference
+                    implanted in the R/Bioconductor library BSgenome.Hsapiens.UCSC.hg38 and BSgenome.Mmusculus.UCSC.mm10 for human and mouse data, respectively. Default parameters using the differential enrichment mode based on the enrichment of their
+                    sites in the query sequences compared with the human/mouse background sequences.</p>
+
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="qa">
+            <h3 class="question">Step VI: Active regulon determination</h3>
+            <div class="answer">
+                <p>The identified de novo motifs in a specific cell type were annotated and clustered with best matching known motifs from the <a href="http://hocomoco11.autosome.ru/"><strong>HOCOMOCO</strong></a> database (V11) using <a href="http://meme-suite.org/tools/tomtom"><strong>TOMTOM</strong></a>.
+                    We filtered the matching motifs by removing HOCOMOCO target for those with the q-value of less than 0.05. The q-value is the minimal false discovery rate at which the observed similarity would be deemed significant. For each of the
+                    motif clusters, the corresponding nonredundant gene list is named as an active regulon.</p>
+
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="qa">
+            <h3 class="question">Step VII: CTSR inference</h3>
+            <div class="answer">
+                <p>For each active regulon, the RAS in a cell is calculated using the Wilcoxon rank sum test (<em>wmwTest</em> function in the <a href="https://bioconductor.org/packages/release/bioc/html/BioQC.html"><strong>BioQC</strong></a> R package)
+                    to rank the expression value of genes in the regulon to the rest genes. This method output more CTSRs and also faster than the AUCell method used in SCENIC and not dependent on selecting thresholds. The procedure of calculating the
+                    specificity of an active regulon under one cell type is adopted based on an entropy-based strategy which is previously used for gene expression data analysis. More details about the calculation of regulon specificity score <a href="https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ&amp;q=6"><strong>can be found here</strong></a>.</p>
+
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="qa">
+            <h3 class="question">Analysis and visualization</h3>
+            <div class="answer">
+                <p>The predicted cell types (from Step II) can be evaluated by calculating the <a href="https://en.wikipedia.org/wiki/Silhouette_(clustering)"><strong>silhouette score</strong></a> that measures how similar a cell is to its type compared
+                    to other clusters.</p>
+                <p>If the ground-truth cell types are provided by users, the predicted labels will also be evaluated by the <a href="https://en.wikipedia.org/wiki/Rand_index"><strong>Adjusted Rand Index</strong></a> (ARI), <a href="https://en.wikipedia.org/wiki/Rand_index"><strong>Rand Index</strong></a>                    (RI), <a href="https://en.wikipedia.org/wiki/FM-index"><strong>Fowlkes and Mallows's index</strong></a> (FMI), and <a href="https://en.wikipedia.org/wiki/Jaccard_index"><strong>Jaccard Index</strong></a> (JI). A <a href="https://en.wikipedia.org/wiki/Sankey_diagram"><strong>Sankey plot</strong></a>                    can be generated to show the convergence and divergence of a two cell groups (ground-truth versus Seurat prediction). The width of the arrows is shown proportionally to the flow quantity. More details about the calculation of the cell
+                    type prediction evaluation <a href="https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ&amp;q=2"><strong>can be found here.</strong></a></p>
+                <p>The CTSRs can be send to perform the enrichment analysis against different functional annotation databases to identify the enriched GO functionalities, biological pathways, etc. The enrichment test is performed by <a href="http://amp.pharm.mssm.edu/Enrichr/"><strong>Enrichr</strong></a>.
+                    The CTSR heatmap and corresponding gene expression pattern interpretation are supported by <a href="https://clustergrammer.readthedocs.io/"><strong>Clustergrammer</strong></a>, which is a powerful and user-friendly heatmap generator
+                    newly developed by the <a href="https://icahn.mssm.edu/research/bioinformatics"><strong>Ma'ayan Lab</strong></a>.</p>
+                <br>
+                <br>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,97 @@
+/*-----------------------------------
+    3. WELCOME SLIDER AREA
+-------------------------------------*/
+
+.welcome-slider-area {
+    color: #fff;
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+}
+
+.welcome-single-slide {
+    
+    width: 100%;
+}
+
+.slide-bg-overlay {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.slide-bg-overlay::after {
+    /*background: #000 none repeat scroll 0 0;*/
+    content: "";
+    height: 100%;
+    left: 0;
+    opacity: 0.7;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+/*
+.slide-bg-one {
+    background: rgba(0, 0, 0, 0) url("assest/img/slider/slide-1.jpg") no-repeat scroll center center / cover;
+}
+
+.slide-bg-two {
+    background: rgba(0, 0, 0, 0) url("assest/img/slider/slide_1.jpg") no-repeat scroll center center / cover;
+}
+
+.slide-bg-three {
+    background: rgba(0, 0, 0, 0) url("assest/img/slider/slide_2.jpg") no-repeat scroll center center / cover;
+}
+*/
+
+.owl-item.active .welcome-single-slide .welcome-text h4 {
+    -webkit-animation: 1s ease 1s normal both 1 running fadeInUp;
+    animation: 1s ease 1s normal both 1 running fadeInUp;
+}
+
+.owl-item.active .welcome-single-slide .welcome-text h1 {
+    -webkit-animation: 1s ease 1.5s normal both 1 running fadeInUp;
+    animation: 1s ease 1.5s normal both 1 running fadeInUp;
+}
+
+.owl-item.active .welcome-single-slide .welcome-text p {
+    -webkit-animation: 1s ease 2s normal both 1 running fadeInUp;
+    animation: 1s ease 2s normal both 1 running fadeInUp;
+    ;
+}
+
+.owl-item.active .welcome-single-slide .home-button {
+    -webkit-animation: 1s ease 2.5s normal both 1 running fadeInUp;
+    animation: 1s ease 2.5s normal both 1 running fadeInUp;
+}
+
+
+@media only screen and (min-width: 1920px) {
+    .welcome-single-slide {
+        height: 950px;
+        width: 100%;
+    }
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+    .welcome-single-slide {
+        height: 800px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .welcome-single-slide {
+        height: 768px;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .welcome-single-slide {
+        height: 480px;
+    }
+}
+
+@media only screen and (min-width: 480px) and (max-width: 767px) {}

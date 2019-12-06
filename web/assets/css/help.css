@@ -1,0 +1,232 @@
+body {
+  background-color: #f9f9f9;
+  font-family: 'Droid Sans', sans-serif;
+  font-size: 14px;
+  margin: 0;
+}
+a {
+  color: #2775b6 ;
+  cursor: pointer;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+#page {
+  background-color: white;
+  margin: 5px auto 20px auto;
+  padding: 20px;
+  width: 750px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Droid Sans', sans-serif;
+}
+#header-wrapper {
+  background-color: white;
+  border-bottom: 1px solid #ddd;
+}
+#header-wrapper #header {
+  margin: 0 auto;
+  padding: 7px;
+  width: 750px;
+}
+#header-wrapper #header h1 {
+  font-size: 40px;
+  font-weight: normal;
+  margin: 0;
+  padding: 5px 0;
+}
+#header-wrapper #header h1 a {
+  color: black;
+  text-decoration: none;
+}
+#header-wrapper #header h1 #back-button {
+  float: right;
+  font-size: 13px;
+  position: relative;
+  top: 25px;
+}
+#header-wrapper #header h1 #back-button:hover {
+  text-decoration: underline;
+}
+#header-wrapper #header h1 span {
+  color: #2775b6 ;
+}
+#header-wrapper #header h1 img {
+  height: 30px;
+  margin-right: 7px;
+}
+#header-wrapper #header h2 {
+  font-size: 14px;
+  padding: 4px;
+  margin: 0;
+}
+#header-wrapper #header h2 a {
+  color: #222;
+  font-size: 12px;
+  text-decoration: none;
+}
+#header-wrapper #header h2 a:hover {
+  text-decoration: underline;
+}
+.clear {
+  clear: both;
+}
+#menu,
+.submenu {
+ 
+}
+#menu ul {
+  border-right: 1px solid #eee;
+  list-style-type: none;
+  padding-left: 0;
+  padding-right: 0px;
+  margin-top: 0;
+}
+#menu ul li {
+  font-size: 14px;
+}
+#menu ul li a {
+  display: block;
+  color: black;
+  height: 100%;
+  width: 100%;
+  text-decoration: none;
+}
+#menu ul li a.highlight {
+  color: #2775b6 ;
+}
+#menu ul li .section {
+  font-family: 'Droid Sans', sans-serif;
+  font-weight: bold;
+  display: block;
+}
+#menu ul li .description {
+  color: #666;
+  font-size: 14px;
+}
+#menu ul li a,
+.submenu ul li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+#menu ul li a:hover,
+.submenu ul li:hover {
+  background-color: #ddd;
+  cursor: pointer;
+}
+#menu ul li a.last,
+.submenu ul li.last {
+  border-bottom: none;
+}
+#menu ul li a img,
+.submenu ul li img {
+  height: 15px;
+  margin-left: 5px;
+  position: relative;
+  top: 2px;
+}
+.submenu {
+  margin-left: 10px;
+}
+.submenu .placeholder {
+  color: #444;
+  margin-top: 9px;
+}
+.submenu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.submenu ul li {
+  font-weight: bold;
+}
+.submenu h3 {
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+}
+#content h1 {
+  border-bottom: 2px solid #2775b6 ;
+}
+#content h3 {
+  border-bottom: 1px solid #ddd;
+  font-size: 18px;
+}
+#content h3.highlight {
+  background-color: #fff3b8;
+  padding: 2px 5px;
+}
+
+}
+
+
+#content #the-basics-content img {
+  float: left;
+  margin: 0em 1em 1em 0em;
+  width: 300px;
+  height: auto;
+  transition: width 0.5s, height 0.5s;
+  -moz-transition: width 0.5s, height 0.5s;
+  -webkit-transition: width 0.5s, height 0.5s;
+  -o-transition: width 0.5s, height 0.5s;
+}
+#content #the-basics-content img {
+  float: left;
+  margin: 0em 1em 1em 0em;
+  width: 320px;
+  height: auto;
+  transition: width 0.5s, height 0.5s;
+  -moz-transition: width 0.5s, height 0.5s;
+  -webkit-transition: width 0.5s, height 0.5s;
+  -o-transition: width 0.5s, height 0.5s;
+}
+#content #the-basics-content img.large {
+  width: 100%;
+  height: auto;
+  transition: width 0.5s, height 0.5s;
+  -moz-transition: width 0.5s, height 0.5s;
+  -webkit-transition: width 0.5s, height 0.5s;
+  -o-transition: width 0.5s, height 0.5s;
+}
+#content pre {
+  margin: 5px 0;
+  font-size: 13px;
+}
+#content code {
+  font-family: monospace;
+}
+#content #api-content table {
+  width: 100%;
+}
+#content #api-content table td {
+  vertical-align: top;
+}
+#content #api-content table table.parameters {
+  background-color: #f8f8f8;
+  /* Match highlight.js */
+  padding: 5px;
+}
+#content #api-content .url {
+  text-decoration: underline;
+}
+/* Report Bug button
+ * ------------------------------------------------------------------------- */
+#report-button-pointer:hover {
+  cursor: pointer;
+}
+.atlwdg-trigger,
+.atlwdg-trigger.atlwdg-SUBTLE {
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  border-radius: 0 !important;
+}
+.atlwdg-trigger:hover,
+.atlwdg-trigger.atlwdg-SUBTLE:hover {
+  background-color: #ddd !important;
+}
+

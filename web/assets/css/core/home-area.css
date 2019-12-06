@@ -1,0 +1,146 @@
+/*----------------------------
+    3. WELCOME TEXT AREA
+------------------------------*/
+
+.welcome-area {
+    -webkit-box-align: end;
+    -ms-flex-align: end;
+    align-items: flex-end;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    height: 60%;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.welcome-mockup img {
+    width: 70%;
+}
+
+.welcome-text h4 {
+    font-size: 20px;
+}
+
+.welcome-text h1 {
+    font-size: 42px;
+    line-height: 1.3;
+    margin-bottom: 30px;
+}
+
+.home-button {
+    padding-top: 50px;
+}
+
+.home-button a {
+    border: 2px solid;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-right: 15px;
+    padding: 13px 20px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.home-button a:hover,
+.sign-up:hover {
+    background: #ffffff none repeat scroll 0 0;
+    border-color: #ffffff;
+    color: #1aabec;
+}
+
+.home-button form {
+    border-radius: 50px;
+    height: 45px;
+    overflow: hidden;
+    position: relative;
+    width: 50%;
+}
+
+.home-button form input {
+    border: 0 none;
+    color: #333333;
+    height: 100%;
+    left: 0;
+    padding: 10px 25px;
+    position: absolute;
+    top: 0;
+    width: calc(100% - 80px);
+}
+
+.home-button form button {
+    background: #2775b6 none repeat scroll 0 0;
+    border: 0 none;
+    font-size: 25px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    -webkit-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+    width: 80px;
+}
+
+.home-button form button:hover {
+    background: #171932 none repeat scroll 0 0;
+}
+
+@media only screen and (min-width: 1920px) {}
+
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+
+    .welcome-text h1 {
+        font-size: 48px;
+    }
+    .welcome-mockup img {
+        width: 100%;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .welcome-text {
+        text-align: center;
+    }
+    .welcome-mockup {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .welcome-text {
+        text-align: center;
+    }
+    .welcome-text h1 {
+        font-size: 26px;
+    }
+    .welcome-area .download-button {
+        display: none;
+    }
+    .welcome-mockup {
+        display: none;
+    }
+    .download-button a:first-child {
+        margin-bottom: 30px;
+    }
+
+}
+
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+    .welcome-text h1 {
+        font-size: 32px;
+    }
+    .welcome-area .download-button {
+        display: block;
+    }
+    .download-button a:first-child {
+        margin-bottom: inherit;
+    }
+}

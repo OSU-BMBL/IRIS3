@@ -1,0 +1,33 @@
+/*----------------------------
+    LINK HOVER
+------------------------------*/
+
+/*-----------------------------
+    BUTTON HOVER
+-------------------------------*/
+
+/*-----------------------------
+    ANIMATION
+------------------------------*/
+
+@-webkit-keyframes dot_animation {
+    0% {
+        -webkit-box-shadow: 0 0 0 0px rgba(0, 0, 0, 1);
+        box-shadow: 0 0 0 0px rgba(0, 0, 0, 1);
+    }
+    100% {
+        -webkit-box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+        box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+    }
+}
+
+@keyframes dot_animation {
+    0% {
+        -webkit-box-shadow: 0 0 0 0px rgba(0, 0, 0, 1);
+        box-shadow: 0 0 0 0px rgba(0, 0, 0, 1);
+    }
+    100% {
+        -webkit-box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+        box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+    }
+}

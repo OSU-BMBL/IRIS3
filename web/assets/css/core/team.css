@@ -1,0 +1,37 @@
+/*-----------------------------
+    TEAM STYLE 1
+-------------------------------*/
+
+.team-style-1 .member-image {
+    margin-bottom: 30px;
+}
+
+.team-style-1 .member-image img {
+    border-radius: 50%;
+    -webkit-box-shadow: 0 0 0 3px #8256ff;
+    box-shadow: 0 0 0 3px #8256ff;
+    height: 200px;
+    width: 200px;
+}
+
+.team-style-1 .name-and-designation {
+    margin-bottom: 20px;
+}
+
+.team-style-1 h4 {
+    margin-bottom: 5px;
+}
+
+.team-style-1 .social-bookmark li a {
+    border: 1px solid;
+    border-radius: 50%;
+    height: 35px;
+    line-height: 2;
+    width: 35px;
+}
+
+.team-style-1 .social-bookmark li a:hover {
+    background: #8256ff none repeat scroll 0 0;
+    border-color: #8256ff;
+    color: #ffffff;
+}

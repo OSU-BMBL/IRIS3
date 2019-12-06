@@ -1,0 +1,412 @@
+/*---------------------------------
+    MENU STYLE
+-----------------------------------*/
+
+.header-top-area {
+    left: 0;
+    /*position: absolute;*/
+    top: 0;
+    width: 100%;
+    z-index: 999;
+	background:#0B1E28 none repeat scroll 0 0;
+
+}
+
+.mainmenu-area {
+    position: relative;
+    -webkit-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+    z-index: 9999;
+}
+
+.navbar-header {
+    margin-top: 20px;
+    position: relative;
+    -webkit-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+    z-index: 9999;
+}
+
+.is-sticky .navbar-header {
+    margin-top: 0;
+}
+
+.navbar {
+    border-bottom: 0 none;
+    border-top: 0 none;
+    margin-bottom: 0;
+}
+
+.navbar-brand > img {
+    -webkit-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+}
+
+/*ul#nav {
+    float: right;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+}*/
+
+ul#nav {
+    float: none;
+    -webkit-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+}
+
+.stellarnav.dark {
+    background: rgba(0, 0, 0, 0);
+}
+
+ul#nav li a {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    /*    font-family: "Montserrat",
+    sans-serif;
+    font-weight: 700;*/
+    font-size: 16px;
+    letter-spacing: 1px;
+    padding: 40px 15px;
+    text-transform: capitalize;
+    -webkit-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+	color:#ffffff;
+}
+
+/*---------------------------
+    MENU COLOR VARIENT
+----------------------------*/
+
+/*--------------------------
+    MENU DEFAULT
+--------------------------*/
+
+.mainmenu-area {
+    background: transparent;
+}
+
+.is-sticky .mainmenu-area {
+    background: #292929;
+}
+
+ul#nav li a {
+    color: #ffffff;
+}
+/*
+ul#nav li li a {
+    color: #ffffff;
+}*/
+
+ul#nav li a:hover,
+ul#nav li.active > a {
+    color: #5698c3;
+}
+
+/*-------------------------
+    MENU TWO
+---------------------------*/
+
+.menu-two ul#nav li a {
+    color: #404873;
+}
+
+.menu-two ul#nav li li a {
+    color: #ffffff;
+}
+
+.menu-two ul#nav li a:hover,
+.menu-two ul#nav li.active > a {
+    color: #8256ff;
+}
+
+.is-sticky .menu-two ul#nav li a {
+    color: #404873;
+}
+
+.is-sticky .menu-two ul#nav li li a {
+    color: #ffffff;
+}
+
+.is-sticky .menu-two ul#nav li a:hover,
+.is-sticky .menu-two ul#nav li.active > a {
+    color: #8256ff;
+}
+
+/*-------------------------
+    MENU THREE
+--------------------------*/
+
+.menu-three ul#nav li a {
+    color: #333333;
+}
+
+.menu-three ul#nav li a:hover,
+.menu-three ul#nav li.active a {
+    color: #8256ff;
+}
+
+.menu-three ul#nav li ul li a,
+.menu-three ul#nav li.active ul li a {
+    color: #ffffff;
+}
+
+.menu-three ul#nav li ul li a:hover {
+    color: #8256ff;
+}
+
+.is-sticky .menu-three ul#nav li a {
+    color: #4d557d;
+}
+
+.is-sticky .menu-three ul#nav li.active a,
+.is-sticky .menu-three ul#nav li a:hover {
+    color: #8256ff;
+}
+
+.is-sticky .menu-three ul#nav li.active ul li a,
+.is-sticky .menu-three ul#nav li ul li a {
+    color: #ffffff;
+}
+
+.is-sticky .menu-three ul#nav li.active ul li a:hover,
+.is-sticky .menu-three ul#nav li ul li a:hover {
+    color: #8256ff;
+}
+
+/*--------------------------
+    MENU FOUR
+---------------------------*/
+
+.menu-four ul#nav li a,
+.menu-four ul#nav li ul a,
+.menu-four ul#nav li ul li a,
+.menu-four ul#nav li.active ul li a,
+.is-sticky .menu-four ul#nav li ul li a,
+.is-sticky .menu-four ul#nav li.active ul li a {
+    color: #ffffff;
+}
+
+.is-sticky .menu-four ul#nav li a {
+    color: #4d557d;
+}
+
+/*
+.is-sticky .menu-four ul#nav li ul li li a,
+.is-sticky .menu-four ul#nav li.active ul li li a {
+    color: #ffffff;
+}
+*/
+
+.menu-four ul#nav li a:hover,
+.menu-four ul#nav li.active a,
+.menu-four ul#nav li ul li a:hover,
+.menu-four ul#nav li.active ul li a:hover,
+.is-sticky .menu-four ul#nav li ul li a:hover,
+.is-sticky .menu-four ul#nav li.active ul li a:hover {
+    color: #8256ff;
+}
+
+/*-----------------------------
+END MENU VARIENT
+------------------------------*/
+
+.is-sticky ul#nav li a {
+    padding: 20px 15px;
+}
+
+.is-sticky .mainmenu-area {
+    -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
+    z-index: 99999;
+}
+
+.menu-toggle.full {
+    border: 1px solid;
+    height: 40px;
+    letter-spacing: 2px;
+    padding-top: 8px;
+    position: absolute;
+    right: 15px;
+    text-align: center;
+    top: 20px;
+    width: 110px;
+    z-index: 9999;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+}
+
+.is-sticky .menu-toggle.full {
+    top: 8px;
+}
+
+ul#nav li ul a,
+.is-sticky ul#nav li ul a {
+    border-bottom: 1px solid #1a1a1a;
+    padding: 10px;
+    padding-left: 15px;
+}
+
+/*----------------------------
+    RESPONSIVE
+------------------------------*/
+
+/*----------------------------------
+    LARGE LAYOUT: 1920px
+-----------------------------------*/
+
+@media only screen and (min-width: 1920px) {
+
+    ul#nav li a {
+        padding: 40px 10px;
+    }
+
+    .is-sticky ul#nav li a {
+        padding: 20px 10px;
+    }
+}
+
+/*----------------------------------
+    MEDIUM LAYOUT: 1280px
+-----------------------------------*/
+
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+
+    .navbar-header {
+        margin-top: 5px;
+    }
+    .is-sticky .navbar-header {
+        margin-top: 2px;
+    }
+    ul#nav li a {
+        padding: 30px 10px;
+    }
+    .is-sticky ul#nav li a {
+        padding: 22px 10px;
+    }
+}
+
+/*----------------------------------
+    TABLET LAYOUT: 768px
+------------------------------------*/
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .navbar-collapse.collapse {
+        display: none !important;
+    }
+    .navbar-collapse.collapse.in {
+        display: block !important;
+    }
+    .navbar-header .collapse,
+    .navbar-toggle {
+        border: 2px solid #eb484d;
+        border-radius: 0;
+        display: block !important;
+    }
+    .navbar-toggle .icon-bar {
+        background: #eb484d none repeat scroll 0 0;
+    }
+    .navbar-header {
+        float: none;
+    }
+    .navbar-header {
+        border-bottom: 1px solid #ffffff;
+        margin: 0;
+        padding: 15px 0;
+    }
+    ul#nav {
+        width: 100%;
+        max-height: 200px;
+        overflow: scroll;
+        overflow-x: hidden;
+    }
+    ul#nav li {
+        float: none;
+    }
+    .is-sticky .navbar-header {
+        margin: 0;
+        padding: 5px 0;
+    }
+    .navbar-brand {
+        padding: 8px;
+    }
+    .is-sticky .navbar-brand {
+        margin-top: -3px;
+    }
+    .is-sticky .navbar-brand img {
+        margin-top: 5px;
+    }
+    .mainmenu-area {
+        background: #272727 none repeat scroll 0 0;
+    }
+    ul#nav li a,
+    .is-sticky ul#nav li a {
+        padding: 10px 15px;
+    }
+    ul#nav li a::after {
+        display: none;
+    }
+}
+
+/*----------------------------------
+    MOBILE LAYOUT: 320px
+-----------------------------------*/
+
+@media only screen and (max-width: 767px) {
+    .navbar-header {
+        border-bottom: 1px solid #ffffff;
+        margin: 0;
+        padding: 15px 0;
+    }
+    ul#nav {
+        width: 100%;
+        max-height: 200px;
+        overflow: scroll;
+        overflow-x: hidden;
+    }
+    ul#nav li {
+        float: none;
+    }
+    .navbar-brand {
+        margin-top: -3px;
+        padding: 8px;
+    }
+    .is-sticky .navbar-brand {
+        margin-top: -3px;
+    }
+    .navbar-brand > img {
+        margin-top: 2px;
+        ;
+        width: 90%;
+    }
+    .mainmenu-area {
+        background: #272727 none repeat scroll 0 0;
+    }
+    ul#nav li a,
+    .is-sticky ul#nav li a {
+        padding: 10px 15px;
+    }
+    ul#nav li a::after {
+        display: none;
+    }
+    .is-sticky .navbar-brand > img {
+        max-width: 100%;
+    }
+    .is-sticky .menu-toggle.full {
+        top: 18px;
+    }
+}
+
+/*----------------------------------
+    WIDE MOBILE LAYOUT: 480px
+-----------------------------------*/
+
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+    ul#nav {
+        width: 100%;
+        max-height: 200px;
+        overflow: scroll;
+        overflow-x: hidden;
+    }
+    ul#nav li {
+        float: none;
+    }
+}
