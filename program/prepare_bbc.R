@@ -4,25 +4,25 @@ library(stringi)
 library(seqinr)
 library(tidyverse)
 args <- commandArgs(TRUE)
-#setwd("/var/www/html/CeRIS/data/20191020160119")
+#setwd("/var/www/html/iris3/data/20191107110621")
 #wd <- getwd()
-#jobid <-20191020160119 
+#jobid <-20191107110621 
 #motif_len <- 12
 jobid <- args[1]
 motif_len <- args[2]
 
-wd <- paste("/var/www/html/CeRIS/data/",jobid,"/",sep="")
+wd <- paste("/var/www/html/iris3/data/",jobid,"/",sep="")
 setwd(wd)
 getwd()
 workdir <- getwd()
 alldir <- list.dirs(path = workdir)
 alldir <- grep(".+_bic$",alldir,value=T)
-#gene_info <- read.table("file:///D:/Users/flyku/Documents/CeRIS_data_backup/dminda/human_gene_start_info.txt")
+#gene_info <- read.table("file:///D:/Users/flyku/Documents/iris3_data_backup/dminda/human_gene_start_info.txt")
 species_id <-  as.character(read.table("species_main.txt")[1,1])
 if(species_id == "Human"){
-  gene_info <- read.table("/var/www/html/CeRIS/program/db/human_gene_start_info.txt")
+  gene_info <- read.table("/var/www/html/iris3/program/db/human_gene_start_info.txt")
 } else if (species_id == "Mouse"){
-  gene_info <- read.table("/var/www/html/CeRIS/program/db/mouse_gene_start_info.txt")
+  gene_info <- read.table("/var/www/html/iris3/program/db/mouse_gene_start_info.txt")
 }
 
 sort_dir <- function(dir) {
