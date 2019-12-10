@@ -5,3 +5,14 @@ The underlying regulatory mechanisms that induce the identity of cell types or p
 Here we propose **IRIS3 (Integrated Cell-type-specific Regulon Inference Server from Single-cell RNA-Seq)** as the first-of-its-kind web server for CTS-R inference in human and mouse. Compared to other existing packages, IRIS3 predicts more accurate regulons from scRNA-Seq data, by a more efficient integrated pipeline. It is noteworthy that IRIS3 is an easy-to-use server and empowered by comprehensive interpretations and visualizations of the identified CTS-Rs. These CTS-Rs can substantially improve the elucidation of heterogeneous regulatory mechanisms among various cell types and allow reliable constructions of global transcriptional regulation networks encoded in a specific cell type.
 
 IRIS3 is freely accessible from https://bmbl.bmi.osumc.edu/iris3/ with no login requirement. 
+
+
+## Overview of iris3 pipeline
+![](web/assets/img/tutorial/1.1.pipeline.png)
+
+## How to submit job
+https://bmbl.bmi.osumc.edu/iris3/tutorial.php#2submission 
+## Example results illustration
+https://bmbl.bmi.osumc.edu/iris3/tutorial.php#3example
+## FAQ
+https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ 
