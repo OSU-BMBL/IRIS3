@@ -7,7 +7,7 @@ Here we propose **IRIS3 (Integrated Cell-type-specific Regulon Inference Server 
 IRIS3 is freely accessible from https://bmbl.bmi.osumc.edu/iris3/ with no login requirement. 
 
 
-## Overview of iris3 pipeline
+## Overview of IRIS3 pipeline
 ![](web/assets/img/tutorial/1.1.pipeline.png)
 
 ## How to submit job
