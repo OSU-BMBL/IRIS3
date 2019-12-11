@@ -187,27 +187,17 @@ foreach (glob("$DATAPATH/$jobid/*_bic.regulon_rank.txt") as $file) {
 foreach (glob("$DATAPATH/$jobid/*_bic.motif_rank.txt") as $file) {
   $motif_rank_file[] = $file;
 }
-$tomtom_path = "$DATAPATH/$jobid/tomtom/";
-foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($tomtom_path)) as $filename)
-{
-    if(pathinfo($filename)["extension"] == "tsv"){
-		$tomtom_file[] = $filename;
-	}
-	
-}
 
 natsort($regulon_gene_symbol_file);
 natsort($regulon_id_file);
 natsort($regulon_motif_file);
 natsort($regulon_rank_file);
 natsort($motif_rank_file);
-natsort($tomtom_file);
 $regulon_gene_symbol_file = array_values($regulon_gene_symbol_file);
 $regulon_id_file = array_values($regulon_id_file);
 $regulon_motif_file = array_values($regulon_motif_file);
 $regulon_rank_file = array_values($regulon_rank_file);
 $motif_rank_file = array_values($motif_rank_file);
-$tomtom_file = array_values($tomtom_file);
 
 $count_ct = range(1,count($regulon_gene_symbol_file));
 
@@ -428,32 +418,18 @@ function getStringBetween($str,$from,$to)
     return substr($sub,0,strpos($sub,$to));
 }
 
-foreach ($tomtom_file as $key=>$this_tomtom_file){
-	$status = "1";
-	$fp = fopen("$this_tomtom_file", 'r');
-	if ($fp){
-	$count = 0;
-	while (($line = fgetcsv($fp, 0, "\t")) !== FALSE){
-		if ($line && $line[0][0] != "#"&& $line[0][0] != "Q") {
-			$count ++;	
-			#print_r($this_tomtom_file->getRealPath());
-			#getStringBetween($this_tomtom_file->getRealPath(),"tomtom","JASPER");
-			$motif_name = getStringBetween($this_tomtom_file->getRealPath(),"tomtom/","/tomtom.tsv");
-			#$motif_name = str_replace("/","_",$motif_name);
-			$tomtom_result[$motif_name][] = array_map('trim',$line);
-			#print_r($count);
+if (file_exists("$DATAPATH/$jobid/$jobid"."_tomtom_result.txt")){
+	$tomtom_result_file = fopen("$DATAPATH/$jobid/$jobid"."_tomtom_result.txt", "r");
+	if ($tomtom_result_file) {
+		while (($line = fgets($tomtom_result_file)) !== false) {
+			$split_line = explode ("\t", $line);
+			$motif_name = $split_line[0];
+			$tomtom_result[$motif_name][] = array_map('trim',$split_line);
 		}
-		# control number of tomtom rows to be presented
-		if ($count > 0) {
-			break;
-		}
-	}
-	} else{
-		die("Unable to open file");
-	}
-	fclose($fp);
-	}
-	#print_r($tomtom_result['ct1bic1m1'][0]);
+		fclose($tomtom_result_file);
+	} 
+}
+
 if(sizeof($module_gene_name_file)){
 	foreach ($module_gene_name_file as $key=>$this_module_gene_name_file){
 	$fp = fopen("$this_module_gene_name_file", 'r');

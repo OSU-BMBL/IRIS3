@@ -143,7 +143,7 @@ if (isset($_POST['submit']))
 	
 	else {
 	system("touch $workdir/email.txt");
-	system("chmod 777 $workdir/email.txt");
+	system("chmod 755 $workdir/email.txt");
 	$fp = fopen("$workdir/email.txt", 'w');
 	if($email == ""){
 		$email = "flykun0620@gmail.com";
@@ -244,6 +244,7 @@ $BASE/program/get_atac_overlap.sh \$wd
 Rscript $BASE/program/prepare_heatmap.R \$wd \$jobid $label_use_sc3\n
 Rscript $BASE/program/get_alternative_regulon.R \$jobid\n
 Rscript $BASE/program/generate_rss_scatter.R \$jobid\n
+Rscript $BASE/program/process_tomtom_result.R \$jobid\n
 mkdir json
 $BASE/program/build_clustergrammar.sh \$wd \$jobid $label_use_sc3\n
 
@@ -251,12 +252,12 @@ $BASE/program/build_clustergrammar.sh \$wd \$jobid $label_use_sc3\n
 zip -R \$wd\$jobid '*.regulon_gene_id.txt' '*.regulon_gene_symbol.txt' '*.regulon_rank.txt' '*.regulon_activity_score.txt' '*_cell_label.txt' '*.blocks' '*_blocks.conds.txt' '*_blocks.gene.txt' '*_filtered_expression.txt' '*_gene_id_name.txt' '*_marker_genes.txt' 'cell_type_unique_marker.txt' '*_combine_regulon.txt'\n
 perl $BASE/program/prepare_email.pl \$jobid\n
 echo 'finish'> done\n  
-chmod -R 777 .
+chmod -R 755 .
 ");
 
 	fclose($fp);
 	session_destroy();
-	system("chmod -R 777 $workdir2");
+	system("chmod -R 755 $workdir2");
 	system("cd $workdir; nohup sh qsub.sh > output.txt &");
 	##shell_exec("$workdir/qsub.sh>$workdir/output.txt &");
 	#header("Location: results.php?jobid=$jobid");
