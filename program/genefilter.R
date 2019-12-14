@@ -284,9 +284,18 @@ write.table(as.data.frame(my.count.data),paste(jobid,"_raw_expression.txt",sep =
 ## if all values are integers, perform normalization, otherwise skip to imputation
 if(all(as.numeric(unlist(my.count.data[nrow(my.count.data),]))%%1==0)){
   ## normalization##############################
-  sce <- tryCatch(computeSumFactors(sce),error = function(e) normalizeSCE(sce))
-  sce <- scater::normalize(sce,return_log=F)
-  my.normalized.data <- normcounts(sce)
+  sce <- tryCatch(computeSumFactors(sce),error = function(e1) {
+    tryCatch(normalizeSCE(sce),error = function(e2){
+      LogNormalize(my.count.data)
+    })
+    })
+  if (class(sce)[1] == "dgCMatrix") {
+    my.normalized.data <- sce
+  } else {
+    sce <- scater::normalize(sce,return_log=F)
+    my.normalized.data <- normcounts(sce)
+  }
+  
 } else {
   my.normalized.data <- my.count.data
 }
@@ -368,8 +377,9 @@ my.object<-RunPCA(my.object,rev.pca = F,features = VariableFeatures(object = my.
 
 my.object<-FindNeighbors(my.object,dims = 1:10)
 my.object<-FindClusters(my.object)
-
-
+if (length(levels(my.object$seurat_clusters)) == 1) {
+  my.object<-FindClusters(my.object, resolution = 1)
+}
 cell_info <- my.object$seurat_clusters
 cell_info <- as.factor(as.numeric(cell_info))
 cell_label <- cbind(cell_names,cell_info)
@@ -395,9 +405,13 @@ my.object<-RunUMAP(object = my.object,dims = 1:10,umap.method="uwot")
 #dist.matrix <- dist(x = Embeddings(object = my.object[['pca']])[,1:30])
 dist.matrix <- dist(x = Embeddings(object = my.object[['pca']]))
 sil <- silhouette(x = as.numeric(x = cell_info), dist = dist.matrix)
-silh_out <- cbind(cell_info,cell_names,sil[,3])
-silh_out <- silh_out[order(as.numeric(silh_out[,1])),]
-
+if (!is.na(sil)){
+  silh_out <- cbind(cell_info,cell_names,sil[,3])
+  silh_out <- silh_out[order(as.numeric(silh_out[,1])),]
+} else {
+  silh_out <- cbind(cell_info,cell_names,rep(0,length(cell_info)))
+  silh_out <- silh_out[order(as.numeric(silh_out[,1])),]
+}
 
 # set max row,
 if (ncol(my.object) > 500) {
