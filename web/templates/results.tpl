@@ -1198,7 +1198,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 					<div class="flatPanel panel-heading" style="padding: 20px 20px"><strong>Job ID: {{$jobid}}</strong></div>
                 <div class="panel-body">
 					<div style="text-align: left;">
-                        <p>Job ID nout found</p>
+                        <p>Job ID not found</p>
                     </div>
 					</div>
 					{{elseif $status==="error"}}

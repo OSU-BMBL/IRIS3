@@ -95,7 +95,7 @@ function addPreviewTable(response, metadata = true, type) {
             if (response['columns'][0].length < 40 && type == 'exp') {
                 $('#preview_' + type).append($('<label>', {
                     'class': 'px-2 py-1'
-                }).html('<span class="bold highlight">Note: Your dataset has (' + response['columns'][0].length + ') cells, errors may occur when you submit to iris3. It is recommended to have at least around 100 cells in your scRNA-seq experiment. </span></label>'))
+                }).html('<span class="bold highlight">Note: Your dataset has (' + response['columns'][0].length + ') cells, errors may occur when you submit to IRIS3. It is recommended to have at least around 100 cells in your scRNA-seq experiment. </span></label>'))
                 document.getElementById("k_arg").value = 5;
             }
             var check_cell_name_start_with_number = function(array) {
@@ -110,7 +110,7 @@ function addPreviewTable(response, metadata = true, type) {
             if (check_cell_name_start_with_number(response['columns'][0]) && type == 'exp') {
                 $('#preview_' + type).append($('<label>', {
                     'class': 'px-2 py-1'
-                }).html('<span class="bold highlight">NOTE: Some of the cell names in your dataset start with numeric value, iris3 will try to rename them in data pre-processing.  </span></label><br/>'));
+                }).html('<span class="bold highlight">NOTE: Some of the cell names in your dataset start with numeric value, IRIS3 will try to rename them in data pre-processing.  </span></label><br/>'));
             }
             break;
         case 'hdf':
@@ -584,7 +584,7 @@ $(document).ready(function() {
 							</div>
 							<br>
 							<h4 class="font-italic text-left">Upload gene module: (Optional) 
-							 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="The developed gene modules that you are interested in or identified by preferred module detection methods can be uploaded to iris3 and have them analyzed to identify the “module-specific regulons”. Each column should represents a gene module, check example gene module file for more details."> </span> 
+							 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="The developed gene modules that you are interested in or identified by preferred module detection methods can be uploaded to IRIS3 and have them analyzed to identify the “module-specific regulons”. Each column should represents a gene module, check example gene module file for more details."> </span> 
 							</h4>
 			
 							<div id="upload_gene_module">
