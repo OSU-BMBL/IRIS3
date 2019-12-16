@@ -192,7 +192,9 @@ if (isset($_POST['submit']))
 	if($if_allowSave != '0'){
     system("cp $workdir2$expfile $BASE/storage");
 	}
-
+if(filesize($expfile) < 4000000) {
+	$k_arg = 3;
+}
 if ($labelfile == ''){
 	$labelfile = '1';
 	$delim_label = ',';
@@ -207,6 +209,7 @@ gene_module_file=$gene_module_file
 jobid=$jobid
 motif_min_length=12
 motif_max_length=12
+perl $BASE/program/send_email.pl $jobid cankun.wang@osumc.edu $BASE/program/email_notification
 Rscript $BASE/program/genefilter.R \$wd\$exp_file \$jobid $delim $is_imputation \$label_file $delim_label $param_k $label_use_sc3
 $BASE/program/qubic2/qubic -i \$wd\$jobid\_filtered_expression.txt -k $k_arg -o $o_arg -f $f_arg $is_c
 for file in *blocks
