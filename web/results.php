@@ -92,7 +92,6 @@ $param_file = fopen("$DATAPATH/$jobid/info.txt", "r");
 }
 
 
-
 if (file_exists("$DATAPATH/$jobid/email.txt")){
 $email_file = fopen("$DATAPATH/$jobid/email.txt", "r");
 	if ($email_file) {
@@ -109,6 +108,17 @@ $email_file = fopen("$DATAPATH/$jobid/email.txt", "r");
 		//print_r("email file not found");
 		// error opening the file.
 	} 
+}
+
+if (file_exists("$DATAPATH/$jobid/species.txt")){
+$species_file = fopen("$DATAPATH/$jobid/species.txt", "r");
+	if ($species_file) {
+		while (($line = fgets($species_file)) !== false) {
+			$input_species = $line;
+		}
+
+		fclose($species_file);
+	}
 }
 
 if (file_exists("$DATAPATH/$jobid/saving_plot1.jpeg")){
@@ -262,6 +272,7 @@ if ($info_file) {
 			$predict_label = $split_line[1];
 		}
     }
+	
 	if ($species == $main_species) {
 		$main_species = "";
 	}
@@ -270,6 +281,7 @@ if ($info_file) {
 	print_r("Info file not found");
     // error opening the file.
 } 
+
 
 
 if (file_exists("$DATAPATH/$jobid/$jobid"."_silh.txt")){
@@ -481,14 +493,13 @@ function exception_handler($exception) {
 }
 
 set_exception_handler('exception_handler');
-}else if (file_exists($done_file) && file_exists("$DATAPATH/$jobid/$jobid"."_CT_1regulon_gene_id.txt") && !file_exists("$DATAPATH/$jobid/$jobid"."_CT_1_bic/bic1.txt.fa.closures")) {
+}else if (file_exists($done_file) && file_exists("$DATAPATH/$jobid/$jobid"."_CT_1_regulon_gene_id.txt") && !file_exists("$DATAPATH/$jobid/$jobid"."_CT_1_bic/bic1.txt.fa.closures")) {
 	$status= "error_bic";
 }else if (file_exists($done_file) && !file_exists("$DATAPATH/$jobid/$jobid"."_cell_label.txt")) {
 	$status= "error_num_cells";
-}else if (file_exists($done_file) && !file_exists("$DATAPATH/$jobid/$jobid"."_CT_1regulon_gene_id.txt")) {
+}else if (file_exists($done_file) && !file_exists("$DATAPATH/$jobid/$jobid"."_CT_1_regulon_gene_id.txt")) {
 	$status= "error";
-}
-else if (!file_exists($tempnam)) {
+}else if (!file_exists($tempnam)) {
 	$status= "404";
 }else {
 	$status = "0";
@@ -510,6 +521,7 @@ $smarty->assign('count_ct',$count_ct);
 $smarty->assign('species',$species);
 $smarty->assign('second_species',$second_species);
 $smarty->assign('main_species',$main_species);
+$smarty->assign('input_species',$input_species);
 $smarty->assign('status',$status);
 $smarty->assign('jobid',$jobid);
 $smarty->assign('count_regulon_in_ct',$count_regulon_in_ct);
@@ -563,7 +575,7 @@ $smarty->assign('sankey_value', $sankey_value);
 $smarty->assign('sankey_nodes', $sankey_nodes);
 $smarty->assign('sankey_label_order', $sankey_label_order);
 $smarty->assign('sankey_nodes_count', $sankey_nodes_count);
-#print_r($module_motif_result);
+
 
 $smarty->setCacheLifetime(3600000);
 $smarty->display('results.tpl');
