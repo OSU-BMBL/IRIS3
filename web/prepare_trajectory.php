@@ -1,4 +1,6 @@
 <?php
+	require("config/common.php");
+	require("config/smarty.php");
 	$id = $_GET['id'];
 	$jobid = $_GET['jobid'];
 	$wd = "$BASE/data/$jobid/";

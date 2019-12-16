@@ -1,4 +1,6 @@
 <?php
+	require("config/common.php");
+	require("config/smarty.php");
 	$jobid = $_GET['jobid'];
 	$regulon_id=$_GET['regulon_id'];
 	$species=$_GET['species'];
