@@ -27,12 +27,8 @@ if (!empty($_FILES)) {
     }
     #check php.ini reach maximum upload size
     $temp_file = $_FILES['file']['tmp_name'];
-    $csv = file_get_contents($temp_file);
     $delim = detectDelimiter($temp_file);
-    $array = file($temp_file);
-	$file_info = new finfo(FILEINFO_MIME); // object oriented approach!
-	$mime_type = $file_info->buffer(file_get_contents($temp_file));  // e.g. gives "image/jpeg"
-	$mime_type = explode(";",$mime_type)[0];
+	$mime_type = mime_content_type($temp_file);
 	#echo($mime_type);
 	switch($mime_type) {
 	case "application/x-gzip":
@@ -56,46 +52,64 @@ if (!empty($_FILES)) {
 		#    #$new_array[] = $line_array[0];
 		#	$new_array[] = array_map('trim',$line_array);
 		#}
-		$fp = fopen("$temp_file", 'r');
-		if ($fp) {
-			$idx = 0;
-			$count_zero = 0;
-			while (($line = fgetcsv($fp, 0, "$delim")) !== FALSE) {
-				if ($line) {
-					if ($idx == 0) {
-						$remove_first = array_shift($line);
-						$new_array['columns'][] = $line;
-					} else {
-						$new_array['index'][] = array_map('trim', $line) [0];
-						$remove_first = array_shift($line);
-						$new_array['data'][] = array_map('trim', $line);
-						$count_zero = $count_zero + count(array_filter($line));
-					}
-				}
-				$idx = $idx + 1;
-				if ($idx == 10) {
-					break;
-				}
-				/*if ($new_array['columns'][0] > 1000) {
-				
-				}*/
-			}
-		} else {
-			die("Unable to open file");
-		} 
-		fclose($fp);
-		$fp = fopen("$temp_file", 'r');
-		if ($fp) {
-			$linecount = - 2;
-			while (!feof($fp)) {
-				$line = fgets($fp);
-				$linecount++;
-			}
-		}
-		$new_array['gene_num'][] = $linecount;
-		$new_array['count_zero'][] = $count_zero;
-		$new_array['type'][] = 'text';
-		fclose($fp);
+        
+        #2000000000
+        if(filesize($temp_file) < 2000000000){
+            $fp = fopen("$temp_file", 'r');
+            if ($fp) {
+                $idx = 0;
+                $count_zero = 0;
+                while (($line = fgetcsv($fp, 0, "$delim")) !== FALSE) {
+                    if ($line) {
+						$new_array['cell_num'][] = count($line) - 1;
+						if (count($line) > 16) {
+							$line = array_slice($line, 0, 15);
+						}
+                        if ($idx == 0) {
+                            $remove_first = array_shift($line);
+                            $new_array['columns'][] = $line;
+                        } else {
+                            $new_array['index'][] = array_map('trim', $line) [0];
+                            $remove_first = array_shift($line);
+                            $new_array['data'][] = array_map('trim', $line);
+                            $count_zero = $count_zero + count(array_filter($line));
+                        }
+                    }
+                    $idx = $idx + 1;
+                    if ($idx == 10) {
+                        break;
+                    }
+                    /*if ($new_array['columns'][0] > 1000) {
+                    
+                    }*/
+                }
+            } else {
+                die("Unable to open file");
+            } 
+            fclose($fp);
+            $fp = fopen("$temp_file", 'r');
+            if ($fp) {
+                $linecount = - 2;
+                while (!feof($fp)) {
+                    $line = fgets($fp);
+                    $linecount++;
+                }
+            }
+            $new_array['gene_num'][] = $linecount;
+            $new_array['count_zero'][] = $count_zero;
+            $new_array['type'][] = 'text';
+            fclose($fp);
+        } else {
+            $new_array['index'][] = $temp_file;
+            $new_array['data'][] = filesize($temp_file);
+            $new_array['gene_num'][] = 0;
+            $new_array['count_zero'][] = 0;
+            $new_array['type'][] = 'text';
+            
+        }
+		
+		
+		
 		$fp = fopen("$workdir/upload_type.txt", 'w');
 		fwrite($fp,"CellGene\n");
 		fclose($fp);
@@ -155,7 +169,6 @@ if (!empty($_FILES)) {
     }
     $_SESSION['jobid'] = $jobid;
 
-    #system("cp ./upload/CeRIS_example_gene_module.csv $workdir");
     $expfile = '';
     $_SESSION['expfile'] = $expfile;
     $labelfile = '';
@@ -178,7 +191,6 @@ if (!empty($_FILES)) {
     }
     system("cp ./upload/Yan_2013_expression.csv $workdir");
     system("cp ./upload/Yan_2013_label.csv $workdir");
-    #system("cp ./upload/CeRIS_example_gene_module.csv $workdir");
     $expfile = 'Yan_2013_expression.csv';
     $_SESSION['expfile'] = $expfile;
     $labelfile = 'Yan_2013_label.csv';
