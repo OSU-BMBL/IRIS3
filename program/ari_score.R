@@ -8,12 +8,12 @@ delim <- args[3] #label file delimiter
 
 label_use_sc3 <- 0 #default 0
 label_use_sc3 <- args[4] # 1 for have label use sc3, 2 for have label use label, 0 for no label use sc3
-#delim <- args[3]
 
-# srcFile = "Seurat-cellInfo.txt"
-# jobid <- "20191003114503"
-# delim <- "\t"
-# label_use_sc3 <- 1
+# setwd("/var/www/html/CeRIS/data/2019102483326")
+# srcFile = "Pollen_cell_label.csv"
+# jobid <- "2019102483326"
+# delim <- ","
+# label_use_sc3 <- 2
 if(delim == 'tab'){
   delim <- '\t'
 }
@@ -29,19 +29,19 @@ if(delim == 'space'){
 #devtools::install_github("sachsmc/plotROC")
 #install.packages("networkD3")
 #library(reader)
-library(plotROC)
-library("NMF")
-library("clues")
-library("igraph")
-library("MLmetrics")
-library("AUC")
-library("ROSE")
-library("ggplot2")
-library(networkD3)
-library(tidyr)
-library(gdata)
-library(data.table)
-library(stringr)
+suppressPackageStartupMessages(library(plotROC))
+suppressPackageStartupMessages(library("NMF"))
+suppressPackageStartupMessages(library("clues"))
+suppressPackageStartupMessages(library("igraph"))
+suppressPackageStartupMessages(library("MLmetrics"))
+suppressPackageStartupMessages(library("AUC"))
+suppressPackageStartupMessages(library("ROSE"))
+suppressPackageStartupMessages(library("ggplot2"))
+suppressPackageStartupMessages(library(networkD3))
+suppressPackageStartupMessages(library(tidyr))
+suppressPackageStartupMessages(library(gdata))
+suppressPackageStartupMessages(library(data.table))
+suppressPackageStartupMessages(library(stringr))
 
 
 predict_cluster <- read.table(paste(jobid,"_sc3_label.txt",sep=""),header=T,sep='\t',check.names = FALSE)
@@ -56,12 +56,14 @@ if (srcFile == '1') {
 }
 
 
+
 user_label_index <- 2
 user_cellname_index <- 1
 user_label <- data.frame(user_label_file[,user_cellname_index],user_label_file[,user_label_index],stringsAsFactors = F)
 
 
 user_label_name <- user_label[order(user_label[,2]),2]
+
 predict_cluster <- predict_cluster[order(predict_cluster[,2]),]
 
 
@@ -108,7 +110,7 @@ if (label_use_sc3 == 2 | label_use_sc3 == 1) {
   user_label_index <- order(user_label[,1])
   user_label <- user_label[user_label_index,]
   user_label_name <- user_label_name[user_label_index]
-
+  
   target <- merge(predict_cluster,user_label,by.x = "cell_name",by.y = "cell_name" )
   clustering_purity <- purity(as.factor(target$cluster),as.factor(target$label))
   clustering_entropy <- entropy(as.factor(target$cluster),as.factor(target$label))
@@ -145,6 +147,7 @@ if (label_use_sc3 == 2 | label_use_sc3 == 1) {
   comb.label.list <- as.data.frame(rbind(matrix(user_label$label),matrix(predict_cluster$cluster)))
   colnames(comb.label.list) <- c("name")
   comb.label.list[,1] <- as.character(comb.label.list[,1])
+  
   i=1
   for (i in 1:nrow(comb.label.list)) {
     idx <- which(colnames(table(user_label_name,user_label$label)) == as.character(comb.label.list[i,1]))
@@ -153,6 +156,7 @@ if (label_use_sc3 == 2 | label_use_sc3 == 1) {
       #comb.label.list[i,2] <- as.character(rownames(table(user_label_name,user_label$label))[idx])
     }
   }
+  
   comb.label.list[,1] <- as.factor(comb.label.list[,1])
   # step4 give number to each label by all label groups, and extract unique nodes
   map.label <- mapLevels(x=comb.label.list)
@@ -162,9 +166,15 @@ if (label_use_sc3 == 2 | label_use_sc3 == 1) {
   nodes <- data.table(name=names(map.label))
   name1 <- gsub("\\(.+", "",  nodes$name)
   predict_idx <-  order(as.numeric(gsub("[^0-9.]", "",  name1[grep("Predict.*",  name1)])))
-  user_idx <-  order(as.numeric(gsub("[^0-9.]", "",  name1[grep("User.*",  name1)]))) + length(predict_idx)
+  match_user_label <- gsub("[^0-9.]", "",  name1[grep("User.*",  name1)])
+  if (!any(match_user_label== "")) {
+    user_idx <- order(as.numeric(match_user_label)) + length(predict_idx)
+  } else {
+    user_idx <-  seq(1:length(match_user_label)) + length(predict_idx)
+  }
   new_index <- c(predict_idx,user_idx)
   nodes <- nodes[new_index,]
+  names(map.label) <- names(map.label)[new_index]
   
   # step5 create link matrix
   links <- as.data.frame(cbind(user_label$label,predict_cluster$cluster))
@@ -176,6 +186,11 @@ if (label_use_sc3 == 2 | label_use_sc3 == 1) {
   colnames(links) <- c("type","value")
   links <- separate(data = links, col = type, into = c("type1", "type2"), sep = "\\^&")
   i=1
+
+  #new_index <- order(as.numeric(str_extract_all(links$type1, "[0-9]+")))
+  #if (length(new_index) > 1){
+  #  links <- links[new_index,]
+  #}
   for (i in 1:nrow(links)) {
     idx <- which(colnames(table(user_label_name,user_label$label)) == as.character(links[i,1]))
     if(length(idx)==1){
