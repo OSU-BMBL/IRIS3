@@ -296,6 +296,22 @@ if ($info_file) {
     // error opening the file.
 } 
 
+$predict_label_array = array();
+if (file_exists("$DATAPATH/$jobid/$jobid"."_sc3_label.txt")){
+	$predict_label_file = fopen("$DATAPATH/$jobid/$jobid"."_sc3_label.txt", "r");
+
+	while (($line = fgets($predict_label_file)) !== false) {
+	$split_line = explode ("\t", $line);
+	array_push($predict_label_array,$split_line[1]);
+	}
+	array_shift($predict_label_array);
+	$predict_label_array = array_count_values($predict_label_array);
+	$predict_label_array = array_values($predict_label_array);
+
+	fclose($predict_label_file);
+	} else {
+	//print_r("Silh file not found");
+}
 
 
 if (file_exists("$DATAPATH/$jobid/$jobid"."_silh.txt")){
@@ -588,6 +604,7 @@ $smarty->assign('sankey_value', $sankey_value);
 $smarty->assign('sankey_nodes', $sankey_nodes);
 $smarty->assign('sankey_label_order', $sankey_label_order);
 $smarty->assign('sankey_nodes_count', $sankey_nodes_count);
+$smarty->assign('predict_label_array', $predict_label_array);
 
 
 $smarty->setCacheLifetime(3600000);
