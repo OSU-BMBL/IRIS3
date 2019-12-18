@@ -16,12 +16,12 @@ args <- commandArgs(TRUE)
 jobid <- args[1] # user job id
 #wd<-getwd()
 ####test
-#jobid <- 20191018130101   
+#jobid <- 2019102483326   
 label_use_sc3 <- 0
 
 dir.create("heatmap",showWarnings = F)
 
-wd <- paste("/var/www/html/CeRIS/data/",jobid,sep="")
+wd <- paste("/var/www/html/iris3/data/",jobid,sep="")
 #wd <- paste("C:/Users/wan268/Documents/CeRIS_data/",jobid,sep="")
 expFile <- paste(jobid,"_filtered_expression.txt",sep="")
 labelFile <- paste(jobid,"_cell_label.txt",sep = "")
@@ -158,6 +158,7 @@ ct_seq=seq(1:total_ct)
 select_idx <- paste("CT",ct_seq,"S-R",sep="")
 select_idx_result<-vector()
 #x=total_rank[[1]]
+tmp <- character()
 for (i in ct_seq) {
   num_regulons_in_this_ct <- length(which(unlist(lapply(total_rank,function(x){
     return(any(grepl(select_idx[i],x)))

@@ -4,9 +4,9 @@ library(stringi)
 library(seqinr)
 library(tidyverse)
 args <- commandArgs(TRUE)
-#setwd("/var/www/html/iris3/data/20191107110621")
+#setwd("/var/www/html/iris3/data/20191214160014")
 #wd <- getwd()
-#jobid <-20191107110621 
+#jobid <-20191214160014 
 #motif_len <- 12
 jobid <- args[1]
 motif_len <- args[2]
@@ -155,12 +155,16 @@ for (i in 1:length(alldir)) {
   }
   cat(">end", file=paste(alldir[i],".bbc.txt",sep=""),sep="\n",append = T)
   
-  
-  this_bic <- gsub(">bic","",motif_rank[,1])
-  this_bic <- gsub(".txt.fa.*","",this_bic)
-  this_id <- gsub(".*closures-","",motif_rank[,1])
-  motif_rank[,6] <- paste(i,this_bic,this_id,sep=",")
-  write.table(motif_rank[,c(6,4,2,3)],paste(alldir[i],".motif_rank.txt",sep=""),sep = "\t" ,quote=F,row.names = F,col.names = F)
+  if (nrow(motif_rank) > 1) {
+    this_bic <- gsub(">bic","",motif_rank[,1])
+    this_bic <- gsub(".txt.fa.*","",this_bic)
+    this_id <- gsub(".*closures-","",motif_rank[,1])
+    motif_rank[,6] <- paste(i,this_bic,this_id,sep=",")
+    write.table(motif_rank[,c(6,4,2,3)],paste(alldir[i],".motif_rank.txt",sep=""),sep = "\t" ,quote=F,row.names = F,col.names = F)
+  } else {
+    cat("", file= paste(alldir[i],".motif_rank.txt",sep=""),sep="\n",append = T)
+  }
+
 }
 
 gene_id_name <- read.table(paste(jobid,"_gene_id_name.txt",sep=""),sep = "\t", header = T)

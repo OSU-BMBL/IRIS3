@@ -596,23 +596,23 @@ Plot.Cluster.Trajectory<-function(customized=T,add.line=TRUE,start.cluster=NULL,
   par(mar=c(3.1, 3.1, 2.1, 5.1), xpd=TRUE)
   plot(reducedDims(tmp.trajectory.cluster)$DiffMap,
        col=alpha(my.classification.color[as.factor(tmp.trajectory.cluster$cell.label)],0.7),
-       pch=20,frame.plot = FALSE,
+       pch=20,frame.plot = FALSE,cex=(3/log(ncol(tmp.trajectory.cluster))),
        asp=1)
   #grid()
   tmp.color.cat<-cbind.data.frame(CellName=as.character(tmp.trajectory.cluster$cell.label),
                                   Color=my.classification.color[as.factor(tmp.trajectory.cluster$cell.label)])
   tmp.color.cat<-tmp.color.cat[!duplicated(tmp.color.cat$CellName),]
-  tmp.color.cat<-tmp.color.cat[order(as.numeric(tmp.color.cat$CellName)),]
+  tmp.color.cat<-tmp.color.cat[order(as.numeric(as.character(tmp.color.cat$CellName))),]
   # add legend
   if(length(tmp.color.cat$CellName)>10){
     legend("topright",legend = tmp.color.cat$CellName,
-           inset=c(0.1,0), ncol=2,
-           col = tmp.color.cat$Color,pch = 20,
-           cex=0.8,title="cluster",bty='n')
+           inset=c(-0.05,0), ncol=2,
+           col = as.character(tmp.color.cat$Color),pch = 19,
+           cex=1.0,title="Cell type",bty='n')
   } else {legend("topright",legend = tmp.color.cat$CellName,
-                 inset=c(0.1,0), ncol=1,
-                 col = tmp.color.cat$Color,pch = 20,
-                 cex=0.8,title="cluster",bty='n')}
+                 inset=c(-0.05,0), ncol=1,
+                 col = as.character(tmp.color.cat$Color),pch = 19,
+                 cex=1.0,title="Cell type",bty='n')}
   
   
   if(add.line==T){
@@ -711,6 +711,7 @@ my.trajectory<-SingleCellExperiment(
   colData = Idents(my.object)
 )
 SummarizedExperiment::assays(my.trajectory)$norm<-GetAssayData(object = my.object,slot = "data")
+
 dm<-DiffusionMap(t(as.matrix(SummarizedExperiment::assays(my.trajectory)$norm)))
 rd2 <- cbind(DC1 = dm$DC1, DC2 = dm$DC2)
 reducedDims(my.trajectory) <- SimpleList(DiffMap = rd2)
@@ -720,7 +721,7 @@ png(paste("regulon_id/overview_ct.trajectory.png",sep = ""),width=2000, height=1
 Plot.Cluster.Trajectory(customized= T,start.cluster=NULL,add.line = T,end.cluster=NULL,show.constraints=T)
 quiet(dev.off())
 
-pdf(file = paste("regulon_id/overview_ct.trajectory.pdf",sep = ""), width = 16, height = 12,  pointsize = 12, bg = "white")
+pdf(file = paste("regulon_id/overview_ct.trajectory.pdf",sep = ""), width = 10, height = 10,  pointsize = 18, bg = "white")
 Plot.Cluster.Trajectory(customized= T,start.cluster=NULL,add.line = T,end.cluster=NULL,show.constraints=T)
 quiet(dev.off())
 
