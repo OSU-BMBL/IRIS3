@@ -10,7 +10,7 @@ args <- commandArgs(TRUE)
 #setwd("/var/www/html/CeRIS/data/20190913134923")
 #setwd("/fs/project/PAS1475/Yuzhou_Chang/CeRIS/test_data/20190830171050")
 #srcDir <- getwd()
-#id <-"CT3S-R2" 
+#id <-"module1S-R1" 
 #jobid <- "20190913134923"
 srcDir <- args[1]
 id <- args[2]
@@ -54,12 +54,13 @@ Plot.cluster2D<-function(reduction.method="umap",customized=T,pt_size=1,...){
 }
 
 
-Plot.regulon2D<-function(reduction.method="umap",regulon=1,cell.type=1,customized=T,pt_size=1,...){
+Plot.regulon2D<-function(reduction.method="umap",regulon=1,cell.type=1,customized=T,pt_size=1,bic_type = "CT",...){
   #message("plotting regulon ",regulon," of cell type ",cell.type,"...")
   my.plot.regulon<-Get.RegulonScore(reduction.method = reduction.method,
                                     cell.type = cell.type,
                                     regulon = regulon,
-                                    customized = customized)
+                                    customized = customized,
+                                    bic_type = bic_type)
   my.plot.regulon <- my.plot.regulon[order(my.plot.regulon$regulon.score),]
   
   # if(!customized){
@@ -84,14 +85,14 @@ Plot.regulon2D<-function(reduction.method="umap",regulon=1,cell.type=1,customize
 }
 
 Generate.Regulon<-function(cell.type=NULL,regulon=1,...){
-  x<-Get.CellType(cell.type = cell.type)
+  x<-Get.CellType(cell.type = cell.type, bic_type=bic_type)
   tmp.regulon<-subset(my.object,cells = colnames(my.object),features = x[[regulon]][-1])
   return(tmp.regulon)
 }
 
-Get.CellType<-function(cell.type=NULL,...){
+Get.CellType<-function(cell.type=NULL,bic_type="CT",...){
   if(!is.null(cell.type)){
-    my.cell.regulon.filelist<-list.files(pattern = "bic.regulon_gene_symbol.txt")
+    my.cell.regulon.filelist<-list.files(pattern = paste(bic_type,".*bic.regulon_gene_symbol.txt",sep=""))
     my.cell.regulon.indicator<-grep(paste0("_",as.character(cell.type),"_bic"),my.cell.regulon.filelist)
     my.cts.regulon.raw<-readLines(my.cell.regulon.filelist[my.cell.regulon.indicator])
     my.regulon.list<-strsplit(my.cts.regulon.raw,"\t")
@@ -101,9 +102,8 @@ Get.CellType<-function(cell.type=NULL,...){
 }
 
 
-
-Get.RegulonScore<-function(reduction.method="tsne",cell.type=1,regulon=1,customized=F,...){
-  my.regulon.number<-length(Get.CellType(cell.type = cell.type))
+Get.RegulonScore<-function(reduction.method="tsne",cell.type=1,regulon=1,customized=F,bic_type="CT",...){
+  my.regulon.number<-length(Get.CellType(cell.type = cell.type, bic_type=bic_type))
   if (regulon > my.regulon.number){
     stop(paste0("Regulon number exceeds the boundary. Under this cell type, there are total ", my.regulon.number," regulons"))
   } else {
@@ -151,7 +151,11 @@ regulon_ct <-gsub( "-.*$", "", id)
 regulon_ct <-gsub("[[:alpha:]]","",regulon_ct)
 regulon_id <- gsub( ".*R", "", id)
 regulon_id <- gsub("[[:alpha:]]","",regulon_id)
-
+if (substr(id,1,2) == "mo") {
+  bic_type <- "module"
+} else {
+  bic_type <- "CT"
+}
 
 activity_score <- read.table(paste(jobid,"_CT_",regulon_ct,"_bic.regulon_activity_score.txt",sep = ""),row.names = 1,header = T,check.names = F)
 #activity_score <- activity_score ^ 1

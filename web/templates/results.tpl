@@ -107,7 +107,7 @@ $(document).ready(function () {
                         <div id="fountainG_8" class="fountainG"></div>
                         <div id="fountainG_8" class="fountainG"></div>
                         </div>
-                     <p class="loading_text">The server is parsing all the results and visualizations, it will take about {{$wait_time}} seconds to load. </p>
+                     <p class="loading_text">The server is parsing all the results and visualizations, and it will take about {{$wait_time}} seconds to load. </p>
                     </div>  
                 </div>
             </div> 

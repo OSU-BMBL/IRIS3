@@ -7,16 +7,16 @@ library(ggplot2)
 
 args <- commandArgs(TRUE) 
 #setwd("D:/IRIS3_data_test/CeRIS_Run/2.Yan/")
-#setwd("/var/www/html/CeRIS/data/20191020160119")
+#setwd("/var/www/html/iris3/data/20191216203506")
 #srcDir <- getwd()
 #id <-"CT1S-R1" 
-#jobid <- "20191024223952"
+#jobid <- "20191216203506"
 #########################################################################################
 # yuzhou test
 # setwd("/fs/project/PAS1475/Yuzhou_Chang/CeRIS/test_data/11.Klein/20190818121919/")
 #srcDir <- getwd()
 #id <-"CT1S-R1" 
-#jobid <- "20190818121919"
+#jobid <- "2019121412746"
 ##########################################################################################
 srcDir <- args[1]
 id <- args[2]
@@ -85,17 +85,17 @@ Plot.Cluster.Trajectory<-function(customized=T,add.line=TRUE,start.cluster=NULL,
   tmp.color.cat<-cbind.data.frame(CellName=as.character(tmp.trajectory.cluster$cell.label),
                                   Color=my.classification.color[as.factor(tmp.trajectory.cluster$cell.label)])
   tmp.color.cat<-tmp.color.cat[!duplicated(tmp.color.cat$CellName),]
-  tmp.color.cat<-tmp.color.cat[order(as.numeric(tmp.color.cat$CellName)),]
+  tmp.color.cat<-tmp.color.cat[order(as.numeric(as.character(tmp.color.cat$CellName))),]
   # add legend
   if(length(tmp.color.cat$CellName)>10){
     legend("topright",legend = tmp.color.cat$CellName,
-           inset=c(0.1,0), ncol=2,
+           inset=c(-0.05,0), ncol=2,
            col = as.character(tmp.color.cat$Color),pch = 19,
-           cex=1.5,title="cluster",bty='n')
+           cex=1.0,title="Cell type",bty='n')
   } else {legend("topright",legend = tmp.color.cat$CellName,
-                 inset=c(0.1,0), ncol=1,
+                 inset=c(-0.05,0), ncol=1,
                  col = as.character(tmp.color.cat$Color),pch = 19,
-                 cex=1.5,title="cluster",bty='n')}
+                 cex=1.0,title="Cell type",bty='n')}
   
   
   if(add.line==T){
@@ -107,9 +107,9 @@ Plot.Cluster.Trajectory<-function(customized=T,add.line=TRUE,start.cluster=NULL,
 }
 
 
-Plot.Regulon.Trajectory<-function(customized=T,cell.type=1,regulon=1,start.cluster=NULL,end.cluster=NULL,...){
+Plot.Regulon.Trajectory<-function(customized=T,cell.type=1,regulon=1,start.cluster=NULL,end.cluster=NULL,bic_type = "CT",...){
   tmp.trajectory.cluster<-Get.cluster.Trajectory(customized = customized,start.cluster=start.cluster,end.cluster=end.cluster)
-  tmp.regulon.score<- Get.RegulonScore(cell.type = cell.type,regulon = regulon)
+  tmp.regulon.score<- Get.RegulonScore(cell.type = cell.type,regulon = regulon,bic_type = bic_type)
   tmp.cell.name<-colnames(tmp.trajectory.cluster)
   tmp.cell.name.index<-match(tmp.cell.name,rownames(tmp.regulon.score))
   tmp.regulon.score<-tmp.regulon.score[tmp.cell.name.index,]
@@ -132,7 +132,7 @@ Plot.Regulon.Trajectory<-function(customized=T,cell.type=1,regulon=1,start.clust
   xr <- 1.5
   yt <- 2
   
-  par(mar=c(20.1,1.1,1.1,5.1))
+  par(mar=c(15.1,1.1,1.1,5.1))
   plot(NA,type="n",ann=F,xlim=c(1,2),ylim=c(1,2),xaxt="n",yaxt="n",bty="n")
   rect(
     xl,
@@ -155,14 +155,14 @@ Plot.Regulon.Trajectory<-function(customized=T,cell.type=1,regulon=1,start.clust
 }
 
 Generate.Regulon<-function(cell.type=NULL,regulon=1,...){
-  x<-Get.CellType(cell.type = cell.type)
+  x<-Get.CellType(cell.type = cell.type, bic_type=bic_type)
   tmp.regulon<-subset(my.object,cells = colnames(my.object),features = x[[regulon]][-1])
   return(tmp.regulon)
 }
 
-Get.CellType<-function(cell.type=NULL,...){
+Get.CellType<-function(cell.type=NULL,bic_type="CT",...){
   if(!is.null(cell.type)){
-    my.cell.regulon.filelist<-list.files(pattern = "bic.regulon_gene_symbol.txt")
+    my.cell.regulon.filelist<-list.files(pattern = paste(bic_type,".*bic.regulon_gene_symbol.txt",sep=""))
     my.cell.regulon.indicator<-grep(paste0("_",as.character(cell.type),"_bic"),my.cell.regulon.filelist)
     my.cts.regulon.raw<-readLines(my.cell.regulon.filelist[my.cell.regulon.indicator])
     my.regulon.list<-strsplit(my.cts.regulon.raw,"\t")
@@ -172,9 +172,8 @@ Get.CellType<-function(cell.type=NULL,...){
 }
 
 
-
-Get.RegulonScore<-function(reduction.method="umap",cell.type=1,regulon=1,customized=F,...){
-  my.regulon.number<-length(Get.CellType(cell.type = cell.type))
+Get.RegulonScore<-function(reduction.method="umap",cell.type=1,regulon=1,customized=F,bic_type="CT",...){
+  my.regulon.number<-length(Get.CellType(cell.type = cell.type, bic_type=bic_type))
   if (regulon > my.regulon.number){
     stop(paste0("Regulon number exceeds the boundary. Under this cell type, there are total ", my.regulon.number," regulons"))
   } else {
@@ -201,6 +200,7 @@ Get.RegulonScore<-function(reduction.method="umap",cell.type=1,regulon=1,customi
     return(my.choose.regulon)
   }
 }
+
 quiet <- function(x) {
   sink(tempfile()) 
   on.exit(sink()) 
@@ -213,36 +213,30 @@ regulon_ct <-gsub( "-.*$", "", id)
 regulon_ct <-gsub("[[:alpha:]]","",regulon_ct)
 regulon_id <- gsub( ".*R", "", id)
 regulon_id <- gsub("[[:alpha:]]","",regulon_id)
-
-png(paste("regulon_id/overview_ct.trajectory.png",sep = ""),width=2000, height=1500,res = 300)
-if (!file.exists(paste("regulon_id/overview_ct.trajectory.png",sep = ""))){
-  #Plot.cluster2D(reduction.method = "umap",customized = T)
-  #Plot.TrajectoryByCellType(customized = T)
-  if(!exists("my.trajectory")){
-    library(slingshot)
-    library(Seurat)
-    library(SummarizedExperiment)
-    suppressPackageStartupMessages(library(destiny))
-    my.trajectory <- readRDS("trajectory_obj.rds")
-    my.object <- readRDS("seurat_obj.rds")
-  }
-  Plot.Cluster.Trajectory(customized= T,start.cluster=NULL,add.line = T,end.cluster=NULL,show.constraints=T)
+if (substr(id,1,2) == "mo") {
+  bic_type <- "module"
+} else {
+  bic_type <- "CT"
 }
-quiet(dev.off())
 
-png(paste("regulon_id/",id,".trajectory.png",sep = ""),width=2000, height=1500,res = 300)
+
+
 if (!file.exists(paste("regulon_id/",id,".trajectory.png",sep = ""))){
   activity_score <- read.table(paste(jobid,"_CT_",regulon_ct,"_bic.regulon_activity_score.txt",sep = ""),row.names = 1,header = T,check.names = F)
-  
-  if(!exists("my.trajectory")){
-    library(slingshot)
-    library(Seurat)
-    library(SummarizedExperiment)
-    suppressPackageStartupMessages(library(destiny))
-    my.trajectory <- readRDS("trajectory_obj.rds")
-    my.object <- readRDS("seurat_obj.rds")
-  }
+  library(slingshot)
+  library(Seurat)
+  library(SummarizedExperiment)
+  suppressPackageStartupMessages(library(destiny))
+  my.trajectory <- readRDS("trajectory_obj.rds")
+  my.object <- readRDS("seurat_obj.rds")
+  png(paste("regulon_id/",id,".trajectory.png",sep = ""),width=2000, height=1500,res = 300)
   reset_par()
-  Plot.Regulon.Trajectory(cell.type = as.numeric(regulon_ct),regulon = as.numeric(regulon_id),start.cluster = NULL,end.cluster = NULL,customized = T)
+  Plot.Regulon.Trajectory(cell.type = as.numeric(regulon_ct),regulon = as.numeric(regulon_id),start.cluster = NULL,end.cluster = NULL,customized = T, bic_type = bic_type)
+  quiet(dev.off())
+  
+  pdf(file = paste("regulon_id/",id,".trajectory.pdf",sep = ""), width = 10, height = 10,  pointsize = 18, bg = "white")
+  reset_par()
+  Plot.Regulon.Trajectory(cell.type = as.numeric(regulon_ct),regulon = as.numeric(regulon_id),start.cluster = NULL,end.cluster = NULL,customized = T, bic_type = bic_type)
+  quiet(dev.off())
+  
 }
-quiet(dev.off())
