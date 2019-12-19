@@ -1058,8 +1058,26 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                                             </div>	
 															{{/if}}
 															{{/foreach}}
-
-															{{foreach from=$module_result item=label1 key=sec0}}														
+															
+															{{if $count_module > 0 && empty($module_result[0][0][0])}}
+															
+																<div class="tab-pane" id="main_module{{$module_idx+1}}" role="tabpanel">
+																<div class="flatPanel panel panel-default">
+																			<div class="row" style="">
+																			<div class="form-group col-md-12 col-sm-12" style="height:100%">
+																			<strong>No CTS-R found in module 1 </strong>
+																	</div></div> </div> </div> 
+															{{/if}}
+															
+															{{foreach from=$module_result item=label1 key=sec0}}
+															{{if ($module_result[$sec0][0][0]) == 0}}
+															<div class="tab-pane" id="main_module{{$sec0+1}}" role="tabpanel">
+																<div class="flatPanel panel panel-default">
+																			<div class="row" style="">
+																			<div class="form-group col-md-12 col-sm-12" style="height:100%">
+																			<strong>No CTS-R found in module{{$sec0+1}} </strong>
+																	</div></div> </div> </div> 
+															{{else}}
 															<div class="tab-pane " id="main_module{{$sec0+1}}" role="tabpanel">
 																<div class="flatPanel panel panel-default">
 																			<div class="row" style="">
@@ -1184,8 +1202,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                                                         {{/section}}
 
 																					
-																	</div></div></div></div>
-															{{/foreach}}</div>
+																	</div></div></div></div>{{/if}}{{/foreach}}</div>
 										</div>
                                 </div>
                             </div>
