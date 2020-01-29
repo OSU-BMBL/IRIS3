@@ -577,7 +577,7 @@ Get.cluster.Trajectory<-function(customized=T,start.cluster=NULL,end.cluster=NUL
     tmp.cell.type<-my.object$Customized.idents
   }
   if(customized==FALSE){
-    tmp.cell.type<-as.character(my.object$seurat_clusters)
+    tmp.cell.type<-as.character(as.numeric(my.object$seurat_clusters))
   }
   tmp.cell.name.index<-match(colnames(my.trajectory),colnames(my.object))
   tmp.cell.type<-tmp.cell.type[tmp.cell.name.index]
@@ -725,3 +725,13 @@ pdf(file = paste("regulon_id/overview_ct.trajectory.pdf",sep = ""), width = 10, 
 Plot.Cluster.Trajectory(customized= T,start.cluster=NULL,add.line = T,end.cluster=NULL,show.constraints=T)
 quiet(dev.off())
 
+
+if (label_use_sc3 =='1' ){
+  png(paste("regulon_id/overview_ct.trajectory.png",sep = ""),width=2000, height=1500,res = 300)
+  Plot.Cluster.Trajectory(customized= F,start.cluster=NULL,add.line = T,end.cluster=NULL,show.constraints=T)
+  quiet(dev.off())
+  
+  pdf(file = paste("regulon_id/overview_ct.trajectory.pdf",sep = ""), width = 10, height = 10,  pointsize = 18, bg = "white")
+  Plot.Cluster.Trajectory(customized= F,start.cluster=NULL,add.line = T,end.cluster=NULL,show.constraints=T)
+  quiet(dev.off())
+} 
