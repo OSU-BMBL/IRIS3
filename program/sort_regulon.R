@@ -247,8 +247,8 @@ rankings <- calc_ranking(exp_data)
 
 #total_ras <- calc_ras(expr = exp_data,genes=total_gene_list,method = "wmw_test")
 total_ras <- calc_ras(expr = exp_data,genes=total_gene_list,method = "wmw_test",rankings = rankings)
-total_ras1 <- total_ras 
 
+rm(exp_data)
 # set Inf RAS to column max value
 for (j in 1:ncol(total_ras)) {
   this_ras <- total_ras[which(total_ras[,j] < Inf),j]
@@ -348,28 +348,28 @@ for (i in 1:total_ct) {
       marker <- lapply(gene_name_list, function(x){
         x[which(x%in%marker_data[,i])]
       })
-      # 
-      # if(sum(sapply(marker, length))>0){
-      #   rss_rank<-order(sapply(marker,length),decreasing=T)
-      #   marker <- marker[rss_rank]
-      #   rss_list <- rss_list[rss_rank]
-      #   gene_name_list <- gene_name_list[rss_rank]
-      #   gene_id_list <- gene_id_list[rss_rank]
-      #   # put marker genes on top
-      #   gene_id_list <- mapply(function(X,Y,Z){
-      #     id <- which(Y %in% X)
-      #     return(unique(append(Z[id],Z)))
-      #   },X=marker,Y=gene_name_list,Z=gene_id_list)
-      #   
-      #   gene_name_list <- mapply(function(X,Y){
-      #     return(unique(append(X,Y)))
-      #   },X=marker,Y=gene_name_list)
-      #   
-      #   motif_list <- motif_list[rss_rank]
-      #   ras <- ras[rss_rank,]
-      #   originak_ras <- originak_ras[rss_rank,]
-      # }
-      # 
+       
+       if(sum(sapply(marker, length))>0){
+         #rss_rank<-order(sapply(marker,length),decreasing=T)
+         marker <- marker[rss_rank]
+         #rss_list <- rss_list[rss_rank]
+         #gene_name_list <- gene_name_list[rss_rank]
+         #gene_id_list <- gene_id_list[rss_rank]
+         # put marker genes on top
+         gene_id_list <- mapply(function(X,Y,Z){
+           id <- which(Y %in% X)
+           return(unique(append(Z[id],Z)))
+         },X=marker,Y=gene_name_list,Z=gene_id_list)
+         
+         gene_name_list <- mapply(function(X,Y){
+           return(unique(append(X,Y)))
+         },X=marker,Y=gene_name_list)
+         
+         motif_list <- motif_list[rss_rank]
+         ras <- ras[rss_rank,]
+         originak_ras <- originak_ras[rss_rank,]
+       }
+       
     } 
     
     #colnames(ras) <- label_data[,1]

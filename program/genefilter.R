@@ -364,7 +364,7 @@ if (label_file == 0 | label_file==1){
   cell_info <- read.table(label_file,check.names = FALSE, header=TRUE,sep = delimiter)
   cell_info[,2] <- as.factor(cell_info[,2])
 }
-
+rm(exp_data)
 my.object<-FindVariableFeatures(my.object,selection.method = "vst",nfeatures = 5000)
 
 # before PCA, scale data to eliminate extreme value affect.
@@ -411,8 +411,8 @@ if (!is.na(sil)){
 } else {
   silh_out <- cbind(cell_info,cell_names,rep(0,length(cell_info)))
   silh_out <- silh_out[order(as.numeric(silh_out[,1])),]
-}
-
+} 
+rm(dist.matrix)
 # set max row,
 if (ncol(my.object) > 500) {
   this_bin <- ncol(my.object) %/% 500
@@ -577,7 +577,7 @@ Get.cluster.Trajectory<-function(customized=T,start.cluster=NULL,end.cluster=NUL
     tmp.cell.type<-my.object$Customized.idents
   }
   if(customized==FALSE){
-    tmp.cell.type<-as.character(as.numeric(my.object$seurat_clusters))
+    tmp.cell.type<-as.character(my.object$seurat_clusters)
   }
   tmp.cell.name.index<-match(colnames(my.trajectory),colnames(my.object))
   tmp.cell.type<-tmp.cell.type[tmp.cell.name.index]
@@ -725,13 +725,3 @@ pdf(file = paste("regulon_id/overview_ct.trajectory.pdf",sep = ""), width = 10, 
 Plot.Cluster.Trajectory(customized= T,start.cluster=NULL,add.line = T,end.cluster=NULL,show.constraints=T)
 quiet(dev.off())
 
-
-if (label_use_sc3 =='1' ){
-  png(paste("regulon_id/overview_ct.trajectory.png",sep = ""),width=2000, height=1500,res = 300)
-  Plot.Cluster.Trajectory(customized= F,start.cluster=NULL,add.line = T,end.cluster=NULL,show.constraints=T)
-  quiet(dev.off())
-  
-  pdf(file = paste("regulon_id/overview_ct.trajectory.pdf",sep = ""), width = 10, height = 10,  pointsize = 18, bg = "white")
-  Plot.Cluster.Trajectory(customized= F,start.cluster=NULL,add.line = T,end.cluster=NULL,show.constraints=T)
-  quiet(dev.off())
-} 
