@@ -30,13 +30,13 @@ $param_file = fopen("$DATAPATH/$jobid/info.txt", "r");
 			} else if($split_line[0] == "f_arg"){
 				$f_arg = $split_line[1];
 			} else if($split_line[0] == "is_c"){
-				if( $split_line[1] == "-C") {
+				if( strcmp($split_line[1], "-C")) {
 					$is_c = "Yes";
 				} else{
 					$is_c = "No";
 				}
 			} else if($split_line[0] == "is_imputation"){
-				if( $split_line[1] == "1") {
+				if( $split_line[1] == 1) {
 					$is_imputation = "Yes";
 				} else{
 					$is_imputation = "No";
