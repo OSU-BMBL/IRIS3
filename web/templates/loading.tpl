@@ -763,7 +763,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 												<div class="col-sm-6">
 												<h4 style="text-align:center;margin-top:50px"> Trajectory Plot Colored by Cell Types</h4>
                                                    <input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_ct.trajectory.pdf')" />
-												   <img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_ct.trajectory.png"></img>
+												   <img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_ct.trajectory.png"  onerror="this.onerror=null; this.src='assets/img/default_trajectory.png'" alt=""></img>
 												</div>
 												<div class="row">
 												</div>
@@ -778,7 +778,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 												<div class="col-sm-6">
 												<h4 style="text-align:center;margin-top:50px"> Trajectory Plot Colored by Cell Types</h4>
                                                     <input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_ct.trajectory.pdf')" />
-													<img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_ct.trajectory.png"></img>
+													<img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_ct.trajectory.png"  onerror="this.onerror=null; this.src='assets/img/default_trajectory.png'" alt=""></img>
 												</div>
 											</div>
 											{{/if}}
