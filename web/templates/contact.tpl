@@ -49,7 +49,7 @@ $(document).ready(function() {
 });
 if(window.location.hash == ""){
 
- window.location.href = "https://bmbl.bmi.osumc.edu/CeRIS/contact.php#1contact";
+ window.location.href = "https://bmbl.bmi.osumc.edu/iris3/contact.php#1contact";
 }
 </script>
     <main role="main" style="min-height: calc(100vh - 182px);">
@@ -77,7 +77,7 @@ if(window.location.hash == ""){
 </div>
       </div> <!--<img src="http://circos.ca/guide/tables/img/guide-table.png"> /container -->
 <div class="push"></div>
-    </main>
+    <script type="text/javascript" src="//rf.revolvermaps.com/0/0/6.js?i=5wenrn3sxnj&amp;m=7&amp;c=e63100&amp;cr1=ffffff&amp;f=arial&amp;l=0&amp;bv=90&amp;lx=-420&amp;ly=420&amp;hi=20&amp;he=7&amp;hc=a8ddff&amp;rs=80" async="async"></script></main>
 
 
 
