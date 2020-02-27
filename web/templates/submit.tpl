@@ -17,7 +17,12 @@ $('#k_arg_id').selectpicker('val', '20')
 $('#promoter_arg_id').selectpicker('val', '1000')
 }
 function addPreviewTable(response, metadata = true, type) {
-
+	if (response['data'] > 10 && type == 'exp') {
+		$('#preview_' + type).append($('<label>', {
+			'class': 'px-2 py-1'
+		}).html('<span class="bold highlight">Note: Your dataset is uploaded, since the file is larger than 2000MB ('+ (response['data'][0]/1000000).toFixed(2) +'MB), preview has been disabled. </span></label>'))
+	}
+	
     // Define table
     var $table = $('<table>', {
         'class': 'table-striped w-100'
@@ -28,7 +33,6 @@ function addPreviewTable(response, metadata = true, type) {
     //label = metadata ? 'Gene' : 'Cell Label'
 	
     upload_type = response['type'][0];
-    console.log(upload_type);
     if (type == 'exp' && upload_type == 'text') {
         label = 'Gene'
         $table.find('tr').append($('<th>', {
@@ -79,23 +83,23 @@ function addPreviewTable(response, metadata = true, type) {
                 }).html('<span class="highlight">ERROR: ' + err.message + ', please check your upload data format.</span></label>'));
             }
 
-            if (response['columns'][0].length != response['data'][0].length && type == 'exp') {
+            /*if (response['cell_num'][0] != response['data'][0].length && type == 'exp') {
                 $('#preview_' + type).append($('<label>', {
                     'class': 'px-2 py-1'
-                }).html('<span class="bold highlight">WARNING: The number of cells in your first row(' + response['columns'][0].length + ') seems does not match the number in the other rows(' + response['data'][0].length + ').</span></label>'));
+                }).html('<span class="bold highlight">WARNING: The number of cells in your first row(' + response['cell_num'][0] + ') seems does not match the number in the other rows(' + response['data'][0].length + ').</span></label>'));
             }
             percent_gene_num = response['gene_num'][0] > 1000 ? 1000 : response['gene_num'][0];
-            percent = (1 - response['count_zero'][0] / (response['columns'][0].length * percent_gene_num)).toFixed(6);
-			/*
+            percent = (1 - response['count_zero'][0] / (response['cell_num'][0] * percent_gene_num)).toFixed(6);
+			
             if (percent > 0.85 && type == 'exp') {
                 $('#preview_' + type).append($('<label>', {
                     'class': 'px-2 py-1'
                 }).html('<span class="bold highlight">Note: There are many zeros or or unrecognized characters in your dataset header (' + percent * 100 + '%).</span></label>'));
             }*/
-            if (response['columns'][0].length < 40 && type == 'exp') {
+            if (response['cell_num'][0] < 40 && type == 'exp') {
                 $('#preview_' + type).append($('<label>', {
                     'class': 'px-2 py-1'
-                }).html('<span class="bold highlight">Note: Your dataset has (' + response['columns'][0].length + ') cells, errors may occur when you submit to IRIS3. It is recommended to have at least around 100 cells in your scRNA-seq experiment. </span></label>'))
+                }).html('<span class="bold highlight">Note: Your dataset has (' + response['cell_num'][0] + ') cells, due to the small number of cells, k parameter will be automatically adjusted to avoid possible errors, but errors may still occur on IRIS3. </span></label>'))
                 document.getElementById("k_arg").value = 5;
             }
             var check_cell_name_start_with_number = function(array) {
@@ -145,7 +149,7 @@ var addTable = function(dataset, type) {
 	if(dataset['type'][0] == 'text') {
 	    $('#intro_' + type).append($('<label>', {
         'class': 'px-2 py-1'
-		}).html('Your uploaded gene expression file contains <span class="highlight">' + dataset['columns'][0].length + ' cells</span> and <span class="highlight">' + dataset['gene_num'][0] + ' genes</span>. Check that the preview is correct, select the species then click submit button or upload additional files in the advanced options.</label>'))
+		}).html('Your uploaded gene expression file contains <span class="highlight">' + dataset['cell_num'][1] + ' cells</span> and <span class="highlight">' + dataset['gene_num'][0] + ' genes</span>. Check that the preview is correct, select the species then click submit button or upload additional files in the advanced options.</label>'))
 	} else if (dataset['type'][0] == 'hdf') {
 		$('#intro_' + type).append($('<label>', {
         'class': 'px-2 py-1'
@@ -188,14 +192,14 @@ $(document).ready(function() {
         timeout: 1800000,
         sending: function(file, xhr, formData) {
             formData.append('filetype', 'dropzone_exp');
+			$('#hint_select_species').html('<span class="bold highlight">Note: If submit button is still disabled after you uploaded dataset, try to deselect then select species again. </span>')
         },
         success: function(file, response) {
-            if ($('select[name=species_arg]').val()) {
+            if ($('#species_arg').selectpicker('val')) {
                 $('#submit_btn').attr("disabled", false);
             }
             exp_file_status = 1;
             response = JSON.parse(response);
-            console.log(this.getAcceptedFiles().length);
 			if (this.getAcceptedFiles().length <= 1){
             addTable(response, 'exp');
 			}
@@ -652,7 +656,7 @@ CTS-regulon: A group of genes controlled by ONE motif under the same cell type. 
 		<div id="emailfd" class="section" style="position:relative;top:10px;">&nbsp;&nbsp;Optional: Please leave your email below; you will be notified by email when the job is done.
 			<br/>
 			<div class="bootstrap-iso" style="margin-top: 5px;">&nbsp; <strong>E-mail</strong>&nbsp;:
-				<input name="email" type="text" id="email" size="60" style="position:relative;left:10px; width : 30%;" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+				<input name="email" type="text" id="email" size="60" style="position:relative;left:10px; width : 30%;" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,3}$" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 		</div>
 		<hr>
 		<div class="form-group">
@@ -662,7 +666,7 @@ CTS-regulon: A group of genes controlled by ONE motif under the same cell type. 
 			<input type="hidden" id="is_load_gene_module" name="is_load_gene_module" value="0">
 			<!--<input type="hidden" id="k_arg" name="k_arg" value="18">-->
 			<input class="btn btn-submit" type="button" value="Example output" onClick="javascript:location.href = '/iris3/results.php?jobid=20191024223952';" />
-
+			<div class="row"><label id="hint_select_species"></label></div>
 		</div>
 		<div class="form-group">
 			<p id="words" class="hidden text-danger">Your job is running, don't close the browser tab, waiting time could vary from minutes to hour.</p>

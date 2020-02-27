@@ -192,9 +192,7 @@ if (isset($_POST['submit']))
 	if($if_allowSave != '0'){
     system("cp $workdir2$expfile $BASE/storage");
 	}
-if(filesize($expfile) < 4000000) {
-	$k_arg = 3;
-}
+
 if ($labelfile == ''){
 	$labelfile = '1';
 	$delim_label = ',';
@@ -253,7 +251,7 @@ $BASE/program/build_clustergrammar.sh \$wd \$jobid $label_use_sc3\n
 
 
 zip -R \$wd\$jobid '*.regulon_gene_id.txt' '*.regulon_gene_symbol.txt' '*.regulon_rank.txt' '*.regulon_activity_score.txt' '*_cell_label.txt' '*.blocks' '*_blocks.conds.txt' '*_blocks.gene.txt' '*_filtered_expression.txt' '*_gene_id_name.txt' '*_marker_genes.txt' 'cell_type_unique_marker.txt' '*_combine_regulon.txt'\n
-perl $BASE/program/prepare_email.pl \$jobid\n
+#perl $BASE/program/prepare_email1.pl \$jobid\n
 echo 'finish'> done\n  
 chmod -R 755 .
 ");
