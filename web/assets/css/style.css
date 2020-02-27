@@ -26,7 +26,7 @@
 }
 
 .features-box-icon {
-    background: #2775b6 none repeat scroll 0 0;
+    background: #B47157 none repeat scroll 0 0;
     border-radius: 5px;
     color: #31dc89;
     height: 70px;
@@ -61,8 +61,8 @@
 }
 
 a.enroll-button {
-    background: #2775b6 none repeat scroll 0 0;
-    border-radius: 50px;
+    background: #B47157 none repeat scroll 0 0;
+    border-radius: 10px;
     color: #fff;
     padding: 10px 15px;
     text-transform: capitalize;
@@ -98,7 +98,7 @@ a.enroll-button:hover {
 ---------------------------------*/
 
 .video-area .area-bg::before {
-    background: #2775b6 none repeat scroll 0 0;
+    background: #B47157 none repeat scroll 0 0;
     opacity: 0.75;
 }
 
@@ -120,7 +120,7 @@ a.enroll-button:hover {
 .video-area-popup {
     background: #ffffff none repeat scroll 0 0;
     border-radius: 50%;
-    color: #2775b6;
+    color: #B47157;
     cursor: pointer;
     display: inline-block;
     font-size: 30px;
@@ -134,7 +134,7 @@ a.enroll-button:hover {
 }
 
 .video-area-popup:hover {
-    background: #2775b6 none repeat scroll 0 0;
+    background: #B47157 none repeat scroll 0 0;
     -webkit-box-shadow: 0 0 10px 10px #ffffff;
     box-shadow: 0 0 10px 10px #ffffff;
     color: #ffffff;
@@ -151,7 +151,7 @@ a.enroll-button:hover {
 }
 
 .author-content::before {
-    color: #2775b6;
+    color: #B47157;
     content: "\f10e";
     font-family: fontawesome;
     font-size: 41px;
@@ -178,7 +178,7 @@ a.enroll-button:hover {
 }
 
 .testmonial-area .owl-nav > div {
-    background: #2775b6 none repeat scroll 0 0;
+    background: #B47157 none repeat scroll 0 0;
     border-radius: 50%;
     color: #ffffff;
     font-size: 30px;
@@ -240,8 +240,8 @@ a.enroll-button:hover {
 }
 
 .testmonial-area .owl-dots > div.active {
-    background: #2775b6 none repeat scroll 0 0;
-    border-color: #2775b6;
+    background: #B47157 none repeat scroll 0 0;
+    border-color: #B47157;
 }
 
 /*--------------------------------
@@ -324,14 +324,14 @@ a.enroll-button:hover {
 
 .contact-form input:focus,
 .contact-form textarea:focus {
-    -webkit-box-shadow: 0 0 0 1px #2775b6;
-    box-shadow: 0 0 0 1px #2775b6;
+    -webkit-box-shadow: 0 0 0 1px #B47157;
+    box-shadow: 0 0 0 1px #B47157;
 }
 
 .contact-form button {
-    background: #2775b6 none repeat scroll 0 0;
+    background: #B47157 none repeat scroll 0 0;
     border: 0 none;
-    border-radius: 50px;
+    border-radius: 10px;
     color: #ffffff;
     font-size: 14px;
     letter-spacing: 2px;
@@ -348,7 +348,7 @@ a.enroll-button:hover {
 
 .enroll-button a {
     background: #31dc89 none repeat scroll 0 0;
-    border-radius: 50px;
+    border-radius: 10px;
     color: #ffffff;
     display: inline-block;
     font-weight: 600;
@@ -395,7 +395,7 @@ a.enroll-button:hover {
 .subscriber-form {
     background: #ffffff none repeat scroll 0 0;
     border: 1px solid #dddddd;
-    border-radius: 50px;
+    border-radius: 10px;
     font-size: 18px;
     height: 50px;
     position: relative;
@@ -417,7 +417,7 @@ a.enroll-button:hover {
 }
 
 .subscriber-form button {
-    background: #2775b6 none repeat scroll 0 0;
+    background: #B47157 none repeat scroll 0 0;
     border: 0 none;
     border-radius: 0 50px 50px 0;
     color: #171932;
@@ -485,7 +485,7 @@ label.mt10.valid {
 }
 
 .scrolltotop:hover {
-    background: #2775b6;
+    background: #B47157;
     color: #ffffff;
 }
 
@@ -498,5 +498,23 @@ label.mt10.valid {
 	opacity: 0 !important;
 }
 
+#particles-js {
+width:100%;
+height:100%;
+background-size:auto;
+background-repeat:repeat;
+position:fixed;
+min-height:200px
+z-index: -10;
+}
 
-	
+#particles-js canvas {
+    display: block;
+    vertical-align: bottom;
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+    -webkit-transition: opacity .8s ease, -webkit-transform 1.4s ease;
+    transition: opacity .8s ease, transform 1.4s ease
+}

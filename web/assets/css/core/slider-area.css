@@ -3,7 +3,7 @@
 -------------------------------------*/
 
 .welcome-slider-area {
-    color: #fff;
+    color: black;
     overflow: hidden;
     width: 100%;
     position: relative;
@@ -71,7 +71,7 @@
 
 @media only screen and (min-width: 1920px) {
     .welcome-single-slide {
-        height: 950px;
+        height: 100%;
         width: 100%;
     }
 }

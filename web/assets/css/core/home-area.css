@@ -62,7 +62,8 @@
     height: 45px;
     overflow: hidden;
     position: relative;
-    width: 50%;
+    width: 80%;
+	border: 1px solid;
 }
 
 .home-button form input {
@@ -77,7 +78,7 @@
 }
 
 .home-button form button {
-    background: #2775b6 none repeat scroll 0 0;
+    background: #B47157 none repeat scroll 0 0;
     border: 0 none;
     font-size: 25px;
     height: 100%;
