@@ -346,7 +346,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 		overview_filepath = "./data/"+jobid+"/regulon_id/overview_provde_ct.pdf"
 		regulon_score_filepath = "./data/"+jobid+"/regulon_id/"+ regulon_id +".pdf"
 		$('#'+table_content_id).html("")
-		$('#'+table_id).html('<div class="col-sm-6"><p>UMAP Plot Colored by Cell Types</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+overview_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/overview_provide_ct.png" /></div><div class="col-sm-6"><p>UMAP Plot Colored by ' + regulon_id + ' Score</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+regulon_score_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/' + regulon_id + '.png" /></div>')
+		$('#'+table_id).html('<div class="col-sm-6"><p>UMAP Plot Colored by Cell Types</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+overview_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/overview_provide_ct.png" /></div><div class="col-sm-6"><p>UMAP Plot Colored by ' + regulon_id + ' Score</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+regulon_score_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/' + regulon_id + '.png" onerror="this.onerror=null; this.src="assets/img/default_umap.png"" alt=""/></div>')
 		},
 	})
 	}
@@ -411,7 +411,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 		expression_filepath = "./data/"+jobid+"/regulon_id/"+ gene_symbol +".umap.pdf"
 		document.getElementById(table_content_id).innerHTML = ''
 		let tmp = document.getElementById(table_id).innerHTML
-		document.getElementById(table_id).innerHTML = tmp + '<div class="col-sm-6"><p>UMAP Plot Colored by Cell Types</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+overview_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/overview_provide_ct.png" /></div><div class="col-sm-6"><p>UMAP Plot Colored by Normalized '+ gene_symbol +' Gene Expression Value</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+expression_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/' + gene_symbol + '.umap.png" /></div>'
+		document.getElementById(table_id).innerHTML = tmp + '<div class="col-sm-6"><p>UMAP Plot Colored by Cell Types</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+overview_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/overview_provide_ct.png" /></div><div class="col-sm-6"><p>UMAP Plot Colored by Normalized '+ gene_symbol +' Gene Expression Value</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+expression_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/' + gene_symbol + '.umap.png" onerror="this.onerror=null; this.src="assets/img/default_umap.png"" alt=""/></div>'
 		},
 	})
 	}
