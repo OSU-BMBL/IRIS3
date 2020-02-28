@@ -430,8 +430,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 		gene_list = lines[gene_idx].split("\t")
 		gene_list.shift()
 		var enrichr_info = {list: gene_list.join("\n"), description: 'Gene list send to '+$(item).attr("id") , popup: true}
-		//console.log(enrichr_info)
-        //defined globally - will improve
+
           send_to_Enrichr(enrichr_info)
     })
 	}	
@@ -596,31 +595,9 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 				extend:'csv',
 				title: {{$jobid}}+'_marker_genes'
 				}
-				]/*,
-			columnDefs: [
-				{
-                "targets": [1],
-                render: function (data, type, row, meta){	
-						var dat=new Array
-						if (type === 'display')
-						{
-							res=data.split(" ")
-							for(i=0;i < res.length;i++) {
-								dat[i] = '<a  href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=' +res[i]+ '" target="_blank">'+res[i] +'</a>'
-							}
-						}
-						return dat
-					}
-				}
-				]*/
+				]
 		} )
 		
-		/*
-		 $('#regulon_table1').DataTable({
-				"ordering": false,
-				"paging": true,
-				"info": false
-		})*/
 	});
 	
  </script>
@@ -638,10 +615,10 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 
                                 <div class="panel-heading">
                                     <ul class="nav nav-tabs">
-                                        <li class="active"><a href="#tab1default" data-toggle="tab">General results</a></li>
+                                        <li class="active"><a href="#tab1default" data-toggle="tab">Cell clustering</a></li>
                                         <li><a href="#tab2default" data-toggle="tab">Cell Type Prediction</a></li>
 										<li><a href="#tab3default" data-toggle="tab">Marker genes</a></li>
-                                        <li><a href="#tab4default" data-toggle="tab">Job settings</a></li>
+                                        <li><a href="#tab4default" data-toggle="tab">General information</a></li>
                                     </ul>
                                 </div>
                                 <div class="panel-body">
@@ -650,41 +627,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                             <div class="flatPanel panel panel-default">
                         <div class="panel-body">
                             <div class="col-md-12 col-sm-12"> 
-                                <div class="form-group col-md-4 col-sm-4">
-                                    <p id="species">Species: {{$species}} {{$main_species}}{{if $second_species != ''}},{{/if}} {{$second_species}}</p>
-                                </div>
-                                <div class="form-group col-md-4 col-sm-4">
-                                    <p>Number of cells: {{$total_cell_num}}</p>
-                                </div>
-                                <div class="form-group col-md-4 col-sm-4">
-                                    <p>Number of genes: {{$total_gene_num}}</p>
-                                </div>
-                                <div class="form-group col-md-4 col-sm-4">
-                                    <p>Number of filtered genes: {{$filter_gene_num}}</p>
-                                </div>
-                                <div class="form-group col-md-4 col-sm-4">
-                                    <p>Gene filtering ratio: {{$filter_gene_rate*100}}%</p>
-                                </div>
-								<div class="form-group col-md-4 col-sm-4">
-                                    <p>Number of filtered cells: {{$filter_cell_num}}</p>
-                                </div>
-                                <div class="form-group col-md-4 col-sm-4">
-                                    <p>Cell filtering ratio: {{$filter_cell_rate*100}}%</p>
-                                </div>
-								{{if $provide_label > 0}}
-                                <div class="form-group col-md-4 col-sm-4">
-                                    <p>Number of provided cell types: {{$provide_label}}</p>
-                                </div>
-								{{/if}}
-								<div class="form-group col-md-4 col-sm-4">
-                                    <p>Number of predicted cell types: {{$predict_label}}</p>
-                                </div>
-                                <div class="form-group col-md-4 col-sm-4">
-                                    <p>Total biclusters: {{$total_bic}}</p>
-                                </div>
-                                <div class="form-group col-md-4 col-sm-4">
-                                    <p>Total CTS-Rs: {{$total_regulon}}</p>
-                                </div>
+                              
                                             <table id="tablePreview" class="table">
                                                 <thead>
                                                     <tr>
@@ -815,6 +758,47 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                         </div>
                                         <div class="tab-pane fade" id="tab4default"><div class="flatPanel panel panel-default">
                         <div class="panel-body">
+						<div class="form-group col-md-12 col-sm-12">
+						<div class="row">
+							<h4 class="font-italic text-left">General results</h4>
+								<div class="form-group col-md-4 col-sm-4">
+									<p id="species">Species: {{$species}} {{$main_species}}{{if $second_species != ''}},{{/if}} {{$second_species}}</p>
+                                </div>
+                                <div class="form-group col-md-4 col-sm-4">
+                                    <p>Number of cells: {{$total_cell_num}}</p>
+                                </div>
+                                <div class="form-group col-md-4 col-sm-4">
+                                    <p>Number of genes: {{$total_gene_num}}</p>
+                                </div>
+                                <div class="form-group col-md-4 col-sm-4">
+                                    <p>Number of filtered genes: {{$filter_gene_num}}</p>
+                                </div>
+                                <div class="form-group col-md-4 col-sm-4">
+                                    <p>Gene filtering ratio: {{$filter_gene_rate*100}}%</p>
+                                </div>
+								<div class="form-group col-md-4 col-sm-4">
+                                    <p>Number of filtered cells: {{$filter_cell_num}}</p>
+                                </div>
+                                <div class="form-group col-md-4 col-sm-4">
+                                    <p>Cell filtering ratio: {{$filter_cell_rate*100}}%</p>
+                                </div>
+								{{if $provide_label > 0}}
+                                <div class="form-group col-md-4 col-sm-4">
+                                    <p>Number of provided cell types: {{$provide_label}}</p>
+                                </div>
+								{{/if}}
+								<div class="form-group col-md-4 col-sm-4">
+                                    <p>Number of predicted cell types: {{$predict_label}}</p>
+                                </div>
+                                <div class="form-group col-md-4 col-sm-4">
+                                    <p>Total biclusters: {{$total_bic}}</p>
+                                </div>
+                                <div class="form-group col-md-4 col-sm-4">
+                                    <p>Total CTS-Rs: {{$total_regulon}}</p>
+                                </div>
+								</div>
+								<div class="row">
+								<h4 class="font-italic text-left">Parameters</h4>
                             <div class="col-md-12 col-sm-12">
                                 <div class="form-group col-md-6 col-sm-6">
                                     <p for="reportsList">Enable imputation: {{$is_imputation}}</p>
@@ -844,6 +828,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                     <p>Uploaded files: </p><p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
                                 </div>
                             </div>
+							</div>
                         </div>
                     </div></div>
                                     </div>
