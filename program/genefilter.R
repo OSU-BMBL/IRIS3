@@ -35,8 +35,7 @@ is_imputation <- args[4] #1 for enable imputation
 label_file <- 1
 label_file <- args[5] # user label file name or 1
 delimiter <- args[6] 
-param_k <- character()
-param_k <- args[7] #k parameter for sc3
+resolution_seurat <- args[7] # resolution for seurat clustering
 label_use_sc3 <- args[8] # 1 for have label use sc3, 2 for have label use label, 0 for no label use sc3
 
 
@@ -56,15 +55,14 @@ label_file
 load_test_data <- function(){
   rm(list = ls(all = TRUE))
   # 
-  # setwd("/var/www/html/CeRIS/data/20191020160119/")
-  # srcFile = "5k_pbmc_protein_v3_filtered_feature_bc_matrix.h5"
-  srcFile = "iris3_example_expression_matrix.csv"
-  jobid <- "20191020160119"
+  # setwd("/var/www/html/iris3/data/20200224113319/")
+  srcFile = "Zeisel_expression.csv"
+  jobid <- "20200224113319"
   delim <- ","
   is_imputation <- 0
-  label_file<-'iris3_example_expression_label.csv'
+  label_file<-'Zeisel_index_label.csv'
   delimiter <- ','
-  param_k<-0
+  resolution_seurat <- 0.8
   label_use_sc3 <- 2
 }
 
@@ -288,7 +286,7 @@ if(all(as.numeric(unlist(my.count.data[nrow(my.count.data),]))%%1==0)){
     tryCatch(normalizeSCE(sce),error = function(e2){
       LogNormalize(my.count.data)
     })
-    })
+  })
   if (class(sce)[1] == "dgCMatrix") {
     my.normalized.data <- sce
   } else {
@@ -318,7 +316,10 @@ my.imputated.data<-log1p(my.imputated.data)
 dim(my.imputated.data)
 dim(expFile)
 
-#my.imputated.data <- as.matrix(exp_data)
+#my.imputated.data <- read.delim(paste(jobid,"_filtered_expression.txt",sep = ""),check.names = FALSE, header=TRUE,row.names = 1)
+#my.imputated.data <- as.matrix(my.imputated.data)
+my.imputated.data <- my.imputated.data[,order(colnames(my.imputated.data))]
+my.object<- NULL
 my.object<-CreateSeuratObject(my.imputated.data)
 my.object<-SetAssayData(object = my.object,slot = "data",new.data = my.imputated.data,assay="RNA")
 
@@ -376,10 +377,12 @@ my.object<-RunPCA(my.object,rev.pca = F,features = VariableFeatures(object = my.
 
 
 my.object<-FindNeighbors(my.object,dims = 1:10)
-my.object<-FindClusters(my.object)
+my.object<-FindClusters(my.object, resolution = resolution_seurat)
 if (length(levels(my.object$seurat_clusters)) == 1) {
   my.object<-FindClusters(my.object, resolution = 1)
 }
+
+levels(my.object$seurat_clusters) <- 1:length(levels(my.object$seurat_clusters))
 cell_info <- my.object$seurat_clusters
 cell_info <- as.factor(as.numeric(cell_info))
 cell_label <- cbind(cell_names,cell_info)
@@ -398,11 +401,14 @@ my.object<-RunUMAP(object = my.object,dims = 1:10,umap.method="uwot")
 # clustering by using KNN, this is seurat cluster algorithm, this part only for cell categorization
 # here has one problems: whether should we define the clustering number?
 
-# find clustering, there will be changing the default cell type, if want to use customized cell type. 
+# find clustering, there will be changing the default cell cluster, if want to use customized cell cluster 
 # use Idents() function.
 
 
 #dist.matrix <- dist(x = Embeddings(object = my.object[['pca']])[,1:30])
+umap_embeddings <- Embeddings(object = my.object[['umap']])
+write.table(umap_embeddings,paste0(jobid,'_umap_embeddings.txt'),sep = '\t',quote = F,row.names = T)
+
 dist.matrix <- dist(x = Embeddings(object = my.object[['pca']]))
 sil <- silhouette(x = as.numeric(x = cell_info), dist = dist.matrix)
 if (!is.na(sil)){
@@ -424,22 +430,30 @@ write.table(silh_out,paste(jobid,"_silh.txt",sep=""),sep = ",",quote = F,col.nam
 #write.table(cell_label,paste(jobid,"_cell_label.txt",sep = ""),quote = F,row.names = F,sep = "\t")
 
 if (label_use_sc3 =='2'){
-  cell_info <- read.table(label_file,check.names = FALSE, header=TRUE,sep = delimiter)
+  cell_info <- read.table(label_file,check.names = FALSE, header=TRUE,sep = delimiter,stringsAsFactors = F)
+  cell_info <- cell_info[order(cell_info[,1]),]
   ## check if user's label has valid number of rows, if not just use predicted value
   if (nrow(cell_info) == nrow(cell_label)){
     original_cell_info <- as.factor(cell_info[,2])
+    #levels(original_cell_info) <- c(5,6,7,4,3,1,2)
+    #levels(original_cell_info) <- c(6,7,5,4,1,2,3)
+    #cell_info[,2] <- as.character(original_cell_info)
+    my.object <- AddMetaData(my.object, as.character(original_cell_info), col.name = "Provided.idents")
     cell_info[,2] <- as.numeric(as.factor(cell_info[,2]))
     rownames(cell_info) <- cell_info[,1]
     cell_info <- cell_info[,-1]
   } else {
-    cell_info <-  my.object$seurat_clusters
+    cell_info <-  my.object$seurat_clusters 
+    my.object <- AddMetaData(my.object, cell_info, col.name = "Provided.idents")
     #cell_info <- as.factor(mydata1$MMdetail)
   }
 } 
 
-my.object<-AddMetaData(my.object,cell_info,col.name = "Customized.idents")
-Idents(my.object)<-as.factor(my.object$Customized.idents)
+my.object <-AddMetaData(my.object,cell_info,col.name = "Customized.idents")
+my.object$Customized.idents <- as.factor(my.object$Customized.idents)
+Idents(my.object) <- my.object$Customized.idents
 
+#DimPlot(my.object,reduction = 'umap')
 ## get marker genes
 my.cluster<-as.character(sort(unique(as.numeric(Idents(my.object)))))
 my.marker<-FindAllMarkers(my.object,only.pos = T)
@@ -477,9 +491,29 @@ sort_column <- function(df) {
   return(order(split))
 }
 
-dir.create("regulon_id")
+dir.create("regulon_id",showWarnings = F)
 my.top <- my.top[,sort_column(my.top)]
 write.table(my.top,file = "cell_type_unique_marker.txt",quote = F,row.names = F,sep = "\t")
+
+scatter_result <- cbind.data.frame(Embeddings(my.object, reduction = 'umap'),cell_type_index = my.object$Customized.idents,cell_type = my.object$Provided.idents,cell_name=colnames(my.object))
+color_list <- as.character(palette36.colors(36))[-2][1:length(unique(my.object$Customized.idents))]
+new_scatter_result <- list()
+
+for (i in 1:length(unique(my.object$Customized.idents))) {
+  this_idx <- which(scatter_result$cell_type_index == i)
+  this_cell_type <- as.character(scatter_result[this_idx,4][1])
+  this_cell_name <- rownames(scatter_result[this_idx,])
+  this_data <- scatter_result[,c(1,2,5)][this_idx,]
+  colnames(this_data) <- NULL
+  rownames(this_data) <- NULL
+  this_row <- list(list(name=i,color=color_list[i],cell_type=this_cell_type,data=this_data))
+  
+  new_scatter_result <- append(new_scatter_result,this_row)
+}
+
+res1 <- jsonlite::toJSON(new_scatter_result,pretty = F)
+write(res1, paste(jobid,"_umap.json", sep = ""))
+
 saveRDS(my.object,file="seurat_obj.rds")
 
 ###### Remove Monocle trajectory ###########
@@ -530,7 +564,7 @@ Plot.cluster2D <- function(reduction.method="umap",customized=T,pt_size=1,revers
     xlab(colnames(my.plot.all.source)[1])+ylab(colnames(my.plot.all.source)[2]) + 
     geom_point(stroke=pt_size,size=pt_size,aes(col=my.plot.all.source[,"Cell_type"])) + 
     guides(colour = guide_legend(override.aes = list(size=5))) + 
-    scale_colour_manual(name  ="Cell type:(Cells)",values  = color_array[1:length(tmp.celltype)],
+    scale_colour_manual(name  ="Cell cluster:(Cells)",values  = color_array[1:length(tmp.celltype)],
                         breaks=tmp.celltype,
                         labels=paste0(tmp.celltype,":(",as.character(summary(my.plot.all.source$Cell_type)),")")[1:length(tmp.celltype)]) +
     theme_classic() + 
@@ -608,11 +642,11 @@ Plot.Cluster.Trajectory<-function(customized=T,add.line=TRUE,start.cluster=NULL,
     legend("topright",legend = tmp.color.cat$CellName,
            inset=c(-0.05,0), ncol=2,
            col = as.character(tmp.color.cat$Color),pch = 19,
-           cex=1.0,title="Cell type",bty='n')
+           cex=1.0,title="Cell cluster",bty='n')
   } else {legend("topright",legend = tmp.color.cat$CellName,
                  inset=c(-0.05,0), ncol=1,
                  col = as.character(tmp.color.cat$Color),pch = 19,
-                 cex=1.0,title="Cell type",bty='n')}
+                 cex=1.0,title="Cell cluster",bty='n')}
   
   
   if(add.line==T){
@@ -649,13 +683,14 @@ quiet(dev.off())
 
 if (label_use_sc3 =='1' | label_use_sc3 =='2'){
   cell_info <- read.table(label_file,check.names = FALSE, header=TRUE,sep = delimiter)
+  cell_info <- cell_info[order(cell_info[,1]),]
   ## check if user's label has valid number of rows, if not just use predicted value
   original_cell_info <- as.factor(cell_info[,2])
   cell_info[,2] <- as.factor(cell_info[,2])
   rownames(cell_info) <- cell_info[,1]
   cell_info <- cell_info[,-1]
   
-  
+  #levels(my.object$Customized.idents) <- levels(original_cell_info)[c(5,6,7,4,1,2,3)]
   my.object<-AddMetaData(my.object,cell_info,col.name = "Customized.idents")
   Idents(my.object)<-as.factor(my.object$Customized.idents)
   png(paste("regulon_id/overview_provide_ct.png",sep = ""),width=2000, height=1500,res = 300)
@@ -712,7 +747,7 @@ my.trajectory<-SingleCellExperiment(
 )
 SummarizedExperiment::assays(my.trajectory)$norm<-GetAssayData(object = my.object,slot = "data")
 
-dm<-destiny::DiffusionMap(t(as.matrix(SummarizedExperiment::assays(my.trajectory)$norm)))
+dm<-DiffusionMap(t(as.matrix(SummarizedExperiment::assays(my.trajectory)$norm)))
 rd2 <- cbind(DC1 = dm$DC1, DC2 = dm$DC2)
 reducedDims(my.trajectory) <- SimpleList(DiffMap = rd2)
 saveRDS(my.trajectory,file="trajectory_obj.rds")

@@ -10,7 +10,7 @@ args <- commandArgs(TRUE)
 #setwd("/var/www/html/CeRIS/data/20190913134923")
 #setwd("/fs/project/PAS1475/Yuzhou_Chang/CeRIS/test_data/20190830171050")
 #srcDir <- getwd()
-#id <-"CT5S-R1" 
+#id <-"CT5-R1" 
 #jobid <- "20200218132456"
 srcDir <- args[1]
 id <- args[2]
@@ -60,9 +60,9 @@ Plot.regulon2D<-function(regulon=regulon_id,pt_size=1, ...){
   #identical(colnames(activity_score),rownames(embeding))
   
   my.plot.regulon <- cbind(embeding,regulon.score = as.numeric(my.regulon))
-
- 
-
+  
+  
+  
   p.regulon <- ggplot(my.plot.regulon, aes(x=my.plot.regulon[,1],y=my.plot.regulon[,2])) + xlab(colnames(my.plot.regulon)[1]) + ylab(colnames(my.plot.regulon)[2])
   p.regulon <- p.regulon + geom_point(stroke=pt_size,size=pt_size,aes(col=my.plot.regulon[,"regulon.score"])) + scale_color_gradient(low = "grey",high = "red")
   # + scale_colour_distiller(palette = "YlOrRd", direction = 1)
@@ -116,7 +116,7 @@ pt_size <- get_point_size(num_cells)
 
 if (!file.exists(paste("regulon_id/",id,".png",sep = ""))){
   cell.label <- read.table(paste0(jobid,"_cell_label.txt"),header = T,stringsAsFactors = F)
-  cor.embedding <- read.table("example_embeddings_umap.txt",header = T, stringsAsFactors = F)
+  cor.embedding <- read.table(paste0(jobid,"_umap_embeddings.txt"),header = T, stringsAsFactors = F)
   png(width=2000, height=1500,res = 300, file=paste("regulon_id/",id,".png",sep = ""))
   print(Plot.regulon2D(cell.type=as.numeric(regulon_ct),regulon=as.numeric(regulon_id), pt_size = pt_size*1.3))
   quiet(dev.off())
