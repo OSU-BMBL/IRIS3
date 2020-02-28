@@ -15,10 +15,10 @@ args <- commandArgs(TRUE)
 wd <- args[1]
 jobid <- args[2]
 label_use_sc3 <- args[3]
-#setwd("/var/www/html/CeRIS/data/20191107183349")
+#setwd("/var/www/html/iris3/data/20191026133546")
 #wd <- getwd()
-#jobid <-20191107183349
-#label_use_sc3 <- 2
+#jobid <-20191026133546
+#label_use_sc3 <- 0
 setwd(wd)
 getwd()
 dir.create('heatmap',showWarnings = F)
@@ -116,10 +116,10 @@ for (i in 1:length(all_regulon)) {
       regulon_heat_matrix <- subset(exp_data,rownames(exp_data) %in% regulon_gene_symbol)
       regulon_heat_matrix <- rbind(category,regulon_heat_matrix)
       if(i <= total_ct) {
-        regulon_heat_matrix_filename <- paste("heatmap/CT",i,"S-R",name_idx,".heatmap.txt",sep="")
+        regulon_heat_matrix_filename <- paste("heatmap/CT",i,"-R",name_idx,".heatmap.txt",sep="")
         ct_index <- gsub(".*_CT_","",short_dir[i])
         ct_index <- as.numeric(gsub("_bic","",ct_index))
-        regulon_label <- paste("CT",ct_index,"S-R",name_idx,": ",sep = "")
+        regulon_label <- paste("CT",ct_index,"-R",name_idx,": ",sep = "")
         ct_colnames <- label_data[which(label_data[,2]==ct_index),1]
         regulon_heat_matrix <- as.data.frame(regulon_heat_matrix[,colnames(regulon_heat_matrix) %in% ct_colnames])
         rownames(regulon_heat_matrix)[-1] <- paste("Genes:",rownames(regulon_heat_matrix)[-1],sep = " ")
@@ -162,6 +162,7 @@ heat_matrix <- data.frame(matrix(ncol = ncol(exp_data), nrow = 0))
 heat_matrix <- subset(exp_data, rownames(exp_data) %in% as.character(regulon_gene[,1]))
 
 #heat_matrix <- heat_matrix[,order(heat_matrix[1,])]
+i=1
 
 #i=j=1 
 # get CT#-regulon1-# heat matrix
@@ -183,7 +184,7 @@ for(i in 1: length(unique(label_data[,2]))){
     max_show <- this_total_regulon
   }
   for (j in 1:max_show) {
-    this_regulon_name <- paste("CT",i,"S-R",j,": ",sep = "")
+    this_regulon_name <- paste("CT",i,"-R",j,": ",sep = "")
     gene_row <- append(gene_row,as.character(unlist(combine_regulon_label[which(names(combine_regulon_label) == this_regulon_name)])))
   }
   k=0

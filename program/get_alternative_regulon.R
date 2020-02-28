@@ -77,7 +77,7 @@ for (i in 1:total_ct_number) {
   total_rank <- append(total_rank,regulon_rank)
 }
 
-#t1 <- "CT4S-R122"
+#t1 <- "CT4-R122"
 #length(grep("CT3.*?",t1))
 #length(grep("CT4.*?",t1))
 total_gene_list<- lapply(strsplit(total_gene_list,"\\t"), function(x){x[-1]})
@@ -155,7 +155,7 @@ tf_name_regulon <- cbind(tf_name_regulon,total_rank_df)
 #tf_name_regulon <- tf_name_regulon[,-2]
 
 ct_seq=seq(1:total_ct)
-select_idx <- paste("CT",ct_seq,"S-R",sep="")
+select_idx <- paste("CT",ct_seq,"-R",sep="")
 select_idx_result<-vector()
 #x=total_rank[[1]]
 tmp <- character()
