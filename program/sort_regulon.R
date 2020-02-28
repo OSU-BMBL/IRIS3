@@ -223,7 +223,7 @@ exp_data <- as.matrix(exp_data)
 label_data <- read.table(paste(jobid,"_cell_label.txt",sep = ""),sep="\t",header = T)
 label_data <- label_data[order(label_data[,1]),]
 
-colnames(exp_data)
+
 cell_idx <- as.character(sort(label_data[,1]))
 
 exp_data <- exp_data[,cell_idx]
@@ -249,6 +249,7 @@ rankings <- calc_ranking(exp_data)
 total_ras <- calc_ras(expr = exp_data,genes=total_gene_list,method = "wmw_test",rankings = rankings)
 
 rm(exp_data)
+#gc()
 # set Inf RAS to column max value
 for (j in 1:ncol(total_ras)) {
   this_ras <- total_ras[which(total_ras[,j] < Inf),j]
@@ -257,8 +258,12 @@ for (j in 1:ncol(total_ras)) {
 
 
 #### bootstrap resampling to calculate p-value
-bootstrap_ras <- calc_bootstrap_ras(rankings=rankings,iteration=10000,regulon_size=20)
+if(ncol(rankings) > 30000){
 
+bootstrap_ras <- calc_bootstrap_ras(rankings=rankings,iteration=1000,regulon_size=20)
+} else{
+bootstrap_ras <- calc_bootstrap_ras(rankings=rankings,iteration=10000,regulon_size=20)
+}
 #bootstrap_rss <- foreach (i=1:total_ct) %dopar% {
 #  calc_bootstrap_rss(norm_bootstrap_ras,i)
 #} 
