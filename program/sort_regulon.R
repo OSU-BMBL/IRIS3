@@ -17,8 +17,8 @@ wd <- args[1] # filtered expression file name
 jobid <- args[2] # user job id
 # wd<-getwd()
 ####test
-# wd <- "/var/www/html/CeRIS/data/2019110595153"
-# jobid <-2019110595153 
+# wd <- "/var/www/html/iris3/data/2020013092708"
+# jobid <-2020013092708 
 # setwd(wd)
 
 quiet <- function(x) { 
@@ -259,10 +259,10 @@ for (j in 1:ncol(total_ras)) {
 
 #### bootstrap resampling to calculate p-value
 if(ncol(rankings) > 30000){
-
-bootstrap_ras <- calc_bootstrap_ras(rankings=rankings,iteration=1000,regulon_size=20)
+  
+  bootstrap_ras <- calc_bootstrap_ras(rankings=rankings,iteration=1000,regulon_size=20)
 } else{
-bootstrap_ras <- calc_bootstrap_ras(rankings=rankings,iteration=10000,regulon_size=20)
+  bootstrap_ras <- calc_bootstrap_ras(rankings=rankings,iteration=10000,regulon_size=20)
 }
 #bootstrap_rss <- foreach (i=1:total_ct) %dopar% {
 #  calc_bootstrap_rss(norm_bootstrap_ras,i)
@@ -353,28 +353,28 @@ for (i in 1:total_ct) {
       marker <- lapply(gene_name_list, function(x){
         x[which(x%in%marker_data[,i])]
       })
-       
-       if(sum(sapply(marker, length))>0){
-         #rss_rank<-order(sapply(marker,length),decreasing=T)
-         marker <- marker[rss_rank]
-         #rss_list <- rss_list[rss_rank]
-         #gene_name_list <- gene_name_list[rss_rank]
-         #gene_id_list <- gene_id_list[rss_rank]
-         # put marker genes on top
-         gene_id_list <- mapply(function(X,Y,Z){
-           id <- which(Y %in% X)
-           return(unique(append(Z[id],Z)))
-         },X=marker,Y=gene_name_list,Z=gene_id_list)
-         
-         gene_name_list <- mapply(function(X,Y){
-           return(unique(append(X,Y)))
-         },X=marker,Y=gene_name_list)
-         
-         motif_list <- motif_list[rss_rank]
-         ras <- ras[rss_rank,]
-         originak_ras <- originak_ras[rss_rank,]
-       }
-       
+      
+      if(sum(sapply(marker, length))>0){
+        #rss_rank<-order(sapply(marker,length),decreasing=T)
+        marker <- marker[rss_rank]
+        #rss_list <- rss_list[rss_rank]
+        #gene_name_list <- gene_name_list[rss_rank]
+        #gene_id_list <- gene_id_list[rss_rank]
+        # put marker genes on top
+        gene_id_list <- mapply(function(X,Y,Z){
+          id <- which(Y %in% X)
+          return(unique(append(Z[id],Z)))
+        },X=marker,Y=gene_name_list,Z=gene_id_list)
+        
+        gene_name_list <- mapply(function(X,Y){
+          return(unique(append(X,Y)))
+        },X=marker,Y=gene_name_list)
+        
+        motif_list <- motif_list[rss_rank]
+        ras <- ras[rss_rank,]
+        originak_ras <- originak_ras[rss_rank,]
+      }
+      
     } 
     
     #colnames(ras) <- label_data[,1]
@@ -384,7 +384,7 @@ for (i in 1:total_ct) {
     rss_pvalue_list <- lapply(rss_list, calc_rss_pvalue,this_bootstrap_rss,i)
     
     for (j in 1:length(gene_name_list)) {
-      regulon_tag <- paste("CT",i,"S-R",j,sep = "")
+      regulon_tag <- paste("CT",i,"-R",j,sep = "")
       gene_name_list[[j]] <- append(regulon_tag,gene_name_list[[j]])
       gene_id_list[[j]] <- append(regulon_tag,gene_id_list[[j]])
       motif_list[[j]] <- append(regulon_tag,motif_list[[j]])
@@ -394,7 +394,7 @@ for (i in 1:total_ct) {
     options(stringsAsFactors=FALSE)
     regulon_rank_result <- data.frame()
     for (j in 1:length(gene_name_list)) {
-      regulon_tag <- paste("CT",i,"S-R",j,sep = "")
+      regulon_tag <- paste("CT",i,"-R",j,sep = "")
       this_motif_value <- motif_rank[which(motif_rank[,1] == motif_list[[j]][2]),-1]
       this_motif_value <- cbind(regulon_tag,this_motif_value)
       regulon_rank_result <- rbind(regulon_rank_result,this_motif_value)
