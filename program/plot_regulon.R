@@ -10,25 +10,24 @@ args <- commandArgs(TRUE)
 #setwd("/var/www/html/CeRIS/data/20190913134923")
 #setwd("/fs/project/PAS1475/Yuzhou_Chang/CeRIS/test_data/20190830171050")
 #srcDir <- getwd()
-#id <-"module1S-R1" 
-#jobid <- "20190913134923"
+#id <-"CT5-R1" 
+#jobid <- "20200218132456"
 srcDir <- args[1]
 id <- args[2]
 jobid <- args[3]
 pt_size <- args[4]
 
-Plot.cluster2D<-function(reduction.method="umap",customized=T,pt_size=1,...){
+Plot.cluster2D<-function(pt_size=1,...){
   # my.plot.source<-GetReduceDim(reduction.method = reduction.method,module = module,customized = customized)
   # my.module.mean<-colMeans(my.gene.module[[module]]@assays$RNA@data)
   # my.plot.source<-cbind.data.frame(my.plot.source,my.module.mean)
-  
-  if(customized==F){
-    my.plot.all.source<-cbind.data.frame(Embeddings(my.object,reduction = reduction.method),
-                                         Cell_type=as.factor(as.numeric(my.object$seurat_clusters)))
-  }else{
-    my.plot.all.source<-cbind.data.frame(Embeddings(my.object,reduction = reduction.method),
-                                         Cell_type=Idents(my.object))
-  }
+  # my.plot.all.source<-cbind.data.frame(Embeddings(my.object,reduction = reduction.method),
+  #                                   Cell_type=as.factor(as.numeric(my.object$seurat_clusters)))
+  # match cell label embedding
+  index.cellLabel_embedding <-match(cell.label$cell_name,rownames(cor.embedding))
+  embeding <- cor.embedding[index.cellLabel_embedding,]
+  # identical(rownames(embeding),cell.label$cell_name)
+  my.plot.all.source <- cbind(embeding,Cell_type = as.factor(cell.label$label))
   tmp.celltype <- levels(unique(my.plot.all.source$Cell_type))
   p.cluster <- ggplot(my.plot.all.source,
                       aes(x=my.plot.all.source[,1],y=my.plot.all.source[,2]))+xlab(colnames(my.plot.all.source)[1])+ylab(colnames(my.plot.all.source)[2])
@@ -54,26 +53,16 @@ Plot.cluster2D<-function(reduction.method="umap",customized=T,pt_size=1,...){
 }
 
 
-Plot.regulon2D<-function(reduction.method="umap",regulon=1,cell.type=1,customized=T,pt_size=1,bic_type = "CT",...){
-  #message("plotting regulon ",regulon," of cell type ",cell.type,"...")
-  my.plot.regulon<-Get.RegulonScore(reduction.method = reduction.method,
-                                    cell.type = cell.type,
-                                    regulon = regulon,
-                                    customized = customized,
-                                    bic_type = bic_type)
-  my.plot.regulon <- my.plot.regulon[order(my.plot.regulon$regulon.score),]
+Plot.regulon2D<-function(regulon=regulon_id,pt_size=1, ...){
+  my.regulon <- activity_score[regulon,]
+  index.regulon_embedding <- match(colnames(activity_score),rownames(cor.embedding))
+  embeding <- cor.embedding[index.regulon_embedding,]
+  #identical(colnames(activity_score),rownames(embeding))
   
-  # if(!customized){
-  #   my.plot.all.source<-cbind.data.frame(Embeddings(my.object,reduction = reduction.method),
-  #                                        Cell_type=my.object$seurat_clusters)
-  #   my.plot.all.source<-my.plot.all.source[,grep("*\\_[1,2,a-z]",colnames(my.plot.all.source))]
-  # }else{
-  #   my.plot.all.source<-cbind.data.frame(Embeddings(my.object,reduction = reduction.method),
-  #                                        Cell_type=as.factor(my.object$Customized.idents))
-  #   my.plot.all.source<-my.plot.all.source[,grep("*\\_[1,2,a-z]",colnames(my.plot.all.source))]
-  # }
-  # my.plot.source.matchNumber<-match(rownames(my.plot.all.source),rownames(my.plot.regulon))
-  # my.plot.source<-cbind.data.frame(my.plot.all.source,regulon.score=my.plot.regulon[my.plot.source.matchNumber,]$regulon.score)
+  my.plot.regulon <- cbind(embeding,regulon.score = as.numeric(my.regulon))
+  
+  
+  
   p.regulon <- ggplot(my.plot.regulon, aes(x=my.plot.regulon[,1],y=my.plot.regulon[,2])) + xlab(colnames(my.plot.regulon)[1]) + ylab(colnames(my.plot.regulon)[2])
   p.regulon <- p.regulon + geom_point(stroke=pt_size,size=pt_size,aes(col=my.plot.regulon[,"regulon.score"])) + scale_color_gradient(low = "grey",high = "red")
   # + scale_colour_distiller(palette = "YlOrRd", direction = 1)
@@ -84,52 +73,8 @@ Plot.regulon2D<-function(reduction.method="umap",regulon=1,cell.type=1,customize
   p.regulon
 }
 
-Generate.Regulon<-function(cell.type=NULL,regulon=1,...){
-  x<-Get.CellType(cell.type = cell.type, bic_type=bic_type)
-  tmp.regulon<-subset(my.object,cells = colnames(my.object),features = x[[regulon]][-1])
-  return(tmp.regulon)
-}
-
-Get.CellType<-function(cell.type=NULL,bic_type="CT",...){
-  if(!is.null(cell.type)){
-    my.cell.regulon.filelist<-list.files(pattern = paste(bic_type,".*bic.regulon_gene_symbol.txt",sep=""))
-    my.cell.regulon.indicator<-grep(paste0("_",as.character(cell.type),"_bic"),my.cell.regulon.filelist)
-    my.cts.regulon.raw<-readLines(my.cell.regulon.filelist[my.cell.regulon.indicator])
-    my.regulon.list<-strsplit(my.cts.regulon.raw,"\t")
-    return(my.regulon.list)
-  }else{stop("please input a cell type")}
-  
-}
 
 
-Get.RegulonScore<-function(reduction.method="tsne",cell.type=1,regulon=1,customized=F,bic_type="CT",...){
-  my.regulon.number<-length(Get.CellType(cell.type = cell.type, bic_type=bic_type))
-  if (regulon > my.regulon.number){
-    stop(paste0("Regulon number exceeds the boundary. Under this cell type, there are total ", my.regulon.number," regulons"))
-  } else {
-    my.cts.regulon.S4<-Generate.Regulon(cell.type = cell.type,regulon=regulon)
-    if(customized){
-      my.cell.type<-my.cts.regulon.S4$Customized.idents
-      message(c("using customized cell label: ","|", paste0(unique(as.character(my.cts.regulon.S4$Customized.idents)),"|")))
-    }else{
-      my.cell.type<-as.numeric(my.cts.regulon.S4$seurat_clusters) 
-      message(c("using default cell label(seurat prediction): ","|", paste0(unique(as.character(my.cts.regulon.S4$seurat_clusters)),"|")))
-    } 
-    tmp_data<-as.data.frame(my.cts.regulon.S4@assays$RNA@data)
-    geneSets<-list(GeneSet1=rownames(tmp_data))
-    #cells_AUC<-AUCell_calcAUC(geneSets,cells_rankings,aucMaxRank = nrow(cells_rankings)*0.1)
-    #cells_assignment<-AUCell_exploreThresholds(cells_AUC,plotHist = F,nCores = 1,assign = T)
-    #my.auc.data<-as.data.frame(cells_AUC@assays@.xData$data$AUC)
-    #my.auc.data<-t(my.auc.data[,colnames(tmp_data)])
-    #regulon.score<-colMeans(tmp_data)/apply(tmp_data,2,sd)
-    regulon.score<-t(as.matrix(activity_score[regulon,]))
-    tmp.embedding<-Embeddings(my.object,reduction = reduction.method)[colnames(my.cts.regulon.S4),][,c(1,2)]
-    my.choose.regulon<-cbind.data.frame(tmp.embedding,Cell_type=my.cell.type)
-    my.choose.regulon <- cbind(my.choose.regulon, regulon.score=regulon.score[match(rownames(my.choose.regulon), rownames(regulon.score))])
-    
-    return(my.choose.regulon)
-  }
-}
 
 quiet <- function(x) {
   sink(tempfile()) 
@@ -170,15 +115,14 @@ pt_size <- get_point_size(num_cells)
 #quiet(dev.off())
 
 if (!file.exists(paste("regulon_id/",id,".png",sep = ""))){
-  library(Seurat)
-  my.object <- readRDS("seurat_obj.rds")
-  
+  cell.label <- read.table(paste0(jobid,"_cell_label.txt"),header = T,stringsAsFactors = F)
+  cor.embedding <- read.table(paste0(jobid,"_umap_embeddings.txt"),header = T, stringsAsFactors = F)
   png(width=2000, height=1500,res = 300, file=paste("regulon_id/",id,".png",sep = ""))
-  print(Plot.regulon2D(cell.type=as.numeric(regulon_ct),regulon=as.numeric(regulon_id),customized = T,reduction.method="umap", pt_size = pt_size*1.3))
+  print(Plot.regulon2D(cell.type=as.numeric(regulon_ct),regulon=as.numeric(regulon_id), pt_size = pt_size*1.3))
   quiet(dev.off())
   
   pdf(file = paste("regulon_id/",id,".pdf",sep = ""), width = 16, height = 12,  pointsize = 12, bg = "white")
-  print(Plot.regulon2D(cell.type=as.numeric(regulon_ct),regulon=as.numeric(regulon_id),customized = T,reduction.method="umap", pt_size = pt_size*3))
+  print(Plot.regulon2D(regulon=as.numeric(regulon_id), pt_size = pt_size*3))
   quiet(dev.off())
   
 }

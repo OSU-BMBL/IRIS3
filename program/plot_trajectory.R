@@ -54,15 +54,11 @@ reset_par <- function(){
   par(op)
 }
 
-Get.cluster.Trajectory<-function(customized=T,start.cluster=NULL,end.cluster=NULL,...){
+Get.cluster.Trajectory<-function(start.cluster=NULL,end.cluster=NULL,...){
   #labeling cell
-  if(customized==TRUE){
-    tmp.cell.type<-my.object$Customized.idents
-  }
-  if(customized==FALSE){
-    tmp.cell.type<-as.character(my.object$seurat_clusters)
-  }
-  tmp.cell.name.index<-match(colnames(my.trajectory),colnames(my.object))
+  tmp.cell.type<-cell.label$label
+  
+  tmp.cell.name.index<-match(colnames(my.trajectory),cell.label$cell_name)
   tmp.cell.type<-tmp.cell.type[tmp.cell.name.index]
   colData(my.trajectory)$cell.label<-tmp.cell.type
   # run trajectory, first run the lineage inference
@@ -107,13 +103,15 @@ Plot.Cluster.Trajectory<-function(customized=T,add.line=TRUE,start.cluster=NULL,
 }
 
 
-Plot.Regulon.Trajectory<-function(customized=T,cell.type=1,regulon=1,start.cluster=NULL,end.cluster=NULL,bic_type = "CT",...){
+Plot.Regulon.Trajectory<-function(regulon=1,start.cluster=NULL,end.cluster=NULL,bic_type = "CT",...){
+  # get trajectary object which contains cell type, diffusion map info.
   tmp.trajectory.cluster<-Get.cluster.Trajectory(customized = customized,start.cluster=start.cluster,end.cluster=end.cluster)
-  tmp.regulon.score<- Get.RegulonScore(cell.type = cell.type,regulon = regulon,bic_type = bic_type)
+  # get regulon score
+  my.regulon <- activity_score[regulon,]
   tmp.cell.name<-colnames(tmp.trajectory.cluster)
-  tmp.cell.name.index<-match(tmp.cell.name,rownames(tmp.regulon.score))
-  tmp.regulon.score<-tmp.regulon.score[tmp.cell.name.index,]
-  val<-tmp.regulon.score$regulon.score
+  tmp.cell.name.index<-match(tmp.cell.name,names(my.regulon))
+  val<-as.numeric(my.regulon)[tmp.cell.name.index]
+
   #
   
   layout(matrix(1:2,nrow=1),widths=c(0.7,0.3))
@@ -122,7 +120,7 @@ Plot.Regulon.Trajectory<-function(customized=T,cell.type=1,regulon=1,start.clust
   
   par(mar=c(5.1,2.1,1.1,2.1))
   plot(reducedDims(tmp.trajectory.cluster)$DiffMap,
-       col=alpha(tmp.color,0.7),cex=(3/log(nrow(tmp.regulon.score))),
+       col=alpha(tmp.color,0.7),cex=(3/log(nrow(tmp.trajectory.cluster))),
        pch=20,frame.plot = FALSE,
        asp=1)
   lines(SlingshotDataSet(tmp.trajectory.cluster))
@@ -141,65 +139,25 @@ Plot.Regulon.Trajectory<-function(customized=T,cell.type=1,regulon=1,start.clust
     tail(seq(yb,yt,(yt-yb)/50),-1),
     col=grPal(50),border=NA
   )
-  tmp.min<-round(min(val),1)
-  tmp.Nmean<-round(tmp.min/2,1)
-  tmp.max<-round(max(val),1)
-  tmp.Pmean<-round(tmp.max/2,1)
+  
+  my.Q<-round(as.numeric(quantile(val)),0)
+ 
   tmp.cor<-seq(yb,yt,(yt-yb)/50)
   mtext("Relugon Score", cex=1,side=1)
-  mtext(c(tmp.min,tmp.Nmean,0,tmp.Pmean,tmp.max),
+  mtext(c(
+    paste0("min:",my.Q[1]),
+    paste0("25%Q:",my.Q[2]),
+    paste0("median:",my.Q[3]),
+    paste0("75%Q:",my.Q[4]),
+    paste0("max:",my.Q[5])
+  ),
         at=c(tmp.cor[5],tmp.cor[15],tmp.cor[25],tmp.cor[35],tmp.cor[45]),
         side=2,las=1,cex=0.7)
   reset_par()
   
 }
 
-Generate.Regulon<-function(cell.type=NULL,regulon=1,...){
-  x<-Get.CellType(cell.type = cell.type, bic_type=bic_type)
-  tmp.regulon<-subset(my.object,cells = colnames(my.object),features = x[[regulon]][-1])
-  return(tmp.regulon)
-}
 
-Get.CellType<-function(cell.type=NULL,bic_type="CT",...){
-  if(!is.null(cell.type)){
-    my.cell.regulon.filelist<-list.files(pattern = paste(bic_type,".*bic.regulon_gene_symbol.txt",sep=""))
-    my.cell.regulon.indicator<-grep(paste0("_",as.character(cell.type),"_bic"),my.cell.regulon.filelist)
-    my.cts.regulon.raw<-readLines(my.cell.regulon.filelist[my.cell.regulon.indicator])
-    my.regulon.list<-strsplit(my.cts.regulon.raw,"\t")
-    return(my.regulon.list)
-  }else{stop("please input a cell type")}
-  
-}
-
-
-Get.RegulonScore<-function(reduction.method="umap",cell.type=1,regulon=1,customized=F,bic_type="CT",...){
-  my.regulon.number<-length(Get.CellType(cell.type = cell.type, bic_type=bic_type))
-  if (regulon > my.regulon.number){
-    stop(paste0("Regulon number exceeds the boundary. Under this cell type, there are total ", my.regulon.number," regulons"))
-  } else {
-    my.cts.regulon.S4<-Generate.Regulon(cell.type = cell.type,regulon=regulon)
-    if(customized){
-      my.cell.type<-my.cts.regulon.S4$Customized.idents
-      message(c("using customized cell label: ","|", paste0(unique(as.character(my.cts.regulon.S4$Customized.idents)),"|")))
-    }else{
-      my.cell.type<-as.numeric(my.cts.regulon.S4$seurat_clusters) 
-      message(c("using default cell label(seurat prediction): ","|", paste0(unique(as.character(my.cts.regulon.S4$seurat_clusters)),"|")))
-    } 
-    tmp_data<-as.data.frame(my.cts.regulon.S4@assays$RNA@data)
-    geneSets<-list(GeneSet1=rownames(tmp_data))
-    #cells_AUC<-AUCell_calcAUC(geneSets,cells_rankings,aucMaxRank = nrow(cells_rankings)*0.1)
-    #cells_assignment<-AUCell_exploreThresholds(cells_AUC,plotHist = F,nCores = 1,assign = T)
-    #my.auc.data<-as.data.frame(cells_AUC@assays@.xData$data$AUC)
-    #my.auc.data<-t(my.auc.data[,colnames(tmp_data)])
-    #regulon.score<-colMeans(tmp_data)/apply(tmp_data,2,sd)
-    regulon.score<-t(as.matrix(activity_score[regulon,]))
-    tmp.embedding<-Embeddings(my.object,reduction = reduction.method)[colnames(my.cts.regulon.S4),][,c(1,2)]
-    my.choose.regulon<-cbind.data.frame(tmp.embedding,Cell_type=my.cell.type)
-    my.choose.regulon <- cbind(my.choose.regulon, regulon.score=regulon.score[match(rownames(my.choose.regulon), rownames(regulon.score))])
-    
-    return(my.choose.regulon)
-  }
-}
 
 quiet <- function(x) {
   sink(tempfile()) 
@@ -223,12 +181,11 @@ if (substr(id,1,2) == "mo") {
 
 if (!file.exists(paste("regulon_id/",id,".trajectory.png",sep = ""))){
   activity_score <- read.table(paste(jobid,"_CT_",regulon_ct,"_bic.regulon_activity_score.txt",sep = ""),row.names = 1,header = T,check.names = F)
+  cell.label <- read.table(paste0(jobid,"_cell_label.txt"),header = T,stringsAsFactors = F)
   library(slingshot)
-  library(Seurat)
   library(SummarizedExperiment)
   suppressPackageStartupMessages(library(destiny))
   my.trajectory <- readRDS("trajectory_obj.rds")
-  my.object <- readRDS("seurat_obj.rds")
   png(paste("regulon_id/",id,".trajectory.png",sep = ""),width=2000, height=1500,res = 300)
   reset_par()
   Plot.Regulon.Trajectory(cell.type = as.numeric(regulon_ct),regulon = as.numeric(regulon_id),start.cluster = NULL,end.cluster = NULL,customized = T, bic_type = bic_type)
