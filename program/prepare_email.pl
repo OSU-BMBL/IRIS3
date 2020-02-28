@@ -10,7 +10,7 @@ $email_content = "<table class='body' style='border-collapse: separate; mso-tabl
 <tr>
 <td style='font-family: sans-serif; font-size: 14px; vertical-align: top;'>&nbsp;</td>
 <td class='container' style='font-family: sans-serif; font-size: 14px; vertical-align: top; display: block; margin: 0 auto; max-width: 700px; padding: 10px; width: 700px;'>
-<div class='content' style='box-sizing: border-box; display: block; margin: 0 auto; max-width: 700px; padding: 10px;'><!-- START CENTERED WHITE CONTAINER --> <span class='preheader' style='color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;'><g class='gr_ gr_65 gr-alert gr_spell gr_inline_cards gr_run_anim ContextualSpelling ins-del multiReplace' id='65' data-gr-id='65'>DMINDA</g> job finished</span>
+<div class='content' style='box-sizing: border-box; display: block; margin: 0 auto; max-width: 700px; padding: 10px;'><!-- START CENTERED WHITE CONTAINER --> <span class='preheader' style='color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;'><g class='gr_ gr_65 gr-alert gr_spell gr_inline_cards gr_run_anim ContextualSpelling ins-del multiReplace' id='65' data-gr-id='65'></g></span>
 <table class='main' style='border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background: #ffffff; border-radius: 3px;'><!-- START MAIN CONTENT AREA -->
 <tbody>
 <tr>
@@ -74,7 +74,7 @@ $email_content = "<table class='body' style='border-collapse: separate; mso-tabl
 <table style='border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;' border='0' cellspacing='0' cellpadding='0'>
 <tbody>
 <tr>
-<td class='content-block' style='font-family: sans-serif; vertical-align: top; padding-bottom: 10px; padding-top: 10px; font-size: 12px; color: #999999; text-align: center;'><span>Copyright 2019 &copy; </span><a href='http://u.osu.edu/bmbl' target='_blank' rel='noopener'>BMBL</a><span>, </span><a href='https://medicine.osu.edu/departments/biomedical-informatics/' target='_blank' rel='noopener'>OSU</a><span>. All rights reserved. </span></td>
+<td class='content-block' style='font-family: sans-serif; vertical-align: top; padding-bottom: 10px; padding-top: 10px; font-size: 12px; color: #999999; text-align: center;'><span>Copyright 2020 &copy; </span><a href='http://u.osu.edu/bmbl' target='_blank' rel='noopener'>BMBL</a><span>, </span><a href='https://medicine.osu.edu/departments/biomedical-informatics/' target='_blank' rel='noopener'>OSU</a><span>. All rights reserved. </span></td>
 </tr>
 <tr>
 <td class='content-block powered-by' style='font-family: sans-serif; vertical-align: top; padding-bottom: 10px; padding-top: 10px; font-size: 12px; color: #999999; text-align: center;'><a href='mailto:qin.ma\@osumc.edu' title='qin.ma\@osumc.edu'>Contact us: qin.ma\@osumc.edu</a><span> </span></td>
