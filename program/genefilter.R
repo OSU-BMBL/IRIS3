@@ -712,7 +712,7 @@ my.trajectory<-SingleCellExperiment(
 )
 SummarizedExperiment::assays(my.trajectory)$norm<-GetAssayData(object = my.object,slot = "data")
 
-dm<-DiffusionMap(t(as.matrix(SummarizedExperiment::assays(my.trajectory)$norm)))
+dm<-destiny::DiffusionMap(t(as.matrix(SummarizedExperiment::assays(my.trajectory)$norm)))
 rd2 <- cbind(DC1 = dm$DC1, DC2 = dm$DC2)
 reducedDims(my.trajectory) <- SimpleList(DiffMap = rd2)
 saveRDS(my.trajectory,file="trajectory_obj.rds")
