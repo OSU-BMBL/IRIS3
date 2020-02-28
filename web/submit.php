@@ -107,30 +107,13 @@ if (isset($_POST['submit']))
 	$expfile = $_SESSION['expfile'];
 	$labelfile = $_SESSION['labelfile'];
 	$gene_module_file = $_SESSION['gene_module_file'];
-	/*if ($is_load_exp == '0') {
-		$expfile = "";
-	}
-	if ($is_load_label == '0') {
-		$labelfile = "";
-	}
-	if ($is_load_gene_module == '0') {
-		$gene_module_file = "";
-	}*/
-	$bic_inference = $_POST['bicluster_inference'];
-	if( $expfile!='iris3_example_expression_matrix.csv' && $labelfile == 'iris3_example_label.csv'){
-		$labelfile = "";
-	}
-	if( $expfile!='iris3_example_expression_matrix.csv' && $gene_module_file == 'iris3_example_gene_module.csv'){
-		$gene_module_file = "";
-	}
-	$len = strlen($labelfile);
-	if($bic_inference=='1' && strlen($labelfile) > 0){#have label use sc3
-		$label_use_sc3 = '1';
-	} else if ($bic_inference=='2' && strlen($labelfile) > 0){ # have label use label
-		$label_use_sc3 = '2';
-	} else { #no label use sc3
+    if ($labelfile == '') {
 		$label_use_sc3 = '0';
+	} else {
+		$label_use_sc3 = '2';
 	}
+	
+	
 	if($expfile=='iris3_example_expression_matrix.csv'){
 		$fp = fopen("$workdir/upload_type.txt", 'w');
 		fwrite($fp,"CellGene\n");
@@ -150,15 +133,10 @@ if (isset($_POST['submit']))
 	}
     fwrite($fp,"$email");
     fclose($fp);
-	//$fp = fopen("$workdir/info.txt", 'w');
-	//fwrite($fp,"$c_arg\t$f_arg\t$o_arg\t$motif_program\t$label_use_sc3\t$expfile\t$labelfile\t");
-	//fclose($fp);
+
 	$workdir2 = "./data/$jobid/";
 	
-	#$delim = detectDelimiter($expfile);
-#	header("Location: warning.php");
-	#system("touch $workdir2/status.txt");
-	
+
 	$delim = detectDelimiter("$workdir2/$expfile");
 	if($delim=="\t"){
 		$delim = "tab";
@@ -259,10 +237,9 @@ chmod -R 755 .
 	fclose($fp);
 	session_destroy();
 	system("chmod -R 755 $workdir2");
-	system("cd $workdir; nohup sh qsub.sh > output.txt &");
+	#system("cd $workdir; nohup sh qsub.sh > output.txt &");
 	##shell_exec("$workdir/qsub.sh>$workdir/output.txt &");
 	#header("Location: results.php?jobid=$jobid");
-	$smarty->assign('o_arg',$o_arg);
 	header("Location: results.php?jobid=$jobid");
 		
 	}
