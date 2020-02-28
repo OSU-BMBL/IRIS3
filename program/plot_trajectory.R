@@ -139,13 +139,18 @@ Plot.Regulon.Trajectory<-function(regulon=1,start.cluster=NULL,end.cluster=NULL,
     tail(seq(yb,yt,(yt-yb)/50),-1),
     col=grPal(50),border=NA
   )
-  tmp.min<-round(min(val),1)
-  tmp.Nmean<-round(tmp.min/2,1)
-  tmp.max<-round(max(val),1)
-  tmp.Pmean<-round(tmp.max/2,1)
+  
+  my.Q<-round(as.numeric(quantile(val)),0)
+ 
   tmp.cor<-seq(yb,yt,(yt-yb)/50)
   mtext("Relugon Score", cex=1,side=1)
-  mtext(c(tmp.min,tmp.Nmean,0,tmp.Pmean,tmp.max),
+  mtext(c(
+    paste0("min:",my.Q[1]),
+    paste0("25%Q:",my.Q[2]),
+    paste0("median:",my.Q[3]),
+    paste0("75%Q:",my.Q[4]),
+    paste0("max:",my.Q[5])
+  ),
         at=c(tmp.cor[5],tmp.cor[15],tmp.cor[25],tmp.cor[35],tmp.cor[45]),
         side=2,las=1,cex=0.7)
   reset_par()
