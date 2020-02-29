@@ -316,9 +316,9 @@ $(document).ready(function() {
       }).html(
         $('<div>', {
           class: 'dz-default dz-message',
-          style: 'margin:2em 0;font-weight:600;color:#00AA90'
+          style: 'margin:2em 0;font-weight:600;color:#B47157'
         }).html(
-          '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Example gene expression file loaded'
+          '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Example gene expression file loaded (Zeisel et al, 2015)'
         )
       )
     )
@@ -331,14 +331,14 @@ $(document).ready(function() {
       }).html(
         $('<div>', {
           class: 'dz-default dz-message',
-          style: 'margin:2em 0;font-weight:600;color:#00AA90'
+          style: 'margin:2em 0;font-weight:600;color:#B47157'
         }).html(
-          '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Example cell label file loaded'
+          '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Example cell label file loaded (Zeisel et al, 2015)'
         )
       )
     )
     $('#dropzone_label').hide()
-    $("#species_arg option[value='Human']").prop('selected', true)
+    $("#species_arg option[value='Mouse']").prop('selected', true)
     $('.selectpicker').selectpicker('refresh')
     // load example data
     $.ajax({
@@ -366,7 +366,7 @@ $(document).ready(function() {
       }).html(
         $('<div>', {
           class: 'dz-default dz-message',
-          style: 'margin:2em 0;font-weight:600;color:#00AA90'
+          style: 'margin:2em 0;font-weight:600;color:#B47157'
         }).html(
           '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Example gene expression file loaded'
         )
@@ -381,7 +381,7 @@ $(document).ready(function() {
       }).html(
         $('<div>', {
           class: 'dz-default dz-message',
-          style: 'margin:2em 0;font-weight:600;color:#00AA90'
+          style: 'margin:2em 0;font-weight:600;color:#B47157'
         }).html(
           '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Example cell label file loaded'
         )
@@ -409,9 +409,9 @@ $(document).ready(function() {
   /*$('#load_gene_module').click(function(evt) {
 	$('#submit_btn').attr("disabled", false);
 	$('#enable_labelfile').attr("disabled", false);
-	$('#loader_exp').html($('<div>', {'class': 'text-center medium regular py-5 border-grey rounded', 'style':"background-image: url(assets/img/expression_table.jpg); background-size: 100% 100%;height:150px; background-size: 100% 100%;margin:10px 0 0 0;border:1px solid #c9c9c9;border-radius:.25rem!important"}).html($('<div>', {'class': 'dz-default dz-message','style':'margin:2em 0;font-weight:600;font-size:2em;color:#00AA90'}).html('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Example gene expression file loaded')));
+	$('#loader_exp').html($('<div>', {'class': 'text-center medium regular py-5 border-grey rounded', 'style':"background-image: url(assets/img/expression_table.jpg); background-size: 100% 100%;height:150px; background-size: 100% 100%;margin:10px 0 0 0;border:1px solid #c9c9c9;border-radius:.25rem!important"}).html($('<div>', {'class': 'dz-default dz-message','style':'margin:2em 0;font-weight:600;font-size:2em;color:#B47157'}).html('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Example gene expression file loaded')));
 	$('#dropzone_exp').hide();
-	$('#loader_label').html($('<div>', {'class': 'text-center medium regular py-5 border-grey rounded', 'style':"background-image: url(assets/img/expression_label.jpg); background-size: 100% 100%;height:150px; background-size: 100% 100%;margin:10px 0 0 0;border:1px solid #c9c9c9;border-radius:.25rem!important"}).html($('<div>', {'class': 'dz-default dz-message','style':'margin:2em 0;font-weight:600;font-size:1.5em;color:#00AA90'}).html('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Example cell label file loaded')));
+	$('#loader_label').html($('<div>', {'class': 'text-center medium regular py-5 border-grey rounded', 'style':"background-image: url(assets/img/expression_label.jpg); background-size: 100% 100%;height:150px; background-size: 100% 100%;margin:10px 0 0 0;border:1px solid #c9c9c9;border-radius:.25rem!important"}).html($('<div>', {'class': 'dz-default dz-message','style':'margin:2em 0;font-weight:600;font-size:1.5em;color:#B47157'}).html('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Example cell label file loaded')));
 	$('#dropzone_label').hide();
 
 	$.ajax({
@@ -453,17 +453,22 @@ $(document).ready(function() {
 					<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="border:1px solid #c9c9c9;border-radius:.25rem!important">Example <span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-						<!--<li><a id="load_exp" class="dropdown-item" href="#">Load example file</a>
-						</li>-->
-						<li><a class="dropdown-item" href="storage/Yan_2013_expression.csv" >Download example gene expression matrix (Yan et al, 2013)</a>
+						<li><a id="load_exp" class="dropdown-item" href="#">Load example (Zeisel et al, 2015)</a>
 						</li>
-						<li><a class="dropdown-item" href="storage/5k_pbmc_protein_v3_filtered_feature_bc_matrix.h5" >Download example HDF5 feature barcode matrix (10X 5K PMBCs)</a>
+						<!--<li><a class="dropdown-item" href="storage/Yan_2013_expression.csv" >Download (Yan et al, 2013) gene expression matrix (Yan et al, 2013)</a>
 						</li>
-						<li><a class="dropdown-item" href="storage/genes.tsv.gz" >Download example gene-barcode matrices (10X 2700 PMBCs) (genes.tsv.gz)</a>
+						<li><a class="dropdown-item" href="/iris3/storage/Yan_2013_label.csv" download>Download (Yan et al, 2013) cell label file)</a></li>
+						<li><a class="dropdown-item" href="/iris3/storage/Yan_2013_example_gene_module.csv">Download example gene module file</a></li>
+						<li><a class="dropdown-item" href="/iris3/storage/Zeisel_index_label.csv" download>Download (Zeisel et al, 2015) cell label file</a></li>-->
+						<li><a class="dropdown-item" href="storage/Zeisel_expression.csv" >Download (Zeisel et al, 2015) gene expression matrix  (Example output mouse dataset)</a>
 						</li>
-						<li><a class="dropdown-item" href="storage/barcodes.tsv.gz" >Download example gene-barcode matrices (10X 2700 PMBCs) (barcodes.tsv.gz)</a>
+						<li><a class="dropdown-item" href="storage/5k_pbmc_protein_v3_filtered_feature_bc_matrix.h5" >Download example HDF5 feature barcode matrix (10X 5K Human PMBCs)</a>
 						</li>
-						<li><a class="dropdown-item" href="storage/matrix.mtx.gz" >Download example gene-barcode matrices (10X 2700 PMBCs) (matrix.mtx.gz)</a>
+						<li><a class="dropdown-item" href="storage/genes.tsv.gz" >Download example gene-barcode matrices (10X 2700 Human PMBCs) (genes.tsv.gz)</a>
+						</li>
+						<li><a class="dropdown-item" href="storage/barcodes.tsv.gz" >Download example gene-barcode matrices (10X 2700 Human PMBCs) (barcodes.tsv.gz)</a>
+						</li>
+						<li><a class="dropdown-item" href="storage/matrix.mtx.gz" >Download example gene-barcode matrices (10X 2700 Human PMBCs) (matrix.mtx.gz)</a>
 						</li>
 					</ul>
 				</div>
@@ -587,10 +592,10 @@ $(document).ready(function() {
 									</div>
 								</div>
 							</div>
-							<div class="row">
+							<div class="form-group  row">
 								<div class="col-md-5">
 									<label for="ex2">Upstream promoter region:	
-									 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="The upstream length from a gene and its DNA sequence will be used for DNA motif prediction."> </span> 
+									 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="The upstream promoter region is open to users to decide the region for motif finding.  Wider range may cause require longer computational time. Default: 1000 bp."> </span> 
 									</label>
 									<select id="promoter_arg_id" class="selectpicker" name="promoter_arg" data-width="auto">
 										<option>250</option>
@@ -601,24 +606,50 @@ $(document).ready(function() {
 									</select>
 								</div>
 							</div>
+              <div class="form-group row">
+									<div class="col-md-4">
+										<label for="ex3">Cell cluster prediction resolution: <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Resolution for clustering in Seurat (form 0-1). Larger number will generate more clusters and smaller number will generate less clusters. Default: 0.8."> </span>
+										</label>
+									</div>
+									<div class="col-md-2">
+										<select  id="resolution_seurat_id" class="selectpicker" name="resolution_seurat" data-width="auto">
+											<option>0.1</option>
+											<option>0.2</option>
+                      <option>0.3</option>
+											<option>0.4</option>
+                      <option>0.5</option>
+											<option>0.6</option>
+                      <option>0.7</option>
+											<option data-subtext="Default" selected="selected">0.8</option>
+                      <option>0.9</option>
+											<option>1.0</option>
+                      <option>1.1</option>
+											<option>1.2</option>
+                      <option>1.3</option>
+											<option>1.4</option>
+                      <option>1.5</option>
+											<option>1.6</option>
+										</select>
+									</div>
+								</div>
 							<hr/>
 							<h3 class="font-italic text-left">Optional</h3>
 						<div class="row">
 						<div class="form-check col-sm-12 ">
 							<input class="form-check-input" type="checkbox" name="is_imputation" id="is_imputation" value="1">
 							<label class="form-check-label" for="is_imputation">Enable imputation in pre-processing (Using <a href="https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-018-2226-y" target="_blank"/>DrImpute</a>) 
-							 <span class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title="Recommendation: disable for C1 data, enable for 10X hdf5 or gene-barcodes matrices files."> </span> 
+							 <span class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title="Enable imputation step using DrImpute with all default parameters in the pre-processing step. Default: disabled."> </span> 
 							</label>
 						</div>
 					</div>
 							<div class="row"><div class="form-check col-sm-12 ">
 							<input class="form-check-input" type="checkbox" name="is_c" id="is_c" value="1">
 							<label class="form-check-label" for="is_c">Enable dual strategy in bi-clustering.
-							 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Core-Dual strategy is to identify biclusters and optimize relevant parameters. Recommendation: enable for C1 gene expression matrix dataset, disable for 10X hdf5 or gene-barcodes matrices files."> </span> 
+							 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Enable dual strategy for QUBIC2 biclustering optimization. Time consuming. Not recommended for 10X data. Default: disabled."> </span> 
 							</label>
 						</div></div>
 						
-							<h4 class="font-italic text-left">Upload cell label: <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="A table contains cell infomation. The file should includes a cell names in the first column match with the expression file, and the second column indicating the cell clusters. Cell clusters are used in two ways: (i) assess the cell-type prediction results from SC3, and (ii) assign Cell-type-specific regulons. If no cell label file uploaded, the pipeline will automatically use the predicted clusters from SC3 for the following regulon predictions. Accept both txt and csv format."> </span></h4>
+							<h4 class="font-italic text-left">Upload cell label: <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Provide cell labels for CTSR identification. This file contains two columns: cell names and cell labels. Regulons will be predicted based on the provided cell labels. "> </span></h4>
 							
 							<div id="upload_label">
 									<div class="form-group row">
@@ -629,7 +660,9 @@ $(document).ready(function() {
 												<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 													<!--<li><a id="load_label" class="dropdown-item" href="#dropzone_label">Load example file</a>
 													</li>-->
-													<li><a class="dropdown-item" href="/iris3/storage/Yan_2013_label.csv" download>Download example cell label file (Yan et al, 2013)</a>
+													<!--<li><a class="dropdown-item" href="/iris3/storage/Yan_2013_label.csv" download>Download cell label file (Yan et al, 2013)</a>
+													</li>-->
+													<li><a class="dropdown-item" href="/iris3/storage/Zeisel_index_label.csv" download>Download cell label file (Zeisel et al, 2015)</a>
 													</li>
 												</ul>
 											</div>
@@ -641,7 +674,7 @@ $(document).ready(function() {
 							</div>
 							
 							<h4 class="font-italic text-left">Upload gene module:
-							 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="The developed gene modules that you are interested in or identified by preferred module detection methods can be uploaded to IRIS3 and have them analyzed to identify the “module-specific regulons”. Each column should represents a gene module, check example gene module file for more details."> </span> 
+							 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Upload a gene module file for additional analysis. The uploaded file can includes single/multiple columns, and each column represents a gene module."> </span> 
 							</h4>
 			
 							<div id="upload_gene_module">
@@ -653,7 +686,7 @@ $(document).ready(function() {
 												<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 													<!--<li><a id="load_gene_module" class="dropdown-item" href="#dropzone_label">Load example file</a>
 													</li>-->
-													<li><a class="dropdown-item" href="/iris3/storage/Yan_2013_example_gene_module.csv" download>Download example gene module file</a>
+													<li><a class="dropdown-item" href="/iris3/storage/example_gene_module.csv" download>Download example gene module file</a>
 													</li>
 												</ul>
 											</div>
@@ -686,7 +719,7 @@ $(document).ready(function() {
 			<input type="hidden" id="is_load_exp" name="is_load_exp" value="0">
 			<input type="hidden" id="is_load_label" name="is_load_label" value="0">
 			<input type="hidden" id="is_load_gene_module" name="is_load_gene_module" value="0">
-			<input class="btn btn-submit" type="button" value="Example output" onClick="javascript:location.href = '/iris3/results.php?jobid=20191024223952';" />
+			<input class="btn btn-submit" type="button" value="Example output" onClick="javascript:location.href = '/iris3/results.php?jobid=20200224113319';" />
 			<div class="row"><label id="hint_select_species"></label></div>
 		</div>
 		<div class="form-group">
