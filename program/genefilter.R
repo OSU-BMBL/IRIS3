@@ -377,7 +377,8 @@ my.object<-RunPCA(my.object,rev.pca = F,features = VariableFeatures(object = my.
 
 
 my.object<-FindNeighbors(my.object,dims = 1:10)
-my.object<-FindClusters(my.object, resolution = resolution_seurat)
+
+my.object<-FindClusters(my.object, resolution = as.numeric(resolution_seurat))
 if (length(levels(my.object$seurat_clusters)) == 1) {
   my.object<-FindClusters(my.object, resolution = 1)
 }
