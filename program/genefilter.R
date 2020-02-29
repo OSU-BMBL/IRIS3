@@ -55,9 +55,9 @@ label_file
 load_test_data <- function(){
   rm(list = ls(all = TRUE))
   # 
-  # setwd("/var/www/html/iris3/data/20200224113319/")
-  srcFile = "Zeisel_expression.csv"
-  jobid <- "20200224113319"
+  # setwd("/var/www/html/iris3/data/20200228215528/")
+  srcFile = "5k_pbmc_protein_v3_filtered_feature_bc_matrix__1_.h5"
+  jobid <- "20200228215528"
   delim <- ","
   is_imputation <- 0
   label_file<-'Zeisel_index_label.csv'
@@ -315,7 +315,7 @@ my.imputated.data<-log1p(my.imputated.data)
 
 dim(my.imputated.data)
 dim(expFile)
-
+#my.imputated.data <- exp_data
 #my.imputated.data <- read.delim(paste(jobid,"_filtered_expression.txt",sep = ""),check.names = FALSE, header=TRUE,row.names = 1)
 #my.imputated.data <- as.matrix(my.imputated.data)
 my.imputated.data <- my.imputated.data[,order(colnames(my.imputated.data))]
@@ -377,7 +377,7 @@ my.object<-RunPCA(my.object,rev.pca = F,features = VariableFeatures(object = my.
 
 
 my.object<-FindNeighbors(my.object,dims = 1:10)
-
+#resolution_seurat=0.4
 my.object<-FindClusters(my.object, resolution = as.numeric(resolution_seurat))
 if (length(levels(my.object$seurat_clusters)) == 1) {
   my.object<-FindClusters(my.object, resolution = 1)
@@ -388,9 +388,8 @@ cell_info <- my.object$seurat_clusters
 cell_info <- as.factor(as.numeric(cell_info))
 cell_label <- cbind(cell_names,cell_info)
 colnames(cell_label) <- c("cell_name","label")
-cell_label <- cell_label[order(cell_label[,2]),]
+cell_label <- cell_label[order(cell_label[,1]),]
 write.table(cell_label,paste(jobid,"_sc3_label.txt",sep = ""),quote = F,row.names = F,sep = "\t")
-
 
 ###########################################
 #  Run TSNE and UMAP ######################
@@ -429,6 +428,7 @@ if (ncol(my.object) > 500) {
 write.table(silh_out,paste(jobid,"_silh.txt",sep=""),sep = ",",quote = F,col.names = F,row.names = F)
 
 #write.table(cell_label,paste(jobid,"_cell_label.txt",sep = ""),quote = F,row.names = F,sep = "\t")
+#DimPlot(my.object,reduction = 'umap')
 
 if (label_use_sc3 =='2'){
   cell_info <- read.table(label_file,check.names = FALSE, header=TRUE,sep = delimiter,stringsAsFactors = F)
@@ -448,7 +448,9 @@ if (label_use_sc3 =='2'){
     my.object <- AddMetaData(my.object, cell_info, col.name = "Provided.idents")
     #cell_info <- as.factor(mydata1$MMdetail)
   }
-} 
+} else {
+  my.object <- AddMetaData(my.object, cell_label[,2], col.name = "Provided.idents")
+}
 
 my.object <-AddMetaData(my.object,cell_info,col.name = "Customized.idents")
 my.object$Customized.idents <- as.factor(my.object$Customized.idents)
