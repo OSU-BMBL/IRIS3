@@ -1,11 +1,17 @@
  {{block name="extra_js"}} {{/block}} {{block name="extra_style"}} {{/block}} {{block name="main"}}
 
-    <script src="assets/js/pace.js"></script>
+<script src="assets/js/pace.js"></script>
+<script src="assets/js/code/highcharts.js"></script>
+<script src="assets/js/code/modules/boost.js"></script>
+<script src="assets/js/code/modules/exporting.js"></script>
+<script src="assets/js/code/modules/export-data.js"></script>
+<script src="assets/js/code/modules/accessibility.js"></script>
+
 <script>
 var flag = [];
 window.addEventListener('scroll', function(e) {
 if(document.getElementById("myTab").getBoundingClientRect().y == 10){
-	document.getElementById("myTab").setAttribute("style","background-color:#fff;border: 5px solid #2775b6;border-radius: 5px")
+	document.getElementById("myTab").setAttribute("style","background-color:#fff;border: 5px solid #B47157;border-radius: 5px")
 }	else {
 	document.getElementById("myTab").setAttribute("style","background-color:transparent;")
 }
@@ -346,7 +352,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 		overview_filepath = "./data/"+jobid+"/regulon_id/overview_provde_ct.pdf"
 		regulon_score_filepath = "./data/"+jobid+"/regulon_id/"+ regulon_id +".pdf"
 		$('#'+table_content_id).html("")
-		$('#'+table_id).html('<div class="col-sm-6"><p>UMAP Plot Colored by Cell Types</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+overview_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/overview_provide_ct.png" /></div><div class="col-sm-6"><p>UMAP Plot Colored by ' + regulon_id + ' Score</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+regulon_score_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/' + regulon_id + '.png" onerror="this.onerror=null; this.src="assets/img/default_umap.png"" alt=""/></div>')
+		$('#'+table_id).html('<div class="col-sm-6"><p>UMAP Plot Colored by cell clusters</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+overview_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/overview_provide_ct.png" /></div><div class="col-sm-6"><p>UMAP Plot Colored by ' + regulon_id + ' Score</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+regulon_score_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/' + regulon_id + '.png" onerror="this.onerror=null; this.src="assets/img/default_umap.png"" alt=""/></div>')
 		},
 	})
 	}
@@ -378,7 +384,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 		overview_filepath = "./data/"+jobid+"/regulon_id/overview_ct.trajectory.pdf"
 		trajectory_score_filepath = "./data/"+jobid+"/regulon_id/"+ trajectory_regulon_id +".trajectory.pdf"
 		$('#'+trajectory_content_id).html("")
-		$('#'+trajectory_id).html('<div class="col-sm-6"><p>Trajectory Plot Colored by Cell Types</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+overview_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/overview_ct.trajectory.png" /></div><div class="col-sm-6"><p>Trajectory Plot Colored by ' + trajectory_regulon_id + ' Score</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+trajectory_score_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/' + trajectory_regulon_id + '.trajectory.png" /></div>')
+		$('#'+trajectory_id).html('<div class="col-sm-6"><p>Trajectory Plot Colored by cell clusters</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+overview_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/overview_ct.trajectory.png" /></div><div class="col-sm-6"><p>Trajectory Plot Colored by ' + trajectory_regulon_id + ' Score</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+trajectory_score_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/' + trajectory_regulon_id + '.trajectory.png" /></div>')
 		},
 	})
 	}
@@ -411,7 +417,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 		expression_filepath = "./data/"+jobid+"/regulon_id/"+ gene_symbol +".umap.pdf"
 		document.getElementById(table_content_id).innerHTML = ''
 		let tmp = document.getElementById(table_id).innerHTML
-		document.getElementById(table_id).innerHTML = tmp + '<div class="col-sm-6"><p>UMAP Plot Colored by Cell Types</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+overview_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/overview_provide_ct.png" /></div><div class="col-sm-6"><p>UMAP Plot Colored by Normalized '+ gene_symbol +' Gene Expression Value</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+expression_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/' + gene_symbol + '.umap.png" onerror="this.onerror=null; this.src="assets/img/default_umap.png"" alt=""/></div>'
+		document.getElementById(table_id).innerHTML = tmp + '<div class="col-sm-6"><p>UMAP Plot Colored by cell clusters</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+overview_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/overview_provide_ct.png" /></div><div class="col-sm-6"><p>UMAP Plot Colored by Normalized '+ gene_symbol +' Gene Expression Value</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+expression_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/' + gene_symbol + '.umap.png" onerror="this.onerror=null; this.src="assets/img/default_umap.png"" alt=""/></div>'
 		},
 	})
 	}
@@ -600,6 +606,92 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 		
 	});
 	
+	$.get(
+      'https://bmbl.bmi.osumc.edu/iris3/data/{{$jobid}}/{{$jobid}}_umap.json',
+      function(dat) {
+        for (let i = 0; i < dat.length; i++){
+          dat[i]['color'] = dat[i]['color'][0]
+        }
+
+        Highcharts.chart('highcharts_umap', {
+          chart: {
+            type: 'scatter',
+            zoomType: 'xy'
+          },
+          boost: {
+            useGPUTranslations: true,
+            usePreAllocated: true
+          },
+          title: {
+            text: 'UMAP plot colored by cell clusters'
+          },
+          xAxis: {
+            title: {
+              enabled: true,
+              text: 'UMAP1'
+            },
+            startOnTick: true,
+            endOnTick: true,
+            showLastLabel: true,
+						gridLineWidth: 0
+          },
+          yAxis: {
+            title: {
+							enabled:true,
+              text: 'UMAP2'
+            },
+						startOnTick: true,
+            endOnTick: true,
+            showLastLabel: true,
+						gridLineWidth: 0
+          },
+          legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: 0,
+            y: 60,
+            floating: true,
+            backgroundColor: Highcharts.defaultOptions.chart.backgroundColor,
+            borderWidth: 0.5
+          },
+          plotOptions: {
+            series: {
+              turboThreshold: 100000,
+              boostThreshold: 100000,			  // Comment out this code to display error
+            },
+            scatter: {
+              marker: {
+                radius: {{if $total_cell_num < 200}} 5 {{else if $total_cell_num < 500}} 4 {{else if $total_cell_num < 1000}} 3 {{else if $total_cell_num < 5000}} 2 {{else}} 1.2 {{/if}},
+                states: {
+                  hover: {
+                    enabled: true,
+                    lineColor: 'rgb(100,100,100)'
+                  }
+                }
+              },
+              states: {
+                hover: {
+                  marker: {
+                    enabled: true
+                  }
+                }
+              }
+            }
+          },
+          series: dat,
+          tooltip: {
+                formatter: function() {
+                   return  'Cluster index:'+this.series.name +'<br/>Cluster:' + this.series.options.cell_type[0] + '<br/>Cell name: ' + this.series.userOptions.data[this.point.index][2] + '<br/>[' + this.x + ',' + this.y +']'
+               }
+              }
+        })
+      }
+    ).fail(function(jqxhr, status, error) {
+      console.log('error', status, error)
+    })
+
+
  </script>
 <main role="main" class="container" style="min-height: calc(100vh - 182px);">
     <div id="content">
@@ -616,7 +708,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                 <div class="panel-heading">
                                     <ul class="nav nav-tabs">
                                         <li class="active"><a href="#tab1default" data-toggle="tab">Cell clustering</a></li>
-                                        <li><a href="#tab2default" data-toggle="tab">Cell Type Prediction</a></li>
+                                        <li><a href="#tab2default" data-toggle="tab">Cell Cluster Prediction</a></li>
 										<li><a href="#tab3default" data-toggle="tab">Marker genes</a></li>
                                         <li><a href="#tab4default" data-toggle="tab">General information</a></li>
                                     </ul>
@@ -627,22 +719,25 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                             <div class="flatPanel panel panel-default">
                         <div class="panel-body">
                             <div class="col-md-12 col-sm-12"> 
-                              
+                              <div
+																id="highcharts_umap"
+																style="min-width: 310px; height: 600px; max-width: 1000px; margin: 0 auto"
+															></div>
                                             <table id="tablePreview" class="table">
                                                 <thead>
                                                     <tr>
                                                         <th>{{if $label_use_sc3 == 'user\'s label'}}
-														User's cell label index
+														Cell clusters index
 														{{else}}
-															Predicted cell label index
+															Predicted cell clusters index
 														{{/if}}</th>
                                                         {{if $label_use_sc3 == 'user\'s label'}}
 															<th>
-															User's cell label
+															Cell clusters
 															</th>
 															{{/if}}
 														<th>Number of cells</th>
-                                                        <th>Number of CTS-Rs</th>
+                                                        <th>Number of regulons</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -692,19 +787,19 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 											{{if $label_use_sc3 == 'user\'s label'}}
 											<div class="CT-result-img">
                                                 <div class="col-sm-6">
-												<h4 style="text-align:center;margin-top:50px"> UMAP Plot Colored by Provided Cell Types</h4>
+												<h4 style="text-align:center;margin-top:50px"> UMAP Plot Colored by Provided Cell Clusters</h4>
                                                    <input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_provide_ct.pdf')" />
 												   <img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_provide_ct.png"></img>
 												</div>
 												<div class="col-sm-6">
-												<h4 style="text-align:center;margin-top:50px"> UMAP Plot Colored by Predicted Cell Types</h4>
+												<h4 style="text-align:center;margin-top:50px"> UMAP Plot Colored by Predicted Cell Clusters</h4>
                                                    <input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_predict_ct.pdf')" />
 												   <img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_predict_ct.png"></img>
 												</div>
 											</div>
 											<div class="CT-result-img">
 												<div class="col-sm-6">
-												<h4 style="text-align:center;margin-top:50px"> Trajectory Plot Colored by Cell Types</h4>
+												<h4 style="text-align:center;margin-top:50px"> Trajectory Plot Colored by Cell Clusters</h4>
                                                    <input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_ct.trajectory.pdf')" />
 												   <img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_ct.trajectory.png"  onerror="this.onerror=null; this.src='assets/img/default_trajectory.png'" alt=""></img>
 												</div>
@@ -714,12 +809,12 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 											{{else}}
 											<div class="CT-result-img">
                                                 <div class="col-sm-6">
-												<h4 style="text-align:center;margin-top:50px"> UMAP Plot Colored by Cell Types</h4>
+												<h4 style="text-align:center;margin-top:50px"> UMAP Plot Colored by Cell Clusters</h4>
                                                    <input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_ct.pdf')" />
 												   <img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_ct.png"></img>
 												</div>
 												<div class="col-sm-6">
-												<h4 style="text-align:center;margin-top:50px"> Trajectory Plot Colored by Cell Types</h4>
+												<h4 style="text-align:center;margin-top:50px"> Trajectory Plot Colored by Cell Clusters</h4>
                                                     <input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_ct.trajectory.pdf')" />
 													<img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_ct.trajectory.png"  onerror="this.onerror=null; this.src='assets/img/default_trajectory.png'" alt=""></img>
 												</div>
@@ -744,7 +839,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                             <table id="marker_table" class="display" style="width:100%">
 												<thead>
 													<tr>
-														<th>Cell type</th>
+														<th>Cell Cluster</th>
 														<th>Gene</th>
 														<th>P-value</th>
 														<th>Avg_logFC</th>
@@ -784,17 +879,14 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                 </div>
 								{{if $provide_label > 0}}
                                 <div class="form-group col-md-4 col-sm-4">
-                                    <p>Number of provided cell types: {{$provide_label}}</p>
+                                    <p>Number of provided cell clusters: {{$provide_label}}</p>
                                 </div>
 								{{/if}}
 								<div class="form-group col-md-4 col-sm-4">
-                                    <p>Number of predicted cell types: {{$predict_label}}</p>
+                                    <p>Number of predicted cell clusters: {{$predict_label}}</p>
                                 </div>
                                 <div class="form-group col-md-4 col-sm-4">
                                     <p>Total biclusters: {{$total_bic}}</p>
-                                </div>
-                                <div class="form-group col-md-4 col-sm-4">
-                                    <p>Total CTS-Rs: {{$total_regulon}}</p>
                                 </div>
 								</div>
 								<div class="row">
@@ -868,7 +960,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 																<div class="flatPanel panel panel-default ct-panel">
 																			<div class="row">
 																			<div class="form-group col-md-12 col-sm-12" style="height:100%">
-																			<p class="ct-panel-description" >CTS Cell-Gene-Regulon Heatmap for Cell Type {{$sec0+1}}</p>
+																			<p class="ct-panel-description" >Cell-gene-regulon heatmap for cell cluster {{$sec0+1}}</p>
 																			<a class="ct-panel-a" href="/iris3/heatmap.php?jobid={{$jobid}}&file=CT{{$sec0+1}}.json" target="_blank">
                                                                         <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#">Open in new tab
                                                                         </button>
@@ -887,7 +979,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 																					</div></div></div></div></div>
 																					<div class="col-md-4">
 																					<div class="form-group col-md-12 col-sm-12" style="height:100%">
-																			<p class="ct-panel-description" >Regulon specificity score scatter plot for Cell Type {{$sec0+1}}</p>
+																			<p class="ct-panel-description" >Regulon specificity score scatter plot for Cell Cluster {{$sec0+1}}</p>
                                                    
 												   <img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/ct{{$sec0+1}}_rss_scatter.png"/>
 												</div></div></div></div> 
@@ -904,10 +996,10 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 															<div id="regulon_pagination{{$sec0+1}}">
 															<label style="margin-left: 0.5em;">Search: <input type="text" class="search regulon_search" placeholder=""/></label>
 															<ul class="list" style="list-style-type:none;padding:0;">
-                                                                        {{section name=sec1 loop=$regulon_result[$sec0]}}
+                                                                        {{section name=sec1 loop=$regulon_result[$sec0]}} 
 																		<li>
 																		<table class="table table-sm page_item{{$sec0+1}}" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:0"><tbody>
-																		<tr><td colspan="2"> <div class='regulon-heading'> {{$regulon_result[$sec0][sec1][0]}}</div></td></tr>
+																		<tr><td colspan="2"> <div class='regulon-heading'> {{$regulon_result[$sec0][sec1][0]}} {{if $regulon_rank_result[$sec0][sec1][4] < 0.05}}(CTSR) {{/if}}</div></td></tr>
 																		<tr><td class="gene-score">Regulon specificity score: {{$regulon_rank_result[$sec0][sec1][5]|string_format:"%.8f"}} (p-value{{if $regulon_rank_result[$sec0][sec1][4]|string_format:"%.5f" == 0}}&lt;1.0e-4{{else}}: {{$regulon_rank_result[$sec0][sec1][4]|string_format:"%.1e"}}{{/if}})</td><td class="gene-score">Number of genes: {{$regulon_result[$sec0][sec1]|@count-1}}</td><td class="gene-score">Number of marker genes: {{$regulon_rank_result[$sec0][sec1]|@count-6}}</td></tr>
                                                                         <tr><td class="gene-table">
                                                                             <div style="width:100%; font-size:14px;">
@@ -940,7 +1032,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 														{{assign var="this_tf" value=","|explode:$regulon_motif_result[$sec0][sec1][1]}}
 														{{assign var=motif_num_jaspar value="ct`$this_tf[0]`bic`$this_tf[1]`m`$this_tf[2]`"}}
 														
-														<button type="button" id="regulonbtn-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="$('#regulon-{{$regulon_result[$sec0][sec1][0]}}').show();show_regulon_table(this);$('#regulon_hidebtn-{{$regulon_result[$sec0][sec1][0]}}').show();$('#regulonbtn-{{$regulon_result[$sec0][sec1][0]}}').hide();">UMAP plot
+														<button type="button" id="regulonbtn-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="$('#regulon-{{$regulon_result[$sec0][sec1][0]}}').show();show_regulon_table(this);$('#regulon_hidebtn-{{$regulon_result[$sec0][sec1][0]}}').show();$('#regulonbtn-{{$regulon_result[$sec0][sec1][0]}}').hide();">Regulon UMAP plot
                                                         </button>
                                                         <button type="button" style="display:none;" id="regulon_hidebtn-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="$('#regulonbtn-{{$regulon_result[$sec0][sec1][0]}}').show();$('#regulon_hidebtn-{{$regulon_result[$sec0][sec1][0]}}').hide();$('#regulon-{{$regulon_result[$sec0][sec1][0]}}').hide();">Hide Regulon UMAP
                                                         </button>
@@ -955,7 +1047,8 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 																				<a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" target="_blank"><img class="motif-logo lozad " data-src="http://hocomoco11.autosome.ru/final_bundle/hocomoco11/full/{{$main_species|upper}}/mono/logo_large/{{$tomtom_result.$motif_num_jaspar[0][1]}}_direct.png"/></a><p class="motif-score">p-value: {{$tomtom_result.$motif_num_jaspar[0][3]|string_format:"%.2e"}}</p><p class="motif-score">e-value: {{$tomtom_result.$motif_num_jaspar[0][4]|string_format:"%.2e"}}</p><p class="motif-score">q-value: {{$tomtom_result.$motif_num_jaspar[0][5]|string_format:"%.2e"}}</p></div>
 																					
 									<div class="col-md-9"> 
-									<input class="btn btn-default tf-button" type="button" value="TF-alternative regulon" onClick="window.open('/iris3/heatmap.php?jobid={{$jobid}}&file={{$tomtom_result.$motif_num_jaspar[0][1]|regex_replace:"/_.+/":""}}.json');"/>
+									<!--
+									<input class="btn btn-default tf-button" type="button" value="TF-alternative regulon" onClick="window.open('/iris3/heatmap.php?jobid={{$jobid}}&file={{$tomtom_result.$motif_num_jaspar[0][1]|regex_replace:"/_.+/":""}}.json');"/>-->
 									<table id="tomtom_table" class="table table-hover tomtom_table table-sm" cellpadding="0" cellspacing="0" width="100%">
 									<thead><tr><td>Motif name</td><td>Motif logo</td><td>Motif p-value</td><td>Motif z-score</td><td>Motif details</td><td>Motif comparison</td></tr></thead>
 									<tbody>
@@ -994,7 +1087,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 																					<table id="table-content-{{$regulon_result[$sec0][sec1][0]}}" class="display" style="font-size:12px;width:100%">
 																						<thead>
 																							<tr>
-																								<th>Tissue/ Cell type</th>
+																								<th>Tissue/ cell cluster</th>
 																								<th># of ATAC-seq peaks</th>
 																								<th># of included regulon genes</th>
 																								<th>Rate in regulon</th>
@@ -1012,9 +1105,9 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 																					<table id="tad-table-content-{{$regulon_result[$sec0][sec1][0]}}" class="display" style="font-size:12px;width:100%">
 																						<thead>
 																							<tr>
-																								<th>Tissue/ Cell type</th>
+																								<th>Tissue/ cell cluster</th>
 																								<th>Species</th>
-																								<th>Additional cell type specific genes found in TAD</th>
+																								<th>Additional cell cluster specific genes found in TAD</th>
 																							</tr>
 																						</thead>
 																					</table>
@@ -1152,7 +1245,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 																					<table id="table-content-{{$module_result[$sec0][sec1][0]}}" class="display" style="font-size:12px;width:100%">
 																						<thead>
 																							<tr>
-																								<th>Tissue/ Cell type</th>
+																								<th>Tissue/ cell cluster</th>
 																								<th># of ATAC-seq peaks</th>
 																								<th># of included regulon genes</th>
 																								<th>Rate in regulon</th>
@@ -1170,9 +1263,9 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 																					<table id="tad-table-content-{{$module_result[$sec0][sec1][0]}}" class="display" style="font-size:12px;width:100%">
 																						<thead>
 																							<tr>
-																								<th>Tissue/ Cell type</th>
+																								<th>Tissue/ cell cluster</th>
 																								<th>Species</th>
-																								<th>Additional cell type specific genes found in TAD</th>
+																								<th>Additional cell cluster specific genes found in TAD</th>
 																							</tr>
 																						</thead>
 																					</table>
@@ -1369,7 +1462,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                         <div class="panel-body"><p>
                             <img src="static/images/busy.gif" />
                             <br /> Your request is received now.
-                            <br> You can remember your jobid <font color="red"> <strong>{{$jobid}}</strong> </font>
+                            <br> You can save your jobid <font color="red"> <strong>{{$jobid}}</strong> </font>
                             <br> Or you can choose to stay at this page, which will be automatically refreshed every <b>60</b> seconds.
                             <br/> Link:&nbsp
                             <a href="{{$LINKPATH}}/iris3/results.php?jobid={{$jobid}}">https://bmbl.bmi.osumc.edu/{{$LINKPATH}}iris3/results.php?jobid={{$jobid}}</a></p>
