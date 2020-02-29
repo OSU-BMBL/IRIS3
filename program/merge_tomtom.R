@@ -153,7 +153,7 @@ for (i in 1:length(alldir)) {
         next
       }
       if(module_type[i] == "CT"){
-        regulon_idx_label <- paste("CT",i,"S-R",regulon_idx,sep = "")
+        regulon_idx_label <- paste("CT",i,"-R",regulon_idx,sep = "")
       }else{
         regulon_idx_label <- paste("module",regulon_idx_module,"-R",regulon_idx,sep = "")
       }
@@ -198,8 +198,6 @@ tmp_list <- unlist(sapply(tmp_list, function(x){
   }
 }))
 remove_motifs <- paste("tomtom/",list.files("tomtom")[!list.files("tomtom") %in% tmp_list],sep = "")
-remove_motifs <- remove_motifs[-grep("module",remove_motifs)]
 unlink(remove_motifs, recursive = TRUE)
-
 ## remove unused motifs
 
