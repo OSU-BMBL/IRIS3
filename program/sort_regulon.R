@@ -10,15 +10,15 @@ library(sgof)
 library(foreach)
 library(tidyverse)
 library(doParallel)
-registerDoParallel(8)  # use multicore, set to the number of our cores
+registerDoParallel(16)  # use multicore, set to the number of our cores
 
 args <- commandArgs(TRUE)
 wd <- args[1] # filtered expression file name
 jobid <- args[2] # user job id
 # wd<-getwd()
 ####test
-# wd <- "/var/www/html/iris3/data/2020013092708"
-# jobid <-2020013092708 
+# wd <- "/var/www/html/iris3/data/20200228204036"
+# jobid <-20200228204036 
 # setwd(wd)
 
 quiet <- function(x) { 
@@ -356,7 +356,7 @@ for (i in 1:total_ct) {
       
       if(sum(sapply(marker, length))>0){
         #rss_rank<-order(sapply(marker,length),decreasing=T)
-        marker <- marker[rss_rank]
+        #marker <- marker[rss_rank]
         #rss_list <- rss_list[rss_rank]
         #gene_name_list <- gene_name_list[rss_rank]
         #gene_id_list <- gene_id_list[rss_rank]
