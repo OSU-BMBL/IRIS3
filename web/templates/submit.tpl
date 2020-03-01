@@ -445,7 +445,7 @@ $(document).ready(function() {
 		<h2 class="text-center">Job Submission</h2>
 		<div class="form-group row">
 			<div class="form-check col-sm-12 ">
-				<label class="form-check-label" for="expfile">Upload gene expression file: <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="A gene expression file with genes as rows and cells as columns. Users can provide normalized or non-normalized file (Read counts) for the submission. Accept txt, csv and tsv format for text gene expression matrix, 10X hdf5 or gene-barcode matrices. "> </span>
+				<label class="form-check-label" for="expfile">Upload gene expression file: <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="A gene expression file with genes as rows and cells as columns. Users can provide normalized or non-normalized file (Read counts) for the submission. Accept txt, csv, and tsv format for text gene expression matrix, 10X hdf5 or gene-barcode matrices. "> </span>
 				</label>
 			</div>
 			<div class="form-check col-sm-2  ">
@@ -497,7 +497,7 @@ $(document).ready(function() {
 		<div class="form-group row">
 		<div class="form-check col-sm-6 ">
 		<label class="form-check-label" for="species_select">Species:
-		 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Specify the species belongs to your gene expression matrix."> </span> 
+		 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Specifies the species belonging to your gene expression matrix."> </span> 
 				</label>
 		<select class="selectpicker" id="species_arg" name="species_arg[]" title="Select species...">
   <option value="Human">Human (hg38)</option>
@@ -635,10 +635,10 @@ $(document).ready(function() {
 							</div>
 							
 							<div class="form-group row">
-						<div class="form-check col-sm-2 ">
-							<button type="button" id="fast_version_btn" class="btn btn-default extra-button" data-toggle="collapse" onclick="use_fast_version(this);" >Fast version</button><span style="margin-left:5px" class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title=" This option uses  fast version. This sets f=0.5, k=20, o=100, and promoter region=500, disable imputation and dual strategy. This runs faster but generage less regulons."> </span> 
-						</div>
-						<div class="form-check col-sm-4 ">
+						<div class="form-check col-sm-12 ">
+							<button type="button" id="fast_version_btn" class="btn btn-default extra-button" data-toggle="collapse" onclick="use_fast_version(this);" >Fast version</button><span style="margin-left:5px;margin-right:50px" class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title=" This option uses  fast version. This sets f=0.5, k=20, o=100, promoter region=500 bp, disable imputation, and dual strategy. This runs faster but generage less regulons."> </span> 
+						
+						
 							<button type="button" id="fast_version_btn" class="btn btn-default extra-button" data-toggle="collapse" onclick="use_accurate_version(this);">Default version</button><span style="margin-left:5px" class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title="(Default)This option uses  parameters in our publications. This sets f=0.7, k=20, o=500, and promoter region=1000. Please also enable imputation if uploading 10X hdf5 or gene-barcodes matrices files, enable dual strategy if uploading C1 gene expression matrix text file. This runs slower but genreate more regulons."> </span> 
 						</div>
 					</div>
