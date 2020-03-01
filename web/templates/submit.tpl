@@ -525,22 +525,15 @@ $(document).ready(function() {
 						
 					<div id="collapseThree2" class="panel-collapse collapse">
 						<div class="panel-body">
-							<h3 class="font-italic text-left">Parameters</h3>
-							<div class="form-group row">
-						<div class="form-check col-sm-2 ">
-							<button type="button" id="fast_version_btn" class="btn btn-default extra-button" data-toggle="collapse" onclick="use_fast_version(this);">Fast version</button><span class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title=" This option uses  fast version. This sets f=0.5, k=20, o=100 , and promoter region=500, disable imputation and dual strategy. This runs faster but generage less CTS-Rs."> </span> 
-						</div>
-						<div class="form-check col-sm-4 ">
-							<button type="button" id="fast_version_btn" class="btn btn-default extra-button" data-toggle="collapse" onclick="use_accurate_version(this);">Default version (Default)</button><span class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title="(Default)This option uses  parameters in our publications. This sets f=0.7, k=20, o=500, and promoter region=1000. Please also enable imputation if uploading 10X hdf5 or gene-barcodes matrices files, enable dual strategy if uploading C1 gene expression matrix text file. This runs slower but genreate more CTS-Rs."> </span> 
-						</div>
-					</div>
+							<h4 class="font-italic text-left">IRIS3 parameters</h4>
+							
 							<div class="form-group">
 								<div class="row">
-									<div class="col-md-2">
-										<label for="ex1">Overlap rate: <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Controls the level of overlaps between to-be-identified biclusters. A larger value means more overlap on gene modules. Default is 0.7."> </span> 
+									<div class="col-md-4">
+										<label for="ex1">QUBIC2: Bicluster overlap rate: <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Controls the level of overlaps between to-be-identified biclusters. A larger value means more overlap on gene modules. Default is 0.7."> </span> 
 										</label>
 									</div>
-									<div class="col-md-2">
+									<div class="col-md-4">
 										<select  id="f_arg_id" class="selectpicker" name="f_arg" data-width="auto">
 											<option>0.5</option>
 											<option>0.6</option>
@@ -553,11 +546,11 @@ $(document).ready(function() {
 								</div>
 								<br>
 								<div class="row">
-									<div class="col-md-2">
-										<label for="ex3">Max biclusters: <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Max number of biclusters to output. Note: the output number will affect the prediction of bicluster, not merely a cutoff, and the output biclusters may be less than this number. A smaller value (e.g 100) helps decrease running time. Default is 500. "> </span>
+									<div class="col-md-4">
+										<label for="ex3">QUBIC2: Maximum bicluster number: <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Max number of biclusters to output. Note: the output number will affect the prediction of bicluster, not merely a cutoff, and the output biclusters may be less than this number. A smaller value (e.g 100) helps decrease running time. Default is 500. "> </span>
 										</label>
 									</div>
-									<div class="col-md-2">
+									<div class="col-md-4">
 										<select  id="o_arg_id" class="selectpicker" name="o_arg" data-width="auto">
 											<option>20</option>
 											<option>50</option>
@@ -570,11 +563,11 @@ $(document).ready(function() {
 								</div>
 								<br>
 								<div class="row">
-									<div class="col-md-2">
-										<label for="ex2">Minimal cell width: <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Minimum column width of the bicluster block. Default is 20."> </span>
+									<div class="col-md-4">
+										<label for="ex2">QUBIC2: Minimum cell number: <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Minimum column width of the bicluster block. Default is 20."> </span>
 										</label>
 									</div>
-									<div class="col-md-2">
+									<div class="col-md-4">
 										<select id="k_arg_id" class="selectpicker" name="k_arg" data-width="auto">
 											<option>5</option>
 											<option>10</option>
@@ -590,28 +583,19 @@ $(document).ready(function() {
 											<option>100</option>
 										</select>
 									</div>
+									<!--
+									<div class="col-md-3">
+									<a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics&q=3" target="_blank">More details for QUBIC parameters.</a>
+									</div>-->
 								</div>
+								
 							</div>
-							<div class="form-group  row">
-								<div class="col-md-5">
-									<label for="ex2">Upstream promoter region:	
-									 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="The upstream promoter region is open to users to decide the region for motif finding.  Wider range may cause require longer computational time. Default: 1000 bp."> </span> 
-									</label>
-									<select id="promoter_arg_id" class="selectpicker" name="promoter_arg" data-width="auto">
-										<option>250</option>
-										<option>500</option>
-										<option>750</option>
-										<option data-subtext="Default" selected="selected">1000</option>
-										<option>2000</option>
-									</select>
-								</div>
-							</div>
-              <div class="form-group row">
+							<div class="form-group row">
 									<div class="col-md-4">
-										<label for="ex3">Cell cluster prediction resolution: <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Resolution for clustering in Seurat (form 0-1). Larger number will generate more clusters and smaller number will generate less clusters. Default: 0.8."> </span>
+										<label for="ex3">Seurat: Cell clustering resolution: <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Resolution for clustering in Seurat (form 0-1). Larger number will generate more clusters and smaller number will generate less clusters. Default: 0.8."> </span>
 										</label>
 									</div>
-									<div class="col-md-2">
+									<div class="col-md-4">
 										<select  id="resolution_seurat_id" class="selectpicker" name="resolution_seurat" data-width="auto">
 											<option>0.1</option>
 											<option>0.2</option>
@@ -632,8 +616,34 @@ $(document).ready(function() {
 										</select>
 									</div>
 								</div>
+							<div class="form-group  row">
+								<div class="col-md-4">
+									<label for="ex2">Motif finding: upstream promoter region:	
+									 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="The upstream promoter region is open to users to decide the region for motif finding.  Wider range may cause require longer computational time. Default: 1000 bp."> </span> 
+									</label>
+									
+								</div>
+								<div class="col-md-4">
+								<select id="promoter_arg_id" class="selectpicker" name="promoter_arg" data-width="auto">
+										<option>250</option>
+										<option>500</option>
+										<option>750</option>
+										<option data-subtext="Default" selected="selected">1000</option>
+										<option>2000</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="form-group row">
+						<div class="form-check col-sm-2 ">
+							<button type="button" id="fast_version_btn" class="btn btn-default extra-button" data-toggle="collapse" onclick="use_fast_version(this);">Fast version</button><span class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title=" This option uses  fast version. This sets f=0.5, k=20, o=100 , and promoter region=500, disable imputation and dual strategy. This runs faster but generage less CTS-Rs."> </span> 
+						</div>
+						<div class="form-check col-sm-4 ">
+							<button type="button" id="fast_version_btn" class="btn btn-default extra-button" data-toggle="collapse" onclick="use_accurate_version(this);">Default version</button><span class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title="(Default)This option uses  parameters in our publications. This sets f=0.7, k=20, o=500, and promoter region=1000. Please also enable imputation if uploading 10X hdf5 or gene-barcodes matrices files, enable dual strategy if uploading C1 gene expression matrix text file. This runs slower but genreate more CTS-Rs."> </span> 
+						</div>
+					</div>
 							<hr/>
-							<h3 class="font-italic text-left">Optional</h3>
+							<h4 class="font-italic text-left">Optional choices</h4>
 						<div class="row">
 						<div class="form-check col-sm-12 ">
 							<input class="form-check-input" type="checkbox" name="is_imputation" id="is_imputation" value="1">
@@ -649,7 +659,9 @@ $(document).ready(function() {
 							</label>
 						</div></div>
 						
-							<h4 class="font-italic text-left">Upload cell label: <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Provide cell labels for CTSR identification. This file contains two columns: cell names and cell labels. Regulons will be predicted based on the provided cell labels. "> </span></h4>
+							<label class="form-check-label" for="is_imputation">Upload cell label:
+							 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Provide cell labels for CTSR identification. This file contains two columns: cell names and cell labels. Regulons will be predicted based on the provided cell labels. "> </span>
+							</label>
 							
 							<div id="upload_label">
 									<div class="form-group row">
@@ -668,14 +680,14 @@ $(document).ready(function() {
 											</div>
 											<div id="dropzone_label" class="dropzone border-grey rounded dz-clickable" style="background-image: url(assets/img/expression_label.jpg); background-size: 100% 100%;margin:0;border:1px solid #c9c9c9;border-radius:.25rem!important"></div>
 											<div id="loader_label"></div>
-			<div id="preview_label"></div>
+									<div id="preview_label"></div>
 										</div>
 									</div>
 							</div>
-							
-							<h4 class="font-italic text-left">Upload gene module:
+							<label class="form-check-label" for="is_imputation">Upload gene module:
 							 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Upload a gene module file for additional analysis. The uploaded file can includes single/multiple columns, and each column represents a gene module."> </span> 
-							</h4>
+							</label>
+							
 			
 							<div id="upload_gene_module">
 									<div class="form-group row">
