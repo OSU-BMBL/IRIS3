@@ -178,7 +178,7 @@
             <h3 class="question"><a id="Q8" style="color:black;">How does IRIS3 perform normalization for Cell-gene-regulon heatmaps?</a></h3>
             <div class="answer">
                 <p>To better illustrate the expression value of the gene sets, we applied a <a href="https://f1000research.com/articles/5-2122/v1"><b>log-normalization</b></a> for heatmap interpretation:</p>
-                <p>`VN_i=lg?(1+VE_i )-sum_(i=1)^nlg?(1+VE_i )/n`</p>
+                <img src="./assets/img/tutorial/formula/norm_heatmap.png"/><div class="row"></div>
                 <p>Where, `VN_i` indicates the normalized value for gene `i`,`VE_i` indicates the expression value of gene `i`, and `n` is the number of total cells. The heatmap comparison of pre-normalized and normalized values are shown below.</p>
                 <img src="./assets/img/tutorial/4.Q8-2.png">
                 <br>
@@ -210,7 +210,7 @@
             <h3 class="question"><a id="Q11" style="color:black;">How is the performance of IRIS3?</a></h3>
             <div class="answer">
                 <p>To evaluate the performance of IRIS3, we compared our regulons with the result predicted by the
-                    <a href="https://github.com/aertslab/SCENIC"><b>SCENIC pipeline</b></a>, using the default parameters were used for both tools.</p>
+                    <a href="https://github.com/aertslab/SCENIC"><b>SCENIC pipeline</b></a>, the default parameters were used for both tools.</p>
                 <img src="./assets/img/tutorial/4.Q10-1.jpg">
                 <p>All the 19 scRNA-Seq datasets were tested using the default parameter settings in IRIS3 (red) and SCENIC (black). The data were arranged in the increasing order of the number of cells and 10X were grouped and highlighted in the orange
                     box. Line one: the violin plots of RSS scores in all active regulons; Line 2: the pie charts of the average percentages of regulon in active regulons per cell type; Line 3: box plots of covered marker gene percentage in each regulon; Line
