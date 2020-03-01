@@ -636,10 +636,10 @@ $(document).ready(function() {
 							
 							<div class="form-group row">
 						<div class="form-check col-sm-2 ">
-							<button type="button" id="fast_version_btn" class="btn btn-default extra-button" data-toggle="collapse" onclick="use_fast_version(this);">Fast version</button><span class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title=" This option uses  fast version. This sets f=0.5, k=20, o=100 , and promoter region=500, disable imputation and dual strategy. This runs faster but generage less CTS-Rs."> </span> 
+							<button type="button" id="fast_version_btn" class="btn btn-default extra-button" data-toggle="collapse" onclick="use_fast_version(this);" >Fast version</button><span style="margin-left:5px" class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title=" This option uses  fast version. This sets f=0.5, k=20, o=100, and promoter region=500, disable imputation and dual strategy. This runs faster but generage less regulons."> </span> 
 						</div>
 						<div class="form-check col-sm-4 ">
-							<button type="button" id="fast_version_btn" class="btn btn-default extra-button" data-toggle="collapse" onclick="use_accurate_version(this);">Default version</button><span class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title="(Default)This option uses  parameters in our publications. This sets f=0.7, k=20, o=500, and promoter region=1000. Please also enable imputation if uploading 10X hdf5 or gene-barcodes matrices files, enable dual strategy if uploading C1 gene expression matrix text file. This runs slower but genreate more CTS-Rs."> </span> 
+							<button type="button" id="fast_version_btn" class="btn btn-default extra-button" data-toggle="collapse" onclick="use_accurate_version(this);">Default version</button><span style="margin-left:5px" class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title="(Default)This option uses  parameters in our publications. This sets f=0.7, k=20, o=500, and promoter region=1000. Please also enable imputation if uploading 10X hdf5 or gene-barcodes matrices files, enable dual strategy if uploading C1 gene expression matrix text file. This runs slower but genreate more regulons."> </span> 
 						</div>
 					</div>
 							<hr/>
@@ -660,7 +660,7 @@ $(document).ready(function() {
 						</div></div>
 						
 							<label class="form-check-label" for="is_imputation">Upload cell label:
-							 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Provide cell labels for CTSR identification. This file contains two columns: cell names and cell labels. Regulons will be predicted based on the provided cell labels. "> </span>
+							 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Provide cell labels for regulon identification. This file contains two columns: cell names and cell labels. Regulons will be predicted based on the provided cell labels. "> </span>
 							</label>
 							
 							<div id="upload_label">
