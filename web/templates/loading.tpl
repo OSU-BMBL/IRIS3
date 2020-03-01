@@ -899,16 +899,16 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                     <p>Enable dual strategy: {{$is_c}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
-                                    <p for="reportsList">Minimal cell width: {{$k_arg}}</p>
+                                    <p for="reportsList">Minimum cell number: {{$k_arg}}</p>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6">
-                                    <p>Max biclusters: {{$o_arg}}</p>
+                                    <p>Maximum bicluster number: {{$o_arg}}</p>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6">
-                                    <p>Overlap rate: {{$f_arg}}</p>
+                                    <p>Bicluster overlap rate: {{$f_arg}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
-                                    <p>CTS-regulon prediction using {{$label_use_sc3}}</p>
+                                    <p>Regulon prediction using {{$label_use_sc3}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Upstream promoter region: {{$promoter_arg}}</p>
@@ -953,7 +953,22 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 																<div class="flatPanel panel panel-default">
 																			<div class="row" style="">
 																			<div class="form-group col-md-12 col-sm-12" style="height:100%">
-																			<strong>No CTS-R found in CT{{$sec0+1}} </strong>
+																			<strong>No regulon found in CT{{$sec0+1}} </strong>
+																			<ol>
+																			This may be caused by You can re-submit your data and change IRIS3 parameters to possibly solve this issue:
+																			<li>Decrease clustering resolution in Suerat, e.g.: 0.5.
+																			</li>
+																			<li>Set a smaller minimal cell numer in biclusters in QUBIC2. E.g. set to 5 for cell number less than 100.
+																			</li>
+																			<li>Set a lager bicluster overlap rate in QUBIC2. 
+																			</li>
+																			<li>Turn on imputation to decrease data noise. (note: this may greatly increase the computational time)
+																			</li>
+																			<li>Set the maximum bicluster number in QUBIC2 as 1000.
+																			</li>
+																			
+																			</ol>
+																			<p>For more information, please check our <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics" target="_blank">tutorial</a> and <a href="https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ" target="_blank">FAQ</a></p>
 																	</div></div> </div> </div> 
 															{{else}}	
 															<div class="tab-pane {{if {{$sec0+1}} eq '1'}}active{{/if}}" id="main_CT{{$sec0+1}}" role="tabpanel">
@@ -1143,7 +1158,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 																<div class="flatPanel panel panel-default">
 																			<div class="row" style="">
 																			<div class="form-group col-md-12 col-sm-12" style="height:100%">
-																			<strong>No CTS-R found in module 1 </strong>
+																			<strong>No regulon found in module 1 </strong>
 																	</div></div> </div> </div> 
 															{{/if}}
 															
@@ -1153,7 +1168,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 																<div class="flatPanel panel panel-default">
 																			<div class="row" style="">
 																			<div class="form-group col-md-12 col-sm-12" style="height:100%">
-																			<strong>No CTS-R found in module{{$sec0+1}} </strong>
+																			<strong>No regulon found in module{{$sec0+1}} </strong>
 																	</div></div> </div> </div> 
 															{{else}}
 															<div class="tab-pane " id="main_module{{$sec0+1}}" role="tabpanel">
@@ -1328,16 +1343,16 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                     <p>Enable dual strategy: {{$is_c}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
-                                    <p for="reportsList">Minimal cell width: {{$k_arg}}</p>
+                                    <p for="reportsList">Minimum cell number: {{$k_arg}}</p>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6">
-                                    <p>Max biclusters: {{$o_arg}}</p>
+                                    <p>Maximum bicluster number: {{$o_arg}}</p>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6">
-                                    <p>Overlap rate: {{$f_arg}}</p>
+                                    <p>Bicluster overlap rate: {{$f_arg}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
-                                    <p>CTS-regulon prediction using {{$label_use_sc3}}</p>
+                                    <p>Regulon prediction using {{$label_use_sc3}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Upstream promoter region: {{$promoter_arg}}</p>
@@ -1379,16 +1394,16 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                     <p>Enable dual strategy: {{$is_c}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
-                                    <p for="reportsList">Minimal cell width: {{$k_arg}}</p>
+                                    <p for="reportsList">Minimum cell number: {{$k_arg}}</p>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6">
-                                    <p>Max biclusters: {{$o_arg}}</p>
+                                    <p>Maximum bicluster number: {{$o_arg}}</p>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6">
-                                    <p>Overlap rate: {{$f_arg}}</p>
+                                    <p>Bicluster overlap rate: {{$f_arg}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
-                                    <p>CTS-regulon prediction using {{$label_use_sc3}}</p>
+                                    <p>Regulon prediction using {{$label_use_sc3}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Upstream promoter region: {{$promoter_arg}}</p>
@@ -1430,16 +1445,16 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                     <p>Enable dual strategy: {{$is_c}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
-                                    <p for="reportsList">Minimal cell width: {{$k_arg}}</p>
+                                    <p for="reportsList">Minimum cell number: {{$k_arg}}</p>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6">
-                                    <p>Max biclusters: {{$o_arg}}</p>
+                                    <p>Maximum bicluster number: {{$o_arg}}</p>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6">
-                                    <p>Overlap rate: {{$f_arg}}</p>
+                                    <p>Bicluster overlap rate: {{$f_arg}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
-                                    <p>CTS-regulon prediction using {{$label_use_sc3}}</p>
+                                    <p>Regulon prediction using {{$label_use_sc3}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Upstream promoter region: {{$promoter_arg}}</p>
@@ -1480,16 +1495,16 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                     <p>Enable dual strategy: {{$is_c}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
-                                    <p for="reportsList">Minimal cell width: {{$k_arg}}</p>
+                                    <p for="reportsList">Minimum cell number: {{$k_arg}}</p>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6">
-                                    <p>Max biclusters: {{$o_arg}}</p>
+                                    <p>Maximum bicluster number: {{$o_arg}}</p>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6">
-                                    <p>Overlap rate: {{$f_arg}}</p>
+                                    <p>Bicluster overlap rate: {{$f_arg}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
-                                    <p>CTS-regulon prediction using {{$label_use_sc3}}</p>
+                                    <p>Regulon prediction using {{$label_use_sc3}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Upstream promoter region: {{$promoter_arg}}</p>
