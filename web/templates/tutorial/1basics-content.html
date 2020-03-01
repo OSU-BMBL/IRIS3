@@ -71,9 +71,9 @@
                 <p>The pre-processed data from <em>Step I</em> is analyzed by our in-house biclustering tool, QUBIC2, for gene module detection. Each of the identified bicluster represents a group of co-expressed genes under a specific subset of cells.</p>
                 <p>Two unique features are addressed in QUBIC: <strong>(1)</strong> it can identify all statistically significant biclusters including biclusters with the so-called 'scaling patterns', a problem considered to be rather challenging; and <strong>(2)</strong>                    the algorithm solves such general biclustering problems very efficiently, capable of solving biclustering problems with tens-of-thousands of genes under to thousands of conditions in a few minutes.</p>
                 <p><strong>Three major parameters control the output biclusters in IRIS3:</strong></p>
-                <p><strong><em>a. Overlap level</em></strong> controls the level (from 0 to 1) of overlaps between the to-be-identified biclusters. 0 means no overlap and 1 indicates complete overlap. The default value is 0.5.</p>
-                <p><strong><em>b. Max biclusters</em></strong> control the maximum number of to-be-identified biclusters. The default value is 500. A smaller value may sufficiently decrease the running time but may identify less regulons.</p>
-                <p><strong><em>c. Minimal cell width</em></strong> the minimal column width of a cell block. The default is 20.</p>
+                <p><strong><em>a. Bicluster overlap rate</em></strong> controls the level (from 0 to 1) of overlaps between the to-be-identified biclusters. 0 means no overlap and 1 indicates complete overlap. The default value is 0.5.</p>
+                <p><strong><em>b. Maximum bicluster number</em></strong> control the maximum number of to-be-identified biclusters. The default value is 500. A smaller value may sufficiently decrease the running time but may identify less regulons.</p>
+                <p><strong><em>c. Minimum cell number</em></strong> The minimum column width of the bicluster block. The default is 20.</p>
 
             </div>
             <div class="clear"></div>

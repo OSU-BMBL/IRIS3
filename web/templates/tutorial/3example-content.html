@@ -12,8 +12,8 @@
         <div class="answer">
             <br>
             <p>We applied IRIS3 on a single-cell RNA-seq dataset consisting of 3005 cells from Mouse lung epithelial from
-                <a href="https://science.sciencemag.org/content/347/6226/1138"><b>Zeisel, et al.</b></a>. Default parameters (k=20, o=500, f=0.7) were used for QUBIC biclustering; Dual strategy was enabled, imputation was disabled. cell types were predicted
-                using Seurat and evaluated by comparing with the ground-truth labels provided by the paper; CTSRs were inferenced using DMINDA and MEME based on the clustering result.</p>
+                <a href="https://science.sciencemag.org/content/347/6226/1138"><b>Zeisel, et al.</b></a>. Default parameters (k=20, o=500, f=0.7) were used for QUBIC biclustering; Dual strategy was enabled, imputation was disabled. Cell clusters were predicted
+                using Seurat and evaluated by comparing with the ground-truth labels provided by the paper; regulons were inferenced using DMINDA and MEME based on the clustering result.</p>
 
             <p>This tutorial will guide you through the output page of IRIS3 in details.</p>
 
@@ -21,68 +21,55 @@
         <div class="clear"></div>
 
         <div class="qa">
-            <h3 class="question">General results</h3>
+            <h3 class="question">Clusters and general information</h3>
             <div class="answer">
-                <p><img src="./assets/img/tutorial/3.1.1.png" alt=""></p>
+                <p><img src="./assets/img/tutorial/3.1.1.jpg" alt="" style="width:100%"></p>
+				
                 <ul>
-                    <li>Click to download a zip file containing the result files. See <a href="https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ&amp;q=12"><strong>here</strong></a> for details.</li>
-                    <li>including: species, the number of original cells and genes, the number of removed (filtered) cells and genes as well as their filtering ratio, the number of provided cell type by users, the number of predicted cell types, the total
-                        number of predicted biclusters (gene modules), and the total number of identified CTSRs.</li>
+                    
+                    <li>The clustering result includes two parts:  an interactive UMAP and a table. A floating window will show up when move your mouse on cells, indicating the belonging cell cluster and cell name. The table shows the overall cell number and regulon number in each cluster.</li>
                 </ul>
-
-            </div>
-            <div class="clear"></div>
-        </div>
-        <div class="qa">
-            <h3 class="question">Cell type prediction results</h3>
-            <div class="answer">
-                <p><img src="./assets/img/tutorial/3.1.2.png" alt=""></p>
-                <ul>
-                    <li>A table showing the <a href="https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ&amp;q=3"><strong>four Rand indexes</strong></a> for the predicted cell type evaluations.</li>
+				<div class="clear"></div>
+				<p><img src="./assets/img/tutorial/3.1.2.jpg" alt="" style="width:100%"></p>
+				<div class="row"></div>
+				<br/>
+				<b>A. clustering evaluation: </b>
+				<ul>
+                    <li> A table showing the four Rand indexes for the predicted cell type evaluations.
+					</li>
                     <li>Four index scores are used to evaluate the closeness of the predicted</li>
-                    <li>cell type to the benchmark. Two UMAPs show the benchmark cell label and predicted cell clusters, respectively.</li>
+                    <li>Two UMAP plots show the benchmark cell label and predicted cell clusters, respectively.</li>
                     <li>A trajectory plot is generated from Slingshot integrated in IRIS3.</li>
-                    <li>A bar plot showing the silhouette score that measures how similar each cell is to its type compared to other clusters.</li>
-                    <li>A Sankey plot showing the convergence and divergence of a two cell groups (ground truth versus Seurat prediction). The width of the arrows shown proportionally to the flow quantity.</li>
+					<li>A bar plot showing the silhouette score that measures how similar each cell is to its type compared to other clusters.</li>
+					<li>A Sankey plot showing the convergence and divergence of a two cell groups (ground truth versus Seurat prediction). The width of the arrows shown proportionally to the flow quantity.</li>
+					<li>Note: if ground-truth cell labels are not provided by the user, the Score table and Sankey plot will be omitted.</li>
                 </ul>
-                <p><strong>Note:</strong> if ground-truth cell labels are not provided by the user, the Score table and Sankey plot will be omitted.</p>
-
-
+				<b>B. marker genes:</b>
+				<ul>
+                    <li> The top 100 marker genes in each cluster generated from the differential expression analysis using Seurat.
+					</li>
+                </ul>
+				<b>C. job information:</b>
+				<ul>
+                    <li> Listing pre-processing information and job settings.
+					</li>
+                </ul>
             </div>
             <div class="clear"></div>
         </div>
-
         <div class="qa">
-            <h3 class="question">Marker genes results</h3>
+            <h3 class="question">Regulon heatmap and RSS distribution</h3>
             <div class="answer">
-                <img src="./assets/img/tutorial/3.1.3.png">
-                <p>A complete marker gene list generated from differential expression analysis using Seurat.</p>
-                <br>
-            </div>
-            <div class="clear"></div>
-        </div>
-
-        <div class="qa">
-            <h3 class="question">Job settings</h3>
-            <div class="answer">
-                <img src="./assets/img/tutorial/3.1.4.png">
-                <p>A table showing all settings and file names of this Job.</p>
-                <br>
-            </div>
-            <div class="clear"></div>
-        </div>
-
-        <div class="qa">
-            <h3 class="question">CTSR Heatmaps in a cell type</h3>
-            <div class="answer">
-                <img src="./assets/img/tutorial/3.2.1.png" style="width:100%">
-                <p>Following the general results, a CTS cell-gene-regulon heatmap is displayed to cover the gene distribution of CTSRs in each cell type and corresponding expression level across all cells. </p>
+                <img src="./assets/img/tutorial/3.1.3.jpg" style="width:100%">
+				<br/>
+				<div class="row"></div>
+                <p>Following the general results, a cell-gene-regulon heatmap is displayed to cover the gene distribution of regulons in each cell type and corresponding expression level across all cells. </p>
                 <p>To explore details about Clustergrammer, please read the <a href="https://clustergrammer.readthedocs.io/"><b>documentation</b></a>.
                     <br>
                     <ul>
-                        <li>(A) The heatmap, empowered by Clustergrammer, showcased the expression pattern of genes from the top ten CTSRs in the corresponding cell type. Users can rearrange the columns and rows by grouping genes in one CTSR or cells in a
-                            cell type. Genes included in a CTSR are labeled as green. The genes can be sorted by each CTSR by double-clicking the CTSR name. Due to the space limit, at most 15 CTSRs are shown in the figure based on the <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#4FAQ&q=7"><b>rank of CTSRs</b></a></li>
-                        <li>(B) The scatter plot shows the distribution of RSS in cell type 1. The top five CTSRs are highlighted with TF names.</li>
+                        <li>(A) The heatmap, empowered by Clustergrammer, showcased the expression pattern of genes from the top ten regulons in the corresponding cell type. Users can rearrange the columns and rows by grouping genes in one regulon or cells in a
+                            cell type. Genes included in a regulon are labeled as green. The genes can be sorted by each regulon by double-clicking the regulon name. Due to the space limit, at most 10 regulons are shown in the figure based on the <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#4FAQ&q=7"><b>rank of regulons</b></a></li>
+                        <li>(B) The scatter plot shows the distribution of RSS in cell type 1. The top five regulons are highlighted with TF names.</li>
                     </ul>
 
             </div>
@@ -90,19 +77,35 @@
         </div>
 
         <div class="qa">
-            <h3 class="question">Detailed result of CTSRs</h3>
+            <h3 class="question">Regulon results in detail</h3>
             <div class="answer">
-                <img src="./assets/img/tutorial/3.3.1.png" style="width:100%">
-                <p>(1) RSS, empirical p-value, and number of genes in the CTSR.<br> (2) Stars indicate marker genes identified from the differential expression analysis.<br> (3) Gene symbols and link to the GeneCards (Human) or the Mouse Genome Informatics
-                    (MGI) website.<br> (4) Corresponding gene Ensembl ID and link to the website.<br> (5) Gene expression UMAP and comparison to the cell types.<br> (6) The corresponding TF with a corresponding link to HOCOMOCO database. (7) CTSRs in
-                    other cell types that regulated by the same TF.<br> (8) Detailed motif finding information.<br> (9) (10) A Clustergrammer heatmap shows the expression value of all genes in current CTSR and cell type.<br> (11) EnrichR link for gene
-                    enrichment analysis of the CTSR.<br> (12) ATAC peak enrichment test.<br> (13) additional analysis to find genes in other CTSRs may in the same topologically associated regions as the current CTSR genes.<br> (14) The regulon activity
-                    UMAP and comparison to the cell types.<br> (15) Trajectory analysis colored by cell type and CTSR activity, respectively.</p>
+				<img src="./assets/img/tutorial/3.1.4.jpg" style="width:100%">
+				<br/>
+				<div class="row"></div>
+                <ol>
+				<li>Each regulon is named by the cell cluster index and regulon number. A regulon is a cell-type-specific regulon (CTSR) if the p-value of regulon specificity score (RSS) is less than 0.05.  </li>
+				<li>Stars indicate marker genes, that is, the differential expressed gene, identified in each cluster using Seurat. </li>
+				<li>Gene symbols and link to the GeneCards (Human) or the Mouse Genome Informatics (MGI) website. </li>
+				<li>Corresponding gene Ensembl ID and link to the website. </li>
+				<li>Gene expression UMAP and comparison to the cell types. </li>
+				<li>The corresponding TF with a corresponding link to HOCOMOCO database.  </li>
+				<li>Detailed motif finding results from including positions, sequences, position weight matrix, etc. </li>
+				<li>Motif details linking to the TOMTOM database. </li>
+				<li>A Clustergrammer heatmap showing the expression value of all genes Of this regulon and cell type. </li>
+				<li>EnrichR link to the enrichment analysis of this regulon.  </li>
+				<li>Bulk ATAC peak enrichment test. <a href="https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ&q=7">See details here.</a> </li>
+				<li>Coverage of regulon genes and the topologically associated regions. <a href="https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ&q=8">See details here.</a> </li>
+				<li>The regulon activity UMAP and comparison to the cell types. </li>
+				<li>Trajectory analysis colored by cell type and regulon activity, respectively. </li>
+				</ol>
 
 
             </div>
             <div class="clear"></div>
         </div>
+
+
+
     </div>
 </body>
 

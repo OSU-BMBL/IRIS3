@@ -963,7 +963,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 														</td></tr>
 														<tr><td class="motif-table">
 																				<div class="row">
-																				<div class="col-md-3"><a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" class="motif-text" target="_blank">{{$tomtom_result.$motif_num_jaspar[0][1]|regex_replace:"/_.+/":""}}</a>
+																				<div class="col-md-3"><label class="motif-text">TF: </label><a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" class="motif-text" target="_blank">{{$tomtom_result.$motif_num_jaspar[0][1]|regex_replace:"/_.+/":""}}</a>
 																				<a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" target="_blank"><img class="motif-logo lozad " data-src="http://hocomoco11.autosome.ru/final_bundle/hocomoco11/full/{{$main_species|upper}}/mono/logo_large/{{$tomtom_result.$motif_num_jaspar[0][1]}}_direct.png"/></a><p class="motif-score">p-value: {{$tomtom_result.$motif_num_jaspar[0][3]|string_format:"%.2e"}}</p><p class="motif-score">e-value: {{$tomtom_result.$motif_num_jaspar[0][4]|string_format:"%.2e"}}</p><p class="motif-score">q-value: {{$tomtom_result.$motif_num_jaspar[0][5]|string_format:"%.2e"}}</p></div>
 																					
 									<div class="col-md-9"> 
@@ -1115,7 +1115,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 														</td></tr>
 														<tr><td class="motif-table">
 																				<div class="row">
-																				<div class="col-md-3"><a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" class="motif-text" target="_blank">{{$tomtom_result.$motif_num_jaspar[0][1]|regex_replace:"/_.+/":""}}</a>
+																				<div class="col-md-3"><label class="motif-text">TF: </label><a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" class="motif-text" target="_blank">{{$tomtom_result.$motif_num_jaspar[0][1]|regex_replace:"/_.+/":""}}</a>
 																				<a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" target="_blank"><img class="motif-logo lozad " data-src="http://hocomoco11.autosome.ru/final_bundle/hocomoco11/full/{{$main_species|upper}}/mono/logo_large/{{$tomtom_result.$motif_num_jaspar[0][1]}}_direct.png"/></a><p class="motif-score">p-value: {{$tomtom_result.$motif_num_jaspar[0][3]|string_format:"%.2e"}}</p><p class="motif-score">e-value: {{$tomtom_result.$motif_num_jaspar[0][4]|string_format:"%.2e"}}</p><p class="motif-score">q-value: {{$tomtom_result.$motif_num_jaspar[0][5]|string_format:"%.2e"}}</p></div>
 																					
 									<div class="col-md-9"> 
@@ -1220,6 +1220,9 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 					
 					<strong>Your job settings:</strong><br>
                             <div class="col-md-12 col-sm-12">
+								<div class="form-group col-md-6 col-sm-6">
+                                    <p>Species: {{$input_species}}</p>
+                                </div>
                                 <div class="form-group col-md-6 col-sm-6">
                                     <p for="reportsList">Enable imputation: {{$is_imputation}}</p>
                                 </div>
@@ -1268,6 +1271,9 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 					
 					<strong>Your job settings:</strong><br>
                             <div class="col-md-12 col-sm-12">
+								<div class="form-group col-md-6 col-sm-6">
+                                    <p>Species: {{$input_species}}</p>
+                                </div>
                                 <div class="form-group col-md-6 col-sm-6">
                                     <p for="reportsList">Enable imputation: {{$is_imputation}}</p>
                                 </div>
@@ -1316,6 +1322,9 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 					
 					<strong>Your job settings:</strong><br>
                             <div class="col-md-12 col-sm-12">
+								<div class="form-group col-md-6 col-sm-6">
+                                    <p>Species: {{$input_species}}</p>
+                                </div>
                                 <div class="form-group col-md-6 col-sm-6">
                                     <p for="reportsList">Enable imputation: {{$is_imputation}}</p>
                                 </div>
@@ -1364,6 +1373,9 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 							
 							<strong>Job settings:</strong><br>
                             <div class="col-md-12 col-sm-12">
+							<div class="form-group col-md-6 col-sm-6">
+                                    <p for="reportsList">Species: {{$input_species}}</p>
+                                </div>
                                 <div class="form-group col-md-6 col-sm-6">
                                     <p for="reportsList">Enable imputation: {{$is_imputation}}</p>
                                 </div>

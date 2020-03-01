@@ -32,7 +32,7 @@
     <link href="assets/css/style.css" rel="stylesheet">
     <link href="assets/css/responsive.css" rel="stylesheet">
     <script src="assets/js/modernizr-2.8.3.min.js"></script>
-
+    <script src="assets/js/pace.js"></script>
 	</head>
 
     <a href="#scroolup" class="scrolltotop"><i class="fa fa-long-arrow-up"></i></a>

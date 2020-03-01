@@ -74,7 +74,13 @@ if(window.location.hash == ""){
 						<span class="section">Citations</span>
 					</a>
 					<div class="submenu" id="submenu-5citation"></div>
-				</li>			
+				</li>	
+				<li>
+					<a href="#6test_data">
+						<span class="section">Tested data</span>
+					</a>
+					<div class="submenu" id="submenu-6test_data"></div>
+				</li>				
 			</ul>
 			
 			

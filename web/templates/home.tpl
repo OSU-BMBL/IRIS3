@@ -30,9 +30,9 @@
                   Single-cell RNA-Seq
                 </h3>
                 <div class="welcome-text">
-                  <a href="assets/img/overview.png" target="_blank"
+                  <a href="assets/img/overview.jpg" target="_blank"
                     ><img
-                      src="assets/img/overview.png"
+                      src="assets/img/overview.jpg"
                       style="height:auto;margin:auto;display:block"
                   /></a>
                 </div>
@@ -117,11 +117,8 @@
                             <i class="fa fa-rocket"></i>
                         </div>-->
                 <h3 class="box-title">News</h3>
-                <p>Posted: 11/10/2019</p>
-                <p>
-                  We are excited to present you the IRIS3 server 1.0! Please
-                  feel free to contact us if you encounter any issues.
-                </p>
+                <p>Posted: 02/29/2020</p>
+                <p>We updated our <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics" target="_blank">Tutorial</a> and <a href="https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ" target="_blank">FAQ</a>, the new version contains more detailed steps and descriptions.</p>
                 <p>
                   <a
                     class="enroll-button"
