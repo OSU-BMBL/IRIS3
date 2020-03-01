@@ -2,28 +2,28 @@
 
 
 args <- commandArgs(TRUE)
-# setwd("D:/Users/flyku/Documents/CeRIS-data/test_missing_heatmap")
+# setwd("/var/www/html/iris3/data/20200224113319")
 # srcDir <- getwd()
 # tad_dir <- 'D:/Users/flyku/Documents/CeRIS-data/tad/mm10'
-# regulon <- 'CT1S-R2'
-# jobid <- '20190404232115'
-# species <- 'Human'
-srcDir <- args[1] # /var/www/html/CeRIS/data/20190404232115
-regulon <- args[2] # CT3S-R5
+# regulon <- 'CT1-R2'
+# jobid <- '20200224113319'
+# species <- 'Mouse'
+srcDir <- args[1] # /var/www/html/iris3/data/20200224113319
+regulon <- args[2] # CT3-R5
 species <- args[3] #Human, Mouse
 jobid <- args[4]
 setwd(srcDir)
 
 if (species == "Human") {
-  tad_dir <- '/var/www/html/CeRIS/program/db/tad/hg38'
+  tad_dir <- '/var/www/html/iris3/program/db/tad/hg38'
 } else if (species == "Mouse"){
-  tad_dir <- '/var/www/html/CeRIS/program/db/tad/mm10'
+  tad_dir <- '/var/www/html/iris3/program/db/tad/mm10'
 }
 # parse 'CT3S-R5' to 'CT', '3', '5'
 #regulon_ct <- strsplit(regulon,"S-R")[[1]][1]
 #regulon_ct <- gsub( "[0-9].*$", "", regulon )
 # regulon= 'modul1-R2'
-# regulon= 'CT1S-R2'
+# regulon= 'CT1-R2'
 regulon_type <- gsub( "[0-9].*$", "", regulon)
 regulon_type_id <-gsub( "S.*$", "", regulon)
 regulon_type_id <-gsub( "-.*$", "", regulon_type_id)
@@ -57,16 +57,24 @@ unique_gene_list_in_type <- as.character(unique_gene_list_in_type[!duplicated(un
 #   3. regulon_gene_list
 
 #this_tad_file <- tad_files[1]
+
 get_result_gene_list <- function(this_tad_file){
   tad_file_connection <- file(this_tad_file)
   tad_gene_list <- strsplit(readLines(tad_file_connection), " ")
   close(tad_file_connection)
-  regulon_tad_overlap_idx <- which(lapply(lapply(tad_gene_list, match, regulon_gene_list), any) == T)
+  #regulon_tad_overlap_idx <- which(lapply(lapply(tad_gene_list, match, t1), any) == T)
+  
+  regulon_tad_overlap_idx <- vector()
+  for (i in 1:length(tad_gene_list)) {
+    if(any(tad_gene_list[[i]] %in% regulon_gene_list)){
+      regulon_tad_overlap_idx <- c(regulon_tad_overlap_idx,i)
+    }
+  }
   result_gene <- unlist(tad_gene_list[regulon_tad_overlap_idx])
   result_gene <- result_gene[!result_gene %in% regulon_gene_list]
-  result_gene <- unique_gene_list_in_type[unique_gene_list_in_type %in% result_gene]
   #tst<- result_gene[result_gene %in% unique_gene_list_in_type]
   result_gene <- as.character(gene_id_name[gene_id_name[,1] %in% result_gene,2])
+  result_gene <- unique_gene_list_in_type[unique_gene_list_in_type %in% result_gene]
   tad_file_short_name <- gsub(".*mm10/","",this_tad_file)
   tad_file_short_name <- gsub(".*hg38/","",tad_file_short_name)
   tad_file_short_name <- gsub(".txt.bed.txt","",tad_file_short_name)
