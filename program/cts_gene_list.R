@@ -1,3 +1,4 @@
+options(stringsAsFactors = FALSE)
 #Generate gene list by 
 #1. raw expression file or jobid_filtered_expression.txt
 #2. jobid_blocks.conds.txt
@@ -49,22 +50,22 @@ delim_gene_module <- args[5] # gene module file delimter
 
 promoter_len <- as.numeric(promoter_len)
 if (!is.na(args[5])) {
-if(delim_gene_module == 'tab'){
-  delim_gene_module <- '\t'
-}
-if(delim_gene_module == 'space'){
-  delim_gene_module <- ' '
-}
+  if(delim_gene_module == 'tab'){
+    delim_gene_module <- '\t'
+  }
+  if(delim_gene_module == 'space'){
+    delim_gene_module <- ' '
+  }
 }
 setwd(wd)
 getwd()
 expFile <- paste(jobid,"_filtered_expression.txt",sep="")
 label_file <- paste(jobid,"_cell_label.txt",sep = "")
 
-# jobid <-20191107110621
-# wd <- paste("/var/www/html/CeRIS/data/",jobid,sep="")
-# gene_module_file <- 'Yan_2013_example_gene_module.csv'
-# delim_gene_module <- 'tab'
+# jobid <-20191216203506
+# wd <- paste("/var/www/html/iris3/data/",jobid,sep="")
+# gene_module_file <- 'iris3_example_gene_module.csv'
+# delim_gene_module <- ','
 # promoter_len <- 250
 conds_file_handle <- file(paste(jobid,"_blocks.conds.txt",sep = ""),"r")
 conds_file <- readLines(conds_file_handle)
@@ -242,71 +243,74 @@ write.table(gene_df,paste(jobid,"_gene_id_name.txt",sep=""),sep = "\t",quote = F
 
 ######## Generate cell type specific gene module and fasta sequences
 for (j in 1:count_cluster) {
-pvalue_thres <- 0.05
-uniq_li <- sapply(pv, get_bic_in_ct,num=j)
-#uniq_bic <- gene_file[which(uniq_li==1),]%>%
-#  t%>%
-#  as.vector()%>%
-#  unique()%>%
-#  write.table(.,paste(jobid,"_CT_",j,"_bic_unique.txt",sep = ""),sep="\t",row.names = F,col.names = F,quote = F)
-
-names(uniq_li) <- seq_along(uniq_li) #preserve index of the non-null values
-uniq_li <- compact(unlist(uniq_li))
-while (is.null(uniq_li)) { # if result is null, increase pvalue to make at least have bicusters in cell type
-  pvalue_thres <- pvalue_thres  + 0.01
+  pvalue_thres <- 0.05
   uniq_li <- sapply(pv, get_bic_in_ct,num=j)
+  #uniq_bic <- gene_file[which(uniq_li==1),]%>%
+  #  t%>%
+  #  as.vector()%>%
+  #  unique()%>%
+  #  write.table(.,paste(jobid,"_CT_",j,"_bic_unique.txt",sep = ""),sep="\t",row.names = F,col.names = F,quote = F)
+  
   names(uniq_li) <- seq_along(uniq_li) #preserve index of the non-null values
   uniq_li <- compact(unlist(uniq_li))
-}
-
-#uniq_bic <- gene_file[names(uniq_li),]%>%
-#  t%>%
-#  as.vector()%>%
-#  table()%>%
-#  as.data.frame()%>%
-#  write.table(.,paste(jobid,"_CT_",j,"_bic_unique.txt",sep = ""),sep="\t",row.names = F,col.names = F,quote = F)
-
-#pvalue_df <- unlist(sapply(pv, get_pvalue_df,num=j))
-#pvalue_thres <- as.numeric(quantile(pvalue_df[pvalue_df <1], 0.05)) # 0.05 for 5% quantile )
-
-li <- sapply(pv, get_bic_in_ct,num=j)
-names(li) <- seq_along(li) #preserve index of the non-null values
-li <- compact(unlist(li))
-
-gene_bic <- gene_file[as.numeric(names(li))]
-
-#tmp_gene_bic <- c(rep(NA,100))
-#test1 <- sapply(gene_bic, function(x){
-#  tmp_gene_bic <- cbind(tmp_gene_bic,x)
-#  return(tmp_gene_bic)
-#})
-#
-#test2 <- data.frame(as.matrix(test1))
-gene_bic <- lapply(gene_bic, function(x) {gsub("_.", "", x)})
-
-
-if(length(gene_bic) > 0) {
-  names(gene_bic) <- paste0("bic",names(li))
-  #gene_name <- read.table(paste(jobid,"_gene_name.txt",sep = ""),header = F,stringsAsFactors = F)
-  #get_gene_name_overlap <- function(df){
-  #  match <- gene_name$V1 %in% nas.character(df)
-  #  return (match)
-  #}
-  #gene_overlap <- gene_name
-  #for (i in 1:ncol(gene_bic)) {
-  #  tmp_match <- gene_name$V1%in%as.character(gene_bic[,i])
-  #  gene_overlap[,i+1] <- ifelse(tmp_match,1,0)
-  #}
-  #ncol(gene_overlap)
-  #colnames(gene_overlap) <- c("geneid",colnames(gene_bic))
-  #gene_overlap[,"weight"] <- rowSums(as.data.frame(gene_overlap[,-1]))
-  #total_bic <- total_bic + ncol(gene_bic) #total gene modules
-  #write.table(gene_bic,paste(jobid,"_CT_",j,"_bic.txt",sep = ""),sep="\t",row.names = F,col.names = T,na = "",quote = F)
-  #write.table(gene_overlap,paste("gene_overlap",j,".txt",sep = ""),row.names = F,col.names = T,quote = F)
-}
-new_dir <- paste(wd,"/",jobid,"_CT_",j,"_bic",sep="")
-dir.create(new_dir, showWarnings = FALSE)
-
+  while (is.null(uniq_li)) { # if result is null, increase pvalue to make at least have bicusters in cell type
+    pvalue_thres <- pvalue_thres  + 0.01
+    uniq_li <- sapply(pv, get_bic_in_ct,num=j)
+    names(uniq_li) <- seq_along(uniq_li) #preserve index of the non-null values
+    uniq_li <- compact(unlist(uniq_li))
+	if(pvalue_thres > 1){
+      break
+    }
+  }
+  
+  #uniq_bic <- gene_file[names(uniq_li),]%>%
+  #  t%>%
+  #  as.vector()%>%
+  #  table()%>%
+  #  as.data.frame()%>%
+  #  write.table(.,paste(jobid,"_CT_",j,"_bic_unique.txt",sep = ""),sep="\t",row.names = F,col.names = F,quote = F)
+  
+  #pvalue_df <- unlist(sapply(pv, get_pvalue_df,num=j))
+  #pvalue_thres <- as.numeric(quantile(pvalue_df[pvalue_df <1], 0.05)) # 0.05 for 5% quantile )
+  
+  li <- sapply(pv, get_bic_in_ct,num=j)
+  names(li) <- seq_along(li) #preserve index of the non-null values
+  li <- compact(unlist(li))
+  
+  gene_bic <- gene_file[as.numeric(names(li))]
+  
+  #tmp_gene_bic <- c(rep(NA,100))
+  #test1 <- sapply(gene_bic, function(x){
+  #  tmp_gene_bic <- cbind(tmp_gene_bic,x)
+  #  return(tmp_gene_bic)
+  #})
+  #
+  #test2 <- data.frame(as.matrix(test1))
+  gene_bic <- lapply(gene_bic, function(x) {gsub("_.", "", x)})
+  
+  
+  if(length(gene_bic) > 0) {
+    names(gene_bic) <- paste0("bic",names(li))
+    #gene_name <- read.table(paste(jobid,"_gene_name.txt",sep = ""),header = F,stringsAsFactors = F)
+    #get_gene_name_overlap <- function(df){
+    #  match <- gene_name$V1 %in% nas.character(df)
+    #  return (match)
+    #}
+    #gene_overlap <- gene_name
+    #for (i in 1:ncol(gene_bic)) {
+    #  tmp_match <- gene_name$V1%in%as.character(gene_bic[,i])
+    #  gene_overlap[,i+1] <- ifelse(tmp_match,1,0)
+    #}
+    #ncol(gene_overlap)
+    #colnames(gene_overlap) <- c("geneid",colnames(gene_bic))
+    #gene_overlap[,"weight"] <- rowSums(as.data.frame(gene_overlap[,-1]))
+    #total_bic <- total_bic + ncol(gene_bic) #total gene modules
+    #write.table(gene_bic,paste(jobid,"_CT_",j,"_bic.txt",sep = ""),sep="\t",row.names = F,col.names = T,na = "",quote = F)
+    #write.table(gene_overlap,paste("gene_overlap",j,".txt",sep = ""),row.names = F,col.names = T,quote = F)
+  }
+  new_dir <- paste(wd,"/",jobid,"_CT_",j,"_bic",sep="")
+  dir.create(new_dir, showWarnings = FALSE)
+  
   for (k in 1:length(gene_bic)) {
     this_name <- names(gene_bic[k])
     this_bic_idx <- paste("bic",k,sep = "")
@@ -353,7 +357,7 @@ write(paste("total_bic,",total_bic,sep=""),file=paste(jobid,"_info.txt",sep=""),
 
 ##if exist gene module file, save gene list to jobid_module_#.txt
 if(nchar(gene_module_file) > 1 && !is.na(gene_module_file)){
-  gene_module <- read.delim(gene_module_file,header = F,sep = delim_gene_module)
+  gene_module <- read.delim(gene_module_file,header = F,sep = delim_gene_module,stringsAsFactors = F)
   for (i in 1:ncol(gene_module)) {
     #write.table(gene_module[,i],paste(jobid,"_module_",i,"_bic.txt",sep = ""),quote = F,col.names = F,row.names = F)
     new_dir <- paste(wd,"/",jobid,"_module_",i,"_bic",sep="")
