@@ -15,9 +15,9 @@ args <- commandArgs(TRUE)
 wd <- args[1]
 jobid <- args[2]
 label_use_sc3 <- args[3]
-#setwd("/var/www/html/iris3/data/20191026133546")
+#setwd("/var/www/html/iris3/data/20200301195659")
 #wd <- getwd()
-#jobid <-20191026133546
+#jobid <-20200301195659
 #label_use_sc3 <- 0
 setwd(wd)
 getwd()
@@ -240,6 +240,10 @@ for(i in 1: length(unique(label_data[,2]))){
   }
   
   write.table(file_heat_matrix,paste("heatmap/CT",i,".heatmap.txt",sep = ""),row.names = F,quote = F,sep = "\t", col.names=T)
+  # if # of lines=13, clustergrammer fails. add a line break
+  if(nrow(file_heat_matrix) == 13) {
+    write('\n',file=paste("heatmap/CT",i,".heatmap.txt",sep = ""),append=TRUE)
+  }
   
 }
 #i=j=1
@@ -305,6 +309,10 @@ if ((length(all_regulon)-total_ct) > 0) {
     }
     
     write.table(file_heat_matrix,paste("heatmap/module",i,".heatmap.txt",sep = ""),row.names = F,quote = F,sep = "\t", col.names=T)
+    # if # of lines=13, clustergrammer fails. add a line break
+    if(nrow(file_heat_matrix) == 13) {
+      write('\n',file=paste("heatmap/module",i,".heatmap.txt",sep = ""),append=TRUE)
+    }
   }
 }
 
