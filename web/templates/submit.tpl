@@ -79,7 +79,7 @@ function addPreviewTable(response, metadata = true, type) {
 
   // Get row number
   n = metadata ? 6 : response['index'].length
-
+  
   switch (upload_type) {
     case 'text':
       try {
@@ -87,7 +87,7 @@ function addPreviewTable(response, metadata = true, type) {
         for (i = 0; i < n; i++) {
           var $tr = $('<tr>').append(
             $('<td>', {
-              class: 'bold text-center px-2 py-1'
+              class: 'bold text-center px-2 py-0'
             }).html(response['index'][i])
           )
           $.each(response['data'][i], function(i, val) {
@@ -105,7 +105,7 @@ function addPreviewTable(response, metadata = true, type) {
       } catch (err) {
         $('#preview_' + type).append(
           $('<label>', {
-            class: 'px-2 py-1'
+            class: 'px-2 py-0'
           }).html(
             '<span class="highlight">ERROR: ' +
               err.message +
@@ -113,54 +113,85 @@ function addPreviewTable(response, metadata = true, type) {
           )
         )
       }
-      if (response['cell_num'][0] < 40 && type == 'exp') {
-        $('#preview_' + type).append(
-          $('<label>', {
-            class: 'px-2 py-1'
-          }).html(
-            '<span class="bold highlight">Note: Your dataset has (' +
-              response['cell_num'][0] +
-              ') cells, due to the small number of cells, k parameter will be automatically adjusted to avoid possible errors, but errors may still occur on IRIS3. </span></label>'
-          )
-        )
-        document.getElementById('k_arg').value = 5
-      }
-      var check_cell_name_start_with_number = function(array) {
-        for (var i = 0; i < array.length; i += 1) {
+     var check_cell_name_start_with_number = false
+        for (var i = 0; i < response['columns'][0].length; i += 1) {
           // Use the index i here
-          console.log()
-          if ('0123456789'.indexOf(array[i].charAt(0)) !== -1) {
-            return true
+          if ('0123456789'.indexOf(response['columns'][0][i].charAt(0)) !== -1) {
+            check_cell_name_start_with_number = true
+          }
+        }
+
+      var hasNegativeValue = false 
+      for (var i_negative = 0; i_negative < response['data'].length; i_negative += 1) {
+        // Use the index i here
+        for(var j_negative = 0; j_negative < response['data'][i_negative].length; j_negative += 1) {
+            if (Math.sign(parseFloat(response['data'][i_negative][j_negative])) === -1) {
+              hasNegativeValue = true
           }
         }
       }
+      
+      if (response['cell_num'][0] < 100 && type == 'exp') {
+        $('#preview_' + type).append(
+          $('<div>', {
+            class: 'recommend_small_k px-2 py-0'
+          }).html(
+            '<span class="bold highlight">NOTE: Your dataset has (' +
+              response['cell_num'][0] +
+              ') cells. It is recommended to set a small "Minimum cell number" in the advanced options section, e.g. Minimum cell number=5 for about 100 cells, otherwise errors may occur. </span></div>'
+          )
+        )
+        //document.getElementById('k_arg').value = 5
+      }
+      
+      
+      
       if (
-        check_cell_name_start_with_number(response['columns'][0]) &&
+        check_cell_name_start_with_number &&
         type == 'exp'
       ) {
         $('#preview_' + type).append(
-          $('<label>', {
-            class: 'px-2 py-1'
+          $('<div>', {
+            class: 'rename_cell px-2 py-0'
           }).html(
-            '<span class="bold highlight">NOTE: Some of the cell names in your dataset start with numeric value, IRIS3 will try to rename them in data pre-processing.  </span></label><br/>'
+            '<span class="bold highlight">NOTE: Some of the cell names in your dataset start with numeric value, IRIS3 will try to rename them in data pre-processing.  </span></div><br/>'
           )
         )
       }
+      
+      if (
+        hasNegativeValue && 
+        type == 'exp'
+      ) {
+        $('#preview_' + type).remove('.rename_cell')
+        $('#preview_' + type).remove('.recommend_small_k')
+        $('#preview_' + type).append(
+          $('<div>', {
+            class: 'px-2 py-0'
+          }).html(
+            '<span class="bold highlight" style="color:red">ERROR: Your dataset contains negative value, Seurat does not support this type of Single-Cell RNA-seq data, thus the IRIS3 submit button has been disabled. </span></div><div class="row"></div>'
+          )
+        )
+        $('#hint_select_species').html(
+        '<span class="bold highlight" style="color:red">ERROR: Your dataset contains negative value, Seurat does not support this type of Single-Cell RNA-seq data, thus the IRIS3 submit button has been disabled. Refresh the page to re-submit your dataset.</span>')
+         $('#submit_btn').attr('disabled', true)
+      }
+
       break
     case 'hdf':
       $('#preview_' + type).append(
-        $('<label>', {
-          class: 'px-2 py-1'
+        $('<div>', {
+          class: 'px-2 py-0'
         }).html(
           '<br><span class="bold highlight">NOTE: Check advanced options for 10X parameter adjustment. ' +
-            '</span></label>'
+            '</span></div>'
         )
       )
       break
   }
   $('#preview_' + type).append(
-    $('<label>', {
-      class: 'px-2 py-1'
+    $('<div>', {
+      class: 'px-2 py-0'
     }).html(
       '<span class="bold highlight">NOTE: Your upload file type: ' +
         upload_type +
@@ -191,7 +222,7 @@ var addTable = function(dataset, type) {
           dataset['cell_num'][1] +
           ' cells</span> and <span class="highlight">' +
           dataset['gene_num'][0] +
-          ' genes</span>. Check that the preview is correct, select the species then click submit button or upload additional files in the advanced options.</label>'
+          ' genes</span>. Check that the preview is correct, select the species then click submit button or upload additional files in the advanced options. Refresh the page to re-submit your dataset.</label>'
       )
     )
   } else if (dataset['type'][0] == 'hdf') {
@@ -199,7 +230,7 @@ var addTable = function(dataset, type) {
       $('<label>', {
         class: 'px-2 py-1'
       }).html(
-        'You uploaded <span class="highlight">HDF format </span>gene expression file, select the species then click submit button or upload additional files in the advanced options.</label>'
+        'You uploaded <span class="highlight">HDF format </span>gene expression file, select the species then click submit button or upload additional files in the advanced options. Refresh the page to re-submit your dataset.</label>'
       )
     )
   }
@@ -241,7 +272,7 @@ $(document).ready(function() {
     sending: function(file, xhr, formData) {
       formData.append('filetype', 'dropzone_exp')
       $('#hint_select_species').html(
-        '<span class="bold highlight">Note: If submit button is still disabled after you uploaded dataset, try to deselect then select species again. </span>'
+        '<span class="bold highlight">NOTE: If submit button is still disabled after you uploaded dataset, try to deselect then select species again. </span>'
       )
     },
     success: function(file, response) {
@@ -350,7 +381,7 @@ $(document).ready(function() {
       dataType: 'json',
       success: function(response) {},
       error: function(e) {
-        console.log(e.message)
+        //console.log(e.message)
       }
     })
   })
@@ -426,12 +457,16 @@ $(document).ready(function() {
         }
 	})
 	});*/
+  
   $('select#species_arg').on('change', function(value) {
     var This = $(this)
     var selectedD = $(this).val()
-    console.log(selectedD)
+    
+
     if (selectedD && exp_file_status) {
-      $('#submit_btn').attr('disabled', false)
+      if($('#hint_select_species').children().attr('style') !== 'color:red'){
+        $('#submit_btn').attr('disabled', false)
+      }
     } else {
       $('#submit_btn').attr('disabled', true)
     }
