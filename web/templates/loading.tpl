@@ -35,12 +35,11 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 				dom: 'lBfrtip',
 				buttons: [
 				{
-				extend:'copy',
-				title: jobid+'_'+regulon_id+'_peak'
-				},
-				{
-				extend:'csv',
-				title: jobid+'_'+regulon_id+'_peak'
+				text:'Download',
+				title: jobid+'_'+regulon_id+'_peak',
+				action: function ( e, dt, button, config ) {
+        		window.open('data/'+jobid+'/atac/'+regulon_id+'.atac_overlap_result.txt')
+     		 } 
 				}
 				],
 				"ajax": "prepare_peak.php?jobid="+jobid+"&regulon_id="+regulon_id+"&species="+match_species+"&table="+table_content_id,
@@ -105,12 +104,11 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 				dom: 'lBfrtip',
 				buttons: [
 				{
-				extend:'copy',
-				title: jobid+'_'+regulon_id+'_TAD_covered_genes'
-				},
-				{
-				extend:'csv',
-				title: jobid+'_'+regulon_id+'_TAD_covered_genes'
+				text:'Download',
+				title: jobid+'_'+regulon_id+'_TAD_covered_genes',
+				action: function ( e, dt, button, config ) {
+        		window.open('data/'+jobid+'/tad/'+regulon_id+'.tad.txt')
+     		 } 
 				}
 				],
 				"ajax": "prepare_tad.php?jobid="+jobid+"&regulon_id="+regulon_id+"&species="+match_species+"&table="+table_content_id,
@@ -147,12 +145,11 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 				dom: 'lBfrtip',
 				buttons: [
 				{
-				extend:'copy',
-				title: jobid+'_'+regulon_id+'_TAD_covered_genes'
-				},
-				{
-				extend:'csv',
-				title: jobid+'_'+regulon_id+'_TAD_covered_genes'
+				text:'Download',
+				title: jobid+'_'+regulon_id+'_TAD_covered_genes',
+				action: function ( e, dt, button, config ) {
+        		window.open('data/'+jobid+'/tad/'+regulon_id+'.tad.txt')
+     		 } 
 				}
 				],
 				"ajax": "prepare_tad.php?jobid="+jobid+"&regulon_id="+regulon_id+"&species="+match_species+"&table="+table_content_id,
