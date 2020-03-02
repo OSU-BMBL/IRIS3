@@ -1319,7 +1319,20 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 						<div class="panel-body">
 					<div style="text-align: left;">
                         <strong><h3>Sorry, there has been an error.</h3></strong>
-						<p>Note that currently we accept human and mouse expression matrix for submission, Each gene measured in the expression dataset should have an identifier listed in the first column, both Gene Symbols (e.g. HSPA9) and Gene IDs (e.g. ENSG00000113013) are allowed. Pleas check our <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics">tutorial</a> for more information. </p>
+						<p>We accept human and mouse expression matrix for submission</p>
+						<ul>
+						
+						<li>
+						Each gene measured in the expression dataset should have an identifier listed in the first column, both Gene Symbols (e.g. HSPA9) and Gene IDs (e.g. ENSG00000113013) are allowed.
+						</li>
+						<li>
+						The selected species is: {{$input_species}}, please check it since we noticed that many errors occur due to the unmatched species information.
+						</li>
+						<li>
+						The minimum cell number parameter is set to {{$k_arg}}, it is important to set a smaller minimal cell numer in a small dataset. E.g. set to 5 for cell number less than 100.
+						</li>
+						</ul>
+						<p>Pleas check our <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics">tutorial</a> for more information. </p>
 						<!---
 						
 						<p>Perhaps you are here because: </p>
@@ -1370,7 +1383,19 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 						<div class="panel-body">
 					<div style="text-align: left;">
                         <strong><h3>Sorry, there has been an error:</h3></strong> <p style="color:red">iris3 did not find enough bi-clusters in your data.</p>
-						<p>Note that currently we accept human and mouse expression matrix for submission, Each gene measured in the expression dataset should have an identifier listed in the first column, both Gene Symbols (e.g. HSPA9) and Gene IDs (e.g. ENSG00000113013) are allowed. Pleas check our <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics">tutorial</a> for more information. </p>
+						<ul>
+						
+						<li>
+						Each gene measured in the expression dataset should have an identifier listed in the first column, both Gene Symbols (e.g. HSPA9) and Gene IDs (e.g. ENSG00000113013) are allowed.
+						</li>
+						<li>
+						The selected species is: {{$input_species}}, please check it since we noticed that many errors occur due to the unmatched species information.
+						</li>
+						<li>
+						The minimum cell number parameter is set to {{$k_arg}}, it is important to set a smaller minimal cell numer in a small dataset. E.g. set to 5 for cell number less than 100.
+						</li>
+						</ul>
+						<p>Pleas check our <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics">tutorial</a> for more information. </p>
 						<!---
 						
 						<p>Perhaps you are here because: </p>
@@ -1420,7 +1445,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 					<div class="flatPanel panel-heading" style="padding: 20px 20px"><strong>Job ID: {{$jobid}}</strong></div>
 						<div class="panel-body">
 					<div style="text-align: left;">
-                        <strong><h3>Sorry, there has been an error</h3></strong> <p style="color:red">Please check with your data format (input file should be txt, csv or tsv format): <br>1. Gene expression matrix: Gene expression matrix (GEMAT) file with genes as rows and cells as columns. <br>2. Cell label file (Optional): a two-column matrix with the first column as the cell names exactly matching the gene expression file, and the second column as ground-truth cell clusters. <br>3. Gene module file (Optional): Each column should reprensents a gene module.</p>
+                        <strong><h3>Sorry, there has been an error</h3></strong> <p style="color:red">Please check with your data format (input file should be txt, csv or tsv format): <br>1. Gene expression matrix: Gene expression matrix (GEMAT) file with genes as rows and cells as columns. The expression value should be positive.<br>2. Cell label file (Optional): a two-column matrix with the first column as the cell names exactly matching the gene expression file, and the second column as ground-truth cell clusters. <br>3. Gene module file (Optional): Each column should reprensents a gene module.</p>
 						<br>For further question, please contact qin.ma@osumc.edu<br>
 						<!---
 						
