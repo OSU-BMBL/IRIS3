@@ -17,6 +17,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 }
 });
 
+
 	function show_peak_table(item){
 		id_name = "#"+$(item).attr("id")
 			$('html, body').animate({
@@ -349,7 +350,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 		overview_filepath = "./data/"+jobid+"/regulon_id/overview_provde_ct.pdf"
 		regulon_score_filepath = "./data/"+jobid+"/regulon_id/"+ regulon_id +".pdf"
 		$('#'+table_content_id).html("")
-		$('#'+table_id).html('<div class="col-sm-6"><p>UMAP Plot Colored by cell clusters</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+overview_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/overview_provide_ct.png" /></div><div class="col-sm-6"><p>UMAP Plot Colored by ' + regulon_id + ' Score</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+regulon_score_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/' + regulon_id + '.png" onerror="this.onerror=null; this.src="assets/img/default_umap.png"" alt=""/></div>')
+		$('#'+table_id).html('<div class="col-sm-6"><p>UMAP Plot Colored by Cell Clusters</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+overview_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/overview_provide_ct.png" /></div><div class="col-sm-6"><p>UMAP Plot Colored by ' + regulon_id + ' Score</p><input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open(\''+regulon_score_filepath+'\')" /><img src="./data/'+jobid+'/regulon_id/' + regulon_id + '.png" onerror="this.onerror=null; this.src="assets/img/default_umap.png"" alt=""/></div>')
 		},
 	})
 	}
@@ -620,7 +621,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
             usePreAllocated: true
           },
           title: {
-            text: 'UMAP plot colored by cell clusters'
+            text: 'UMAP plot colored by Cell Clusters'
           },
           xAxis: {
             title: {
@@ -1148,31 +1149,31 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                                             </div>	
 															{{/if}}
 															{{/foreach}}
-															
-															{{if $count_module > 0 && empty($module_result[0][0][0])}}
+															<!--
+															{{if $count_module > 0 && $module_result[0][0][0]|count_characters > 2}}
 															
 																<div class="tab-pane" id="main_module{{$module_idx+1}}" role="tabpanel">
 																<div class="flatPanel panel panel-default">
 																			<div class="row" style="">
 																			<div class="form-group col-md-12 col-sm-12" style="height:100%">
-																			<strong>No regulon found in module 1 </strong>
+																			<strong>No regulon found in this module </strong>
 																	</div></div> </div> </div> 
-															{{/if}}
+															{{/if}}-->
 															
 															{{foreach from=$module_result item=label1 key=sec0}}
-															{{if ($module_result[$sec0][0][0]) == 0}}
+															{{if $module_result[$sec0][0][0]|count_characters < 2}}
 															<div class="tab-pane" id="main_module{{$sec0+1}}" role="tabpanel">
 																<div class="flatPanel panel panel-default">
 																			<div class="row" style="">
 																			<div class="form-group col-md-12 col-sm-12" style="height:100%">
-																			<strong>No regulon found in module{{$sec0+1}} </strong>
+																			<strong>No regulon found in module {{$sec0}} </strong>
 																	</div></div> </div> </div> 
 															{{else}}
 															<div class="tab-pane " id="main_module{{$sec0+1}}" role="tabpanel">
 																<div class="flatPanel panel panel-default">
 																			<div class="row" style="">
 																			<div class="form-group col-md-12 col-sm-12" style="height:100%">
-																			<p class="ct-panel-description">Uploaded gene module heatmap {{$sec0+1}}</p>
+																			<p class="ct-panel-description">{{$module_result[$sec0][0][0]}} Uploaded gene module heatmap {{$sec0+1}}</p>
 																			<a class="ct-panel-a" href="/iris3/heatmap.php?jobid={{$jobid}}&file=module{{$sec0+1}}.json" target="_blank">
                                                                         <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#">Open in new tab
                                                                         </button>

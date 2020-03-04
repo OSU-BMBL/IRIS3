@@ -178,7 +178,34 @@ $evaluation_file = fopen("$DATAPATH/$jobid/$jobid"."_sc3_cluster_evaluation.txt"
 		// error opening the file.
 	} 
 
-
+if (file_exists("$DATAPATH/$jobid/$jobid"."_predict_cluster_evaluation.txt")){
+$evaluation_file = fopen("$DATAPATH/$jobid/$jobid"."_predict_cluster_evaluation.txt", "r");
+	if ($evaluation_file) {
+		while (($line = fgets($evaluation_file)) !== false) {
+			$split_line = explode (",", $line);
+			if($split_line[0] == "ARI"){
+				$ARI = $split_line[1];
+			} else if($split_line[0] == "RI"){
+				$RI = $split_line[1];
+			} else if($split_line[0] == "JI"){
+				$JI = $split_line[1];
+			} else if($split_line[0] == "FMI"){
+				$FMI = $split_line[1];
+			} else if($split_line[0] == "Accuracy"){
+				$Accuracy = $split_line[1];
+			} else if($split_line[0] == "entropy"){
+				$entropy = $split_line[1];
+			} else if($split_line[0] == "purity"){
+				$purity = $split_line[1];
+			} 
+		}
+		fclose($evaluation_file);
+	} 
+}else {
+		//print_r("Info file not found");
+		// error opening the file.
+	} 
+	
 $all_files = scandir("$DATAPATH/$jobid/");
 $regulon_gene_symbol_file = preg_grep('/_CT_.+?_bic\.regulon_gene_symbol\.txt/', $all_files);
 $regulon_id_file = preg_grep('/_CT_.+?_bic\.regulon_gene_id\.txt/', $all_files);
@@ -186,8 +213,8 @@ $regulon_motif_file = preg_grep('/_CT_.+?_bic\.regulon_motif\.txt/', $all_files)
 $regulon_rank_file = preg_grep('/_CT_.+?_bic\.regulon_rank\.txt/', $all_files);
 $motif_rank_file = preg_grep('/_CT_.+?_bic\.motif_rank\.txt/', $all_files);
 $module_gene_name_file = preg_grep('/_module_.+?_bic\.regulon_gene_symbol\.txt/', $all_files);
-$module_id_file = preg_grep('/_module_.+?_bic\.regulon_gene_symbol\.txt/', $all_files);
-$module_motif_file = preg_grep('/_module_.+?_bic\.regulon_gene_symbol\.txt/', $all_files);
+$module_id_file = preg_grep('/_module_.+?_bic\.regulon_gene_id\.txt/', $all_files);
+$module_motif_file = preg_grep('/_module_.+?_bic\.regulon_motif\.txt/', $all_files);
 
 #print_r($regulon_gene_symbol_file);
 

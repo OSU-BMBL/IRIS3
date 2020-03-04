@@ -113,6 +113,7 @@ for (i in 1:length(all_regulon)) {
     this_label_index <- this_label_index[1:300]
     this_label_data <- label_data[this_label_index,]
     this_exp_data <- exp_data[,this_label_index]
+    this_user_label_name <- user_label_name[this_label_index,]
   } else {
     this_label_data <- label_data
     this_exp_data <- exp_data[,this_label_index]

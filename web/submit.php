@@ -81,8 +81,8 @@ if (isset($_POST['submit']))
 	$c_arg = '20';
 	$f_arg = '0.5';
 	$o_arg = '100';
+	$resolution_seurat = $_POST['resolution_seurat'];
 	$promoter_arg = '1000';
-	$param_k = '0';
 	$c_arg = $_POST['c_arg'];
 	$f_arg = $_POST['f_arg'];
 	$o_arg = $_POST['o_arg'];
@@ -91,13 +91,7 @@ if (isset($_POST['submit']))
 	$is_load_label = $_POST['is_load_label'];
 	$is_load_gene_module = $_POST['is_load_gene_module'];
 	$promoter_arg = $_POST['promoter_arg'];
-	$enable_sc3_k = $_POST['enable_sc3_k'];
-	if($enable_sc3_k == "specify"){
-		$param_k = $_POST['param_k'];
-		if ($param_k == ""){
-			$param_k = '0';
-		}
-	}
+	
 	$species_arg=$_POST['species_arg'];
 	#$fp = fopen("$workdir/species.txt", 'w');
 	#fwrite($fp,"$species_arg");
@@ -119,9 +113,13 @@ if (isset($_POST['submit']))
 		fwrite($fp,"CellGene\n");
 		fclose($fp);
 	}
-	if($c_arg == '1.0' && $f_arg == '0.5' && $o_arg == '100' && $label_use_sc3 == '1' && $expfile=='iris3_example_expression_matrix.csv' && $labelfile == 'iris3_example_label.csv'){
-
-		header("Location: results.php?jobid=2019081954006");
+	if($expfile=='Zeisel_expression.csv'){
+		$fp = fopen("$workdir/upload_type.txt", 'w');
+		fwrite($fp,"CellGene\n");
+		fclose($fp);
+	}
+	if($k_arg == '20' && $f_arg == '0.7' && $o_arg == '500' && $label_use_sc3 == '2' && $expfile=='Zeisel_expression.csv' && $labelfile == 'Zeisel_index_label.csv'){
+		header("Location: results.php?jobid=20200224113319");
 	}
 	
 	else {
@@ -164,7 +162,7 @@ if (isset($_POST['submit']))
 	}
 	}
 	$fp = fopen("$workdir/info.txt", 'w');
-	fwrite($fp,"is_load_exp,$is_load_exp\nk_arg,$k_arg\nf_arg,$f_arg\no_arg,$o_arg\nlabel_use_sc3,$label_use_sc3\nexpfile,$expfile\nlabelfile,$labelfile\ngene_module_file,$gene_module_file\nis_imputation,$is_imputation\nis_c,$is_c\npromoter_arg,$promoter_arg\nif_allowSave,$if_allowSave\nbic_inference,$bic_inference");
+	fwrite($fp,"is_load_exp,$is_load_exp\nk_arg,$k_arg\nf_arg,$f_arg\no_arg,$o_arg\nlabel_use_sc3,$label_use_sc3\nexpfile,$expfile\nlabelfile,$labelfile\ngene_module_file,$gene_module_file\nis_imputation,$is_imputation\nis_c,$is_c\npromoter_arg,$promoter_arg\nif_allowSave,$if_allowSave\nbic_inference,$label_use_sc3");
 	fclose($fp);
 	$fp = fopen("$workdir2/qsub.sh", 'w');
 	if($if_allowSave != '0'){
@@ -186,7 +184,7 @@ jobid=$jobid
 motif_min_length=12
 motif_max_length=12
 perl $BASE/program/send_email.pl $jobid cankun.wang@osumc.edu $BASE/program/email_notification
-Rscript $BASE/program/genefilter.R \$wd\$exp_file \$jobid $delim $is_imputation \$label_file $delim_label $param_k $label_use_sc3
+Rscript $BASE/program/genefilter.R \$wd\$exp_file \$jobid $delim $is_imputation \$label_file $delim_label $resolution_seurat $label_use_sc3
 $BASE/program/qubic2/qubic -i \$wd\$jobid\_filtered_expression.txt -k $k_arg -o $o_arg -f $f_arg $is_c
 for file in *blocks
 do
@@ -229,7 +227,7 @@ $BASE/program/build_clustergrammar.sh \$wd \$jobid $label_use_sc3\n
 
 
 zip -R \$wd\$jobid '*.regulon_gene_id.txt' '*.regulon_gene_symbol.txt' '*.regulon_rank.txt' '*.regulon_activity_score.txt' '*_cell_label.txt' '*.blocks' '*_blocks.conds.txt' '*_blocks.gene.txt' '*_filtered_expression.txt' '*_gene_id_name.txt' '*_marker_genes.txt' 'cell_type_unique_marker.txt' '*_combine_regulon.txt'\n
-#perl $BASE/program/prepare_email1.pl \$jobid\n
+#perl $BASE/program/prepare_email.pl \$jobid\n
 echo 'finish'> done\n  
 chmod -R 755 .
 ");
