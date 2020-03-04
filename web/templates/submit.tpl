@@ -604,7 +604,9 @@ $(document).ready(function() {
 									</div>
 									<div class="col-md-4">
 										<select id="k_arg_id" class="selectpicker" name="k_arg" data-width="auto">
+                      <option>3</option>
 											<option>5</option>
+                      <option>7</option>
 											<option>10</option>
 											<option>15</option>
 											<option data-subtext="Default" selected="selected">20</option>
