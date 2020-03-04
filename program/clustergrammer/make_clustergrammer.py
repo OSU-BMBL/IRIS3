@@ -40,10 +40,9 @@ if outname[0:2] != 'CT' and use_user_label == '2':
         net.set_cat_color(axis='col', cat_index=1, cat_name=label, inst_color=color_array3[i])
 				
 if outname[0:2] == 'CT' or outname[0:2] == 'mo':
-	if use_user_label == '2':
-		for j in range(len(unique_array)):
-			userlabel='User\'s label: _'+str(unique_array[j]).replace(" ", "_")+'_'
-			net.set_cat_color(axis='col', cat_index=1, cat_name=userlabel, inst_color=color_array3[j])
+	for j in range(len(unique_array)):
+		userlabel='User\'s label: _'+str(unique_array[j]).replace(" ", "_")+'_'
+		net.set_cat_color(axis='col', cat_index=1, cat_name=userlabel, inst_color=color_array3[j])
 			
 if outname[0:2] == 'CT' or outname[0:2] == 'mo':    
 	if use_user_label == '2':        
