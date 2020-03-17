@@ -16,7 +16,7 @@ args <- commandArgs(TRUE)
 jobid <- args[1] # user job id
 #wd<-getwd()
 ####test
-#jobid <- 2019102483326   
+#jobid <- 20200316162519   
 label_use_sc3 <- 0
 
 dir.create("heatmap",showWarnings = F)
@@ -86,7 +86,7 @@ total_rank<- strsplit(total_rank,"\\t")
 total_rank_df <- vector()
 
 for (i in 1:length(total_rank)) {
-  this_ct <- strsplit(strsplit(total_rank[[i]][1],"CT")[[1]][2],"S")[[1]][1]
+  this_ct <- strsplit(strsplit(total_rank[[i]][1],"CT")[[1]][2],"-R")[[1]][1]
   total_rank_df <- rbind(total_rank_df,c(total_rank[[i]][c(1,5,6)],this_ct))
   colnames(total_rank_df) <- c("regulon_id","rss_pval","rss","cell_type")
 }
@@ -338,7 +338,7 @@ for(i in 1: length(regulon_tf_vector)){
   this_total_regulon <- 0
   
   for (j in 1:nrow(this_alternative_regulon_result)) {
-  #for (j in c(1,3)) {
+    #for (j in c(1,3)) {
     this_regulon_name <- paste(this_alternative_regulon_result[j,1],": ",sep = "")
     gene_row <- append(gene_row,strsplit(as.character(this_alternative_regulon_result[j,2]),",")[[1]])
     regulon_ct <-gsub( "-.*$", "", this_regulon_name)
@@ -378,8 +378,8 @@ for(i in 1: length(regulon_tf_vector)){
     
     #file_heat_matrix <- file_heat_matrix[,order(file_heat_matrix[1,])]
     #j=84
-  for (j in 1:nrow(this_alternative_regulon_result)) {
-  #for (j in c(1,3)) {
+    for (j in 1:nrow(this_alternative_regulon_result)) {
+      #for (j in c(1,3)) {
       regulon_label_col <- as.data.frame(paste(this_alternative_regulon_result[j,1],": ",(rownames(file_heat_matrix) %in% strsplit(this_alternative_regulon_result[j,2],",")[[1]])*1,sep = ""),stringsAsFactors=F)
       #print(regulon_label_col)
       #regulon_label_col[1,1] <- ""
