@@ -20,6 +20,11 @@ $done_file = "$DATAPATH/$jobid/done";
 
 $regulon_gene_symbol_file = array();
 $regulon_file = array();
+if (file_exists("$DATAPATH/$jobid/running_status.txt")){
+	$running_status = `head -n1 "$DATAPATH/$jobid/running_status.txt"`;
+	$running_status = preg_replace( "/\r|\n/", "", $running_status);
+}
+
 if (file_exists("$DATAPATH/$jobid/info.txt")){
 $param_file = fopen("$DATAPATH/$jobid/info.txt", "r");
 	if ($param_file) {
@@ -30,7 +35,7 @@ $param_file = fopen("$DATAPATH/$jobid/info.txt", "r");
 			} else if($split_line[0] == "f_arg"){
 				$f_arg = $split_line[1];
 			} else if($split_line[0] == "is_c"){
-				if( strcmp($split_line[1], "-C")) {
+				if( strcmp($split_line[1], "-C") > 0) {
 					$is_c = "Yes";
 				} else{
 					$is_c = "No";
@@ -51,11 +56,11 @@ $param_file = fopen("$DATAPATH/$jobid/info.txt", "r");
 				} else{
 					$motif_program = "MEME";
 				}
-			} else if($split_line[0] == "label_use_sc3"){
+			} else if($split_line[0] == "label_use_predict"){
 				if( $split_line[1] == 0 || $split_line[1] == 1) {
-					$label_use_sc3 = "Seurat";
+					$label_use_predict = "Seurat";
 				} else{
-					$label_use_sc3 = "user's label";
+					$label_use_predict = "user's label";
 				}
 			} else if($split_line[0] == "expfile"){
 				$expfile_name = $split_line[1];
@@ -89,6 +94,11 @@ $param_file = fopen("$DATAPATH/$jobid/info.txt", "r");
 		//print_r("Info file not found");
 		// error opening the file.
 	} 
+}
+if (file_exists("$DATAPATH/$jobid/json/$jobid"."_umap.json")){
+	$all_json = scandir("$DATAPATH/$jobid/json");
+  $dge_json_file = preg_grep('/dge\.json/', $all_json);
+	$count_dge = range(1,count($dge_json_file));
 }
 
 
@@ -562,7 +572,7 @@ set_exception_handler('exception_handler');
 	header("Refresh: 60;url='results.php?jobid=$jobid'");
 }
 
-$_SESSION[$jobid."ann"]=$annotation1;
+$smarty->assign('running_status',$running_status);
 $smarty->assign('filter_gene_num',$filter_gene_num);
 $smarty->assign('total_gene_num',$total_gene_num);
 $smarty->assign('filter_gene_rate',$filter_gene_rate);
@@ -574,6 +584,7 @@ $smarty->assign('total_bic',$total_bic);
 $smarty->assign('total_ct',$total_ct);
 $smarty->assign('total_regulon',$total_regulon);
 $smarty->assign('count_ct',$count_ct);
+$smarty->assign('count_dge',$count_dge);
 $smarty->assign('species',$species);
 $smarty->assign('second_species',$second_species);
 $smarty->assign('main_species',$main_species);
@@ -613,14 +624,13 @@ $smarty->assign('provided_cell',$provided_cell);
 $smarty->assign('provided_cell_value',$provided_cell_value);
 $smarty->assign('purity',$purity);
 $smarty->assign('motif_program',$motif_program);
-$smarty->assign('label_use_sc3',$label_use_sc3);
+$smarty->assign('label_use_predict',$label_use_predict);
 $smarty->assign('expfile_name',$expfile_name);
 $smarty->assign('labelfile_name',$labelfile_name);
 $smarty->assign('gene_module_file_name',$gene_module_file_name);
 $smarty->assign('is_gene_filter',$is_gene_filter);
 $smarty->assign('is_cell_filter',$is_cell_filter);
 $smarty->assign('if_allowSave',$if_allowSave);
-$smarty->assign('annotation', $annotation1);
 $smarty->assign('LINKPATH', $LINKPATH);
 $smarty->assign('silh_trace',$silh_trace);
 $smarty->assign('silh_y',$silh_y);

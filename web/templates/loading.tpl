@@ -9,13 +9,28 @@
 
 <script>
 var flag = [];
-window.addEventListener('scroll', function(e) {
-if(document.getElementById("myTab").getBoundingClientRect().y == 10){
-	document.getElementById("myTab").setAttribute("style","background-color:#fff;border: 5px solid #B47157;border-radius: 5px")
-}	else {
-	document.getElementById("myTab").setAttribute("style","background-color:transparent;")
+if ($('#heatmapTab').length > 0) {
+	window.addEventListener('scroll', function(e) {
+		if(document.getElementById("heatmapTab").getBoundingClientRect().y == 10){
+			document.getElementById("heatmapTab").setAttribute("style","background-color:#fff;border: 5px solid #B47157;border-radius: 5px")
+		}	else {
+			document.getElementById("heatmapTab").setAttribute("style","background-color:transparent;")
+		}
+		});
 }
-});
+
+if ($('#regulonTab').length > 0) {
+	window.addEventListener('scroll', function(e) {
+		if(document.getElementById("regulonTab").getBoundingClientRect().y == 10){
+			document.getElementById("regulonTab").setAttribute("style","background-color:#fff;border: 5px solid #B47157;border-radius: 5px")
+		}	else {
+			document.getElementById("regulonTab").setAttribute("style","background-color:transparent;")
+		}
+		});
+}
+
+
+
 
 
 	function show_peak_table(item){
@@ -31,6 +46,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 		jobid = location.search.match(/\d+/gm)
 		table_content_id = "table-content-"+regulon_id
 		table_jquery_id="#"+table_content_id
+		console.log("prepare_peak.php?jobid="+jobid+"&regulon_id="+regulon_id+"&species="+match_species+"&table="+table_content_id)
 		if ( ! $.fn.DataTable.isDataTable(table_jquery_id) ) {
 		$(table_jquery_id).DataTable( {
 				dom: 'lBfrtip',
@@ -60,6 +76,10 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 					}
 				},{
                 "targets": [6],
+                "visible": false
+				},
+				{
+                "targets": [3],
                 "visible": false
 				},{
                 "targets": [7],
@@ -543,8 +563,9 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 			"bInfo": false,
 		})
 		
-		make_clust_main('data/{{$jobid}}/json/CT1.json', '#container-id-1');
-		flag.push("#container-id-1")
+		//make_clust_main('data/{{$jobid}}/json/CT1.json', '#container-id-1');
+		//flag.push("#container-id-1")
+	
 
 		for (i=1;i<={{$count_ct|count}};i++) {
 		    new List('regulon_pagination'+i, {
@@ -563,7 +584,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 			return (arrhaystack.indexOf(needle) > -1)
 		}
 
-		$('a[tabtype="main"]').on('shown.bs.tab', function(e) {
+		/*$('a[tabtype="main"]').on('shown.bs.tab', function(e) {
 			window.location = "#"+$(e.target).attr("id")
 			//$('html, body').animate({
 			//	scrollTop: $('#nav_scroll').offset().top
@@ -580,37 +601,59 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 				//for (i in element_group)
 				//	i.style.display='none'
 			}
-		});
-		$('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-			//console.log(flag)
-			var json_file = $(e.target).attr("json")
-			var root_id = $(e.target).attr("root")
-			//console.log(!arrayContains(root_id,flag))
-			if (!arrayContains(root_id, flag)) {
-				make_clust(json_file, root_id)
-				flag.push(root_id)
-			}
-		});
-		$('#marker_table').DataTable( {
-			"ajax": '/iris3/data/{{$jobid}}/{{$jobid}}_marker_genes.json',
-			dom: 'lBfrtip',
+		});*/
+
+		// load CT1 dge by default
+		$('#dge_table_ct_1').DataTable( {
+			"ajax": 'data/{{$jobid}}/json/{{$jobid}}_CT_1_dge.json',
+			dom: 'lBfrtip', 
 			buttons: [
 				{
 				extend:'csv',
-				title: {{$jobid}}+'_marker_genes'
+				title: {{$jobid}}+'_CT1'+'_diffrentially_expressed_genes'
 				}
-				]
-		} )
+			]
+			})
+
+		
+		$('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+			var json_file = $(e.target).attr("json")
+			if (json_file === undefined) {
+				json_file = ""
+			}
+			var root_id = $(e.target).attr("root")
+			//console.log(!arrayContains(root_id,flag))
+			if (json_file.includes('dge')) { // render dge table
+				var this_ct = json_file.match(/\d+/g)[2]
+				if ( !$.fn.dataTable.isDataTable('#dge_table_ct_'+this_ct)) {
+					$('#dge_table_ct_'+this_ct).DataTable( {
+						"ajax": json_file,
+						dom: 'lBfrtip',
+						buttons: [
+							{
+							extend:'csv',
+							title: {{$jobid}}+'CT'+this_ct+'_diffrentially_expressed_genes'
+							}
+						]
+						} )
+				}
+			} else if(!arrayContains(root_id,flag)) { // render clustergrammer
+				$(root_id + '> .wait_message').html('Loading heatmap ... <img src="static/images/busy.gif">')
+				make_clust(json_file, root_id)
+				flag.push(root_id)
+				//$(root_id + '> .wait_message').html('Move your cursor outside the heatmap region to scroll the page.')
+			}
+		});
+		
 		
 	});
-	
+
 	$.get(
-      'https://bmbl.bmi.osumc.edu/iris3/data/{{$jobid}}/{{$jobid}}_umap.json',
+      'data/{{$jobid}}/json/{{$jobid}}_umap.json',
       function(dat) {
         for (let i = 0; i < dat.length; i++){
           dat[i]['color'] = dat[i]['color'][0]
         }
-
         Highcharts.chart('highcharts_umap', {
           chart: {
             type: 'scatter',
@@ -621,7 +664,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
             usePreAllocated: true
           },
           title: {
-            text: 'UMAP plot colored by Cell Clusters'
+            text: 'UMAP Plot Colored by Cell Clusters'
           },
           xAxis: {
             title: {
@@ -677,6 +720,42 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
               }
             }
           },
+					exporting: {
+    				buttons: {
+        		  contextButton: {
+              menuItems:["viewFullscreen", "downloadPNG", "downloadJPEG", "downloadPDF", "downloadSVG",{
+                     text: 'Download TXT table',
+                     onclick: function () {
+                    	 fetch('https://bmbl.bmi.osumc.edu/iris3/data/{{$jobid}}/{{$jobid}}_umap_embeddings.txt')
+												.then(resp => resp.blob())
+												.then(blob => {
+													const url = window.URL.createObjectURL(blob);
+													const a = document.createElement('a');
+													a.style.display = 'none';
+													a.href = url;
+													a.download = '{{$jobid}}_umap_embeddings.txt';
+													document.body.appendChild(a);
+													a.click();
+													window.URL.revokeObjectURL(url);
+												})
+												.catch(() => alert('Download UMAP data failed!'));
+                     }
+                 }]
+         	 	}
+       		 },
+						allowHTML: true,
+							menuItemDefinitions: {
+							downloadPDF: {
+								text: 'Download PDF image',
+								onclick: function() {
+										this.exportChart({
+												type: 'application/pdf',
+												width: null
+										});
+								}
+							}
+    				}
+    		  },
           series: dat,
           tooltip: {
                 formatter: function() {
@@ -702,65 +781,60 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                     <div class="row">
                         <div class="col-md-12">
                             <div class="panel with-nav-tabs panel-default">
-
                                 <div class="panel-heading">
                                     <ul class="nav nav-tabs">
                                         <li class="active"><a href="#tab1default" data-toggle="tab">Cell clustering</a></li>
-                                        <li><a href="#tab2default" data-toggle="tab">Cell Cluster Prediction</a></li>
-										<li><a href="#tab3default" data-toggle="tab">Marker genes</a></li>
-                                        <li><a href="#tab4default" data-toggle="tab">General information</a></li>
+																				<li><a href="#tab2default" data-toggle="tab">Regulon heatmap</a></li>
+																				<li><a href="#tab3default" data-toggle="tab">Regulon details</a></li>
+																				<!--<li><a href="#tab4default" data-toggle="tab">Differentially expressed genes</a></li>-->
+                                        <li><a href="#tab5default" data-toggle="tab">Job information</a></li>
                                     </ul>
                                 </div>
                                 <div class="panel-body">
                                     <div class="tab-content">
 									<div class="tab-pane fade in active" id="tab1default">
-                                            <div class="flatPanel panel panel-default">
-                        <div class="panel-body">
                             <div class="col-md-12 col-sm-12"> 
+															<div class="row">
+																	<div class="form-group col-md-4 col-sm-4">
+																		<p id="species">Species: {{$species}} {{$main_species}}{{if $second_species != ''}},{{/if}} {{$second_species}}</p>
+																									</div>
+																									<div class="form-group col-md-4 col-sm-4">
+																											<p>Number of cells: {{$total_cell_num}}</p>
+																									</div>
+																									<div class="form-group col-md-4 col-sm-4">
+																											<p>Number of genes: {{$total_gene_num}}</p>
+																									</div>
+																									<div class="form-group col-md-4 col-sm-4">
+																											<p>Number of filtered genes: {{$filter_gene_num}}</p>
+																									</div>
+																									<div class="form-group col-md-4 col-sm-4">
+																											<p>Gene filtering ratio: {{$filter_gene_rate*100}}%</p>
+																									</div>
+																	<div class="form-group col-md-4 col-sm-4">
+																											<p>Number of filtered cells: {{$filter_cell_num}}</p>
+																									</div>
+																									<div class="form-group col-md-4 col-sm-4">
+																											<p>Cell filtering ratio: {{$filter_cell_rate*100}}%</p>
+																									</div>
+																	{{if $provide_label > 0}}
+																									<div class="form-group col-md-4 col-sm-4">
+																											<p>Number of provided cell clusters: {{$provide_label}}</p>
+																									</div>
+																	{{/if}}
+																	<div class="form-group col-md-4 col-sm-4">
+																											<p>Number of predicted cell clusters: {{$predict_label}}</p>
+																									</div>
+																									<div class="form-group col-md-4 col-sm-4">
+																											<p>Total biclusters: {{$total_bic}}</p>
+																									</div>
+																	</div>
+																	<hr/>
                               <div
 																id="highcharts_umap"
 																style="min-width: 310px; height: 600px; max-width: 1000px; margin: 0 auto"
 															></div>
-                                            <table id="tablePreview" class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>{{if $label_use_sc3 == 'user\'s label'}}
-														Cell clusters index
-														{{else}}
-															Predicted cell clusters index
-														{{/if}}</th>
-                                                        {{if $label_use_sc3 == 'user\'s label'}}
-															<th>
-															Cell clusters
-															</th>
-															{{/if}}
-														<th>Number of cells</th>
-                                                        <th>Number of regulons</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-												{{section name=ct_idx start=0 loop=$count_ct}}
-													<tr >
-															<td style="padding: 0px;">{{$count_ct[ct_idx]}}</td>
-															{{if $label_use_sc3 == 'user\'s label'}}
-															<td style="padding: 0px;">
-															{{$provided_cell[ct_idx]}}
-															</td>
-															<td style="padding: 0px;">{{$provided_cell_value[ct_idx]}}</td>
-															{{else}}
-															<td style="padding: 0px;">{{$predict_label_array[ct_idx]}}</td>
-															{{/if}}
-															<td style="padding: 0px;">{{$count_regulon_in_ct[ct_idx]}}</td>
-                                                    </tr>
-													{{/section}}
-                                                </tbody>
-                                            </table>
-                            </div>
-                        </div>
-                    </div>
-                                            </div>
-                                        <div class="tab-pane fade " id="tab2default">
-										{{if ($ARI  >0)}}
+															<hr/>
+															{{if ($ARI  >0)}}
                                              <table id="tablePreview" class="table">
                                                 <thead>
                                                     <tr>
@@ -779,522 +853,642 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                                     </tr>
                                                 </tbody>
                                             </table>
-											
-											{{/if}}
-											
-											{{if $label_use_sc3 == 'user\'s label'}}
-											<div class="CT-result-img">
-                                                <div class="col-sm-6">
-												<h4 style="text-align:center;margin-top:50px"> UMAP Plot Colored by Provided Cell Clusters</h4>
-                                                   <input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_provide_ct.pdf')" />
-												   <img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_provide_ct.png"></img>
-												</div>
-												<div class="col-sm-6">
-												<h4 style="text-align:center;margin-top:50px"> UMAP Plot Colored by Predicted Cell Clusters</h4>
-                                                   <input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_predict_ct.pdf')" />
-												   <img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_predict_ct.png"></img>
-												</div>
-											</div>
-											<div class="CT-result-img">
-												<div class="col-sm-6">
-												<h4 style="text-align:center;margin-top:50px"> Trajectory Plot Colored by Cell Clusters</h4>
-                                                   <input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_ct.trajectory.pdf')" />
-												   <img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_ct.trajectory.png"  onerror="this.onerror=null; this.src='assets/img/default_trajectory.png'" alt=""></img>
-												</div>
-												<div class="row">
-												</div>
-											</div>	
-											{{else}}
-											<div class="CT-result-img">
-                                                <div class="col-sm-6">
-												<h4 style="text-align:center;margin-top:50px"> UMAP Plot Colored by Cell Clusters</h4>
-                                                   <input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_ct.pdf')" />
-												   <img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_ct.png"></img>
-												</div>
-												<div class="col-sm-6">
-												<h4 style="text-align:center;margin-top:50px"> Trajectory Plot Colored by Cell Clusters</h4>
-                                                    <input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_ct.trajectory.pdf')" />
-													<img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_ct.trajectory.png"  onerror="this.onerror=null; this.src='assets/img/default_trajectory.png'" alt=""></img>
-												</div>
-											</div>
-											{{/if}}
-											
-                                            <div class="CT-result-img">
-                                                <div class="col-sm-6">
-												<hr>
-												<h4 style="text-align:center;margin-top:50px"> Silhouette score</h4>
-                                                    <div id="score_div"></div>
-												</div>{{if ($sankey_src|@count >0)}}
-                                                <div class="col-sm-6">
-												<hr>
-												<h4 style="text-align:center;margin-top:50px"> Sankey plot</h4>
-													<div id="sankey_div"></div>
-												</div>
-												{{/if}}
-											</div>
-										</div>
-                                        <div class="tab-pane fade" id="tab3default">
-                                            <table id="marker_table" class="display" style="width:100%">
-												<thead>
-													<tr>
-														<th>Cell Cluster</th>
-														<th>Gene</th>
-														<th>P-value</th>
-														<th>Avg_logFC</th>
-														<th>Pct.1</th>
-														<th>Pct.2</th>
-														<th>Adjusted p-value</th>
-													</tr>
-												</thead>
-											</table>
-											
-                                        </div>
-                                        <div class="tab-pane fade" id="tab4default"><div class="flatPanel panel panel-default">
-                        <div class="panel-body">
-						<div class="form-group col-md-12 col-sm-12">
-						<div class="row">
-							<h4 class="font-italic text-left">General results</h4>
-								<div class="form-group col-md-4 col-sm-4">
-									<p id="species">Species: {{$species}} {{$main_species}}{{if $second_species != ''}},{{/if}} {{$second_species}}</p>
-                                </div>
-                                <div class="form-group col-md-4 col-sm-4">
-                                    <p>Number of cells: {{$total_cell_num}}</p>
-                                </div>
-                                <div class="form-group col-md-4 col-sm-4">
-                                    <p>Number of genes: {{$total_gene_num}}</p>
-                                </div>
-                                <div class="form-group col-md-4 col-sm-4">
-                                    <p>Number of filtered genes: {{$filter_gene_num}}</p>
-                                </div>
-                                <div class="form-group col-md-4 col-sm-4">
-                                    <p>Gene filtering ratio: {{$filter_gene_rate*100}}%</p>
-                                </div>
-								<div class="form-group col-md-4 col-sm-4">
-                                    <p>Number of filtered cells: {{$filter_cell_num}}</p>
-                                </div>
-                                <div class="form-group col-md-4 col-sm-4">
-                                    <p>Cell filtering ratio: {{$filter_cell_rate*100}}%</p>
-                                </div>
-								{{if $provide_label > 0}}
-                                <div class="form-group col-md-4 col-sm-4">
-                                    <p>Number of provided cell clusters: {{$provide_label}}</p>
-                                </div>
-								{{/if}}
-								<div class="form-group col-md-4 col-sm-4">
-                                    <p>Number of predicted cell clusters: {{$predict_label}}</p>
-                                </div>
-                                <div class="form-group col-md-4 col-sm-4">
-                                    <p>Total biclusters: {{$total_bic}}</p>
-                                </div>
-								</div>
-								<div class="row">
-								<h4 class="font-italic text-left">Parameters</h4>
-                            <div class="col-md-12 col-sm-12">
-                                <div class="form-group col-md-6 col-sm-6">
-                                    <p for="reportsList">Enable imputation: {{$is_imputation}}</p>
-                                </div>
-                                <div class="form-group col-md-6 col-sm-6">
-                                    <p>Enable dual strategy: {{$is_c}}</p>
-                                </div>
-								<div class="form-group col-md-6 col-sm-6">
-                                    <p for="reportsList">Minimum cell number: {{$k_arg}}</p>
-                                </div>
-                                <div class="form-group col-md-6 col-sm-6">
-                                    <p>Maximum bicluster number: {{$o_arg}}</p>
-                                </div>
-                                <div class="form-group col-md-6 col-sm-6">
-                                    <p>Bicluster overlap rate: {{$f_arg}}</p>
-                                </div>
-								<div class="form-group col-md-6 col-sm-6">
-                                    <p>Regulon prediction using {{$label_use_sc3}}</p>
-                                </div>
-								<div class="form-group col-md-6 col-sm-6">
-                                    <p>Upstream promoter region: {{$promoter_arg}}</p>
-                                </div>
-								<div class="form-group col-md-6 col-sm-6"> 
-                                    <p>Email: {{$email_line}}</p>
-                                </div>
-                                <div class="form-group col-md-6 col-sm-6"> 
-                                    <p>Uploaded files: </p><p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
-                                </div>
-                            </div>
-							</div>
-                        </div>
-                    </div></div>
+																	<hr/>
+															{{/if}}
+															<div class="panel with-nav-tabs panel-default">
+                              <div class="panel-heading">
+																<ul class="nav nav-tabs">
+																		<li><a href="#plot-tab1default" data-toggle="tab">UMAP Plot</a></li>
+																		<li><a href="#tab4default" data-toggle="tab">Differentially expressed genes</a></li>
+																		<li><a href="#plot-tab2default" data-toggle="tab">Trajectory Plot</a></li>
+																		<li><a href="#plot-tab3default" data-toggle="tab">Silhouette score</a></li>
+																		{{if ($sankey_src|@count >0)}}<li><a href="#plot-tab4default" data-toggle="tab">Sankey plot</a></li>{{/if}}
+																</ul>
+															</div>
+															<div class="panel-body">
+																<div class="tab-content">
+																	<div class="tab-pane fade" id="plot-tab1default">
+																		<div class="flatPanel panel-default">
+																			{{if $label_use_predict == 'user\'s label'}}
+																			<div class="CT-result-img">
+																																<div class="col-sm-6">
+																				<h4 style="text-align:center;margin-top:50px"> UMAP Plot Colored by Provided Cell Clusters</h4>
+																																	 <input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_provide_ct.pdf')" />
+																					 <img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_provide_ct.png"></img>
+																				</div>
+																				<div class="col-sm-6">
+																				<h4 style="text-align:center;margin-top:50px"> UMAP Plot Colored by Predicted Cell Clusters</h4>
+																																	 <input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_predict_ct.pdf')" />
+																					 <img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_predict_ct.png"></img>
+																				</div>
+																			</div>
+																			{{else}}
+																			<div class="CT-result-img">
+																																<div class="col-sm-6">
+																				<h4 style="text-align:center;margin-top:50px"> UMAP Plot Colored by Cell Clusters</h4>
+																																	 <input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_ct.pdf')" />
+																					 <img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_ct.png"></img>
+																				</div>
+																			</div>
+																			{{/if}}
+																		</div>
+																	</div>
+																	<div class="tab-pane fade" id="tab4default">
+																		<ul class="nav nav-tabs nav-sticky" id="dgeTab" role="tablist">
+																			{{section name=ct_idx start=0 loop=$count_ct}}
+																				<li class="nav-item {{if {{$count_ct[ct_idx]}} eq '1'}}active{{/if}}">
+																						<a class="nav-link fade in {{if {{$count_ct[ct_idx]}} eq '0'}}active{{/if}}" id="nav-{{$count_ct[ct_idx]}}" data-toggle="tab" tabtype="main" href="#dge_CT{{$count_ct[ct_idx]}}" json="data/{{$jobid}}/json/{{$jobid}}_CT_{{$count_ct[ct_idx]}}_dge.json" root="#dge_table_ct_{{$count_ct[ct_idx]}}" role="tab" aria-controls="home" aria-selected="true">CT{{$count_ct[ct_idx]}}</a>
+																				</li>
+																			{{/section}}
+																			</ul>
+																			<div class="tab-content" id="dgeTabContent">	
+																				{{section name=ct_idx start=0 loop=$count_ct}}	{{/section}}
+																				{{foreach from=$regulon_result item=label1 key=sec0}}	
+																					<div class="tab-pane {{if {{$sec0+1}} eq '1'}}active{{/if}}" id="dge_CT{{$sec0+1}}" role="tabpanel">
+																						<div class="flatPanel panel panel-default ct-panel">
+																									<div class="row">
+																										<div class="form-group col-md-12 col-sm-12" style="height:100%">
+																											<table id="dge_table_ct_{{$sec0+1}}" class="display" style="width:100%">
+																												<thead>
+																													<tr>
+																														<th>Cell Cluster</th>
+																														<th>Gene</th>
+																														<th>P-value</th>
+																														<th>Avg_logFC</th>
+																														<th>Pct.1</th>
+																														<th>Pct.2</th>
+																														<th>Adjusted p-value</th>
+																													</tr>
+																												</thead>
+																											</table>
+																										</div>
+																											</div></div> </div> {{/foreach}}</div>
+																	</div>
+																	<div class="tab-pane fade" id="plot-tab2default">
+																		<div class="flatPanel panel-default">
+																			{{if $label_use_predict == 'user\'s label'}}
+																			<div class="CT-result-img">
+																				<div class="col-sm-6">
+																				<h4 style="text-align:center;margin-top:50px"> Trajectory Plot Colored by Cell Clusters</h4>
+																																	 <input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_ct.trajectory.pdf')" />
+																					 <img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_ct.trajectory.png"  onerror="this.onerror=null; this.src='assets/img/default_trajectory.png'" alt=""></img>
+																				</div>
+																				<div class="row">
+																				</div>
+																			</div>	
+																			{{else}}
+																			<div class="CT-result-img">
+																				<div class="col-sm-6">
+																				<h4 style="text-align:center;margin-top:50px"> Trajectory Plot Colored by Cell Clusters</h4>
+																																		<input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_ct.trajectory.pdf')" />
+																					<img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_ct.trajectory.png"  onerror="this.onerror=null; this.src='assets/img/default_trajectory.png'" alt=""></img>
+																				</div>
+																			</div>
+																			{{/if}}
+																		</div>
+																</div>
+																<div class="tab-pane fade" id="plot-tab3default">
+																	<div class="flatPanel panel-default"> 
+																		<div class="CT-result-img">
+																			<div class="col-sm-12">
+																			<h4 style="text-align:center;margin-top:50px"> Silhouette score</h4>
+																				<div id="score_div"></div>
+																			</div>
+																		</div>
+																	</div>
+															</div>
+															<div class="tab-pane fade" id="plot-tab4default">
+																<div class="flatPanel  panel-default">
+																	<div class="CT-result-img">
+																		{{if ($sankey_src|@count >0)}}
+																		<div class="col-sm-12">
+																		<h4 style="text-align:center;margin-top:50px"> Sankey plot</h4>
+																			<div id="sankey_div"></div>
+																		</div>
+																		{{/if}}
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>  
+												</div>  
+                      </div>
+                                            </div>
+                                        <div class="tab-pane fade" id="tab2default">
+																					<div class="row" style="">
+																						<div class="form-group col-md-12 col-sm-12" style="height:100%">
+																							<table id="tablePreview" class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>{{if $label_use_predict == 'user\'s label'}}
+																													Cell clusters index
+																													{{else}}
+																														Predicted cell clusters index
+																													{{/if}}</th>
+																																											{{if $label_use_predict == 'user\'s label'}}
+																														<th>
+																														Cell clusters
+																														</th>
+																														{{/if}}
+																													<th>Number of cells</th>
+                                                        <th>Number of regulons</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+																									{{section name=ct_idx start=0 loop=$count_ct}}
+																										<tr >
+																												<td style="padding: 0px;">{{$count_ct[ct_idx]}}</td>
+																												{{if $label_use_predict == 'user\'s label'}}
+																												<td style="padding: 0px;">
+																												{{$provided_cell[ct_idx]}}
+																												</td>
+																												<td style="padding: 0px;">{{$provided_cell_value[ct_idx]}}</td>
+																												{{else}}
+																												<td style="padding: 0px;">{{$predict_label_array[ct_idx]}}</td>
+																												{{/if}}
+																												<td style="padding: 0px;">{{$count_regulon_in_ct[ct_idx]}}</td>
+																												</tr>
+																										{{/section}}
+                                                </tbody>
+																						</table>
+																	 <ul class="nav nav-tabs nav-sticky" id="heatmapTab" role="tablist">
+																					{{section name=ct_idx start=0 loop=$count_ct}}
+																																				<li class="nav-item {{if {{$count_ct[ct_idx]}} eq '1'}}{{/if}}">
+																																						<a class="nav-link fade in {{if {{$count_ct[ct_idx]}} eq '0'}}active{{/if}}" id="nav-{{$count_ct[ct_idx]}}" data-toggle="tab" tabtype="main" href="#main_CT{{$count_ct[ct_idx]}}" json="data/{{$jobid}}/json/CT{{$count_ct[ct_idx]}}.json" root="#container-id-{{$count_ct[ct_idx]}}" role="tab" aria-controls="home" aria-selected="true">CT{{$count_ct[ct_idx]}}</a>
+																																				</li>
+																					{{/section}}
+																					{{if $count_module > 0}}
+																					{{section name=ct_idx start=0 loop=$count_module}}
+																																				<li class="nav-item">
+																																						<a class="nav-link fade in " id="nav{{$count_module[ct_idx]}}" data-toggle="tab" tabtype="main" href="#main_module{{$count_module[ct_idx]}}" json="data/{{$jobid}}/json/module{{$count_module[ct_idx]}}.json" root="#container-id-module-{{$count_module[ct_idx]}}" role="tab" aria-controls="home" aria-selected="true">module{{$count_module[ct_idx]}}</a>
+																																				</li>
+																					{{/section}}
+																					{{/if}}
+																																		</ul>
+																																		<div class="tab-content" id="heatmapTabContent">	
+																																			{{section name=ct_idx start=0 loop=$count_ct}}	{{/section}}
+																																			{{foreach from=$regulon_result item=label1 key=sec0}}	
+																																			{{if $regulon_result[$sec0][0][0] == '0'}}
+																																				<div class="tab-pane {{if {{$sec0+1}} eq '1'}}active{{/if}}" id="main_CT{{$sec0+1}}" role="tabpanel">
+																																					<div class="flatPanel panel panel-default">
+																																								<div class="row" style="">
+																																								<div class="form-group col-md-12 col-sm-12" style="height:100%">
+																																								<strong>No regulon found in CT{{$sec0+1}} </strong>
+																																								<ol>
+																																								This may be caused by You can re-submit your data and change IRIS3 parameters to possibly solve this issue:
+																																								<li>Decrease clustering resolution in Suerat, e.g.: 0.5.
+																																								</li>
+																																								<li>Set a smaller minimal cell numer in biclusters in QUBIC2. E.g. set to 5 for cell number less than 100.
+																																								</li>
+																																								<li>Set a lager bicluster overlap rate in QUBIC2. 
+																																								</li>
+																																								<li>Turn on imputation to decrease data noise. (note: this may greatly increase the computational time)
+																																								</li>
+																																								<li>Set the maximum bicluster number in QUBIC2 as 1000.
+																																								</li>
+																																								
+																																								</ol>
+																																								<p>For more information, please check our <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics" target="_blank">tutorial</a> and <a href="https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ" target="_blank">FAQ</a></p>
+																																						</div></div> </div> </div> 
+																																				{{else}}	
+																																				<div class="tab-pane {{if {{$sec0+1}} eq '1'}}active{{/if}}" id="main_CT{{$sec0+1}}" role="tabpanel">
+																																					<div class="flatPanel panel panel-default ct-panel">
+																																								<div class="row">
+																																								<div class="form-group col-md-12 col-sm-12" style="height:100%">
+																																								<p class="ct-panel-description" >Cell-gene-regulon heatmap for cell cluster {{$sec0+1}}</p>
+																																								<a class="ct-panel-a" href="/iris3/heatmap.php?jobid={{$jobid}}&file=CT{{$sec0+1}}.json" target="_blank">
+																																																									<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#">Open heatmap in new tab
+																																																									</button>
+																																																							</a><a class="ct-panel-a"  href="/iris3/data/{{$jobid}}/{{$jobid}}_CT_{{$sec0+1}}_bic.regulon_gene_symbol.txt" target="_blank">
+																																																									<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#">Download CT-{{$sec0+1}} regulon-gene list (Gene Symbol) 
+																																																									</button> </a>
+																																							<a class="ct-panel-a"  href="/iris3/data/{{$jobid}}/{{$jobid}}_CT_{{$sec0+1}}_bic.regulon_gene_id.txt" target="_blank">
+																																							<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#">Download CT-{{$sec0+1}} regulon-gene list (Ensembl gene ID)
+																																																									</button>
+																																																							</a>
+																																						
+																																						<div class="panel-body"><div class="flatPanel panel panel-default">
+																																									<div id="heatmap">
+																																											<div id='container-id-{{$sec0+1}}' style="height:95%;max-height:95%;max-width:100%;display:block">
+																																											<h4 class='wait_message'>Click on 'CT' tabs above to load heatmap.</h4>
+																																										</div></div></div></div></div>
+																																										</div></div> </div> 
+																																										
+																																						{{/if}}{{/foreach}}</div>
+																															</div></div></div>
+																															<div class="tab-pane fade" id="tab3default">
+																																<div class="">
+																																	<div class="">
+																																			<div class="row" style="">
+																																					<div class="form-group col-md-12 col-sm-12" style="height:100%">
+																																 <ul class="nav nav-tabs nav-sticky" id="regulonTab" role="tablist">
+																																				{{section name=ct_idx start=0 loop=$count_ct}}
+																																																			<li class="nav-item {{if {{$count_ct[ct_idx]}} eq '1'}}active{{/if}}">
+																																																					<a class="nav-link fade in {{if {{$count_ct[ct_idx]}} eq '0'}}active{{/if}}" id="nav-{{$count_ct[ct_idx]}}" data-toggle="tab" tabtype="main" href="#regulon_main_CT{{$count_ct[ct_idx]}}" role="tab" aria-controls="home" aria-selected="true">CT{{$count_ct[ct_idx]}}</a>
+																																																			</li>
+																																				{{/section}}
+																																				{{if $count_module > 0}}
+																																				{{section name=ct_idx start=0 loop=$count_module}}
+																																																			<li class="nav-item">
+																																																					<a class="nav-link fade in " id="nav{{$count_module[ct_idx]}}" data-toggle="tab" tabtype="main" href="#main_module{{$count_module[ct_idx]}}"  role="tab" aria-controls="home" aria-selected="true">module{{$count_module[ct_idx]}}</a>
+																																																			</li>
+																																				{{/section}}
+																																				{{/if}}
+																																																	</ul>
+																																
+																																																	<div class="tab-content" id="regulonTabContent">	
+																																			{{section name=ct_idx start=0 loop=$count_ct}}	{{/section}}
+																																			{{foreach from=$regulon_result item=label1 key=sec0}}	
+																																			{{if $regulon_result[$sec0][0][0] == '0'}}
+																																				<div class="tab-pane {{if {{$sec0+1}} eq '1'}}active{{/if}}" id="regulon_main_CT{{$sec0+1}}" role="tabpanel">
+																																					<div class="flatPanel panel panel-default">
+																																								<div class="row" style="">
+																																								<div class="form-group col-md-12 col-sm-12" style="height:100%">
+																																								<strong>No regulon found in CT{{$sec0+1}} </strong>
+																																								<ol>
+																																								This may be caused by You can re-submit your data and change IRIS3 parameters to possibly solve this issue:
+																																								<li>Decrease clustering resolution in Suerat, e.g.: 0.5.
+																																								</li>
+																																								<li>Set a smaller minimal cell numer in biclusters in QUBIC2. E.g. set to 5 for cell number less than 100.
+																																								</li>
+																																								<li>Set a lager bicluster overlap rate in QUBIC2. 
+																																								</li>
+																																								<li>Turn on imputation to decrease data noise. (note: this may greatly increase the computational time)
+																																								</li>
+																																								<li>Set the maximum bicluster number in QUBIC2 as 1000.
+																																								</li>
+																																								
+																																								</ol>
+																																								<p>For more information, please check our <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics" target="_blank">tutorial</a> and <a href="https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ" target="_blank">FAQ</a></p>
+																																						</div></div> </div> </div> 
+																																				{{else}}	
+																																				<div class="tab-pane {{if {{$sec0+1}} eq '1'}}active{{/if}}" id="regulon_main_CT{{$sec0+1}}" role="tabpanel">
+																																						
+																																						<div id="nav_scroll"></div>
+																																						<div class="flatPanel panel panel-default">
+																																							<div class="row">
+																																							<div class="CT-result-img">
+																																								<div class="col-sm-12">
+																																								<h4 style="text-align:center;margin-top:50px"> Regulon Specificity Score Scatter Plot for Cell Cluster {{$sec0+1}}</h4>
+																																									<div class="col-sm-4"></div>
+																																									<div class="col-sm-4"><img src="data/{{$jobid}}/regulon_id/ct{{$sec0+1}}_rss_scatter.png"/></div>
+																																									<div class="col-sm-4"></div>
+																																								</div>
+																																							</div>
+																																							</div>
+																																								<div class="row" >
+																																								<div class="form-group col-md-12 col-sm-12" style="height:100%">
+																																						
+																																						<!--<table id="regulon_table{{$sec0+1}}" cellpadding="0" cellspacing="0" width="100%">
+																																						<thead><tr><th></th></tr></thead>
+																																																							<tbody> 
+																																						-->
+																																				<div id="regulon_pagination{{$sec0+1}}">
+																																				<label style="margin-left: 0.5em;">Search: <input type="text" class="search regulon_search" placeholder="" autofocus/></label>
+																																				<a class="ct-panel-a"  href="/iris3/data/{{$jobid}}/{{$jobid}}_CT_{{$sec0+1}}_bic.regulon_gene_symbol.txt" target="_blank">
+																																					<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#">Download CT-{{$sec0+1}} regulon-gene list (Gene Symbol) 
+																																					</button> </a>
+																			<a class="ct-panel-a"  href="/iris3/data/{{$jobid}}/{{$jobid}}_CT_{{$sec0+1}}_bic.regulon_gene_id.txt" target="_blank">
+																			<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#">Download CT-{{$sec0+1}} regulon-gene list (Ensembl gene ID)
+																																					</button>
+																																			</a>
+																																				<ul class="list" style="list-style-type:none;padding:0;">
+																																																									{{section name=sec1 loop=$regulon_result[$sec0]}} 
+																																							<li>
+																																							<table class="table table-sm page_item{{$sec0+1}}" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:0"><tbody>
+																																							<tr><td colspan="2"> <div class='regulon-heading'> {{$regulon_result[$sec0][sec1][0]}} {{if $regulon_rank_result[$sec0][sec1][4] < 0.05}}(CTSR) {{/if}}</div></td></tr>
+																																							<tr><td class="gene-score">Regulon specificity score: {{$regulon_rank_result[$sec0][sec1][5]|string_format:"%.8f"}} (p-value{{if $regulon_rank_result[$sec0][sec1][4]|string_format:"%.5f" == 0}}&lt;1.0e-4{{else}}: {{$regulon_rank_result[$sec0][sec1][4]|string_format:"%.1e"}}{{/if}})</td><td class="gene-score">Number of genes: {{$regulon_result[$sec0][sec1]|@count-1}}</td><td class="gene-score">Number of differentially expressed genes: {{$regulon_rank_result[$sec0][sec1]|@count-6}}</td></tr>
+																																																									<tr><td class="gene-table">
+																																																											<div style="width:100%; font-size:14px;">
+																																									<table class="table table-hover table-sm" ><tbody>
+																																						<tr><td>Marker gene</td><td>Gene Symbol  <button class="btn btn-default" id="symbol-{{$regulon_result[$sec0][sec1][0]}}" onclick="copy_list(this)">Copy</button></td><td>Enesmbl ID  <button class="btn btn-default" id="id-{{$regulon_result[$sec0][sec1][0]}}"onclick="copy_list(this)">Copy</button></td><td>Gene UMAP plot</td>
+																																</tr>
+																																						{{section name=sec2 start=1 loop=$regulon_result[$sec0][sec1]}}
+																																
+																																<tr><td>
+																																{{section name=marker_idx start=6 loop=$regulon_rank_result[$sec0][sec1]}}
+																																{{if !empty($regulon_rank_result[$sec0][sec1][marker_idx]) && $regulon_rank_result[$sec0][sec1][marker_idx]==$regulon_result[$sec0][sec1][sec2]}}<span class="glyphicon glyphicon-star"></span> {{/if}}
+																																{{/section}}</td><td><a target="_blank" href= "{{if $main_species|strpos:'Human'===0}}https://www.genecards.org/cgi-bin/carddisp.pl?gene={{elseif $main_species|strpos:'Mouse'===0}}http://www.informatics.jax.org/searchtool/Search.do?query={{/if}}{{$regulon_result[$sec0][sec1][sec2]}}">{{$regulon_result[$sec0][sec1][sec2]}}</a></td>							
+																																									 <td><a  target="_blank" href= "https://www.ensembl.org/id/{{$regulon_id_result[$sec0][sec1][sec2]}}">{{$regulon_id_result[$sec0][sec1][sec2]}}</a></td><td><button type="button" id="genebtn-{{$regulon_result[$sec0][sec1][0]}}_{{$regulon_result[$sec0][sec1][sec2]}}" class="btn btn-default gene-button" data-toggle="collapse" onclick="$('#gene_hidebtn-{{$regulon_result[$sec0][sec1][0]}}_{{$regulon_result[$sec0][sec1][sec2]}}').show();$('#gene-{{$regulon_result[$sec0][sec1][0]}}').show();show_gene_tsne(this);$('#genebtn-{{$regulon_result[$sec0][sec1][0]}}_{{$regulon_result[$sec0][sec1][sec2]}}').hide();"> Display
+																																																	</button><button type="button" style="display:none;" id="gene_hidebtn-{{$regulon_result[$sec0][sec1][0]}}_{{$regulon_result[$sec0][sec1][sec2]}}" class="btn btn-default gene-button" data-toggle="collapse" onclick="$('#genebtn-{{$regulon_result[$sec0][sec1][0]}}_{{$regulon_result[$sec0][sec1][sec2]}}').show();$('#gene_hidebtn-{{$regulon_result[$sec0][sec1][0]}}_{{$regulon_result[$sec0][sec1][sec2]}}').hide();$('#gene-{{$regulon_result[$sec0][sec1][0]}}').hide();">Hide
+																																																	</button><!----></td>{{/section}}</tr></tbody></table></div></td>
+																																								<td rowspan="2" class="vert-aligned">
+																																			<button type="button" class="btn btn-default extra-button" data-toggle="collapse" id="{{$regulon_result[$sec0][sec1][0]}}" onclick="$('#heatmap-{{$regulon_result[$sec0][sec1][0]}}').show();make_clust('data/{{$jobid}}/json/{{$regulon_result[$sec0][sec1][0]}}.json','#ci-{{$regulon_result[$sec0][sec1][0]}}');flag.push('#ci-{{$regulon_result[$sec0][sec1][0]}}');$('#hide-{{$regulon_result[$sec0][sec1][0]}}').show();$('#{{$regulon_result[$sec0][sec1][0]}}').hide();">Heatmap
+																																																	</button><button style="display:none;" type="button" class="btn btn-default extra-button" data-toggle="collapse"  id="hide-{{$regulon_result[$sec0][sec1][0]}}" onclick="$('#ci-{{$regulon_result[$sec0][sec1][0]}}').removeAttr('style');$('#ci-{{$regulon_result[$sec0][sec1][0]}}').empty();$('#{{$regulon_result[$sec0][sec1][0]}}').show();$('#hide-{{$regulon_result[$sec0][sec1][0]}}').hide();">Hide Heatmap
+																																																	</button>
+																																			<button type="button" id="enrichr-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="get_gene_list(this)" >Send gene list to Enrichr
+																																																	</button>
+																																			<button type="button" id="peakbtn-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="show_peak_table(this);$('#peak_hidebtn-{{$regulon_result[$sec0][sec1][0]}}').show();$('#peak-{{$regulon_result[$sec0][sec1][0]}}').show();$('#peakbtn-{{$regulon_result[$sec0][sec1][0]}}').hide();" >ATAC-seq peak enrichment
+																																																	</button>
+																																			<button type="button" style="display:none;" id="peak_hidebtn-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="$('#peakbtn-{{$regulon_result[$sec0][sec1][0]}}').show();$('#peak_hidebtn-{{$regulon_result[$sec0][sec1][0]}}').hide();$('#peak-{{$regulon_result[$sec0][sec1][0]}}').hide();" >Hide ATAC-seq peak enrichment
+																																																	</button>
+																																			<button type="button" id="tadbtn-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="show_tad_table(this);$('#tad_hidebtn-{{$regulon_result[$sec0][sec1][0]}}').show();$('#tad-{{$regulon_result[$sec0][sec1][0]}}').show();$('#tadbtn-{{$regulon_result[$sec0][sec1][0]}}').hide();" >Additional TAD covered genes
+																																																	</button>
+																																			<button type="button" style="display:none;" id="tad_hidebtn-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="$('#tadbtn-{{$regulon_result[$sec0][sec1][0]}}').show();$('#tad_hidebtn-{{$regulon_result[$sec0][sec1][0]}}').hide();$('#tad-{{$regulon_result[$sec0][sec1][0]}}').hide();" >Hide additional TAD covered genes
+																																																	</button>
+																																			{{assign var="this_tf" value=","|explode:$regulon_motif_result[$sec0][sec1][1]}}
+																																			{{assign var=motif_num_jaspar value="ct`$this_tf[0]`bic`$this_tf[1]`m`$this_tf[2]`"}}
+																																			
+																																			<button type="button" id="regulonbtn-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="$('#regulon-{{$regulon_result[$sec0][sec1][0]}}').show();show_regulon_table(this);$('#regulon_hidebtn-{{$regulon_result[$sec0][sec1][0]}}').show();$('#regulonbtn-{{$regulon_result[$sec0][sec1][0]}}').hide();">Regulon UMAP plot
+																																																	</button>
+																																																	<button type="button" style="display:none;" id="regulon_hidebtn-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="$('#regulonbtn-{{$regulon_result[$sec0][sec1][0]}}').show();$('#regulon_hidebtn-{{$regulon_result[$sec0][sec1][0]}}').hide();$('#regulon-{{$regulon_result[$sec0][sec1][0]}}').hide();">Hide Regulon UMAP
+																																																	</button>
+																																			<button type="button" id="trajectorybtn-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="$('#trajectory-{{$regulon_result[$sec0][sec1][0]}}').show();show_trajectory_table(this);$('#trajectory_hidebtn-{{$regulon_result[$sec0][sec1][0]}}').show();$('#trajectorybtn-{{$regulon_result[$sec0][sec1][0]}}').hide();">Trajectory plot
+																																																	</button>
+																																																	<button type="button" style="display:none;" id="trajectory_hidebtn-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="$('#trajectorybtn-{{$regulon_result[$sec0][sec1][0]}}').show();$('#trajectory_hidebtn-{{$regulon_result[$sec0][sec1][0]}}').hide();$('#trajectory-{{$regulon_result[$sec0][sec1][0]}}').hide();">Hide Trajectory plot
+																																																	</button>
+																																			</td></tr>
+																																			<tr><td class="motif-table">
+																																									<div class="row">
+																																									<div class="col-md-3"><label class="motif-text">TF: </label> <a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" class="motif-text" target="_blank">{{$tomtom_result.$motif_num_jaspar[0][1]|regex_replace:"/_.+/":""}}</a>
+																																									<a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" target="_blank"><img class="motif-logo lozad " data-src="http://hocomoco11.autosome.ru/final_bundle/hocomoco11/full/{{$main_species|upper}}/mono/logo_large/{{$tomtom_result.$motif_num_jaspar[0][1]}}_direct.png"/></a><p class="motif-score">p-value: {{$tomtom_result.$motif_num_jaspar[0][3]|string_format:"%.2e"}}</p><p class="motif-score">e-value: {{$tomtom_result.$motif_num_jaspar[0][4]|string_format:"%.2e"}}</p><p class="motif-score">q-value: {{$tomtom_result.$motif_num_jaspar[0][5]|string_format:"%.2e"}}</p></div>
+																																										
+																																<div class="col-md-9"> 
+																																<!--
+																																<input class="btn btn-default tf-button" type="button" value="TF-alternative regulon" onClick="window.open('/iris3/heatmap.php?jobid={{$jobid}}&file={{$tomtom_result.$motif_num_jaspar[0][1]|regex_replace:"/_.+/":""}}.json');"/>-->
+																																<table id="tomtom_table" class="table table-hover tomtom_table table-sm" cellpadding="0" cellspacing="0" width="100%">
+																																<thead><tr><td>Motif name</td><td>Motif logo</td><td>Motif p-value</td><td>Motif z-score</td><td>Motif details</td><td>Motif comparison</td></tr></thead>
+																																<tbody>
+																																{{section name=sec3  start=1 loop=$regulon_motif_result[$sec0][sec1]}}
+																																{{assign var="this_motif" value=","|explode:$regulon_motif_result[$sec0][sec1][sec3]}}
+																																<tr><td >{{$regulon_result[$sec0][sec1][0]}}-Motif-{{$smarty.section.sec3.index}}
+																																							</td><td>
+																																<a href="motif_detail.php?jobid={{$jobid}}&ct={{$this_motif[0]}}&bic={{$this_motif[1]}}&id={{$this_motif[2]}}" target="_blank"><img class="motif-predict-logo lozad " data-src="data/{{$jobid}}/logo/ct{{$this_motif[0]}}bic{{$this_motif[1]}}m{{$this_motif[2]}}.fsa.png"/></a></td>
+																																<td class="tomtom_pvalue">
+																																{{$motif_rank_result[$sec0][sec4][0]}}
+																																{{section name=sec4  start=0 loop=$motif_rank_result[$sec0]}}
+																																{{if $regulon_motif_result[$sec0][sec1][sec3] == $motif_rank_result[$sec0][sec4][0]}}
+																																{{$motif_rank_result[$sec0][sec4][1]|string_format:"%.2e"}}</td>
+																																{{if $motif_rank_result[$sec0][sec4][3]|string_format:"%.2f" < 10}}
+																																<td> {{$motif_rank_result[$sec0][sec4][3]|string_format:"%.2f"}}</td>
+																																{{else}} <td> NA</td>
+																																{{/if}}
+																																{{/if}}
+																																{{/section}}
+																																
+																																<td><a href="motif_detail.php?jobid={{$jobid}}&ct={{$this_motif[0]}}&bic={{$this_motif[1]}}&id={{$this_motif[2]}}" target="_blank">Open
+																																							</a></td><td><a href="data/{{$jobid}}/tomtom/ct{{$this_motif[0]}}bic{{$this_motif[1]}}m{{$this_motif[2]}}/tomtom.html" target="_blank">Open
+																																							</a></td></tr>
+																																{{/section}}</tbody></table>  
+																																									
+																																									</div></div>
+																																</td></tr>
+																																			<tr><td colspan=2 style="border:none">
+																																										<div id="heatmap-{{$regulon_result[$sec0][sec1][0]}}" class="col-md-12" style="display:none;">
+																																											<div id='ci-{{$regulon_result[$sec0][sec1][0]}}'>
+																																											<h1 class='wait_message'>Loading heatmap ...<img src="static/images/busy.gif"></h1>
+																																										</div></div> 
+																																										<div id="peak-{{$regulon_result[$sec0][sec1][0]}}" style="display:none;">
+																																											<div id='table-{{$regulon_result[$sec0][sec1][0]}}' style="max-width:100%;display:block">
+																																										</div>
+																																										<table id="table-content-{{$regulon_result[$sec0][sec1][0]}}" class="display" style="font-size:12px;width:100%">
+																																											<thead>
+																																												<tr>
+																																													<th>Tissue/ cell cluster</th>
+																																													<th># of ATAC-seq peaks</th>
+																																													<th># of included regulon genes</th>
+																																													<th>Rate in regulon</th>
+																																													<th>Species</th>
+																																													<th>CistromeDB ID</th>
+																																													<th></th>
+																																													<th>Overlapped genes</th>
+																																												</tr>
+																																											</thead>
+																																										</table>
+																																										</div>
+																																										<div id="tad-{{$regulon_result[$sec0][sec1][0]}}" style="display:none;">
+																																											<div id='tad-table-{{$regulon_result[$sec0][sec1][0]}}' style="max-width:100%;display:block">
+																																										</div>
+																																										<table id="tad-table-content-{{$regulon_result[$sec0][sec1][0]}}" class="display" style="font-size:12px;width:100%">
+																																											<thead>
+																																												<tr>
+																																													<th>Tissue/ cell cluster</th>
+																																													<th>Species</th>
+																																													<th>Additional cell cluster specific genes found in TAD</th>
+																																												</tr>
+																																											</thead>
+																																										</table>
+																																										</div>
+																																										<div class="col-md-12" id="regulon-{{$regulon_result[$sec0][sec1][0]}}" style="display:none;">
+																																																															<div id='regulon-table-{{$regulon_result[$sec0][sec1][0]}}' style="max-width:100%;display:block"></div>
+																																																															<div id="regulon-table-content-{{$regulon_result[$sec0][sec1][0]}}" class="display" style="font-size:12px;width:100%">
+																																										</div>
+																																																													</div>
+																																									<div class="col-md-12"  id="trajectory-{{$regulon_result[$sec0][sec1][0]}}" style="display:none;">
+																																																															<div id='trajectory-table-{{$regulon_result[$sec0][sec1][0]}}' style="max-width:100%;display:block"></div>
+																																																															<div id="trajectory-table-content-{{$regulon_result[$sec0][sec1][0]}}" class="display" style="font-size:12px;width:100%">
+																																																															</div>
+																																																													</div>
+																																									<div class="col-md-12"  id="gene-{{$regulon_result[$sec0][sec1][0]}}" style="display:none;">
+																																																															<div id='gene-tsne-{{$regulon_result[$sec0][sec1][0]}}' style="max-width:100%;display:block"></div>
+																																																															<div id="gene-tsne-content-{{$regulon_result[$sec0][sec1][0]}}" class="display" style="font-size:12px;width:100%">
+																																																															</div>
+																																																													</div>
+																																							</td>
+																																							</tr>
+																																							</tbody></table>
+																																							</li>
+																																																									{{/section}} </ul> <ul class="pagination pagination-lg regulon_pagination_bar"></ul></div></div></div></div>
+																																						
+																																																			</div>	
+																																				{{/if}}
+																																				{{/foreach}}
+																																				<!--
+																																				{{if $count_module > 0 && $module_result[0][0][0]|count_characters > 2}}
+																																				
+																																					<div class="tab-pane" id="main_module{{$module_idx+1}}" role="tabpanel">
+																																					<div class="flatPanel panel panel-default">
+																																								<div class="row" style="">
+																																								<div class="form-group col-md-12 col-sm-12" style="height:100%">
+																																								<strong>No regulon found in this module </strong>
+																																						</div></div> </div> </div> 
+																																				{{/if}}-->
+																																				
+																																				{{foreach from=$module_result item=label1 key=sec0}}
+																																				{{if $module_result[$sec0][0][0]|count_characters < 2}}
+																																				<div class="tab-pane" id="main_module{{$sec0+1}}" role="tabpanel">
+																																					<div class="flatPanel panel panel-default">
+																																								<div class="row" style="">
+																																								<div class="form-group col-md-12 col-sm-12" style="height:100%">
+																																								<strong>No regulon found in module {{$sec0}} </strong>
+																																						</div></div> </div> </div> 
+																																				{{else}}
+																																				<div class="tab-pane " id="main_module{{$sec0+1}}" role="tabpanel">
+																																					<div class="flatPanel panel panel-default">
+																																								<div class="row" style="">
+																																								<div class="form-group col-md-12 col-sm-12" style="height:100%">
+																																								<p class="ct-panel-description">{{$module_result[$sec0][0][0]}} Uploaded gene module heatmap {{$sec0+1}}</p>
+																																								<a class="ct-panel-a" href="/iris3/heatmap.php?jobid={{$jobid}}&file=module{{$sec0+1}}.json" target="_blank">
+																																																									<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#">Open in new tab
+																																																									</button>
+																																																							</a><a class="ct-panel-a" href="/iris3/data/{{$jobid}}/{{$jobid}}_module_{{$sec0+1}}_bic.regulon_gene_symbol.txt" target="_blank">
+																																																									<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#">Download module-{{$sec0+1}} regulon-gene list (Gene symbol)
+																																																									</button></a>
+																																							<a class="ct-panel-a" href="/iris3/data/{{$jobid}}/{{$jobid}}_module_{{$sec0+1}}_bic.regulon_gene_id.txt" target="_blank">
+																																							<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#">Download module-{{$sec0+1}} regulon-gene list (Ensembl gene ID) 
+																																																									</button>
+																																																							</a><div class="panel-body"><div class="flatPanel panel panel-default">
+																																									<div id="heatmap">
+																																											<div id='container-id-module-{{$sec0+1}}' style="height:95%;max-height:95%;max-width:100%;display:block">
+																																											<h1 class='wait_message'>Please wait ...</h1>
+																																										</div></div></div></div></div></div></div>
+																																						<div class="flatPanel panel panel-default">
+																																								<div class="row" >
+																																								<div class="form-group col-md-12 col-sm-12" style="height:100%">
+																																							
+																																						
+																																																									{{section name=sec1 loop=$module_result[$sec0]}}
+																																							<table class="table table-sm page_item{{$sec0+1}}" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:0"><tbody>
+																																							<tr><td colspan="2"> <div class='regulon-heading'> {{$module_result[$sec0][sec1][0]}}</div></td></tr>
+																																							<tr><td class="gene-score">Number of genes: {{$module_result[$sec0][sec1]|@count-1}}</td></tr>
+																																																									<tr><td class="gene-table">
+																																																											<div style="width:100%; font-size:14px;">
+																																									<table class="table table-hover table-sm" ><tbody>
+																																						<tr><td>Gene Symbol  <button class="btn btn-default" id="symbol-{{$module_result[$sec0][sec1][0]}}" onclick="copy_list(this)">Copy</button></td><td>Enesmbl ID  <button class="btn btn-default" id="id-{{$module_result[$sec0][sec1][0]}}"onclick="copy_list(this)">Copy</button></td><td>Gene UMAP plot</td>
+																																</tr>
+																																						{{section name=sec2 start=1 loop=$module_result[$sec0][sec1]}}
+																																
+																																<tr><td><a target="_blank" href= "{{if $main_species|strpos:'Human'===0}}https://www.genecards.org/cgi-bin/carddisp.pl?gene={{elseif $main_species|strpos:'Mouse'===0}}http://www.informatics.jax.org/searchtool/Search.do?query={{/if}}{{$module_result[$sec0][sec1][sec2]}}">{{$module_result[$sec0][sec1][sec2]}}</a></td>							
+																																									 <td><a  target="_blank" href= "https://www.ensembl.org/id/{{$module_id_result[$sec0][sec1][sec2]}}">{{$regulon_id_result[$sec0][sec1][sec2]}}</a></td><td><button type="button" id="genebtn-{{$module_result[$sec0][sec1][0]}}_{{$module_result[$sec0][sec1][sec2]}}" class="btn btn-default gene-button" data-toggle="collapse" onclick="$('#gene_hidebtn-{{$module_result[$sec0][sec1][0]}}_{{$module_result[$sec0][sec1][sec2]}}').show();$('#gene-{{$module_result[$sec0][sec1][0]}}').show();show_gene_tsne(this);$('#genebtn-{{$module_result[$sec0][sec1][0]}}_{{$module_result[$sec0][sec1][sec2]}}').hide();"> Display
+																																																	</button><button type="button" style="display:none;" id="gene_hidebtn-{{$module_result[$sec0][sec1][0]}}_{{$module_result[$sec0][sec1][sec2]}}" class="btn btn-default gene-button" data-toggle="collapse" onclick="$('#genebtn-{{$module_result[$sec0][sec1][0]}}_{{$module_result[$sec0][sec1][sec2]}}').show();$('#gene_hidebtn-{{$module_result[$sec0][sec1][0]}}_{{$module_result[$sec0][sec1][sec2]}}').hide();$('#gene-{{$module_result[$sec0][sec1][0]}}').hide();">Hide
+																																																	</button></td>{{/section}}</tr></tbody></table></div></td>
+																																								<td rowspan="2" class="vert-aligned">
+																																			<button type="button" class="btn btn-default extra-button" data-toggle="collapse" id="{{$module_result[$sec0][sec1][0]}}" onclick="$('#heatmap-{{$module_result[$sec0][sec1][0]}}').show();make_clust('data/{{$jobid}}/json/{{$module_result[$sec0][sec1][0]}}.json','#ci-{{$module_result[$sec0][sec1][0]}}');flag.push('#ci-{{$module_result[$sec0][sec1][0]}}');$('#hide-{{$module_result[$sec0][sec1][0]}}').show();$('#{{$module_result[$sec0][sec1][0]}}').hide();">Heatmap
+																																																	</button><button style="display:none;" type="button" class="btn btn-default extra-button" data-toggle="collapse"  id="hide-{{$module_result[$sec0][sec1][0]}}" onclick="$('#ci-{{$module_result[$sec0][sec1][0]}}').removeAttr('style');$('#ci-{{$module_result[$sec0][sec1][0]}}').empty();$('#{{$module_result[$sec0][sec1][0]}}').show();$('#hide-{{$module_result[$sec0][sec1][0]}}').hide();">Hide Heatmap
+																																																	</button>
+																																			<button type="button" id="enrichr-{{$module_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="get_gene_list(this)" >Send gene list to Enrichr
+																																																	</button>
+																																			<button type="button" id="peakbtn-{{$module_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="show_peak_table(this);$('#peak_hidebtn-{{$module_result[$sec0][sec1][0]}}').show();$('#peak-{{$module_result[$sec0][sec1][0]}}').show();$('#peakbtn-{{$module_result[$sec0][sec1][0]}}').hide();" >ATAC-seq peak enrichment
+																																																	</button>
+																																			<button type="button" style="display:none;" id="peak_hidebtn-{{$module_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="$('#peakbtn-{{$module_result[$sec0][sec1][0]}}').show();$('#peak_hidebtn-{{$module_result[$sec0][sec1][0]}}').hide();$('#peak-{{$module_result[$sec0][sec1][0]}}').hide();" >Hide ATAC-seq peak enrichment
+																																																	</button>
+																																			<button type="button" id="tadbtn-{{$module_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="show_tad_table(this);$('#tad_hidebtn-{{$module_result[$sec0][sec1][0]}}').show();$('#tad-{{$module_result[$sec0][sec1][0]}}').show();$('#tadbtn-{{$module_result[$sec0][sec1][0]}}').hide();" >Additional TAD covered genes
+																																																	</button>
+																																			<button type="button" style="display:none;" id="tad_hidebtn-{{$module_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="$('#tadbtn-{{$module_result[$sec0][sec1][0]}}').show();$('#tad_hidebtn-{{$module_result[$sec0][sec1][0]}}').hide();$('#tad-{{$module_result[$sec0][sec1][0]}}').hide();" >Hide additional TAD covered genes
+																																																	</button>
+																																			{{assign var="this_tf" value=","|explode:$module_motif_result[$sec0][sec1][1]}}
+																																			{{assign var=motif_num_jaspar value="module`$this_tf[0]`bic`$this_tf[1]`m`$this_tf[2]`"}}
+																																			</td></tr>
+																																			<tr><td class="motif-table">
+																																									<div class="row">
+																																									<div class="col-md-3"><label class="motif-text">TF: </label> <a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" class="motif-text" target="_blank">{{$tomtom_result.$motif_num_jaspar[0][1]|regex_replace:"/_.+/":""}}</a>
+																																									<a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" target="_blank"><img class="motif-logo lozad " data-src="http://hocomoco11.autosome.ru/final_bundle/hocomoco11/full/{{$main_species|upper}}/mono/logo_large/{{$tomtom_result.$motif_num_jaspar[0][1]}}_direct.png"/></a><p class="motif-score">p-value: {{$tomtom_result.$motif_num_jaspar[0][3]|string_format:"%.2e"}}</p><p class="motif-score">e-value: {{$tomtom_result.$motif_num_jaspar[0][4]|string_format:"%.2e"}}</p><p class="motif-score">q-value: {{$tomtom_result.$motif_num_jaspar[0][5]|string_format:"%.2e"}}</p></div>
+																																										
+																																<div class="col-md-9"> 
+																																
+																																<table id="tomtom_table" class="table table-hover tomtom_table table-sm" cellpadding="0" cellspacing="0" width="100%">
+																																<thead><tr><td>Motif name</td><td>Motif logo</td><td>Motif details</td><td>Motif comparison</td></tr></thead>
+																																<tbody>
+																																{{section name=sec3  start=1 loop=$module_motif_result[$sec0][sec1]}}
+																																{{assign var="this_motif" value=","|explode:$module_motif_result[$sec0][sec1][sec3]}}
+																																<tr><td >{{$module_result[$sec0][sec1][0]}}-Motif-{{$smarty.section.sec3.index}}
+																																							</td><td>
+																																<a href="motif_detail.php?jobid={{$jobid}}&module={{$this_motif[0]}}&bic={{$this_motif[1]}}&id={{$this_motif[2]}}" target="_blank"><img class="motif-predict-logo lozad " data-src="data/{{$jobid}}/logo/module{{$this_motif[0]}}bic{{$this_motif[1]}}m{{$this_motif[2]}}.fsa.png"/></a></td>
+																																<td><a href="motif_detail.php?jobid={{$jobid}}&module={{$this_motif[0]}}&bic={{$this_motif[1]}}&id={{$this_motif[2]}}" target="_blank">Open
+																																							</a></td><td><a href="data/{{$jobid}}/tomtom/module{{$this_motif[0]}}bic{{$this_motif[1]}}m{{$this_motif[2]}}/tomtom.html" target="_blank">Open
+																																							</a></td></tr>
+																																{{/section}}</tbody></table>  
+																																									
+																																									</div></div>
+																																</td></tr>
+																																			<tr><td colspan=2 style="border:none">
+																																										<div id="heatmap-{{$module_result[$sec0][sec1][0]}}" class="col-md-12" style="display:none;">
+																																											<div id='ci-{{$module_result[$sec0][sec1][0]}}'>
+																																											<h1 class='wait_message'>Loading heatmap ... <img src="static/images/busy.gif"></h1>
+																																										</div></div> 
+																																										<div id="peak-{{$module_result[$sec0][sec1][0]}}" style="display:none;">
+																																											<div id='table-{{$module_result[$sec0][sec1][0]}}' style="max-width:100%;display:block">
+																																										</div>
+																																										<table id="table-content-{{$module_result[$sec0][sec1][0]}}" class="display" style="font-size:12px;width:100%">
+																																											<thead>
+																																												<tr>
+																																													<th>Tissue/ cell cluster</th>
+																																													<th># of ATAC-seq peaks</th>
+																																													<th># of included regulon genes</th>
+																																													<th>Rate in regulon</th>
+																																													<th>Species</th>
+																																													<th>CistromeDB ID</th>
+																																													<th></th>
+																																													<th>Overlapped genes</th>
+																																												</tr>
+																																											</thead>
+																																										</table>
+																																										</div>
+																																										<div id="tad-{{$module_result[$sec0][sec1][0]}}" style="display:none;">
+																																											<div id='tad-table-{{$module_result[$sec0][sec1][0]}}' style="max-width:100%;display:block">
+																																										</div>
+																																										<table id="tad-table-content-{{$module_result[$sec0][sec1][0]}}" class="display" style="font-size:12px;width:100%">
+																																											<thead>
+																																												<tr>
+																																													<th>Tissue/ cell cluster</th>
+																																													<th>Species</th>
+																																													<th>Additional cell cluster specific genes found in TAD</th>
+																																												</tr>
+																																											</thead>
+																																										</table>
+																																										</div>
+																																									<div class="col-md-12"  id="gene-{{$module_result[$sec0][sec1][0]}}" style="display:none;">
+																																																															<div id='gene-tsne-{{$module_result[$sec0][sec1][0]}}' style="max-width:100%;display:block"></div>
+																																																															<div id="gene-tsne-content-{{$module_result[$sec0][sec1][0]}}" class="display" style="font-size:12px;width:100%">
+																																																															</div>
+																																																													</div>
+																																										</td></tr> </tbody></table>
+																																
+																																																									{{/section}}
+																																
+																																										
+																																						</div>{{/if}}{{/foreach}}</div></div></div></div>
+																																</div>
+																														</div>
+                                        <div class="tab-pane fade" id="tab5default"><div class="flatPanel panel panel-default">
+																											<div class="panel-body">
+																					<div class="form-group col-md-12 col-sm-12">
+																							<div class="row">
+																							<h4 class="font-italic text-left"></h4>
+																													<div class="col-md-12 col-sm-12">
+																															<div class="form-group col-md-6 col-sm-6">
+																																	<p for="reportsList">Enable imputation: {{$is_imputation}}</p>
+																															</div>
+																															<div class="form-group col-md-6 col-sm-6">
+																																<p>Number of principle components: 10</p>
+																														</div>
+																														<div class="form-group col-md-6 col-sm-6">
+																																	<p>Number of highly variable features: 5000</p>
+																															</div>
+																															<div class="form-group col-md-6 col-sm-6">
+																																<p>Cell clustering resolution: 0.8</p>
+																														</div>
+																															<div class="form-group col-md-6 col-sm-6">
+																																	<p>Enable dual strategy: {{$is_c}}</p>
+																															</div>
+																							<div class="form-group col-md-6 col-sm-6">
+																																	<p for="reportsList">Minimum cell number: {{$k_arg}}</p>
+																															</div>
+																															<div class="form-group col-md-6 col-sm-6">
+																																	<p>Maximum bicluster number: {{$o_arg}}</p>
+																															</div>
+																															<div class="form-group col-md-6 col-sm-6">
+																																	<p>Bicluster overlap rate: {{$f_arg}}</p>
+																															</div>
+																							<div class="form-group col-md-6 col-sm-6">
+																																	<p>Regulon prediction using {{$label_use_predict}}</p>
+																															</div>
+																							<div class="form-group col-md-6 col-sm-6">
+																																	<p>Upstream promoter region: {{$promoter_arg}}</p>
+																															</div>
+																							<div class="form-group col-md-6 col-sm-6"> 
+																																	<p>Email: {{$email_line}}</p>
+																															</div>
+																															<div class="form-group col-md-6 col-sm-6"> 
+																																	<p>Uploaded files: </p><p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
+																															</div>
+																													</div>
+																						</div>
+																											</div>
+																									</div></div>
                                     </div>
                                 </div>
                             </div>
-                    <div class="flatPanel panel panel-default">
-                        <div class="panel-body">
-                            <div class="row" style="">
-                                <div class="form-group col-md-12 col-sm-12" style="height:100%">
-									     <ul class="nav nav-tabs nav-sticky" id="myTab" role="tablist">
-															{{section name=ct_idx start=0 loop=$count_ct}}
-                                                            <li class="nav-item {{if {{$count_ct[ct_idx]}} eq '1'}}active{{/if}}">
-                                                                <a class="nav-link fade in {{if {{$count_ct[ct_idx]}} eq '0'}}active{{/if}}" id="nav-{{$count_ct[ct_idx]}}" data-toggle="tab" tabtype="main" href="#main_CT{{$count_ct[ct_idx]}}" json="data/{{$jobid}}/json/CT{{$count_ct[ct_idx]}}.json" root="#container-id-{{$count_ct[ct_idx]}}" role="tab" aria-controls="home" aria-selected="true">CT{{$count_ct[ct_idx]}}</a>
-                                                            </li>
-															{{/section}}
-															{{if $count_module > 0}}
-															{{section name=ct_idx start=0 loop=$count_module}}
-                                                            <li class="nav-item">
-                                                                <a class="nav-link fade in " id="nav{{$count_module[ct_idx]}}" data-toggle="tab" tabtype="main" href="#main_module{{$count_module[ct_idx]}}" json="data/{{$jobid}}/json/module{{$count_module[ct_idx]}}.json" root="#container-id-module-{{$count_module[ct_idx]}}" role="tab" aria-controls="home" aria-selected="true">module{{$count_module[ct_idx]}}</a>
-                                                            </li>
-															{{/section}}
-															{{/if}}
-                                                        </ul>
-
-                                                        <div class="tab-content" id="myTabContent">	
-														{{section name=ct_idx start=0 loop=$count_ct}}	{{/section}}
-														{{foreach from=$regulon_result item=label1 key=sec0}}	
-														{{if $regulon_result[$sec0][0][0] == '0'}}
-																			<div class="tab-pane {{if {{$sec0+1}} eq '1'}}active{{/if}}" id="main_CT{{$sec0+1}}" role="tabpanel">
-																<div class="flatPanel panel panel-default">
-																			<div class="row" style="">
-																			<div class="form-group col-md-12 col-sm-12" style="height:100%">
-																			<strong>No regulon found in CT{{$sec0+1}} </strong>
-																			<ol>
-																			This may be caused by You can re-submit your data and change IRIS3 parameters to possibly solve this issue:
-																			<li>Decrease clustering resolution in Suerat, e.g.: 0.5.
-																			</li>
-																			<li>Set a smaller minimal cell numer in biclusters in QUBIC2. E.g. set to 5 for cell number less than 100.
-																			</li>
-																			<li>Set a lager bicluster overlap rate in QUBIC2. 
-																			</li>
-																			<li>Turn on imputation to decrease data noise. (note: this may greatly increase the computational time)
-																			</li>
-																			<li>Set the maximum bicluster number in QUBIC2 as 1000.
-																			</li>
-																			
-																			</ol>
-																			<p>For more information, please check our <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics" target="_blank">tutorial</a> and <a href="https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ" target="_blank">FAQ</a></p>
-																	</div></div> </div> </div> 
-															{{else}}	
-															<div class="tab-pane {{if {{$sec0+1}} eq '1'}}active{{/if}}" id="main_CT{{$sec0+1}}" role="tabpanel">
-																<div class="flatPanel panel panel-default ct-panel">
-																			<div class="row">
-																			<div class="form-group col-md-12 col-sm-12" style="height:100%">
-																			<p class="ct-panel-description" >Cell-gene-regulon heatmap for cell cluster {{$sec0+1}}</p>
-																			<a class="ct-panel-a" href="/iris3/heatmap.php?jobid={{$jobid}}&file=CT{{$sec0+1}}.json" target="_blank">
-                                                                        <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#">Open in new tab
-                                                                        </button>
-                                                                    </a><a class="ct-panel-a"  href="/iris3/data/{{$jobid}}/{{$jobid}}_CT_{{$sec0+1}}_bic.regulon_gene_symbol.txt" target="_blank">
-                                                                        <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#">Download CT-{{$sec0+1}} regulon-gene list (Gene Symbol) 
-                                                                        </button> </a>
-																		<a class="ct-panel-a"  href="/iris3/data/{{$jobid}}/{{$jobid}}_CT_{{$sec0+1}}_bic.regulon_gene_id.txt" target="_blank">
-																		<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#">Download CT-{{$sec0+1}} regulon-gene list (Ensembl gene ID)
-                                                                        </button>
-                                                                    </a>
-																	
-																	<div class="panel-body"><div class="flatPanel panel panel-default">
-																				<div id="heatmap">
-																						<div id='container-id-{{$sec0+1}}' style="height:95%;max-height:95%;max-width:100%;display:block">
-																						<h2 class='wait_message'>Loading heatmap ...</h2>
-																					</div></div></div></div></div>
-																					<div class="col-md-4">
-																					<div class="form-group col-md-12 col-sm-12" style="height:100%">
-																			<p class="ct-panel-description" >Regulon specificity score scatter plot for Cell Cluster {{$sec0+1}}</p>
-                                                   
-												   <img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/ct{{$sec0+1}}_rss_scatter.png"/>
-												</div></div></div></div> 
-																					
-																	<div id="nav_scroll"></div>
-																	<div class="flatPanel panel panel-default">
-																			<div class="row" >
-																			<div class="form-group col-md-12 col-sm-12" style="height:100%">
-																	
-																	<!--<table id="regulon_table{{$sec0+1}}" cellpadding="0" cellspacing="0" width="100%">
-																	<thead><tr><th></th></tr></thead>
-                                                                    <tbody> 
-																	-->
-															<div id="regulon_pagination{{$sec0+1}}">
-															<label style="margin-left: 0.5em;">Search: <input type="text" class="search regulon_search" placeholder=""/></label>
-															<ul class="list" style="list-style-type:none;padding:0;">
-                                                                        {{section name=sec1 loop=$regulon_result[$sec0]}} 
-																		<li>
-																		<table class="table table-sm page_item{{$sec0+1}}" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:0"><tbody>
-																		<tr><td colspan="2"> <div class='regulon-heading'> {{$regulon_result[$sec0][sec1][0]}} {{if $regulon_rank_result[$sec0][sec1][4] < 0.05}}(CTSR) {{/if}}</div></td></tr>
-																		<tr><td class="gene-score">Regulon specificity score: {{$regulon_rank_result[$sec0][sec1][5]|string_format:"%.8f"}} (p-value{{if $regulon_rank_result[$sec0][sec1][4]|string_format:"%.5f" == 0}}&lt;1.0e-4{{else}}: {{$regulon_rank_result[$sec0][sec1][4]|string_format:"%.1e"}}{{/if}})</td><td class="gene-score">Number of genes: {{$regulon_result[$sec0][sec1]|@count-1}}</td><td class="gene-score">Number of marker genes: {{$regulon_rank_result[$sec0][sec1]|@count-6}}</td></tr>
-                                                                        <tr><td class="gene-table">
-                                                                            <div style="width:100%; font-size:14px;">
-																				<table class="table table-hover table-sm" ><tbody>
-	                                <tr><td>Marker gene</td><td>Gene Symbol  <button class="btn btn-default" id="symbol-{{$regulon_result[$sec0][sec1][0]}}" onclick="copy_list(this)">Copy</button></td><td>Enesmbl ID  <button class="btn btn-default" id="id-{{$regulon_result[$sec0][sec1][0]}}"onclick="copy_list(this)">Copy</button></td><td>Gene UMAP plot</td>
-									</tr>
-                                  {{section name=sec2 start=1 loop=$regulon_result[$sec0][sec1]}}
-							
-										  <tr><td>
-										  {{section name=marker_idx start=6 loop=$regulon_rank_result[$sec0][sec1]}}
-										  {{if !empty($regulon_rank_result[$sec0][sec1][marker_idx]) && $regulon_rank_result[$sec0][sec1][marker_idx]==$regulon_result[$sec0][sec1][sec2]}}<span class="glyphicon glyphicon-star"></span> {{/if}}
-										  {{/section}}</td><td><a target="_blank" href= "{{if $main_species|strpos:'Human'===0}}https://www.genecards.org/cgi-bin/carddisp.pl?gene={{elseif $main_species|strpos:'Mouse'===0}}http://www.informatics.jax.org/searchtool/Search.do?query={{/if}}{{$regulon_result[$sec0][sec1][sec2]}}">{{$regulon_result[$sec0][sec1][sec2]}}</a></td>							
-                                         <td><a  target="_blank" href= "https://www.ensembl.org/id/{{$regulon_id_result[$sec0][sec1][sec2]}}">{{$regulon_id_result[$sec0][sec1][sec2]}}</a></td><td><button type="button" id="genebtn-{{$regulon_result[$sec0][sec1][0]}}_{{$regulon_result[$sec0][sec1][sec2]}}" class="btn btn-default gene-button" data-toggle="collapse" onclick="$('#gene_hidebtn-{{$regulon_result[$sec0][sec1][0]}}_{{$regulon_result[$sec0][sec1][sec2]}}').show();$('#gene-{{$regulon_result[$sec0][sec1][0]}}').show();show_gene_tsne(this);$('#genebtn-{{$regulon_result[$sec0][sec1][0]}}_{{$regulon_result[$sec0][sec1][sec2]}}').hide();"> Display
-                                                        </button><button type="button" style="display:none;" id="gene_hidebtn-{{$regulon_result[$sec0][sec1][0]}}_{{$regulon_result[$sec0][sec1][sec2]}}" class="btn btn-default gene-button" data-toggle="collapse" onclick="$('#genebtn-{{$regulon_result[$sec0][sec1][0]}}_{{$regulon_result[$sec0][sec1][sec2]}}').show();$('#gene_hidebtn-{{$regulon_result[$sec0][sec1][0]}}_{{$regulon_result[$sec0][sec1][sec2]}}').hide();$('#gene-{{$regulon_result[$sec0][sec1][0]}}').hide();">Hide
-                                                        </button><!----></td>{{/section}}</tr></tbody></table></div></td>
-																			<td rowspan="2" class="vert-aligned">
-														<button type="button" class="btn btn-default extra-button" data-toggle="collapse" id="{{$regulon_result[$sec0][sec1][0]}}" onclick="$('#heatmap-{{$regulon_result[$sec0][sec1][0]}}').show();make_clust('data/{{$jobid}}/json/{{$regulon_result[$sec0][sec1][0]}}.json','#ci-{{$regulon_result[$sec0][sec1][0]}}');flag.push('#ci-{{$regulon_result[$sec0][sec1][0]}}');$('#hide-{{$regulon_result[$sec0][sec1][0]}}').show();$('#{{$regulon_result[$sec0][sec1][0]}}').hide();">Heatmap
-                                                        </button><button style="display:none;" type="button" class="btn btn-default extra-button" data-toggle="collapse"  id="hide-{{$regulon_result[$sec0][sec1][0]}}" onclick="$('#ci-{{$regulon_result[$sec0][sec1][0]}}').removeAttr('style');$('#ci-{{$regulon_result[$sec0][sec1][0]}}').empty();$('#{{$regulon_result[$sec0][sec1][0]}}').show();$('#hide-{{$regulon_result[$sec0][sec1][0]}}').hide();">Hide Heatmap
-                                                        </button>
-														<button type="button" id="enrichr-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="get_gene_list(this)" >Send gene list to Enrichr
-                                                        </button>
-														<button type="button" id="peakbtn-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="show_peak_table(this);$('#peak_hidebtn-{{$regulon_result[$sec0][sec1][0]}}').show();$('#peak-{{$regulon_result[$sec0][sec1][0]}}').show();$('#peakbtn-{{$regulon_result[$sec0][sec1][0]}}').hide();" >ATAC-seq peak enrichment
-                                                        </button>
-														<button type="button" style="display:none;" id="peak_hidebtn-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="$('#peakbtn-{{$regulon_result[$sec0][sec1][0]}}').show();$('#peak_hidebtn-{{$regulon_result[$sec0][sec1][0]}}').hide();$('#peak-{{$regulon_result[$sec0][sec1][0]}}').hide();" >Hide ATAC-seq peak enrichment
-                                                        </button>
-														<button type="button" id="tadbtn-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="show_tad_table(this);$('#tad_hidebtn-{{$regulon_result[$sec0][sec1][0]}}').show();$('#tad-{{$regulon_result[$sec0][sec1][0]}}').show();$('#tadbtn-{{$regulon_result[$sec0][sec1][0]}}').hide();" >Additional TAD covered genes
-                                                        </button>
-														<button type="button" style="display:none;" id="tad_hidebtn-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="$('#tadbtn-{{$regulon_result[$sec0][sec1][0]}}').show();$('#tad_hidebtn-{{$regulon_result[$sec0][sec1][0]}}').hide();$('#tad-{{$regulon_result[$sec0][sec1][0]}}').hide();" >Hide additional TAD covered genes
-                                                        </button>
-														{{assign var="this_tf" value=","|explode:$regulon_motif_result[$sec0][sec1][1]}}
-														{{assign var=motif_num_jaspar value="ct`$this_tf[0]`bic`$this_tf[1]`m`$this_tf[2]`"}}
-														
-														<button type="button" id="regulonbtn-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="$('#regulon-{{$regulon_result[$sec0][sec1][0]}}').show();show_regulon_table(this);$('#regulon_hidebtn-{{$regulon_result[$sec0][sec1][0]}}').show();$('#regulonbtn-{{$regulon_result[$sec0][sec1][0]}}').hide();">Regulon UMAP plot
-                                                        </button>
-                                                        <button type="button" style="display:none;" id="regulon_hidebtn-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="$('#regulonbtn-{{$regulon_result[$sec0][sec1][0]}}').show();$('#regulon_hidebtn-{{$regulon_result[$sec0][sec1][0]}}').hide();$('#regulon-{{$regulon_result[$sec0][sec1][0]}}').hide();">Hide Regulon UMAP
-                                                        </button>
-														<button type="button" id="trajectorybtn-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="$('#trajectory-{{$regulon_result[$sec0][sec1][0]}}').show();show_trajectory_table(this);$('#trajectory_hidebtn-{{$regulon_result[$sec0][sec1][0]}}').show();$('#trajectorybtn-{{$regulon_result[$sec0][sec1][0]}}').hide();">Trajectory plot
-                                                        </button>
-                                                        <button type="button" style="display:none;" id="trajectory_hidebtn-{{$regulon_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="$('#trajectorybtn-{{$regulon_result[$sec0][sec1][0]}}').show();$('#trajectory_hidebtn-{{$regulon_result[$sec0][sec1][0]}}').hide();$('#trajectory-{{$regulon_result[$sec0][sec1][0]}}').hide();">Hide Trajectory plot
-                                                        </button>
-														</td></tr>
-														<tr><td class="motif-table">
-																				<div class="row">
-																				<div class="col-md-3"><label class="motif-text">TF: </label> <a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" class="motif-text" target="_blank">{{$tomtom_result.$motif_num_jaspar[0][1]|regex_replace:"/_.+/":""}}</a>
-																				<a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" target="_blank"><img class="motif-logo lozad " data-src="http://hocomoco11.autosome.ru/final_bundle/hocomoco11/full/{{$main_species|upper}}/mono/logo_large/{{$tomtom_result.$motif_num_jaspar[0][1]}}_direct.png"/></a><p class="motif-score">p-value: {{$tomtom_result.$motif_num_jaspar[0][3]|string_format:"%.2e"}}</p><p class="motif-score">e-value: {{$tomtom_result.$motif_num_jaspar[0][4]|string_format:"%.2e"}}</p><p class="motif-score">q-value: {{$tomtom_result.$motif_num_jaspar[0][5]|string_format:"%.2e"}}</p></div>
-																					
-									<div class="col-md-9"> 
-									<!--
-									<input class="btn btn-default tf-button" type="button" value="TF-alternative regulon" onClick="window.open('/iris3/heatmap.php?jobid={{$jobid}}&file={{$tomtom_result.$motif_num_jaspar[0][1]|regex_replace:"/_.+/":""}}.json');"/>-->
-									<table id="tomtom_table" class="table table-hover tomtom_table table-sm" cellpadding="0" cellspacing="0" width="100%">
-									<thead><tr><td>Motif name</td><td>Motif logo</td><td>Motif p-value</td><td>Motif z-score</td><td>Motif details</td><td>Motif comparison</td></tr></thead>
-									<tbody>
-									{{section name=sec3  start=1 loop=$regulon_motif_result[$sec0][sec1]}}
-									{{assign var="this_motif" value=","|explode:$regulon_motif_result[$sec0][sec1][sec3]}}
-									<tr><td >{{$regulon_result[$sec0][sec1][0]}}-Motif-{{$smarty.section.sec3.index}}
-                                    </td><td>
-									<a href="motif_detail.php?jobid={{$jobid}}&ct={{$this_motif[0]}}&bic={{$this_motif[1]}}&id={{$this_motif[2]}}" target="_blank"><img class="motif-predict-logo lozad " data-src="data/{{$jobid}}/logo/ct{{$this_motif[0]}}bic{{$this_motif[1]}}m{{$this_motif[2]}}.fsa.png"/></a></td>
-									<td class="tomtom_pvalue">
-									{{$motif_rank_result[$sec0][sec4][0]}}
-									{{section name=sec4  start=0 loop=$motif_rank_result[$sec0]}}
-									{{if $regulon_motif_result[$sec0][sec1][sec3] == $motif_rank_result[$sec0][sec4][0]}}
-									{{$motif_rank_result[$sec0][sec4][1]|string_format:"%.2e"}}</td>
-										{{if $motif_rank_result[$sec0][sec4][3]|string_format:"%.2f" < 10}}
-										<td> {{$motif_rank_result[$sec0][sec4][3]|string_format:"%.2f"}}</td>
-										{{else}} <td> NA</td>
-										{{/if}}
-									{{/if}}
-									{{/section}}
-									
-									<td><a href="motif_detail.php?jobid={{$jobid}}&ct={{$this_motif[0]}}&bic={{$this_motif[1]}}&id={{$this_motif[2]}}" target="_blank">Open
-                                    </a></td><td><a href="data/{{$jobid}}/tomtom/ct{{$this_motif[0]}}bic{{$this_motif[1]}}m{{$this_motif[2]}}/tomtom.html" target="_blank">Open
-                                    </a></td></tr>
-									{{/section}}</tbody></table>  
-																				
-																				</div></div>
-									</td></tr>
-														<tr><td colspan=2 style="border:none">
-																					<div id="heatmap-{{$regulon_result[$sec0][sec1][0]}}" class="col-md-12" style="display:none;">
-																						<div id='ci-{{$regulon_result[$sec0][sec1][0]}}'>
-																						<h1 class='wait_message'>Loading heatmap ...</h1>
-																					</div></div> 
-																					<div id="peak-{{$regulon_result[$sec0][sec1][0]}}" style="display:none;">
-																						<div id='table-{{$regulon_result[$sec0][sec1][0]}}' style="max-width:100%;display:block">
-																					</div>
-																					<table id="table-content-{{$regulon_result[$sec0][sec1][0]}}" class="display" style="font-size:12px;width:100%">
-																						<thead>
-																							<tr>
-																								<th>Tissue/ cell cluster</th>
-																								<th># of ATAC-seq peaks</th>
-																								<th># of included regulon genes</th>
-																								<th>Rate in regulon</th>
-																								<th>Species</th>
-																								<th>CistromeDB ID</th>
-																								<th></th>
-																								<th>Overlapped genes</th>
-																							</tr>
-																						</thead>
-																					</table>
-																					</div>
-																					<div id="tad-{{$regulon_result[$sec0][sec1][0]}}" style="display:none;">
-																						<div id='tad-table-{{$regulon_result[$sec0][sec1][0]}}' style="max-width:100%;display:block">
-																					</div>
-																					<table id="tad-table-content-{{$regulon_result[$sec0][sec1][0]}}" class="display" style="font-size:12px;width:100%">
-																						<thead>
-																							<tr>
-																								<th>Tissue/ cell cluster</th>
-																								<th>Species</th>
-																								<th>Additional cell cluster specific genes found in TAD</th>
-																							</tr>
-																						</thead>
-																					</table>
-																					</div>
-																					<div class="col-md-12" id="regulon-{{$regulon_result[$sec0][sec1][0]}}" style="display:none;">
-                                                                                    <div id='regulon-table-{{$regulon_result[$sec0][sec1][0]}}' style="max-width:100%;display:block"></div>
-                                                                                    <div id="regulon-table-content-{{$regulon_result[$sec0][sec1][0]}}" class="display" style="font-size:12px;width:100%">
-																					</div>
-                                                                                </div>
-																				<div class="col-md-12"  id="trajectory-{{$regulon_result[$sec0][sec1][0]}}" style="display:none;">
-                                                                                    <div id='trajectory-table-{{$regulon_result[$sec0][sec1][0]}}' style="max-width:100%;display:block"></div>
-                                                                                    <div id="trajectory-table-content-{{$regulon_result[$sec0][sec1][0]}}" class="display" style="font-size:12px;width:100%">
-                                                                                    </div>
-                                                                                </div>
-																				<div class="col-md-12"  id="gene-{{$regulon_result[$sec0][sec1][0]}}" style="display:none;">
-                                                                                    <div id='gene-tsne-{{$regulon_result[$sec0][sec1][0]}}' style="max-width:100%;display:block"></div>
-                                                                                    <div id="gene-tsne-content-{{$regulon_result[$sec0][sec1][0]}}" class="display" style="font-size:12px;width:100%">
-                                                                                    </div>
-                                                                                </div>
-																		</td>
-																		</tr>
-																		</tbody></table>
-																		</li>
-                                                                        {{/section}} </ul> <ul class="pagination pagination-lg regulon_pagination_bar"></ul></div></div></div></div>
-																	
-                                                            </div>	
-															{{/if}}
-															{{/foreach}}
-															<!--
-															{{if $count_module > 0 && $module_result[0][0][0]|count_characters > 2}}
-															
-																<div class="tab-pane" id="main_module{{$module_idx+1}}" role="tabpanel">
-																<div class="flatPanel panel panel-default">
-																			<div class="row" style="">
-																			<div class="form-group col-md-12 col-sm-12" style="height:100%">
-																			<strong>No regulon found in this module </strong>
-																	</div></div> </div> </div> 
-															{{/if}}-->
-															
-															{{foreach from=$module_result item=label1 key=sec0}}
-															{{if $module_result[$sec0][0][0]|count_characters < 2}}
-															<div class="tab-pane" id="main_module{{$sec0+1}}" role="tabpanel">
-																<div class="flatPanel panel panel-default">
-																			<div class="row" style="">
-																			<div class="form-group col-md-12 col-sm-12" style="height:100%">
-																			<strong>No regulon found in module {{$sec0}} </strong>
-																	</div></div> </div> </div> 
-															{{else}}
-															<div class="tab-pane " id="main_module{{$sec0+1}}" role="tabpanel">
-																<div class="flatPanel panel panel-default">
-																			<div class="row" style="">
-																			<div class="form-group col-md-12 col-sm-12" style="height:100%">
-																			<p class="ct-panel-description">{{$module_result[$sec0][0][0]}} Uploaded gene module heatmap {{$sec0+1}}</p>
-																			<a class="ct-panel-a" href="/iris3/heatmap.php?jobid={{$jobid}}&file=module{{$sec0+1}}.json" target="_blank">
-                                                                        <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#">Open in new tab
-                                                                        </button>
-                                                                    </a><a class="ct-panel-a" href="/iris3/data/{{$jobid}}/{{$jobid}}_module_{{$sec0+1}}_bic.regulon_gene_symbol.txt" target="_blank">
-                                                                        <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#">Download module-{{$sec0+1}} regulon-gene list (Gene symbol)
-                                                                        </button></a>
-																		<a class="ct-panel-a" href="/iris3/data/{{$jobid}}/{{$jobid}}_module_{{$sec0+1}}_bic.regulon_gene_id.txt" target="_blank">
-																		<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#">Download module-{{$sec0+1}} regulon-gene list (Ensembl gene ID) 
-                                                                        </button>
-                                                                    </a><div class="panel-body"><div class="flatPanel panel panel-default">
-																				<div id="heatmap">
-																						<div id='container-id-module-{{$sec0+1}}' style="height:95%;max-height:95%;max-width:100%;display:block">
-																						<h1 class='wait_message'>Please wait ...</h1>
-																					</div></div></div></div></div></div></div>
-																	<div class="flatPanel panel panel-default">
-																			<div class="row" >
-																			<div class="form-group col-md-12 col-sm-12" style="height:100%">
-																		
-																	
-                                                                        {{section name=sec1 loop=$module_result[$sec0]}}
-																		<table class="table table-sm page_item{{$sec0+1}}" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:0"><tbody>
-																		<tr><td colspan="2"> <div class='regulon-heading'> {{$module_result[$sec0][sec1][0]}}</div></td></tr>
-																		<tr><td class="gene-score">Number of genes: {{$module_result[$sec0][sec1]|@count-1}}</td></tr>
-                                                                        <tr><td class="gene-table">
-                                                                            <div style="width:100%; font-size:14px;">
-																				<table class="table table-hover table-sm" ><tbody>
-	                                <tr><td>Gene Symbol  <button class="btn btn-default" id="symbol-{{$module_result[$sec0][sec1][0]}}" onclick="copy_list(this)">Copy</button></td><td>Enesmbl ID  <button class="btn btn-default" id="id-{{$module_result[$sec0][sec1][0]}}"onclick="copy_list(this)">Copy</button></td><td>Gene UMAP plot</td>
-									</tr>
-                                  {{section name=sec2 start=1 loop=$module_result[$sec0][sec1]}}
-							
-										  <tr><td><a target="_blank" href= "{{if $main_species|strpos:'Human'===0}}https://www.genecards.org/cgi-bin/carddisp.pl?gene={{elseif $main_species|strpos:'Mouse'===0}}http://www.informatics.jax.org/searchtool/Search.do?query={{/if}}{{$module_result[$sec0][sec1][sec2]}}">{{$module_result[$sec0][sec1][sec2]}}</a></td>							
-                                         <td><a  target="_blank" href= "https://www.ensembl.org/id/{{$module_id_result[$sec0][sec1][sec2]}}">{{$regulon_id_result[$sec0][sec1][sec2]}}</a></td><td><button type="button" id="genebtn-{{$module_result[$sec0][sec1][0]}}_{{$module_result[$sec0][sec1][sec2]}}" class="btn btn-default gene-button" data-toggle="collapse" onclick="$('#gene_hidebtn-{{$module_result[$sec0][sec1][0]}}_{{$module_result[$sec0][sec1][sec2]}}').show();$('#gene-{{$module_result[$sec0][sec1][0]}}').show();show_gene_tsne(this);$('#genebtn-{{$module_result[$sec0][sec1][0]}}_{{$module_result[$sec0][sec1][sec2]}}').hide();"> Display
-                                                        </button><button type="button" style="display:none;" id="gene_hidebtn-{{$module_result[$sec0][sec1][0]}}_{{$module_result[$sec0][sec1][sec2]}}" class="btn btn-default gene-button" data-toggle="collapse" onclick="$('#genebtn-{{$module_result[$sec0][sec1][0]}}_{{$module_result[$sec0][sec1][sec2]}}').show();$('#gene_hidebtn-{{$module_result[$sec0][sec1][0]}}_{{$module_result[$sec0][sec1][sec2]}}').hide();$('#gene-{{$module_result[$sec0][sec1][0]}}').hide();">Hide
-                                                        </button></td>{{/section}}</tr></tbody></table></div></td>
-																			<td rowspan="2" class="vert-aligned">
-														<button type="button" class="btn btn-default extra-button" data-toggle="collapse" id="{{$module_result[$sec0][sec1][0]}}" onclick="$('#heatmap-{{$module_result[$sec0][sec1][0]}}').show();make_clust('data/{{$jobid}}/json/{{$module_result[$sec0][sec1][0]}}.json','#ci-{{$module_result[$sec0][sec1][0]}}');flag.push('#ci-{{$module_result[$sec0][sec1][0]}}');$('#hide-{{$module_result[$sec0][sec1][0]}}').show();$('#{{$module_result[$sec0][sec1][0]}}').hide();">Heatmap
-                                                        </button><button style="display:none;" type="button" class="btn btn-default extra-button" data-toggle="collapse"  id="hide-{{$module_result[$sec0][sec1][0]}}" onclick="$('#ci-{{$module_result[$sec0][sec1][0]}}').removeAttr('style');$('#ci-{{$module_result[$sec0][sec1][0]}}').empty();$('#{{$module_result[$sec0][sec1][0]}}').show();$('#hide-{{$module_result[$sec0][sec1][0]}}').hide();">Hide Heatmap
-                                                        </button>
-														<button type="button" id="enrichr-{{$module_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="get_gene_list(this)" >Send gene list to Enrichr
-                                                        </button>
-														<button type="button" id="peakbtn-{{$module_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="show_peak_table(this);$('#peak_hidebtn-{{$module_result[$sec0][sec1][0]}}').show();$('#peak-{{$module_result[$sec0][sec1][0]}}').show();$('#peakbtn-{{$module_result[$sec0][sec1][0]}}').hide();" >ATAC-seq peak enrichment
-                                                        </button>
-														<button type="button" style="display:none;" id="peak_hidebtn-{{$module_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="$('#peakbtn-{{$module_result[$sec0][sec1][0]}}').show();$('#peak_hidebtn-{{$module_result[$sec0][sec1][0]}}').hide();$('#peak-{{$module_result[$sec0][sec1][0]}}').hide();" >Hide ATAC-seq peak enrichment
-                                                        </button>
-														<button type="button" id="tadbtn-{{$module_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="show_tad_table(this);$('#tad_hidebtn-{{$module_result[$sec0][sec1][0]}}').show();$('#tad-{{$module_result[$sec0][sec1][0]}}').show();$('#tadbtn-{{$module_result[$sec0][sec1][0]}}').hide();" >Additional TAD covered genes
-                                                        </button>
-														<button type="button" style="display:none;" id="tad_hidebtn-{{$module_result[$sec0][sec1][0]}}" class="btn btn-default extra-button" data-toggle="collapse" onclick="$('#tadbtn-{{$module_result[$sec0][sec1][0]}}').show();$('#tad_hidebtn-{{$module_result[$sec0][sec1][0]}}').hide();$('#tad-{{$module_result[$sec0][sec1][0]}}').hide();" >Hide additional TAD covered genes
-                                                        </button>
-														{{assign var="this_tf" value=","|explode:$module_motif_result[$sec0][sec1][1]}}
-														{{assign var=motif_num_jaspar value="module`$this_tf[0]`bic`$this_tf[1]`m`$this_tf[2]`"}}
-														</td></tr>
-														<tr><td class="motif-table">
-																				<div class="row">
-																				<div class="col-md-3"><label class="motif-text">TF: </label> <a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" class="motif-text" target="_blank">{{$tomtom_result.$motif_num_jaspar[0][1]|regex_replace:"/_.+/":""}}</a>
-																				<a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" target="_blank"><img class="motif-logo lozad " data-src="http://hocomoco11.autosome.ru/final_bundle/hocomoco11/full/{{$main_species|upper}}/mono/logo_large/{{$tomtom_result.$motif_num_jaspar[0][1]}}_direct.png"/></a><p class="motif-score">p-value: {{$tomtom_result.$motif_num_jaspar[0][3]|string_format:"%.2e"}}</p><p class="motif-score">e-value: {{$tomtom_result.$motif_num_jaspar[0][4]|string_format:"%.2e"}}</p><p class="motif-score">q-value: {{$tomtom_result.$motif_num_jaspar[0][5]|string_format:"%.2e"}}</p></div>
-																					
-									<div class="col-md-9"> 
-									
-									<table id="tomtom_table" class="table table-hover tomtom_table table-sm" cellpadding="0" cellspacing="0" width="100%">
-									<thead><tr><td>Motif name</td><td>Motif logo</td><td>Motif details</td><td>Motif comparison</td></tr></thead>
-									<tbody>
-									{{section name=sec3  start=1 loop=$module_motif_result[$sec0][sec1]}}
-									{{assign var="this_motif" value=","|explode:$module_motif_result[$sec0][sec1][sec3]}}
-									<tr><td >{{$module_result[$sec0][sec1][0]}}-Motif-{{$smarty.section.sec3.index}}
-                                    </td><td>
-									<a href="motif_detail.php?jobid={{$jobid}}&module={{$this_motif[0]}}&bic={{$this_motif[1]}}&id={{$this_motif[2]}}" target="_blank"><img class="motif-predict-logo lozad " data-src="data/{{$jobid}}/logo/module{{$this_motif[0]}}bic{{$this_motif[1]}}m{{$this_motif[2]}}.fsa.png"/></a></td>
-									<td><a href="motif_detail.php?jobid={{$jobid}}&module={{$this_motif[0]}}&bic={{$this_motif[1]}}&id={{$this_motif[2]}}" target="_blank">Open
-                                    </a></td><td><a href="data/{{$jobid}}/tomtom/module{{$this_motif[0]}}bic{{$this_motif[1]}}m{{$this_motif[2]}}/tomtom.html" target="_blank">Open
-                                    </a></td></tr>
-									{{/section}}</tbody></table>  
-																				
-																				</div></div>
-									</td></tr>
-														<tr><td colspan=2 style="border:none">
-																					<div id="heatmap-{{$module_result[$sec0][sec1][0]}}" class="col-md-12" style="display:none;">
-																						<div id='ci-{{$module_result[$sec0][sec1][0]}}'>
-																						<h1 class='wait_message'>Loading heatmap ...</h1>
-																					</div></div> 
-																					<div id="peak-{{$module_result[$sec0][sec1][0]}}" style="display:none;">
-																						<div id='table-{{$module_result[$sec0][sec1][0]}}' style="max-width:100%;display:block">
-																					</div>
-																					<table id="table-content-{{$module_result[$sec0][sec1][0]}}" class="display" style="font-size:12px;width:100%">
-																						<thead>
-																							<tr>
-																								<th>Tissue/ cell cluster</th>
-																								<th># of ATAC-seq peaks</th>
-																								<th># of included regulon genes</th>
-																								<th>Rate in regulon</th>
-																								<th>Species</th>
-																								<th>CistromeDB ID</th>
-																								<th></th>
-																								<th>Overlapped genes</th>
-																							</tr>
-																						</thead>
-																					</table>
-																					</div>
-																					<div id="tad-{{$module_result[$sec0][sec1][0]}}" style="display:none;">
-																						<div id='tad-table-{{$module_result[$sec0][sec1][0]}}' style="max-width:100%;display:block">
-																					</div>
-																					<table id="tad-table-content-{{$module_result[$sec0][sec1][0]}}" class="display" style="font-size:12px;width:100%">
-																						<thead>
-																							<tr>
-																								<th>Tissue/ cell cluster</th>
-																								<th>Species</th>
-																								<th>Additional cell cluster specific genes found in TAD</th>
-																							</tr>
-																						</thead>
-																					</table>
-																					</div>
-																				<div class="col-md-12"  id="gene-{{$module_result[$sec0][sec1][0]}}" style="display:none;">
-                                                                                    <div id='gene-tsne-{{$module_result[$sec0][sec1][0]}}' style="max-width:100%;display:block"></div>
-                                                                                    <div id="gene-tsne-content-{{$module_result[$sec0][sec1][0]}}" class="display" style="font-size:12px;width:100%">
-                                                                                    </div>
-                                                                                </div>
-																					</td></tr> </tbody></table>
-
-                                                                        {{/section}}
-
-																					
-																	</div></div></div></div>{{/if}}{{/foreach}}</div>
-										</div>
                                 </div>
                             </div>
                         </div>
@@ -1331,18 +1525,10 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 						</li>
 						</ul>
 						<p>Pleas check our <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics">tutorial</a> for more information. </p>
-						<!---
-						
-						<p>Perhaps you are here because: </p>
-						<ul>
-						<li> Wrong input file format</li>
-						</ul>
-						
-						--->
 						<br>
                     </div>
 					
-					<strong>Your job settings:</strong><br>
+					<strong>Job settings:</strong><br>
                             <div class="col-md-12 col-sm-12">
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Species: {{$input_species}}</p>
@@ -1363,7 +1549,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                     <p>Bicluster overlap rate: {{$f_arg}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
-                                    <p>Regulon prediction using {{$label_use_sc3}}</p>
+                                    <p>Regulon prediction using {{$label_use_predict}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Upstream promoter region: {{$promoter_arg}}</p>
@@ -1394,18 +1580,10 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 						</li>
 						</ul>
 						<p>Pleas check our <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics">tutorial</a> for more information. </p>
-						<!---
-						
-						<p>Perhaps you are here because: </p>
-						<ul>
-						<li> Wrong input file format</li>
-						</ul>
-						
-						--->
 						<br>
                     </div>
 					
-					<strong>Your job settings:</strong><br>
+					<strong>Job settings:</strong><br>
                             <div class="col-md-12 col-sm-12">
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Species: {{$input_species}}</p>
@@ -1426,7 +1604,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                     <p>Bicluster overlap rate: {{$f_arg}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
-                                    <p>Regulon prediction using {{$label_use_sc3}}</p>
+                                    <p>Regulon prediction using {{$label_use_predict}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Upstream promoter region: {{$promoter_arg}}</p>
@@ -1443,20 +1621,12 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
 					<div class="flatPanel panel-heading" style="padding: 20px 20px"><strong>Job ID: {{$jobid}}</strong></div>
 						<div class="panel-body">
 					<div style="text-align: left;">
-                        <strong><h3>Sorry, there has been an error</h3></strong> <p style="color:red">Please check with your data format (input file should be txt, csv or tsv format): <br>1. Gene expression matrix: Gene expression matrix (GEMAT) file with genes as rows and cells as columns. The expression value should be positive.<br>2. Cell label file (Optional): a two-column matrix with the first column as the cell names exactly matching the gene expression file, and the second column as ground-truth cell clusters. <br>3. Gene module file (Optional): Each column should reprensents a gene module.</p>
+                        <strong><h3>Sorry, there has been an error</h3></strong> <p style="color:red">Please check with your data format (Make sure to unzip your input data into txt csv or tsv format.): <br>1. Gene expression matrix: Gene expression matrix (GEMAT) file with genes as rows and cells as columns. The expression value should be positive.<br>2. Cell label file (Optional): a two-column matrix with the first column as the cell names exactly matching the gene expression file, and the second column as ground-truth cell clusters. <br>3. Gene module file (Optional): Each column should reprensents a gene module.</p>
 						<br>For further question, please contact qin.ma@osumc.edu<br>
-						<!---
-						
-						<p>Perhaps you are here because: </p>
-						<ul>
-						<li> Wrong input file format</li>
-						</ul>
-						
-						--->
 						<br>
                     </div>
 					
-					<strong>Your job settings:</strong><br>
+					<strong>Job settings:</strong><br>
                             <div class="col-md-12 col-sm-12">
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Species: {{$input_species}}</p>
@@ -1477,7 +1647,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                     <p>Bicluster overlap rate: {{$f_arg}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
-                                    <p>Regulon prediction using {{$label_use_sc3}}</p>
+                                    <p>Regulon prediction using {{$label_use_predict}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Upstream promoter region: {{$promoter_arg}}</p>
@@ -1490,26 +1660,19 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                 </div>
                             </div>
 					</div>
-                    {{else}} {{block name="meta"}}
+					{{elseif $status==="complete_seurat1"}}
 					<div class="flatPanel panel-heading" style="padding: 20px 20px"><strong>Job ID: {{$jobid}}</strong></div>
-                <div class="panel-body">
-                    <META HTTP-EQUIV="REFRESH" CONTENT="60"> {{/block}}
-
-                    <div style="text-align: left;">
-                        <div class="flatPanel panel panel-default">
-                        <div class="panel-body"><p>
-                            <img src="static/images/busy.gif" />
-                            <br /> Your request is received now.
-                            <br> You can save your jobid <font color="red"> <strong>{{$jobid}}</strong> </font>
-                            <br> Or you can choose to stay at this page, which will be automatically refreshed every <b>60</b> seconds.
-                            <br/> Link:&nbsp
-                            <a href="{{$LINKPATH}}/iris3/results.php?jobid={{$jobid}}">https://bmbl.bmi.osumc.edu/{{$LINKPATH}}iris3/results.php?jobid={{$jobid}}</a></p>
-							
-							
-							<strong>Job settings:</strong><br>
+						<div class="panel-body">
+					<div style="text-align: left;">
+                        <strong><h3>Sorry, there has been an error</h3></strong> <p style="color:red">Please check with your data format (Make sure to unzip your input data into txt csv or tsv format.): <br>1. Gene expression matrix: Gene expression matrix (GEMAT) file with genes as rows and cells as columns. The expression value should be positive.<br>2. Cell label file (Optional): a two-column matrix with the first column as the cell names exactly matching the gene expression file, and the second column as ground-truth cell clusters. <br>3. Gene module file (Optional): Each column should reprensents a gene module.</p>
+						<br>For further question, please contact qin.ma@osumc.edu<br>
+						<br>
+                    </div>
+					
+					<strong>Job settings:</strong><br>
                             <div class="col-md-12 col-sm-12">
-							<div class="form-group col-md-6 col-sm-6">
-                                    <p for="reportsList">Species: {{$input_species}}</p>
+								<div class="form-group col-md-6 col-sm-6">
+                                    <p>Species: {{$input_species}}</p>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6">
                                     <p for="reportsList">Enable imputation: {{$is_imputation}}</p>
@@ -1527,7 +1690,7 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                     <p>Bicluster overlap rate: {{$f_arg}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
-                                    <p>Regulon prediction using {{$label_use_sc3}}</p>
+                                    <p>Regulon prediction using {{$label_use_predict}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Upstream promoter region: {{$promoter_arg}}</p>
@@ -1539,10 +1702,285 @@ if(document.getElementById("myTab").getBoundingClientRect().y == 10){
                                     <p>Uploaded files: </p><p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
                                 </div>
                             </div>
+					</div>
+					{{else}} {{block name="meta"}}
+					<div id="myModal" class="modal fade" role="dialog">
+						<div class="modal-dialog">
+					
+							<!-- Modal content-->
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title">Terminate your job</h4>
+								</div>
+								<div class="modal-body">
+									<p>WARNING: This will delete all files belong to Job ID: {{$jobid}}</p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-warning" data-dismiss="modal">Confirm</button>
+									<button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+					
+						</div>
+					</div>
+					<div class="flatPanel panel-heading" style="padding: 20px 20px"><strong>Job ID: {{$jobid}}</strong></div>
+                <div class="panel-body">
+                    <META HTTP-EQUIV="REFRESH" CONTENT="60"> {{/block}}
+
+                    <div style="text-align: left;">
+                        <div class="flatPanel panel panel-default">
+                        <div class="panel-body"><p>
+							<p>Your job has been submitted successfully! Thanks for your interests in using IRIS3.</p>
+							<p>Your job ID is  <font color="red"> <strong>{{$jobid}}</strong></font>, which can be used to retrieve the prediction results in the searching bar at <a href="https://bmbl.bmi.osumc.edu/iris3">https://bmbl.bmi.osumc.edu/iris3</a></p>
+							<p>Note: The running time usually takes a few hours and can be more than 10 hours if there are more than 5000 cells in your data. Hence, we recommend you bookmark this page or save the job ID; and retrieve the result at your convenience later. </p>
+							<p>Please feel free to contact us at qin.ma@osumc.edu, if you might have any questions regarding your job.</p>
+							<hr/>
+							<strong>Job status: (Cell clustering results will be available to preview after step II)</strong><br>
+							{{if $running_status == 'preprocessing'}}
+							<p>Step I: Pre-processing.(Running)<img src="static/images/busy.gif" /> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Terminate your job</button>
+							<p class="waiting_job_status">Step II: Cell cluster prediction.</p>
+							<p class="waiting_job_status">Step III: Gene module detection.</p>
+							<p class="waiting_job_status">Step IV: Gene module assignment.</p>
+							<p class="waiting_job_status">Step V: Motif finding and comparison.</p>
+							<p class="waiting_job_status">Step VI: Active regulon determination.</p>
+							<p class="waiting_job_status">Step VII: Regulon inference.</p>
+							{{else if $running_status == 'cell_cluster_prediction'}}
+							<p>Step I: Pre-processing.(Complete)</p>
+							<p>Step II: Cell cluster prediction.(Running)<img src="static/images/busy.gif" /> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Terminate your job</button>
+							<p class="waiting_job_status">Step III: Gene module detection.</p>
+							<p class="waiting_job_status">Step IV: Gene module assignment.</p>
+							<p class="waiting_job_status">Step V: Motif finding and comparison.</p>
+							<p class="waiting_job_status">Step VI: Active regulon determination.</p>
+							<p class="waiting_job_status">Step VII: Regulon inference.</p>
+							{{else if $running_status == 'gene_module_detection'}}
+							<p>Step I: Pre-processing.(Complete)</p>
+							<p>Step II: Cell cluster prediction.(Complete)</p>
+							<p>Step III: Gene module detection.(Running)<img src="static/images/busy.gif" /> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Terminate your job</button>
+							<p class="waiting_job_status">Step IV: Gene module assignment.</p>
+							<p class="waiting_job_status">Step V: Motif finding and comparison.</p>
+							<p class="waiting_job_status">Step VI: Active regulon determination.</p>
+							<p class="waiting_job_status">Step VII: Regulon inference.</p>
+							{{else if $running_status == 'gene_module_assignment'}}
+							<p>Step I: Pre-processing.(Complete)</p>
+							<p>Step II: Cell cluster prediction.(Complete)</p>
+							<p>Step III: Gene module detection.(Complete)</p>
+							<p>Step IV: Gene module assignment.(Running)<img src="static/images/busy.gif" /> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Terminate your job</button>
+							<p class="waiting_job_status">Step V: Motif finding and comparison.</p>
+							<p class="waiting_job_status">Step VI: Active regulon determination.</p>
+							<p class="waiting_job_status">Step VII: Regulon inference.</p>
+							{{else if $running_status == 'motif_finding_and_comparison'}}
+							<p>Step I: Pre-processing.(Complete)</p>
+							<p>Step II: Cell cluster prediction.(Complete)</p>
+							<p>Step III: Gene module detection.(Complete)</p>
+							<p>Step IV: Gene module assignment.(Complete)</p>
+							<p>Step V: Motif finding and comparison.(Running)<img src="static/images/busy.gif" /> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Terminate your job</button>
+							<p class="waiting_job_status">Step VI: Active regulon determination.</p>
+							<p class="waiting_job_status">Step VII: Regulon inference.</p>
+							{{else if $running_status == 'active_regulon_determination'}}
+							<p>Step I: Pre-processing.(Complete)</p>
+							<p>Step II: Cell cluster prediction.(Complete)</p>
+							<p>Step III: Gene module detection.(Complete)</p>
+							<p>Step IV: Gene module assignment.(Complete)</p>
+							<p>Step V: Motif finding and comparison.(Complete)</p>
+							<p>Step VI: Active regulon determination.(Running)<img src="static/images/busy.gif" /> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Terminate your job</button>
+							<p class="waiting_job_status">Step VII: Regulon inference.</p>
+							{{else if $running_status == 'regulon_inference'}}
+							<p>Step I: Pre-processing.(Complete)</p>
+							<p>Step II: Cell cluster prediction.(Complete)</p>
+							<p>Step III: Gene module detection.(Complete)</p>
+							<p>Step IV: Gene module assignment.(Complete)</p>
+							<p>Step V: Motif finding and comparison.(Complete)</p>
+							<p>Step VI: Active regulon determination.(Complete)</p>
+							<p>Step VII: Regulon inference.(Running)<img src="static/images/busy.gif" /> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Terminate your job</button>
+							{{/if}}
+							
+              <p>This page will be automatically refreshed every <b>60</b> seconds.</p>
+							<hr/>
+							{{if $running_status == 'preprocessing' or $running_status == 'cell_cluster_prediction'}}
+							<strong>Job settings:</strong><br>
+                            <div class="col-md-12 col-sm-12">
+								<div class="form-group col-md-6 col-sm-6">
+                                    <p>Species: {{$input_species}}</p>
+                                </div>
+                                <div class="form-group col-md-6 col-sm-6">
+                                    <p for="reportsList">Enable imputation: {{$is_imputation}}</p>
+																</div>
+																<div class="form-group col-md-6 col-sm-6">
+																	<p>Number of principle components: 10</p>
+															</div>
+															<div class="form-group col-md-6 col-sm-6">
+																		<p>Number of highly variable features: 5000</p>
+																</div>
+																<div class="form-group col-md-6 col-sm-6">
+																	<p>Cell clustering resolution: 0.8</p>
+															</div>
+                                <div class="form-group col-md-6 col-sm-6">
+                                    <p>Enable dual strategy: {{$is_c}}</p>
+                                </div>
+								<div class="form-group col-md-6 col-sm-6">
+                                <p for="reportsList">Minimum cell number: {{$k_arg}}</p>
+                                </div>
+                                <div class="form-group col-md-6 col-sm-6">
+                                    <p>Maximum bicluster number: {{$o_arg}}</p>
+                                </div>
+                                <div class="form-group col-md-6 col-sm-6">
+                                    <p>Bicluster overlap rate: {{$f_arg}}</p>
+                                </div>
+								<div class="form-group col-md-6 col-sm-6">
+                                    <p>Regulon prediction using {{$label_use_predict}}</p>
+                                </div>
+								<div class="form-group col-md-6 col-sm-6">
+                                    <p>Upstream promoter region: {{$promoter_arg}}</p>
+                                </div>
+								<div class="form-group col-md-6 col-sm-6"> 
+                                    <p>Email: {{$email_line}}</p>
+                                </div>
+                                <div class="form-group col-md-6 col-sm-6"> 
+                                    <p>Uploaded files: </p><p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
+                                </div>
+                </div>
+
+							{{else}}
+							<strong>You may preview the available results:</strong><br>
+														<div class="panel-heading">
+															<ul class="nav nav-tabs">
+																	<li class="active"><a href="#preview-tab1default" data-toggle="tab">Cell clustering</a></li>
+																	<li><a href="#preview-tab2default" data-toggle="tab">Cell cluster prediction</a></li>
+																	<li><a href="#preview-tab3default" data-toggle="tab">Differentially expressed genes</a></li>
+																	<li><a href="#preview-tab4default" data-toggle="tab">Job information</a></li>
+															</ul>
+													</div>
+													<div class="panel-body">
+														  <div class="tab-content">
+															  <div class="tab-pane fade in active" id="preview-tab1default">
+																	  <div class="flatPanel panel panel-default">
+																		  <div class="panel-body">
+																				<div class="col-md-12 col-sm-12"> 
+																					<div id="highcharts_umap" style="min-width: 310px; height: 600px; max-width: 1000px; margin: 0 auto"></div>
+																				</div>
+																		  </div>
+																    </div>
+																</div>
+																<div class="tab-pane fade " id="preview-tab2default">
+																		{{if $label_use_predict == 'user\'s label'}}
+																		<div class="CT-result-img">
+																															<div class="col-sm-6">
+																			<h4 style="text-align:center;margin-top:50px"> UMAP Plot Colored by Provided Cell Clusters</h4>
+																																 <input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_provide_ct.pdf')" />
+																				 <img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_provide_ct.png"></img>
+																			</div>
+																			<div class="col-sm-6">
+																			<h4 style="text-align:center;margin-top:50px"> UMAP Plot Colored by Predicted Cell Clusters</h4>
+																																 <input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_predict_ct.pdf')" />
+																				 <img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_predict_ct.png"></img>
+																			</div>
+																		</div>
+																		<div class="CT-result-img">
+																			<div class="col-sm-6">
+																			<h4 style="text-align:center;margin-top:50px"> Trajectory Plot Colored by Cell Clusters</h4>
+																																 <input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_ct.trajectory.pdf')" />
+																				 <img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_ct.trajectory.png"  onerror="this.onerror=null; this.src='assets/img/default_trajectory.png'" alt=""></img>
+																			</div>
+																			<div class="row">
+																			</div>
+																		</div>	
+																		{{else}}
+																		<div class="CT-result-img">
+																															<div class="col-sm-6">
+																			<h4 style="text-align:center;margin-top:50px"> UMAP Plot Colored by Cell Clusters</h4>
+																																 <input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_ct.pdf')" />
+																				 <img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_ct.png"></img>
+																			</div>
+																			<div class="col-sm-6">
+																			<h4 style="text-align:center;margin-top:50px"> Trajectory Plot Colored by Cell Clusters</h4>
+																																	<input style="float:right; "class="btn btn-default" type="button" value="Download(PDF)" onClick="window.open('data/{{$jobid}}/regulon_id/overview_ct.trajectory.pdf')" />
+																				<img class="lozad" style="width:100%" data-src="data/{{$jobid}}/regulon_id/overview_ct.trajectory.png"  onerror="this.onerror=null; this.src='assets/img/default_trajectory.png'" alt=""></img>
+																			</div>
+																		</div>
+																		{{/if}}
+																</div>
+																<div class="tab-pane fade" id="preview-tab3default">
+																	<ul class="nav nav-tabs nav-sticky" id="dgeTab" role="tablist">
+																		{{section name=ct_idx start=0 loop=$count_dge}}
+																			<li class="nav-item {{if {{$count_dge[ct_idx]}} eq '1'}}active{{/if}}">
+																					<a class="nav-link fade in {{if {{$count_dge[ct_idx]}} eq '0'}}active{{/if}}" id="nav-{{$count_dge[ct_idx]}}" data-toggle="tab" tabtype="main" href="#dge_CT{{$count_dge[ct_idx]}}" json="data/{{$jobid}}/json/{{$jobid}}_CT_{{$count_dge[ct_idx]}}_dge.json" root="#dge_table_ct_{{$count_dge[ct_idx]}}" role="tab" aria-controls="home" aria-selected="true">CT{{$count_dge[ct_idx]}}</a>
+																			</li>
+																		{{/section}}
+																		</ul>
+																		<div class="tab-content" id="dgeTabContent">	
+																			{{section name=ct_idx start=0 loop=$count_dge}}	{{/section}}
+																			{{foreach from=$count_dge item=label1 key=sec0}}	
+																				<div class="tab-pane {{if {{$sec0+1}} eq '1'}}active{{/if}}" id="dge_CT{{$sec0+1}}" role="tabpanel">
+																					<div class="flatPanel panel panel-default ct-panel">
+																								<div class="row">
+																									<div class="form-group col-md-12 col-sm-12" style="height:100%">
+																										<table id="dge_table_ct_{{$sec0+1}}" class="display" style="width:100%">
+																											<thead>
+																												<tr>
+																													<th>Cell Cluster</th>
+																													<th>Gene</th>
+																													<th>P-value</th>
+																													<th>Avg_logFC</th>
+																													<th>Pct.1</th>
+																													<th>Pct.2</th>
+																													<th>Adjusted p-value</th>
+																												</tr>
+																											</thead>
+																										</table>
+																									</div>
+																										</div></div> </div> {{/foreach}}</div>
+																</div>
+																<div class="tab-pane fade" id="preview-tab4default"><div class="flatPanel panel panel-default">
+																	<div class="panel-body">
+																		<div class="col-md-12 col-sm-12">
+																			<div class="form-group col-md-6 col-sm-6">
+																					<p for="reportsList">Enable imputation: {{$is_imputation}}</p>
+																			</div>
+																			<div class="form-group col-md-6 col-sm-6">
+																				<p>Number of principle components: 10</p>
+																			</div>
+																			<div class="form-group col-md-6 col-sm-6">
+																					<p>Number of highly variable features: 5000</p>
+																			</div>
+																			<div class="form-group col-md-6 col-sm-6">
+																				<p>Cell clustering resolution: 0.8</p>
+																			</div>
+																			<div class="form-group col-md-6 col-sm-6">
+																					<p>Enable dual strategy: {{$is_c}}</p>
+																			</div>
+																			<div class="form-group col-md-6 col-sm-6">
+																					<p for="reportsList">Minimum cell number: {{$k_arg}}</p>
+																			</div>
+																			<div class="form-group col-md-6 col-sm-6">
+																					<p>Maximum bicluster number: {{$o_arg}}</p>
+																			</div>
+																			<div class="form-group col-md-6 col-sm-6">
+																					<p>Bicluster overlap rate: {{$f_arg}}</p>
+																			</div>
+																			<div class="form-group col-md-6 col-sm-6">
+																					<p>Regulon prediction using {{$label_use_predict}}</p>
+																			</div>
+																			<div class="form-group col-md-6 col-sm-6">
+																					<p>Upstream promoter region: {{$promoter_arg}}</p>
+																			</div>
+																			<div class="form-group col-md-6 col-sm-6"> 
+																					<p>Email: {{$email_line}}</p>
+																			</div>
+																			<div class="form-group col-md-6 col-sm-6"> 
+																					<p>Uploaded files: </p><p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
+																			</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+													{{/if}}
                         </div>
                     </div>
-                    </div>
-					</div>
+                  </div>
+				      	</div>
                     {{/if}}
                 </div>
         </div>
@@ -1588,18 +2026,19 @@ var score_layout = {
 	title: "",
 	autosize:true,
 	barmode: 'group',
-		width:window.innerHeight-10,
+		width: window.innerHeight-10,
 		font: {
 			size: 12
 		},
 	"titlefont": {
     "size": 16
-	},
-	width: 500,
-	height: 500,
+	},/*
+	width: '100%',
+	height: 500,*/
 	"xaxis": {
 	visible:false,
 	tickangle: -45,
+	responsive: true,
 	},
  }
  
@@ -1607,16 +2046,20 @@ var score_config = {
   toImageButtonOptions: {
 	title: 'Download plot as a svg',
     format: 'svg', // one of png, svg, jpeg, webp
-    filename: 'new_image',
+    filename: 'new_image',/*
     height: 1000,
-    width: 1400,
+    width: 1400,*/
     scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
-  },
+	},
+	autosize: true,
+	responsive: true,
   showLink: true,
   displayModeBar: true,
   modeBarButtonsToRemove:['zoom2d', 'pan2d', 'select2d', 'lasso2d', 'zoomIn2d', 'zoomOut2d', 'autoScale2d','hoverClosestCartesian', 'hoverCompareCartesian','hoverClosest3d','toggleHover','hoverClosestGl2d','hoverClosestPie','toggleSpikelines']
 };
-	Plotly.react('score_div', score_data, score_layout, score_config);
+	if ($('#score_div').length > 0) {
+		Plotly.react('score_div', score_data, score_layout, score_config);
+	}
 
     </script>
 	
@@ -1645,20 +2088,21 @@ var score_config = {
         }
         var sankey_data = [sankey_data]
         var sankey_layout = {
-		title: "",
-		autosize:true,
-		responsive: true,
-		width: 500,
-		height: 500,
-            font: {
-                size: 12
-            },
-		"titlefont": {
-		"size": 16
-		},
-        }
-        Plotly.react('sankey_div', sankey_data, sankey_layout,score_config)
-		
+					title: "",
+					autosize: true,
+					responsive: true,
+					width: window.innerHeight-10,
+					height: 600,
+									font: {
+											size: 12
+									},
+					"titlefont": {
+					"size": 16
+					},
+				}
+				if ($('#sankey_div').length > 0) {
+					Plotly.react('sankey_div', sankey_data, sankey_layout,score_config)
+				}
 		 </script>
 		{{/if}}
 <div class="push"></div></main>

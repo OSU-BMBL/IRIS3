@@ -141,7 +141,6 @@ function addPreviewTable(response, metadata = true, type) {
               ') cells. It is recommended to set a small "Minimum cell number" in the advanced options section, e.g. Minimum cell number=5 for about 100 cells, otherwise errors may occur. </span></div>'
           )
         )
-        //document.getElementById('k_arg').value = 5
       }
       
       
@@ -201,7 +200,7 @@ function addPreviewTable(response, metadata = true, type) {
 }
 
 var addTable = function(dataset, type) {
-  // method from biojupies/upload/table
+  // modified function from biojupies/upload/table
   $('#expression').val(JSON.stringify(dataset))
   // Toggle Interfaces
   //$('button[form="upload-expression-form"]').prop('disabled', false);
@@ -258,12 +257,12 @@ $(document).ready(function() {
   })
   dz_exp = $('#dropzone_exp').dropzone({
     dictDefaultMessage:
-      'Drag or click upload your gene expression matrix, supported format: <br>1. Gene expression matrix (txt, tsv, csv). <br>2. HDF5 feature barcode batrix (hdf5).<br>3. Gene-barcode matrices (3 gzip files in your 10X output directory).',
+      'Drag or click upload your gene expression matrix, supported format: <br>1. Gene expression matrix (txt, tsv, csv). <br>2. HDF5 feature barcode batrix (hdf5).<br>3. Gene-barcode matrices (3 gzip files in your 10X output directory). <br>4. Compressed format supported (gzip).',
     acceptedFiles: '.txt,.csv,.tsv,.gz,.zip,.h5,.hdf5,.zip',
     url: 'upload.php',
     maxFiles: 3,
     parallelUploads: 3,
-    maxFilesize: 5000,
+    maxFilesize: 5000, //5GB max upload file size
     maxfilesexceeded: function(file) {
       this.removeFile(this.files[0])
       this.addFile(file)
@@ -537,10 +536,6 @@ $(document).ready(function() {
 		<select class="selectpicker" id="species_arg" name="species_arg[]" title="Select species...">
   <option value="Human">Human (hg38)</option>
   <option value="Mouse">Mouse (mm10)</option>
-  <!--<option value="Zebrafish">Zebrafish</option>
-  <option value="Fruit_fly">Fruit fly</option>
-  <option value="Yeast">Yeast</option>
-  <option value="Worm">Worm</option>-->
 </select>
 </div>
 		<br/>
@@ -552,7 +547,7 @@ $(document).ready(function() {
 		<div class="bs-example2">
 			<div class="panel-group" id="accordion2">
 				<div class="panel panel-default">
-					<div class="panel-collapse-heading">
+					<div class="panel-collapse-heading"> 
 						<h2 class="panel-title">
                      <a data-toggle="collapse" data-parent="#accordion2" href="#collapseThree2">Advanced options</a>
                   </h4>
@@ -560,12 +555,122 @@ $(document).ready(function() {
 						
 					<div id="collapseThree2" class="panel-collapse collapse">
 						<div class="panel-body">
-							<h4 class="font-italic text-left">IRIS3 parameters</h4>
-							
+							<h4 class="font-italic text-left">DrImpute:</h4>
+                 <div class="form-group row">
+									<div class="col-md-4">
+										<label class="form-check-label" for="is_imputation">Enable imputation in pre-processing.
+							 <span class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title="Enable imputation step using DrImpute with all default parameters in the pre-processing step. Default: disabled."> </span> 
+						    	</label>
+									</div>
+									<div class="col-md-4">
+										<select  id="is_imputation" class="selectpicker" name="is_imputation" data-width="auto">
+											<option>Yes</option>
+											<option data-subtext="Default" selected="selected">No</option>
+										</select>
+									</div>
+                </div>
+              <h4 class="font-italic text-left">Seurat:</h4>
+							<div class="form-group row">
+									<div class="col-md-4">
+										<label for="ex3">Number of principle components used in downstream analyses. <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title=" Default: offset-md10."> </span>
+										</label>
+									</div>
+									<div class="col-md-4">
+										<select  id="n_pca_id" class="selectpicker" name="n_pca" data-width="auto">
+                      <option>5</option>
+                      <option>6</option>
+                      <option>7</option>
+                      <option>8</option>
+											<option>9</option>
+                      <option data-subtext="Default" selected="selected">10</option>
+                      <option>11</option>
+											<option>12</option>
+											<option>13</option>
+                      <option>14</option>
+                      <option>15</option>
+											<option>16</option>
+											<option>17</option>
+											<option>18</option>
+                      <option>19</option>
+                      <option>20</option>
+                      <option>21</option>
+                      <option>22</option>
+                      <option>23</option>
+                      <option>24</option>
+                      <option>25</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-md-4">
+										<label for="ex3">Number of highly variable features. <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title=" Default: 5000."> </span>
+										</label>
+									</div>
+									<div class="col-md-4">
+										<select  id="n_variable_features_id" class="selectpicker" name="n_variable_features" data-width="auto">
+											<option>1000</option>
+											<option>2000</option>
+											<option>3000</option>
+											<option>4000</option>
+											<option data-subtext="Default" selected="selected">5000</option>
+											<option>6000</option>
+											<option>7000</option>
+											<option>8000</option>
+											<option>9000</option>
+                      <option>10000</option>
+                      <option>all</option>
+										</select>
+									</div>
+								</div>
+                <div class="form-group row">
+									<div class="col-md-4">
+										<label for="ex3">Cell clustering resolution.<span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Resolution for clustering in Seurat (form 0-1). Larger number will generate more clusters and smaller number will generate less clusters. Default: 0.8."> </span>
+										</label>
+									</div>
+									<div class="col-md-4">
+										<select  id="resolution_seurat_id" class="selectpicker" name="resolution_seurat" data-width="auto">
+											<option>0.1</option>
+											<option>0.2</option>
+                      <option>0.3</option>
+											<option>0.4</option>
+                      <option>0.5</option>
+											<option>0.6</option>
+                      <option>0.7</option>
+											<option data-subtext="Default" selected="selected">0.8</option>
+                      <option>0.9</option>
+											<option>1.0</option>
+                      <option>1.1</option>
+											<option>1.2</option>
+                      <option>1.3</option>
+											<option>1.4</option>
+                      <option>1.5</option>
+											<option>1.6</option>
+											<option>1.7</option>
+											<option>1.8</option>
+											<option>1.9</option>
+											<option>2.0</option>
+										</select>
+									</div>
+								</div>
 							<div class="form-group">
+                <h4 class="font-italic text-left">QUBIC2:</h4>
+            <div class="form-group row">
+              <div class="col-md-4">
+                <!--<input class="form-check-input" type="checkbox" name="is_c" id="is_c" value="1">-->
+                <label class="form-check-label" for="is_c">Enable dual strategy in bi-clustering.
+                  <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Enable dual strategy for QUBIC2 biclustering optimization. Time consuming. Not recommended for 10X data. Default: disabled."> </span> 
+                 </label>
+              </div>
+              <div class="col-md-4">
+                <select  id="is_c" class="selectpicker" name="is_c" data-width="auto">
+                  <option>Yes</option>
+                  <option data-subtext="Default" selected="selected">No</option>
+                </select>
+              </div>
+            </div>
 								<div class="row">
 									<div class="col-md-4">
-										<label for="ex1">QUBIC2: Bicluster overlap rate: <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Controls the level of overlaps between to-be-identified biclusters. A larger value means more overlap on gene modules. Default is 0.7."> </span> 
+										<label for="ex1">Bicluster overlap rate. <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Controls the level of overlaps between to-be-identified biclusters. A larger value means more overlap on gene modules. Default is 0.7."> </span> 
 										</label>
 									</div>
 									<div class="col-md-4">
@@ -582,7 +687,7 @@ $(document).ready(function() {
 								<br>
 								<div class="row">
 									<div class="col-md-4">
-										<label for="ex3">QUBIC2: Maximum bicluster number: <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Max number of biclusters to output. Note: the output number will affect the prediction of bicluster, not merely a cutoff, and the output biclusters may be less than this number. A smaller value (e.g 100) helps decrease running time. Default is 500. "> </span>
+										<label for="ex3">Maximum bicluster number. <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Max number of biclusters to output. Note: the output number will affect the prediction of bicluster, not merely a cutoff, and the output biclusters may be less than this number. A smaller value (e.g 100) helps decrease running time. Default is 500. "> </span>
 										</label>
 									</div>
 									<div class="col-md-4">
@@ -599,7 +704,7 @@ $(document).ready(function() {
 								<br>
 								<div class="row">
 									<div class="col-md-4">
-										<label for="ex2">QUBIC2: Minimum cell number: <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Minimum column width of the bicluster block. Default is 20."> </span>
+										<label for="ex2">Minimum cell number. <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Minimum column width of the bicluster block. Default is 20."> </span>
 										</label>
 									</div>
 									<div class="col-md-4">
@@ -627,35 +732,10 @@ $(document).ready(function() {
 								</div>
 								
 							</div>
-							<div class="form-group row">
-									<div class="col-md-4">
-										<label for="ex3">Seurat: Cell clustering resolution: <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Resolution for clustering in Seurat (form 0-1). Larger number will generate more clusters and smaller number will generate less clusters. Default: 0.8."> </span>
-										</label>
-									</div>
-									<div class="col-md-4">
-										<select  id="resolution_seurat_id" class="selectpicker" name="resolution_seurat" data-width="auto">
-											<option>0.1</option>
-											<option>0.2</option>
-                      <option>0.3</option>
-											<option>0.4</option>
-                      <option>0.5</option>
-											<option>0.6</option>
-                      <option>0.7</option>
-											<option data-subtext="Default" selected="selected">0.8</option>
-                      <option>0.9</option>
-											<option>1.0</option>
-                      <option>1.1</option>
-											<option>1.2</option>
-                      <option>1.3</option>
-											<option>1.4</option>
-                      <option>1.5</option>
-											<option>1.6</option>
-										</select>
-									</div>
-								</div>
+							<h4 class="font-italic text-left">DMINDA2 & MEME:</h4>
 							<div class="form-group  row">
 								<div class="col-md-4">
-									<label for="ex2">Motif finding: upstream promoter region:	
+									<label for="ex2">Motif finding upstream promoter region.
 									 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="The upstream promoter region is open to users to decide the region for motif finding.  Wider range may cause require longer computational time. Default: 1000 bp."> </span> 
 									</label>
 									
@@ -669,10 +749,14 @@ $(document).ready(function() {
 										<option>2000</option>
 									</select>
 								</div>
-							</div>
-							
+              </div>
+              <hr/>
 							<div class="form-group row">
-						<div class="form-check col-sm-12 ">
+                <div class="col-md-12">
+                <label for="ex3">Not sure which parameters to choose? Check our <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#2submission" target="_blank">tutorial</a>.
+                </label>
+							</div>
+						  <div class="form-check col-sm-12 ">
 							<button type="button" id="fast_version_btn" class="btn btn-default extra-button" data-toggle="collapse" onclick="use_fast_version(this);" >Fast version</button><span style="margin-left:5px;margin-right:50px" class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title=" This option uses  fast version. This sets f=0.5, k=20, o=100, promoter region=500 bp, disable imputation, and dual strategy. This runs faster but generage less regulons."> </span> 
 						
 						
@@ -681,21 +765,6 @@ $(document).ready(function() {
 					</div>
 							<hr/>
 							<h4 class="font-italic text-left">Optional choices</h4>
-						<div class="row">
-						<div class="form-check col-sm-12 ">
-							<input class="form-check-input" type="checkbox" name="is_imputation" id="is_imputation" value="1">
-							<label class="form-check-label" for="is_imputation">Enable imputation in pre-processing (Using <a href="https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-018-2226-y" target="_blank"/>DrImpute</a>) 
-							 <span class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title="Enable imputation step using DrImpute with all default parameters in the pre-processing step. Default: disabled."> </span> 
-							</label>
-						</div>
-					</div>
-							<div class="row"><div class="form-check col-sm-12 ">
-							<input class="form-check-input" type="checkbox" name="is_c" id="is_c" value="1">
-							<label class="form-check-label" for="is_c">Enable dual strategy in bi-clustering.
-							 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Enable dual strategy for QUBIC2 biclustering optimization. Time consuming. Not recommended for 10X data. Default: disabled."> </span> 
-							</label>
-						</div></div>
-						
 							<label class="form-check-label" for="is_imputation">Upload cell label:
 							 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Provide cell labels for regulon identification. This file contains two columns: cell names and cell labels. Regulons will be predicted based on the provided cell labels. "> </span>
 							</label>
@@ -757,7 +826,7 @@ $(document).ready(function() {
 				<label class="form-check-label" for="allowstorage">Allow permanent storage in our database <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="By checking this option, you allow us to store your data in iris3 database (both submitted and results) for the future database construction. Be cautious if your data have not been published."> </span>
 				</label>
 			</div>-->
-		<div id="emailfd" class="section" style="position:relative;top:10px;">&nbsp;&nbsp;Optional: Please leave your email below; you will be notified by email when the job is done.
+		<div id="emailfd" class="section" style="position:relative;top:10px;">&nbsp;&nbsp;Optional: The running time usually takes a few hours, and can be more than 10 hours if there are more than 5000 cells in your data. Hence, we strongly recommend you to leave your email below, and you will be notified by email when the job is done.
 			<br/>
 			<div class="bootstrap-iso" style="margin-top: 5px;">&nbsp; <strong>E-mail</strong>&nbsp;:
 				<input name="email" type="text" id="email" size="60" style="position:relative;left:10px; width : 30%;" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,3}$" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
