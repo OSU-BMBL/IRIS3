@@ -5,7 +5,7 @@ dir=$1
 mkdir atac
 
 while read -r species; do 
-atac_dir=/var/www/html/iris3/program/db/${species,,}_atac_seq
+atac_dir=/var/www/html/iris3/program/db/${species}_atac_seq
 files="$(find $dir -maxdepth 2 -name "*.regulon_motif.txt" -print)"
 bed_files="$(find $atac_dir -maxdepth 2 -name "*.bed" )"
 for file in $files;
