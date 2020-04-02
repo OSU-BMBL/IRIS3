@@ -1,4 +1,4 @@
-####### preprocessing expression matrix based on SC3 ##########
+####### preprocessing expression matrix based on Seurat ##########
 options(check.names=F)
 #removes genes/transcripts that are either expressed (expression value > 2) in less than X% of cells (rare genes/transcripts) 
 #or expressed (expression value > 0) in at least (100 ??? X)% of cells (ubiquitous genes/transcripts). 
@@ -28,15 +28,17 @@ suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(cluster))
 
 args <- commandArgs(TRUE)
-srcFile <- args[1] # raw user filename
-jobid <- args[2] # user job id
-delim <- args[3] #delimiter
-is_imputation <- args[4] #1 for enable imputation
+jobid <- args[1] # user job id
+expr_file <- args[2] # raw user filename
+delim <- args[3] #delimiter for expr matrix
 label_file <- 1
-label_file <- args[5] # user label file name or 1
-delimiter <- args[6] 
+label_file <- args[4] # user label file name or 1
+delimiter <- args[5] # delimter for cell label
+is_imputation <- args[6] #1 for enable imputation
 resolution_seurat <- args[7] # resolution for seurat clustering
-label_use_sc3 <- args[8] # 1 for have label use sc3, 2 for have label use label, 0 for no label use sc3
+n_pc <- args[8] # number of principle components
+n_variable_feature <- args[9] # number of highly variable genes 
+label_use_predict <- args[10] # 0 for using Seurat clusters, 2 for using user's label,
 
 
 if(is.na(delim)){
@@ -55,15 +57,17 @@ label_file
 load_test_data <- function(){
   rm(list = ls(all = TRUE))
   # 
-  # setwd("/var/www/html/iris3/data/20200228215528/")
-  srcFile = "5k_pbmc_protein_v3_filtered_feature_bc_matrix__1_.h5"
-  jobid <- "20200228215528"
-  delim <- ","
-  is_imputation <- 0
-  label_file<-'Zeisel_index_label.csv'
+  # setwd("/var/www/html/iris3/data/20200331164625/")
+  expr_file = "lx653_tumorTransposed.txt"
+  jobid <- "20200331164625"
+  delim <- "\t"
+  is_imputation <- 'Yes'
+  label_file<-'1'
   delimiter <- ','
+  n_pc <- "10"
+  n_variable_feature <- "5000"
   resolution_seurat <- 0.8
-  label_use_sc3 <- 2
+  label_use_predict <- '0'
 }
 
 ##############################
@@ -128,10 +132,10 @@ read_data<-function(x=NULL,read.method=NULL,sep="\t",...){
 getwd()
 upload_type <- as.character(read.table("upload_type.txt",stringsAsFactors = F)[1,1])
 #expFile <- read_data(x = getwd(),read.method = "TenX.folder",sep = delim)
-#expFile <- read_data(x = srcFile,read.method = "TenX.h5",sep = delim)
+#expFile <- read_data(x = expr_file,read.method = "TenX.h5",sep = delim)
 #upload_type <- "CellGene"
-#expFile <- read_data(x = srcFile,read.method = "CellGene",sep = delim)
-expFile <- read_data(x = srcFile,read.method = upload_type,sep = delim)
+#expFile <- read_data(x = expr_file,read.method = "CellGene",sep = delim)
+expFile <- read_data(x = expr_file,read.method = upload_type,sep = delim)
 if(class(expFile) == "list"){
   expFile <- expFile[[1]]
 }
@@ -146,7 +150,6 @@ total_gene_num <- nrow(expFile)
 
 ## deal with some edge cases on gene symbols/id 
 if (upload_type == "CellGene"){
-  is_imputation  <- '0'
   ## case: gene with id with ENSG########.X, remove part after dot, e.g:
   ## a <- c("ENSG00000064545.10","ENSG000031230064545","ENMUSG00003213004545.31234s")
   match_index <- grep("^ENSG.+\\.[0-9]",ignore.case = T,expFile[,1])
@@ -277,7 +280,7 @@ if (upload_type == "TenX.folder" | upload_type == "TenX.h5"){
 ## get raw data################################  
 my.count.data<-GetAssayData(object = my.object[['RNA']],slot="counts")
 sce<-SingleCellExperiment(list(counts=my.count.data))
-write.table(as.data.frame(my.count.data),paste(jobid,"_raw_expression.txt",sep = ""), row.names = T,col.names = T,sep="\t",quote=FALSE)
+#write.table(as.data.frame(my.count.data),paste(jobid,"_raw_expression.txt",sep = ""), row.names = T,col.names = T,sep="\t",quote=FALSE)
 
 ## if all values are integers, perform normalization, otherwise skip to imputation
 if(all(as.numeric(unlist(my.count.data[nrow(my.count.data),]))%%1==0)){
@@ -299,7 +302,7 @@ if(all(as.numeric(unlist(my.count.data[nrow(my.count.data),]))%%1==0)){
 }
 
 ## imputation#################################
-if (is_imputation == '1') {
+if (is_imputation == 'Yes') {
   my.imputated.data <- DrImpute(as.matrix(my.normalized.data),dists = "spearman")
 } else {
   my.imputated.data <- my.normalized.data
@@ -348,7 +351,7 @@ write(paste("main_species,",main_species,sep=""),file=paste(jobid,"_info.txt",se
 write.table(data.frame("Gene"=rownames(exp_data),exp_data,check.names = F),paste(jobid,"_filtered_expression.txt",sep = ""), row.names = F,sep="\t",quote=FALSE)
 gene_name <- rownames(exp_data)
 write.table(gene_name,paste(jobid,"_gene_name.txt",sep = ""), sep="\t",row.names = F,col.names = F,quote = F)
-
+cat("cell_cluster_prediction", file="running_status.txt")
 rm(expFile)
 rm(sce)
 rm(db)
@@ -366,14 +369,22 @@ if (label_file == 0 | label_file==1){
   cell_info[,2] <- as.factor(cell_info[,2])
 }
 rm(exp_data)
-my.object<-FindVariableFeatures(my.object,selection.method = "vst",nfeatures = 5000)
+
+if(n_variable_feature == "all" | as.numeric(n_variable_feature) > nrow(my.object)) {
+  n_variable_feature <- nrow(my.object)
+}
+
+my.object<-FindVariableFeatures(my.object,selection.method = "vst",nfeatures = as.numeric(n_variable_feature))
 
 # before PCA, scale data to eliminate extreme value affect.
 all.gene<-rownames(my.object)
 my.object<-ScaleData(my.object,features = all.gene)
 # after scaling, perform PCA
 
-my.object<-RunPCA(my.object,rev.pca = F,features = VariableFeatures(object = my.object), npcs = 10)
+if(as.numeric(n_pc) > ncol(my.object)) {
+  n_pc <- ncol(my.object)
+}
+my.object<-RunPCA(my.object,rev.pca = F,features = VariableFeatures(object = my.object), npcs = as.numeric(n_pc))
 
 
 my.object<-FindNeighbors(my.object,dims = 1:10)
@@ -389,14 +400,14 @@ cell_info <- as.factor(as.numeric(cell_info))
 cell_label <- cbind(cell_names,cell_info)
 colnames(cell_label) <- c("cell_name","label")
 cell_label <- cell_label[order(cell_label[,1]),]
-write.table(cell_label,paste(jobid,"_sc3_label.txt",sep = ""),quote = F,row.names = F,sep = "\t")
+write.table(cell_label,paste(jobid,"_predict_label.txt",sep = ""),quote = F,row.names = F,sep = "\t")
 
 ###########################################
 #  Run TSNE and UMAP ######################
 ###########################################
 #my.object<-RunTSNE(my.object,dims = 1:30,perplexity=10,dim.embed = 3)
 # run umap to get high dimension scatter plot at 2 dimensional coordinate system.
-my.object<-RunUMAP(object = my.object,dims = 1:10,umap.method="uwot")
+my.object<-RunUMAP(object = my.object,dims = 1:as.numeric(n_pc),umap.method="uwot")
 #clustering by using Seurat KNN. 
 # clustering by using KNN, this is seurat cluster algorithm, this part only for cell categorization
 # here has one problems: whether should we define the clustering number?
@@ -407,7 +418,6 @@ my.object<-RunUMAP(object = my.object,dims = 1:10,umap.method="uwot")
 
 #dist.matrix <- dist(x = Embeddings(object = my.object[['pca']])[,1:30])
 umap_embeddings <- Embeddings(object = my.object[['umap']])
-write.table(umap_embeddings,paste0(jobid,'_umap_embeddings.txt'),sep = '\t',quote = F,row.names = T)
 
 dist.matrix <- dist(x = Embeddings(object = my.object[['pca']]))
 sil <- silhouette(x = as.numeric(x = cell_info), dist = dist.matrix)
@@ -430,7 +440,7 @@ write.table(silh_out,paste(jobid,"_silh.txt",sep=""),sep = ",",quote = F,col.nam
 #write.table(cell_label,paste(jobid,"_cell_label.txt",sep = ""),quote = F,row.names = F,sep = "\t")
 #DimPlot(my.object,reduction = 'umap')
 
-if (label_use_sc3 =='2'){
+if (label_use_predict =='2'){
   cell_info <- read.table(label_file,check.names = FALSE, header=TRUE,sep = delimiter,stringsAsFactors = F)
   cell_info <- cell_info[order(cell_info[,1]),]
   ## check if user's label has valid number of rows, if not just use predicted value
@@ -476,15 +486,20 @@ names(my.top)<-paste0("CT",my.cluster)
 my.top<-as.data.frame(my.top)
 write.table(my.marker,paste(jobid,"_marker_genes.txt",sep=""),quote = F,col.names = T,row.names = F)
 
+dir.create("json",showWarnings = F)
 ## save marker genes to json format, used in result page
-my.marker_json <- list(NULL)
-names(my.marker_json) <- 'data'
-colnames(my.marker) <- NULL
-my.marker[,6] <- paste("CT",my.marker[,6],sep = "")
-my.marker <- my.marker[,c(6,7,1:5)]
-my.marker_json$data <- my.marker
-my.marker_json <- toJSON(my.marker_json,pretty = T, simplifyDataFrame =F)
-write(my.marker_json, paste(jobid,"_marker_genes.json",sep=""))
+for(i in 1: length(my.cluster)){
+  this_marker <- my.marker[which(my.marker[,6] == i),]
+  my.marker_json <- list(NULL)
+  names(my.marker_json) <- 'data'
+  colnames(this_marker) <- NULL
+  this_marker[,6] <- paste("CT",this_marker[,6],sep = "")
+  this_marker <- this_marker[,c(6,7,1:5)]
+  my.marker_json$data <- this_marker
+  my.marker_json <- toJSON(my.marker_json,pretty = T, simplifyDataFrame =F)
+  write(my.marker_json, paste("json/",jobid,"_CT_",i,"_dge.json",sep=""))
+}
+
 
 
 sort_column <- function(df) {
@@ -496,7 +511,7 @@ sort_column <- function(df) {
 
 dir.create("regulon_id",showWarnings = F)
 my.top <- my.top[,sort_column(my.top)]
-write.table(my.top,file = "cell_type_unique_marker.txt",quote = F,row.names = F,sep = "\t")
+write.table(my.top,file = "cell_type_unique_diffrenetially_expressed_genes.txt",quote = F,row.names = F,sep = "\t")
 
 scatter_result <- cbind.data.frame(Embeddings(my.object, reduction = 'umap'),cell_type_index = my.object$Customized.idents,cell_type = my.object$Provided.idents,cell_name=colnames(my.object))
 color_list <- as.character(palette36.colors(36))[-2][1:length(unique(my.object$Customized.idents))]
@@ -515,7 +530,17 @@ for (i in 1:length(unique(my.object$Customized.idents))) {
 }
 
 res1 <- jsonlite::toJSON(new_scatter_result,pretty = F)
-write(res1, paste(jobid,"_umap.json", sep = ""))
+umap_embeddings_table <- data.frame()
+for(i in 1:length(new_scatter_result)){
+  x <- new_scatter_result[[i]]
+  this_df <- data.frame(x$data,x$cell_type,x$name)
+  colnames(this_df) <- c("umap1","umap2","cell_name","cell_cluster","index")
+  this_df <- this_df[c(5,3,4,1,2)]
+  umap_embeddings_table <- rbind(umap_embeddings_table,this_df)
+}
+
+write.table(umap_embeddings_table,paste0(jobid,'_umap_embeddings.txt'),sep = '\t',quote = F,row.names = F)
+write(res1, paste("json/",jobid,"_umap.json", sep = ""))
 
 saveRDS(my.object,file="seurat_obj.rds")
 
@@ -684,7 +709,7 @@ pdf(file = paste("regulon_id/overview_predict_ct.pdf",sep = ""), width = 16, hei
 Plot.cluster2D(reduction.method = "umap",customized = F, reverse_color = T)
 quiet(dev.off())
 
-if (label_use_sc3 =='1' | label_use_sc3 =='2'){
+if (label_use_predict =='1' | label_use_predict =='2'){
   cell_info <- read.table(label_file,check.names = FALSE, header=TRUE,sep = delimiter)
   cell_info <- cell_info[order(cell_info[,1]),]
   ## check if user's label has valid number of rows, if not just use predicted value

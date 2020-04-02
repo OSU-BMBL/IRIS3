@@ -6,14 +6,14 @@ srcFile <- args[1] # raw user filename
 jobid <- args[2] # job id
 delim <- args[3] #label file delimiter 
 
-label_use_sc3 <- 0 #default 0
-label_use_sc3 <- args[4] # 1 for have label use sc3, 2 for have label use label, 0 for no label use sc3
+label_use_predict <- 0 #default 0
+label_use_predict <- args[4] # 1 for have label use sc3, 2 for have label use label, 0 for no label use sc3
 
-# setwd("/var/www/html/CeRIS/data/2019102483326")
+# setwd("/var/www/html/iris3/data/2019102483326")
 # srcFile = "Pollen_cell_label.csv"
 # jobid <- "2019102483326"
 # delim <- ","
-# label_use_sc3 <- 2
+# label_use_predict <- 2
 if(delim == 'tab'){
   delim <- '\t'
 }
@@ -44,7 +44,7 @@ suppressPackageStartupMessages(library(data.table))
 suppressPackageStartupMessages(library(stringr))
 
 
-predict_cluster <- read.table(paste(jobid,"_sc3_label.txt",sep=""),header=T,sep='\t',check.names = FALSE)
+predict_cluster <- read.table(paste(jobid,"_predict_label.txt",sep=""),header=T,sep='\t',check.names = FALSE)
 # srcFile <- 'Zeisel_cell_label.csv'
 
 #2nd input
@@ -76,17 +76,16 @@ levels(user_label[,2]) <- 1: length(levels(user_label[,2]))
 colnames(predict_cluster) <- c("cell_name","cluster")
 colnames(user_label) <- c("cell_name","label")
 
-write.table(predict_cluster, paste(jobid,"_sc3_label.txt",sep = ""),sep = "\t", row.names = F,col.names = T,quote = F)
+write.table(predict_cluster, paste(jobid,"_predict_label.txt",sep = ""),sep = "\t", row.names = F,col.names = T,quote = F)
 
-if (label_use_sc3 == 2) {
+if (label_use_predict == 2) {
   is_evaluation <- 'yes'
-  #write.table(user_label_file,paste(jobid,"_sc3_label.txt",sep = ""),quote = F,row.names = F,sep = "\t")
   write.table(user_label, paste(jobid,"_cell_label.txt",sep = ""),sep = "\t", row.names = F,col.names = T,quote = F)
   write.table(str_replace(user_label_name," ","_"), paste(jobid,"_user_label_name.txt",sep = ""),sep = "\t", row.names = F,col.names = F,quote = F)
   write(paste("provide_label,",length(levels(as.factor(user_label_name))),sep=""),file=paste(jobid,"_info.txt",sep=""),append=TRUE)
   write(paste("predict_label,",max(predict_cluster[,2]),sep=""),file=paste(jobid,"_info.txt",sep=""),append=TRUE)
   
-} else if (label_use_sc3 == 1){
+} else if (label_use_predict == 1){
   is_evaluation <- 'yes'
   write.table(predict_cluster, paste(jobid,"_cell_label.txt",sep = ""),sep = "\t", row.names = F,col.names = T,quote = F)
   write.table(user_label_name, paste(jobid,"_user_label_name.txt",sep = ""),sep = "\t", row.names = F,col.names = F,quote = F)
@@ -105,7 +104,7 @@ if (label_use_sc3 == 2) {
 write(paste("is_evaluation,",is_evaluation,sep=""),file=paste(jobid,"_info.txt",sep=""),append=TRUE)
 
 # prepare data for sankey plot
-if (label_use_sc3 == 2 | label_use_sc3 == 1) {
+if (label_use_predict == 2 | label_use_predict == 1) {
   predict_cluster <- predict_cluster[order(predict_cluster[,1]),]
   user_label_index <- order(user_label[,1])
   user_label <- user_label[user_label_index,]

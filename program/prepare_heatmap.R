@@ -60,7 +60,11 @@ if (ncol(exp_data) > 300) {
   if(length(unique(small_cell_label[,2])) != length(unique(label_data[,2]))){
     for (i in 1: length(unique(label_data[,2]))) {
       if (!any(small_cell_label[,2] %in% i)) {
-        add_cell_idx <- which(label_data[,2] == i)[1:3]
+        if (length(which(label_data[,2] == i)) > 3){
+          add_cell_idx <- which(label_data[,2] == i)[1:3]
+        } else {
+          add_cell_idx <- which(label_data[,2] == i)
+        }
         small_cell_idx <- c(small_cell_idx, add_cell_idx)
         small_cell_label <- label_data[small_cell_idx,]
         small_exp_data <- cbind(small_exp_data, exp_data[,add_cell_idx])
@@ -120,7 +124,7 @@ for (i in 1:length(all_regulon)) {
     this_user_label_name <- user_label_name[this_label_index,]
     
   }
-
+  
   ## different number of cells should be different numbers of category 
   if (label_use_prediction == 0 | label_use_prediction == 1 ) {
     category <- paste("Predicted label:",paste("_",this_label_data[,2],"_",sep=""),sep = " ")
@@ -236,12 +240,12 @@ for(i in 1: length(unique(small_cell_label[,2]))){
     category2 <- paste("User's label:",paste("_",as.character(unlist(small_user_label_name)),"_",sep=""),sep = " ")
     file_heat_matrix <- rbind(category1,category2,file_heat_matrix)
   } else {
-    sc3_label <- read.table(paste(jobid,"_sc3_label.txt",sep=""),header = T)
-    sc3_label <- sc3_label[order(match(sc3_label[,1],colnames(exp_data))),]
+    predict_label <- read.table(paste(jobid,"_predict_label.txt",sep=""),header = T)
+    predict_label <- predict_label[order(match(predict_label[,1],colnames(exp_data))),]
     category1 <- paste("User's label:",paste("_",as.character(unlist(small_user_label_name)),"_",sep=""),sep = " ")
-    category2 <- paste("Predicted label:",paste("_",sc3_label[,2],"_",sep=""),sep = " ")
+    category2 <- paste("Predicted label:",paste("_",predict_label[,2],"_",sep=""),sep = " ")
     colnames(file_heat_matrix)
-    sc3_label <- sc3_label[which(as.character(sc3_label[,1]) %in% colnames(file_heat_matrix)),]
+    predict_label <- predict_label[which(as.character(predict_label[,1]) %in% colnames(file_heat_matrix)),]
     
     file_heat_matrix <- rbind(category1,category2,file_heat_matrix)
   }
@@ -308,10 +312,10 @@ if ((length(all_regulon)-total_ct) > 0) {
       category2 <- paste("User's label:",paste("_",as.character(unlist(small_user_label_name)),"_",sep=""),sep = " ")
       file_heat_matrix <- rbind(category1,category2,file_heat_matrix)
     } else {
-      sc3_label <- read.table(paste(jobid,"_sc3_label.txt",sep=""),header = T)
-      sc3_label <- sc3_label[order(match(sc3_label[,1],colnames(exp_data))),]
+      predict_label <- read.table(paste(jobid,"_predict_label.txt",sep=""),header = T)
+      predict_label <- predict_label[order(match(predict_label[,1],colnames(exp_data))),]
       category1 <- paste("User's label:",paste("_",as.character(unlist(small_user_label_name)),"_",sep=""),sep = " ")
-      category2 <- paste("Predicted label:",paste("_",sc3_label[,2],"_",sep=""),sep = " ")
+      category2 <- paste("Predicted label:",paste("_",predict_label[,2],"_",sep=""),sep = " ")
       file_heat_matrix <- rbind(category1,category2,file_heat_matrix)
     }
     
