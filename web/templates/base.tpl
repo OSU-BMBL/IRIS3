@@ -33,8 +33,9 @@
     <link href="assets/css/responsive.css" rel="stylesheet">
     <script src="assets/js/modernizr-2.8.3.min.js"></script>
     <script src="assets/js/pace.js"></script>
-	</head>
-
+    </head>
+    
+    <a href="https://forms.gle/V5acxpBPZoqyKEcM6" class="take_survey" target="_blank">Take a survey<i class="fa fa-poll-h"></i></a>
     <a href="#scroolup" class="scrolltotop"><i class="fa fa-long-arrow-up"></i></a>
         <div class="header-top-area" id="scroolup">
             <div class="mainmenu-area" id="mainmenu-area">
@@ -78,6 +79,7 @@
                     <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                         <div class="footer-copyright text-center wow fadeIn">
                             <p class="m-0 text-center text">© <script>document.write(new Date().getFullYear());</script> <a href="https://u.osu.edu/bmbl/">BMBL</a> | <a href="mailto:qin.ma@osumc.edu" title="qin.ma@osumc.edu">Contact us: qin.ma@osumc.edu</a>  </p>
+							<p class="m-0 text-center text">This website is free and open to all users and there is no login requirement.</p>
                         </div>
                     </div>
                 </div>
