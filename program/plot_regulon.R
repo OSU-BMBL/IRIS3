@@ -10,7 +10,7 @@ args <- commandArgs(TRUE)
 #setwd("/var/www/html/CeRIS/data/20190913134923")
 #setwd("/fs/project/PAS1475/Yuzhou_Chang/CeRIS/test_data/20190830171050")
 #srcDir <- getwd()
-#id <-"CT5-R1" 
+#id <-"CT1-R1" 
 #jobid <- "20200218132456"
 srcDir <- args[1]
 id <- args[2]
@@ -117,6 +117,8 @@ pt_size <- get_point_size(num_cells)
 if (!file.exists(paste("regulon_id/",id,".png",sep = ""))){
   cell.label <- read.table(paste0(jobid,"_cell_label.txt"),header = T,stringsAsFactors = F)
   cor.embedding <- read.table(paste0(jobid,"_umap_embeddings.txt"),header = T, stringsAsFactors = F)
+  rownames(cor.embedding) <- cor.embedding$cell_name
+  cor.embedding <- cor.embedding[,c(4,5)]
   png(width=2000, height=1500,res = 300, file=paste("regulon_id/",id,".png",sep = ""))
   print(Plot.regulon2D(cell.type=as.numeric(regulon_ct),regulon=as.numeric(regulon_id), pt_size = pt_size*1.3))
   quiet(dev.off())
