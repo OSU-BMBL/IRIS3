@@ -17,8 +17,8 @@ wd <- args[1] # filtered expression file name
 jobid <- args[2] # user job id
 # wd<-getwd()
 ####test
-# wd <- "/var/www/html/iris3/data/20200228204036"
-# jobid <-20200228204036 
+# wd <- "/var/www/html/iris3/data/20200331164625"
+# jobid <-20200331164625 
 # setwd(wd)
 
 quiet <- function(x) { 
@@ -222,14 +222,20 @@ exp_data<- read.delim(paste(jobid,"_filtered_expression.txt",sep = ""),check.nam
 exp_data <- as.matrix(exp_data)
 label_data <- read.table(paste(jobid,"_cell_label.txt",sep = ""),sep="\t",header = T)
 label_data <- label_data[order(label_data[,1]),]
+species_file <- as.character(read.table("species.txt",header = F,stringsAsFactors = F)[,1])
 
+if(species_file == "Human") {
+  tf_list <- as.character(read.table("/var/www/html/iris3/program/db/human_tf_hocomoco.txt",header = F,stringsAsFactors = F)[,1])
+} else if (species_file == "Mouse"){
+  tf_list <- as.character(read.table("/var/www/html/iris3/program/db/mouse_tf_hocomoco.txt",header = F,stringsAsFactors = F)[,1])
+} 
 
 cell_idx <- as.character(sort(label_data[,1]))
 
 exp_data <- exp_data[,cell_idx]
 
 
-marker_data <- read.table("cell_type_unique_marker.txt",sep="\t",header = T)
+marker_data <- read.table("cell_type_unique_diffrenetially_expressed_genes.txt",sep="\t",header = T)
 total_motif_list <- vector()
 total_gene_list <- vector()
 
@@ -258,7 +264,7 @@ for (j in 1:ncol(total_ras)) {
 
 
 #### bootstrap resampling to calculate p-value
-if(ncol(rankings) > 30000){
+if(ncol(rankings) > 10000){
   
   bootstrap_ras <- calc_bootstrap_ras(rankings=rankings,iteration=1000,regulon_size=20)
 } else{
@@ -279,11 +285,14 @@ bootstrap_rss <- gather(bootstrap_rss,CT,RSS)
 
 
 #ggplot(bootstrap_rss, aes(x=RSS,color=CT,fill=CT))+theme_bw() + geom_density(alpha=0.25)+ ggtitle(paste("Bootstrap RSS Density plot\nRegulon size:",40,"iteration:",10000))
-
 #i=1
 # genes=x= gene_name_list[[1]]
 total_gene_index <- 1
 for (i in 1:total_ct) {
+  adj_pvalue_factor <- length(which(as.character(marker_data[,i]) %in% tf_list))
+  if(adj_pvalue_factor == 0) {
+    adj_pvalue_factor <- 1
+  }
   regulon_gene_name_handle <- file(paste(jobid,"_CT_",i,"_bic.regulon_gene_symbol.txt",sep = ""),"r")
   regulon_gene_name <- readLines(regulon_gene_name_handle)
   close(regulon_gene_name_handle)
@@ -296,8 +305,7 @@ for (i in 1:total_ct) {
   regulon_motif <- readLines(regulon_motif_handle)
   close(regulon_motif_handle)
   
-  
-  motif_rank <- read.table(paste(jobid,"_CT_",i,"_bic.motif_rank.txt",sep = ""))
+  motif_rank <- tryCatch(read.table(paste(jobid,"_CT_",i,"_bic.motif_rank.txt",sep = "")),error = function(e) data.frame())
   
   gene_name_list <- lapply(strsplit(regulon_gene_name,"\\t"), function(x){x[-1]})
   gene_id_list <- lapply(strsplit(regulon_gene_id,"\\t"), function(x){x[-1]})
@@ -370,7 +378,7 @@ for (i in 1:total_ct) {
           return(unique(append(X,Y)))
         },X=marker,Y=gene_name_list)
         
-        motif_list <- motif_list[rss_rank]
+        #motif_list <- motif_list[rss_rank]
         ras <- ras[rss_rank,]
         originak_ras <- originak_ras[rss_rank,]
       }
