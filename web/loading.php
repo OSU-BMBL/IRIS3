@@ -11,6 +11,7 @@ $log1="";
 $log2="";
 $log="";
 $status="";
+$delete_flag="$DATAPATH/$jobid/delete.txt";
 #$info = Spyc::YAMLLoad("$DATAPATH/$jobid/info.yaml");
 $status= $info['status'];
 $big=intval($info['big']);
@@ -62,6 +63,18 @@ $param_file = fopen("$DATAPATH/$jobid/info.txt", "r");
 				} else{
 					$label_use_predict = "user's label";
 				}
+			} else if($split_line[0] == "label_use_sc3"){
+				if( $split_line[1] == 0 || $split_line[1] == 1) {
+					$label_use_predict = "Seurat";
+				} else{
+					$label_use_predict = "user's label";
+				}
+			} else if($split_line[0] == "n_pca"){
+				$n_pca = $split_line[1];
+			} else if($split_line[0] == "n_variable_features"){
+				$n_variable_features = $split_line[1];
+			} else if($split_line[0] == "resolution_seurat"){
+				$resolution_seurat = $split_line[1];
 			} else if($split_line[0] == "expfile"){
 				$expfile_name = $split_line[1];
 			} else if($split_line[0] == "labelfile"){
@@ -135,7 +148,7 @@ if (file_exists("$DATAPATH/$jobid/saving_plot1.jpeg")){
 	$saving_plot1 = 1;
 }
 
-if (file_exists($done_file) && file_exists("$DATAPATH/$jobid/$jobid"."_CT_1_bic.regulon_gene_symbol.txt")){
+if (file_exists($done_file) && !file_exists($delete_flag) && file_exists("$DATAPATH/$jobid/$jobid"."_CT_1_bic.regulon_gene_symbol.txt")){
 	if (file_exists("$DATAPATH/$jobid/$jobid"."_user_label_name.txt")){
 		$lines = file("$DATAPATH/$jobid/$jobid"."_user_label_name.txt", FILE_IGNORE_NEW_LINES);
 		$provided_cell_v = array_count_values($lines);
@@ -334,7 +347,7 @@ if ($info_file) {
 } 
 
 $predict_label_array = array();
-if (file_exists("$DATAPATH/$jobid/$jobid"."_sc3_label.txt")){
+if (file_exists("$DATAPATH/$jobid/$jobid"."_sc3_label.txt") && !file_exists("$DATAPATH/$jobid/$jobid"."_predict_label.txt")){
 	$predict_label_file = fopen("$DATAPATH/$jobid/$jobid"."_sc3_label.txt", "r");
 
 	while (($line = fgets($predict_label_file)) !== false) {
@@ -350,6 +363,21 @@ if (file_exists("$DATAPATH/$jobid/$jobid"."_sc3_label.txt")){
 	//print_r("Silh file not found");
 }
 
+if (file_exists("$DATAPATH/$jobid/$jobid"."_predict_label.txt")){
+	$predict_label_file = fopen("$DATAPATH/$jobid/$jobid"."_predict_label.txt", "r");
+
+	while (($line = fgets($predict_label_file)) !== false) {
+	$split_line = explode ("\t", $line);
+	array_push($predict_label_array,$split_line[1]);
+	}
+	array_shift($predict_label_array);
+	$predict_label_array = array_count_values($predict_label_array);
+	$predict_label_array = array_values($predict_label_array);
+
+	fclose($predict_label_file);
+	} else {
+	//print_r("Silh file not found");
+}
 
 if (file_exists("$DATAPATH/$jobid/$jobid"."_silh.txt")){
 $silh_file = fopen("$DATAPATH/$jobid/$jobid"."_silh.txt", "r");
@@ -559,13 +587,13 @@ function exception_handler($exception) {
 }
 
 set_exception_handler('exception_handler');
-}else if (file_exists($done_file) && file_exists("$DATAPATH/$jobid/$jobid"."_CT_1_regulon_gene_id.txt") && !file_exists("$DATAPATH/$jobid/$jobid"."_CT_1_bic/bic1.txt.fa.closures")) {
+}else if (file_exists($done_file) && !file_exists($delete_flag) && file_exists("$DATAPATH/$jobid/$jobid"."_CT_1_regulon_gene_id.txt") && !file_exists("$DATAPATH/$jobid/$jobid"."_CT_1_bic/bic1.txt.fa.closures")) {
 	$status= "error_bic";
-}else if (file_exists($done_file) && !file_exists("$DATAPATH/$jobid/$jobid"."_cell_label.txt")) {
+}else if (file_exists($done_file) && !file_exists($delete_flag) && !file_exists("$DATAPATH/$jobid/$jobid"."_cell_label.txt")) {
 	$status= "error_num_cells";
-}else if (file_exists($done_file) && !file_exists("$DATAPATH/$jobid/$jobid"."_CT_1_regulon_gene_id.txt")) {
+}else if (file_exists($done_file) && !file_exists($delete_flag) && !file_exists("$DATAPATH/$jobid/$jobid"."_CT_1_regulon_gene_id.txt")) {
 	$status= "error";
-}else if (!file_exists($tempnam)) {
+}else if (!file_exists($tempnam) || file_exists($delete_flag)) {
 	$status= "404";
 }else {
 	$status = "0";
@@ -625,6 +653,9 @@ $smarty->assign('provided_cell_value',$provided_cell_value);
 $smarty->assign('purity',$purity);
 $smarty->assign('motif_program',$motif_program);
 $smarty->assign('label_use_predict',$label_use_predict);
+$smarty->assign('n_variable_features',$n_variable_features);
+$smarty->assign('n_pca',$n_pca);
+$smarty->assign('resolution_seurat',$resolution_seurat);
 $smarty->assign('expfile_name',$expfile_name);
 $smarty->assign('labelfile_name',$labelfile_name);
 $smarty->assign('gene_module_file_name',$gene_module_file_name);

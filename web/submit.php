@@ -3,11 +3,8 @@
 set_time_limit(3000);
 session_start();
 
-
-
 require("config/common.php");
 require("config/smarty.php");
-
 
 $smarty->caching = true;
 $smarty->assign('section', 'Homepage');
@@ -158,7 +155,7 @@ if (isset($_POST['submit']))
 	}
 	}
 	$fp = fopen("$workdir/info.txt", 'w');
-	fwrite($fp,"is_load_exp,$is_load_exp\nk_arg,$k_arg\nf_arg,$f_arg\no_arg,$o_arg\nn_variable_features,$n_variable_features\nn_pca,$n_pca\nlabel_use_predict,$label_use_predict\nexpfile,$expfile\nlabelfile,$labelfile\ngene_module_file,$gene_module_file\nis_imputation,$is_imputation\nis_c,$is_c\npromoter_arg,$promoter_arg\nbic_inference,$label_use_predict");
+	fwrite($fp,"is_load_exp,$is_load_exp\nk_arg,$k_arg\nf_arg,$f_arg\no_arg,$o_arg\nresolution_seurat,$resolution_seurat\nn_variable_features,$n_variable_features\nn_pca,$n_pca\nlabel_use_predict,$label_use_predict\nexpfile,$expfile\nlabelfile,$labelfile\ngene_module_file,$gene_module_file\nis_imputation,$is_imputation\nis_c,$is_c\npromoter_arg,$promoter_arg\nbic_inference,$label_use_predict");
 	fclose($fp);
 	$fp = fopen("$workdir/running_status.txt", 'w');
 	fwrite($fp,"preprocessing");
@@ -199,7 +196,7 @@ Rscript $BASE/program/convert_meme.R \$wd \$motif_min_length
 $BASE/program/get_motif.sh \$wd \$motif_min_length \$motif_max_length 0
 wait
 cd \$wd
-find -name '*' -size 0 -delete
+#find -name '*' -size 0 -delete
 Rscript $BASE/program/prepare_bbc.R \$jobid \$motif_min_length\n
 
 mkdir tomtom
