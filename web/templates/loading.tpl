@@ -1,5 +1,5 @@
  {{block name="extra_js"}} {{/block}} {{block name="extra_style"}} {{/block}} {{block name="main"}}
-
+<a href="https://forms.gle/V5acxpBPZoqyKEcM6" class="take_survey" target="_blank">Take a Survey<i class="fa fa-poll-h"></i></a>
 <script src="assets/js/pace.js"></script>
 <script src="assets/js/code/highcharts.js"></script>
 <script src="assets/js/code/modules/boost.js"></script>
@@ -30,7 +30,21 @@ if ($('#regulonTab').length > 0) {
 }
 
 
-
+function terminate_job(item) {
+		jobid = location.search.match(/\d+/gm)
+		if (jobid[0].startsWith("20")) {
+			console.log("terminate job: " + jobid)
+			$.ajax({
+			url: "terminate_job.php?jobid=" + jobid ,
+			type: 'POST',
+			data: {'id': jobid},
+			dataType: 'json',
+			success: function(response) {
+			},
+		})
+		}
+	}
+	
 
 
 	function show_peak_table(item){
@@ -568,17 +582,21 @@ if ($('#regulonTab').length > 0) {
 	
 
 		for (i=1;i<={{$count_ct|count}};i++) {
-		    new List('regulon_pagination'+i, {
-			valueNames: ['page_item'+i],
-			page: 10,
-			pagination: true,
-			innerWindow: 5,
-			outerWindow: 2
+		  new List('regulon_pagination'+i, {
+				valueNames: ['page_item'+i],
+				page: 10,
+				pagination: true,
+				innerWindow: 5,
+				outerWindow: 2
 			})
 		}
-		
+				
 		const observer = lozad(); // lazy loads elements with default selector as '.lozad'
 		observer.observe();
+
+		$('.regulon_pagination_bar').click(function() {
+			observer.observe();
+		});
 
 		function arrayContains(needle, arrhaystack) {
 			return (arrhaystack.indexOf(needle) > -1)
@@ -644,8 +662,8 @@ if ($('#regulonTab').length > 0) {
 				//$(root_id + '> .wait_message').html('Move your cursor outside the heatmap region to scroll the page.')
 			}
 		});
-		
-		
+
+		//end of ready
 	});
 
 	$.get(
@@ -768,8 +786,9 @@ if ($('#regulonTab').length > 0) {
       console.log('error', status, error)
     })
 
-
+		
  </script>
+ <a href="https://forms.gle/V5acxpBPZoqyKEcM6" class="take_survey" target="_blank">Take a survey<i class="fa fa-poll-h"></i></a>
 <main role="main" class="container" style="min-height: calc(100vh - 182px);">
     <div id="content">
         <div class="container">
@@ -1161,7 +1180,7 @@ if ($('#regulonTab').length > 0) {
 																																																									<tr><td class="gene-table">
 																																																											<div style="width:100%; font-size:14px;">
 																																									<table class="table table-hover table-sm" ><tbody>
-																																						<tr><td>Marker gene</td><td>Gene Symbol  <button class="btn btn-default" id="symbol-{{$regulon_result[$sec0][sec1][0]}}" onclick="copy_list(this)">Copy</button></td><td>Enesmbl ID  <button class="btn btn-default" id="id-{{$regulon_result[$sec0][sec1][0]}}"onclick="copy_list(this)">Copy</button></td><td>Gene UMAP plot</td>
+																																						<tr><td>Differentially expressed gene</td><td>Gene Symbol  <button class="btn btn-default" id="symbol-{{$regulon_result[$sec0][sec1][0]}}" onclick="copy_list(this)">Copy</button></td><td>Enesmbl ID  <button class="btn btn-default" id="id-{{$regulon_result[$sec0][sec1][0]}}"onclick="copy_list(this)">Copy</button></td><td>Gene UMAP plot</td>
 																																</tr>
 																																						{{section name=sec2 start=1 loop=$regulon_result[$sec0][sec1]}}
 																																
@@ -1450,13 +1469,13 @@ if ($('#regulonTab').length > 0) {
 																																	<p for="reportsList">Enable imputation: {{$is_imputation}}</p>
 																															</div>
 																															<div class="form-group col-md-6 col-sm-6">
-																																<p>Number of principle components: 10</p>
+																																<p>Number of principle components: {{$n_pca}}</p>
 																														</div>
 																														<div class="form-group col-md-6 col-sm-6">
-																																	<p>Number of highly variable features: 5000</p>
+																																	<p>Number of highly variable features: {{$n_variable_features}}</p>
 																															</div>
 																															<div class="form-group col-md-6 col-sm-6">
-																																<p>Cell clustering resolution: 0.8</p>
+																																<p>Cell clustering resolution: {{$resolution_seurat}}</p>
 																														</div>
 																															<div class="form-group col-md-6 col-sm-6">
 																																	<p>Enable dual strategy: {{$is_c}}</p>
@@ -1717,7 +1736,7 @@ if ($('#regulonTab').length > 0) {
 									<p>WARNING: This will delete all files belong to Job ID: {{$jobid}}</p>
 								</div>
 								<div class="modal-footer">
-									<button type="button" class="btn btn-warning" data-dismiss="modal">Confirm</button>
+									<button type="button" class="btn btn-warning" data-dismiss="modal" onclick="terminate_job(this)">Confirm</button>
 									<button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
 								</div>
 							</div>
@@ -1807,13 +1826,13 @@ if ($('#regulonTab').length > 0) {
                                     <p for="reportsList">Enable imputation: {{$is_imputation}}</p>
 																</div>
 																<div class="form-group col-md-6 col-sm-6">
-																	<p>Number of principle components: 10</p>
+																	<p>Number of principle components: {{$n_pca}}</p>
 															</div>
 															<div class="form-group col-md-6 col-sm-6">
-																		<p>Number of highly variable features: 5000</p>
+																		<p>Number of highly variable features: {{$n_variable_features}}</p>
 																</div>
 																<div class="form-group col-md-6 col-sm-6">
-																	<p>Cell clustering resolution: 0.8</p>
+																	<p>Cell clustering resolution: {{$resolution_seurat}}</p>
 															</div>
                                 <div class="form-group col-md-6 col-sm-6">
                                     <p>Enable dual strategy: {{$is_c}}</p>
@@ -1845,8 +1864,8 @@ if ($('#regulonTab').length > 0) {
 							<strong>You may preview the available results:</strong><br>
 														<div class="panel-heading">
 															<ul class="nav nav-tabs">
-																	<li class="active"><a href="#preview-tab1default" data-toggle="tab">Cell clustering</a></li>
-																	<li><a href="#preview-tab2default" data-toggle="tab">Cell cluster prediction</a></li>
+																	<li class="active"><a href="#preview-tab1default" data-toggle="tab">UMAP interactive plot</a></li>
+																	<li><a href="#preview-tab2default" data-toggle="tab">Cell cluster static plots</a></li>
 																	<li><a href="#preview-tab3default" data-toggle="tab">Differentially expressed genes</a></li>
 																	<li><a href="#preview-tab4default" data-toggle="tab">Job information</a></li>
 															</ul>
@@ -1938,14 +1957,14 @@ if ($('#regulonTab').length > 0) {
 																					<p for="reportsList">Enable imputation: {{$is_imputation}}</p>
 																			</div>
 																			<div class="form-group col-md-6 col-sm-6">
-																				<p>Number of principle components: 10</p>
+																				<p>Number of principle components: {{$n_pca}}</p>
+																		</div>
+																		<div class="form-group col-md-6 col-sm-6">
+																					<p>Number of highly variable features: {{$n_variable_features}}</p>
 																			</div>
 																			<div class="form-group col-md-6 col-sm-6">
-																					<p>Number of highly variable features: 5000</p>
-																			</div>
-																			<div class="form-group col-md-6 col-sm-6">
-																				<p>Cell clustering resolution: 0.8</p>
-																			</div>
+																				<p>Cell clustering resolution: {{$resolution_seurat}}</p>
+																		</div>
 																			<div class="form-group col-md-6 col-sm-6">
 																					<p>Enable dual strategy: {{$is_c}}</p>
 																			</div>
