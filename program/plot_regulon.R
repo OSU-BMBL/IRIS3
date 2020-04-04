@@ -7,11 +7,11 @@ library(scales)
 #library(Cairo) 
 
 args <- commandArgs(TRUE) 
-#setwd("/var/www/html/CeRIS/data/20190913134923")
+#setwd("/var/www/html/CeRIS/data/20200224113319")
 #setwd("/fs/project/PAS1475/Yuzhou_Chang/CeRIS/test_data/20190830171050")
 #srcDir <- getwd()
 #id <-"CT1-R1" 
-#jobid <- "20200218132456"
+#jobid <- "20200224113319"
 srcDir <- args[1]
 id <- args[2]
 jobid <- args[3]
@@ -116,7 +116,7 @@ pt_size <- get_point_size(num_cells)
 
 if (!file.exists(paste("regulon_id/",id,".png",sep = ""))){
   cell.label <- read.table(paste0(jobid,"_cell_label.txt"),header = T,stringsAsFactors = F)
-  cor.embedding <- read.table(paste0(jobid,"_umap_embeddings.txt"),header = T, stringsAsFactors = F)
+  cor.embedding <- read.table(paste0(jobid,"_umap_embeddings.txt"),header = T, stringsAsFactors = F,sep = "\t")
   rownames(cor.embedding) <- cor.embedding$cell_name
   cor.embedding <- cor.embedding[,c(4,5)]
   png(width=2000, height=1500,res = 300, file=paste("regulon_id/",id,".png",sep = ""))
