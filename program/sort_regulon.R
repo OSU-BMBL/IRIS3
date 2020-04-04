@@ -17,8 +17,8 @@ wd <- args[1] # filtered expression file name
 jobid <- args[2] # user job id
 # wd<-getwd()
 ####test
-# wd <- "/var/www/html/iris3/data/20200331164625"
-# jobid <-20200331164625 
+# wd <- "/var/www/html/iris3/data/20200402123857"
+# jobid <-20200402123857 
 # setwd(wd)
 
 quiet <- function(x) { 
@@ -335,7 +335,7 @@ for (i in 1:total_ct) {
       else return(0)
     })
     
-    if (length(motif_list) > 0) {
+    if (length(motif_list) > 1) {
       rss_keep_index <- which(unlist(rss_keep_index) == 0)
       rss_list <- rss_list[rss_keep_index]
       gene_name_list <- gene_name_list[rss_keep_index]
@@ -378,6 +378,7 @@ for (i in 1:total_ct) {
           return(unique(append(X,Y)))
         },X=marker,Y=gene_name_list)
         
+        
         #motif_list <- motif_list[rss_rank]
         ras <- ras[rss_rank,]
         originak_ras <- originak_ras[rss_rank,]
@@ -396,9 +397,10 @@ for (i in 1:total_ct) {
       gene_name_list[[j]] <- append(regulon_tag,gene_name_list[[j]])
       gene_id_list[[j]] <- append(regulon_tag,gene_id_list[[j]])
       motif_list[[j]] <- append(regulon_tag,motif_list[[j]])
-      #rss_list[[j]] <- append(regulon_tag,rss_list[[j]])
       rss_list[[j]] <- append(rss_list[[j]],marker[[j]])
     }
+    
+    
     options(stringsAsFactors=FALSE)
     regulon_rank_result <- data.frame()
     for (j in 1:length(gene_name_list)) {
