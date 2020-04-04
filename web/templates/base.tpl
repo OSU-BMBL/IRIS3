@@ -35,7 +35,7 @@
     <script src="assets/js/pace.js"></script>
     </head>
     
-    <a href="https://forms.gle/V5acxpBPZoqyKEcM6" class="take_survey" target="_blank">Take a survey<i class="fa fa-poll-h"></i></a>
+    <a href="https://forms.gle/V5acxpBPZoqyKEcM6" class="take_survey" target="_blank">Take a Survey<i class="fa fa-poll-h"></i></a>
     <a href="#scroolup" class="scrolltotop"><i class="fa fa-long-arrow-up"></i></a>
         <div class="header-top-area" id="scroolup">
             <div class="mainmenu-area" id="mainmenu-area">
