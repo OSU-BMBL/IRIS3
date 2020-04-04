@@ -119,8 +119,8 @@
                             <i class="fa fa-rocket"></i>
                         </div>-->
                 <h3 class="box-title">News</h3>
-                <p>Posted: 02/29/2020</p>
-                <p>We updated our <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics" target="_blank">Tutorial</a> and <a href="https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ" target="_blank">FAQ</a>, the new version contains more detailed steps and descriptions.</p>
+                <p>Posted: 04/03/2020</p>
+                <p>We updated our Tutorial, Submit, and Result page, along with bug fix.</p><br>
                 <p>
                   <a
                     class="enroll-button"
