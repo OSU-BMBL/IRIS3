@@ -467,6 +467,26 @@ label.mt10.valid {
 /*---------------------------------
     12. SCROLL TO TOP AREA
 ----------------------------------*/
+.take_survey {
+    background: #747b8c none repeat scroll 0 0;
+    bottom: 20px;
+    color: #ffffff;
+    display: none;
+    font-size: 16px;
+    height: 40px;
+    padding-top: 8px;
+    position: fixed;
+    right: 80px;
+    text-align: center;
+    width: 110px;
+    z-index: 9;
+	display:block;
+}
+
+.take_survey:hover {
+    color: #ffffff;
+}
+
 
 .scrolltotop {
     background: #747b8c none repeat scroll 0 0;
