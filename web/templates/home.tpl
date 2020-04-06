@@ -133,8 +133,14 @@
             </div>
           </div>
 		  <hr/>
-		  <div class="row" style="display:inline-block; width:100%">
-		  <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4"> </div>
+        <div class="row text-center"><a href="https://www.easycounter.com/" target="_blank">
+          <img src="https://www.easycounter.com/counter.php?wangcankun100"
+          border="0" alt="Hit Counters"></a>
+          <br><p>Visitors since 04/01/2020</p></div>
+        
+        <div class="row" style="display:inline-block; width:100%">
+      <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4"> </div>
+      
 		  <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4"><script type="text/javascript" src="//rf.revolvermaps.com/0/0/7.js?i=5qjeof23o10&amp;m=0&amp;c=ff0000&amp;cr1=ffffff&amp;br=2&amp;sx=0" async="async"></script> </div>
 		  <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4"> </div>
 		  </div>
