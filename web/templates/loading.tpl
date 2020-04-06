@@ -571,6 +571,8 @@ function terminate_job(item) {
 	
 	$(document).ready(function() {
 
+		$('.enrichr_logo').css('display','none')
+
 		$('#tablePreview').DataTable({
 			"searching": false,
 			"paging": false,
@@ -656,10 +658,13 @@ function terminate_job(item) {
 						} )
 				}
 			} else if(!arrayContains(root_id,flag)) { // render clustergrammer
+				var this_ct = root_id.match(/\d+/g)[0]
 				$(root_id + '> .wait_message').html('Loading heatmap ... <img src="static/images/busy.gif">')
+				$('#heatmap-header-'+this_ct).css('display','block')
+				$('#heatmap-hint').css('display','none')
+				$('#main_CT'+this_ct).css('display','')
 				make_clust(json_file, root_id)
 				flag.push(root_id)
-				//$(root_id + '> .wait_message').html('Move your cursor outside the heatmap region to scroll the page.')
 			}
 		});
 
@@ -795,7 +800,7 @@ function terminate_job(item) {
             <br/>
             <div class="flatPanel panel panel-default" >
                     {{if $status == "1"}}
-					<div class="flatPanel panel-heading" style="padding: 20px 20px"><strong>Job ID: {{$jobid}}</strong><input style="float:right; "class="btn btn-default" type="button" value="Download" onClick="javascript:location.href = '/iris3/data/{{$jobid}}/{{$jobid}}.zip';" /></div>
+					<div class="flatPanel panel-heading" style="padding: 20px 20px"><strong>Job ID: {{$jobid}}</strong> <a class="result-header-tutorial" href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#3example" target="_blank">Click here for result page illustration.</a><input style="float:right; "class="btn btn-default" type="button" value="Download" onClick="javascript:location.href = '/iris3/data/{{$jobid}}/{{$jobid}}.zip';" /></div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-12">
@@ -967,24 +972,28 @@ function terminate_job(item) {
 																		</div>
 																</div>
 																<div class="tab-pane fade" id="plot-tab3default">
-																	<div class="flatPanel panel-default"> 
-																		<div class="CT-result-img">
-																			<div class="col-sm-12">
-																			<h4 style="text-align:center;margin-top:50px"> Silhouette score</h4>
-																				<div id="score_div"></div>
+																	<div class="panel-body">
+																		<div class="flatPanel panel-default"> 
+																			<div class="CT-result-img">
+																				<div class="col-sm-12">
+																				<h4 style="text-align:center;margin-top:50px"> Silhouette score</h4>
+																					<div id="score_div"></div>
+																				</div>
 																			</div>
 																		</div>
 																	</div>
 															</div>
 															<div class="tab-pane fade" id="plot-tab4default">
-																<div class="flatPanel  panel-default">
-																	<div class="CT-result-img">
-																		{{if ($sankey_src|@count >0)}}
-																		<div class="col-sm-12">
-																		<h4 style="text-align:center;margin-top:50px"> Sankey plot</h4>
-																			<div id="sankey_div"></div>
+																<div class="panel-body">
+																	<div class="flatPanel  panel-default">
+																		<div class="CT-result-img">
+																			{{if ($sankey_src|@count >0)}}
+																			<div class="col-sm-12">
+																			<h4 style="text-align:center;margin-top:50px"> Sankey plot</h4>
+																				<div id="sankey_div" style="max-width: 95%; display:block;"></div>
+																			</div>
+																			{{/if}}
 																		</div>
-																		{{/if}}
 																	</div>
 																</div>
 															</div>
@@ -1031,6 +1040,7 @@ function terminate_job(item) {
                                                 </tbody>
 																						</table>
 																	 <ul class="nav nav-tabs nav-sticky" id="heatmapTab" role="tablist">
+																					<h4 id="heatmap-hint" class='wait_message'>Click on 'CT' tabs below to load heatmap.</h4>
 																					{{section name=ct_idx start=0 loop=$count_ct}}
 																																				<li class="nav-item {{if {{$count_ct[ct_idx]}} eq '1'}}{{/if}}">
 																																						<a class="nav-link fade in {{if {{$count_ct[ct_idx]}} eq '0'}}active{{/if}}" id="nav-{{$count_ct[ct_idx]}}" data-toggle="tab" tabtype="main" href="#main_CT{{$count_ct[ct_idx]}}" json="data/{{$jobid}}/json/CT{{$count_ct[ct_idx]}}.json" root="#container-id-{{$count_ct[ct_idx]}}" role="tab" aria-controls="home" aria-selected="true">CT{{$count_ct[ct_idx]}}</a>
@@ -1044,7 +1054,7 @@ function terminate_job(item) {
 																					{{/section}}
 																					{{/if}}
 																																		</ul>
-																																		<div class="tab-content" id="heatmapTabContent">	
+																																		<div class="tab-content" id="heatmapTabContent">
 																																			{{section name=ct_idx start=0 loop=$count_ct}}	{{/section}}
 																																			{{foreach from=$regulon_result item=label1 key=sec0}}	
 																																			{{if $regulon_result[$sec0][0][0] == '0'}}
@@ -1070,10 +1080,11 @@ function terminate_job(item) {
 																																								<p>For more information, please check our <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics" target="_blank">tutorial</a> and <a href="https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ" target="_blank">FAQ</a></p>
 																																						</div></div> </div> </div> 
 																																				{{else}}	
-																																				<div class="tab-pane {{if {{$sec0+1}} eq '1'}}active{{/if}}" id="main_CT{{$sec0+1}}" role="tabpanel">
+																																				<div class="tab-pane {{if {{$sec0+1}} eq '1'}}active{{/if}}" id="main_CT{{$sec0+1}}" style="display: none;" role="tabpanel">
 																																					<div class="flatPanel panel panel-default ct-panel">
 																																								<div class="row">
 																																								<div class="form-group col-md-12 col-sm-12" style="height:100%">
+																																									<div id="heatmap-header-{{$sec0+1}}" style="display: none;">
 																																								<p class="ct-panel-description" >Cell-gene-regulon heatmap for cell cluster {{$sec0+1}}</p>
 																																								<a class="ct-panel-a" href="/iris3/heatmap.php?jobid={{$jobid}}&file=CT{{$sec0+1}}.json" target="_blank">
 																																																									<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#">Open heatmap in new tab
@@ -1084,12 +1095,11 @@ function terminate_job(item) {
 																																							<a class="ct-panel-a"  href="/iris3/data/{{$jobid}}/{{$jobid}}_CT_{{$sec0+1}}_bic.regulon_gene_id.txt" target="_blank">
 																																							<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#">Download CT-{{$sec0+1}} regulon-gene list (Ensembl gene ID)
 																																																									</button>
-																																																							</a>
-																																						
+																																																							</a></div>
 																																						<div class="panel-body"><div class="flatPanel panel panel-default">
 																																									<div id="heatmap">
 																																											<div id='container-id-{{$sec0+1}}' style="height:95%;max-height:95%;max-width:100%;display:block">
-																																											<h4 class='wait_message'>Click on 'CT' tabs above to load heatmap.</h4>
+																																											<h4 class='wait_message'></h4>
 																																										</div></div></div></div></div>
 																																										</div></div> </div> 
 																																										
@@ -1149,9 +1159,7 @@ function terminate_job(item) {
 																																							<div class="CT-result-img">
 																																								<div class="col-sm-12">
 																																								<h4 style="text-align:center;margin-top:50px"> Regulon Specificity Score Scatter Plot for Cell Cluster {{$sec0+1}}</h4>
-																																									<div class="col-sm-4"></div>
-																																									<div class="col-sm-4"><img src="data/{{$jobid}}/regulon_id/ct{{$sec0+1}}_rss_scatter.png"/></div>
-																																									<div class="col-sm-4"></div>
+																																									<div class="row text-center"><img style="width: 33%;" src="data/{{$jobid}}/regulon_id/ct{{$sec0+1}}_rss_scatter.png"/></div>
 																																								</div>
 																																							</div>
 																																							</div>
@@ -1253,7 +1261,7 @@ function terminate_job(item) {
 																																									</div></div>
 																																</td></tr>
 																																			<tr><td colspan=2 style="border:none">
-																																										<div id="heatmap-{{$regulon_result[$sec0][sec1][0]}}" class="col-md-12" style="display:none;">
+																																										<div id="heatmap-{{$regulon_result[$sec0][sec1][0]}}" class="col-md-12" style="display:none;max-width: 95%">
 																																											<div id='ci-{{$regulon_result[$sec0][sec1][0]}}'>
 																																											<h1 class='wait_message'>Loading heatmap ...<img src="static/images/busy.gif"></h1>
 																																										</div></div> 
@@ -1745,12 +1753,12 @@ function terminate_job(item) {
 					</div>
 					<div class="flatPanel panel-heading" style="padding: 20px 20px"><strong>Job ID: {{$jobid}}</strong></div>
                 <div class="panel-body">
-                    <META HTTP-EQUIV="REFRESH" CONTENT="60"> {{/block}}
+                    <META HTTP-EQUIV="REFRESH" CONTENT="180"> {{/block}}
 
                     <div style="text-align: left;">
                         <div class="flatPanel panel panel-default">
                         <div class="panel-body"><p>
-							<p>Your job has been submitted successfully! Thanks for your interests in using IRIS3.</p>
+							<p>Your job has been submitted successfully! Thanks for your interest in using IRIS3.</p>
 							<p>Your job ID is  <font color="red"> <strong>{{$jobid}}</strong></font>, which can be used to retrieve the prediction results in the searching bar at <a href="https://bmbl.bmi.osumc.edu/iris3">https://bmbl.bmi.osumc.edu/iris3</a></p>
 							<p>Note: The running time usually takes a few hours and can be more than 10 hours if there are more than 5000 cells in your data. Hence, we recommend you bookmark this page or save the job ID; and retrieve the result at your convenience later. </p>
 							<p>Please feel free to contact us at qin.ma@osumc.edu, if you might have any questions regarding your job.</p>
@@ -1814,7 +1822,7 @@ function terminate_job(item) {
 							<p>Step VII: Regulon inference.(Running)<img src="static/images/busy.gif" /> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Terminate your job</button>
 							{{/if}}
 							
-              <p>This page will be automatically refreshed every <b>60</b> seconds.</p>
+              <p>This page will be automatically refreshed every <b>180</b> seconds.</p>
 							<hr/>
 							{{if $running_status == 'preprocessing' or $running_status == 'cell_cluster_prediction'}}
 							<strong>Job settings:</strong><br>
@@ -2045,10 +2053,10 @@ var score_layout = {
 	title: "",
 	autosize:true,
 	barmode: 'group',
-		width: window.innerHeight-10,
-		font: {
-			size: 12
-		},
+		width: $(".panel-body").width()-150,
+	font: {
+		size: 12
+	},
 	"titlefont": {
     "size": 16
 	},/*
@@ -2065,9 +2073,7 @@ var score_config = {
   toImageButtonOptions: {
 	title: 'Download plot as a svg',
     format: 'svg', // one of png, svg, jpeg, webp
-    filename: 'new_image',/*
-    height: 1000,
-    width: 1400,*/
+    filename: 'new_image',
     scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
 	},
 	autosize: true,
@@ -2110,7 +2116,7 @@ var score_config = {
 					title: "",
 					autosize: true,
 					responsive: true,
-					width: window.innerHeight-10,
+					width: $(".panel-body").width()-150,
 					height: 600,
 									font: {
 											size: 12
