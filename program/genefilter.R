@@ -26,6 +26,9 @@ suppressPackageStartupMessages(library(RColorBrewer))
 suppressPackageStartupMessages(library(Polychrome))
 suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(cluster))
+suppressPackageStartupMessages(library(xfun))
+suppressPackageStartupMessages(library(reader))
+
 
 args <- commandArgs(TRUE)
 jobid <- args[1] # user job id
@@ -57,13 +60,15 @@ label_file
 load_test_data <- function(){
   rm(list = ls(all = TRUE))
   # 
-  # setwd("/var/www/html/iris3/data/20200331164625/")
-  expr_file = "lx653_tumorTransposed.txt"
-  jobid <- "20200331164625"
-  delim <- "\t"
-  is_imputation <- 'Yes'
+  # setwd("/var/www/html/iris3/data/20200404101108/")
+  expr_file = "Yan_2013_expression.zip"
+  expr_file = "Yan_2013_expression.7z"
+  expr_file = "Yan_2013_expression.csv.gz"
+  jobid <- "20200404101108"
+  delim <- ";"
   label_file<-'1'
   delimiter <- ','
+  is_imputation <- 'No'
   n_pc <- "10"
   n_variable_feature <- "5000"
   resolution_seurat <- 0.8
@@ -81,25 +86,39 @@ read_data<-function(x=NULL,read.method=NULL,sep="\t",...){
         tmp_x<-Read10X_h5(x)
         return(tmp_x)
       }else if(read.method =="TenX.folder"){
-        #improve later
-        all_files <- list.files(getwd())
-        barcode_file <- grep("barcodes",all_files)
-        matrix_file <- grep("matrix",all_files)
-        gene_file <- grep("genes",all_files)
-        feature_file <- grep("features",all_files)
-        
         
         all_files <- list.files(getwd())
         barcode_file <- grep("barcodes",all_files)
         matrix_file <- grep("matrix",all_files)
         gene_file <- grep("genes",all_files)
         feature_file <- grep("features",all_files)
+        
+        #Check users upload single zipped file, by counting detected filename, if less than 3 we think users uploads zipped file
+        if((length(barcode_file) + length(matrix_file) + length(gene_file) + length(feature_file)) < 3) {
+          dir.create("tmp",showWarnings = F)
+          if (file_ext(expr_file) == "7z") {
+            try(system(paste("7za x", expr_file, "-aoa -otmp")),silent = T)
+          }
+          try(system(paste("unzip -o", expr_file, "-d tmp")),silent = T)
+          try(system(paste("tar xzvf", expr_file, "--directory tmp")),silent = T)
+          
+          this_files <- list.files("tmp")[1]
+          if(is.na(this_files) || file_ext(this_files) == "tar") {
+            system("rm tmp/*")
+            try(system(paste("gunzip -c", expr_file, "> tmp/out.txt")),silent = T)
+          }
+          this_files <- list.files("tmp",full.names = T)[1]
+          this_delim <- reader::get.delim(this_files)
+          tmp_x<-read.delim(paste0(this_files),header = T,row.names = NULL,check.names = F,sep=this_delim)
+          upload_type <<- "CellGene"
+          system("rm tmp/*")
+          return(tmp_x)
+        }
         
         tryCatch(file.rename(all_files[barcode_file],paste("barcodes",gsub(".*barcodes","",all_files[barcode_file]),sep = "")),error = function(e) 0)
         tryCatch(file.rename(all_files[matrix_file],paste("matrix",gsub(".*matrix","",all_files[matrix_file]),sep = "")),error = function(e) 0)
         tryCatch(file.rename(all_files[gene_file],paste("genes",gsub(".*genes","",all_files[gene_file]),sep = "")),error = function(e) 0)
         tryCatch(file.rename(all_files[feature_file],paste("features",gsub(".*features","",all_files[features]),sep = "")),error = function(e) 0)
-        
         
         tmp_x<-tryCatch(Read10X(getwd()),error = function(e) {
           all_files <- list.files(getwd())
@@ -130,7 +149,9 @@ read_data<-function(x=NULL,read.method=NULL,sep="\t",...){
 }
 
 getwd()
+
 upload_type <- as.character(read.table("upload_type.txt",stringsAsFactors = F)[1,1])
+
 #expFile <- read_data(x = getwd(),read.method = "TenX.folder",sep = delim)
 #expFile <- read_data(x = expr_file,read.method = "TenX.h5",sep = delim)
 #upload_type <- "CellGene"
