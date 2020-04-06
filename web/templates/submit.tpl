@@ -572,7 +572,7 @@ $(document).ready(function() {
               <h4 class="font-italic text-left">Seurat:</h4>
 							<div class="form-group row">
 									<div class="col-md-4">
-										<label for="ex3">Number of principle components used in downstream analyses. <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title=" Default: offset-md10."> </span>
+										<label for="ex3">Number of principle components used in downstream analyses. <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Determine the ‘dimensionality’ of the dataset, the top principal components represent a robust compression of the dataset. Default: 10."> </span>
 										</label>
 									</div>
 									<div class="col-md-4">
@@ -603,7 +603,7 @@ $(document).ready(function() {
 								</div>
 								<div class="form-group row">
 									<div class="col-md-4">
-										<label for="ex3">Number of highly variable features. <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title=" Default: 5000."> </span>
+										<label for="ex3">Number of highly variable features. <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="The subset of features that exhibit high cell-to-cell variation in the dataset, focusing on these genes in downstream analysis helps to highlight biological signal in single-cell datasets. Default: 5000."> </span>
 										</label>
 									</div>
 									<div class="col-md-4">
@@ -826,9 +826,8 @@ $(document).ready(function() {
 				<label class="form-check-label" for="allowstorage">Allow permanent storage in our database <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="By checking this option, you allow us to store your data in iris3 database (both submitted and results) for the future database construction. Be cautious if your data have not been published."> </span>
 				</label>
 			</div>-->
-		<div id="emailfd" class="section" style="position:relative;top:10px;">&nbsp;&nbsp;Optional: The running time usually takes a few hours, and can be more than 10 hours if there are more than 5000 cells in your data. Hence, we strongly recommend you to leave your email below, and you will be notified by email when the job is done.
-			<br/>
-			<div class="bootstrap-iso" style="margin-top: 5px;">&nbsp; <strong>E-mail</strong>&nbsp;:
+		<div id="emailfd" class="section" style="position:relative;top:10px;"><p>&nbsp;&nbsp;Optional: The running time usually takes a few hours, and can be more than 10 hours if there are more than 5000 cells in your data. Hence, we strongly recommend you to leave your email below, and you will be notified by email when the job is done.</p>
+			<div class="bootstrap-iso" style="margin: 5px;">&nbsp; <strong>E-mail</strong>&nbsp;:
 				<input name="email" type="text" id="email" size="60" style="position:relative;left:10px; width : 30%;" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,3}$" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 		</div>
 		<hr>
