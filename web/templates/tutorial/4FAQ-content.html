@@ -26,9 +26,9 @@
             <div class="answer">
                 <p>The hypergeometric enrichment test is performed in both CTS-gene module assignment and the functional enrichment for regulon evaluations. To infer CTS-gene modules, the probability of having x cells of the same cell type in a bicluster of
                     size n from the dataset with a total of N cells can be computed using the following hypergeometric function:</p>
-                <img src="./assets/img/tutorial/formula/hyper1.png"/><div class="row"></div>
+                <img src="./assets/img/tutorial/formula/hyper1.png" style="width: 360px;"/><div class="row"></div>
                 <p>where p is the percentage of that cell type among all cell types in the data set. The p-value of getting such enriched bicluster is calculated as:</p>
-                <img src="./assets/img/tutorial/formula/hyper2.png"/><div class="row"></div>
+                <img src="./assets/img/tutorial/formula/hyper2.png" style="width: 520px;"/><div class="row"></div>
                 <p>The p-value of a bicluster corresponding to a specific cell type is Bonferroni-adjusted by multiplying by the total number of cell types, and such bicluster is assigned as a CTS-gene module if its adjusted p-value to that cell type is
                     significant (`adj.p lt 0.05`). </p>
                 <p>The functional enrichment analysis between genes in the regulon and databases, such as KEGG, GO, ProteomicDB, etc. uses the same hypergeometric test and p-value adjustment shown above, but compares genes instead of cells. All the enrichment
@@ -55,19 +55,19 @@
                         <li>FN: the total number of attributes where the attribute of A is 0 and the of B is 1.</li>
                     </ul>
                     <p>RI can be calculated as:</p>
-                    <img src="./assets/img/tutorial/formula/RI.png"/><div class="row"></div>
+                    <img src="./assets/img/tutorial/formula/RI.png" style="width: 330px;" /><div class="row"></div>
                     <p>ARI is the corrected-for-chance of the RI. To calculate ARI, a contingency table is built to summarize the overlaps between the two cell label lists with n elements (cells). Each entry denotes the number of objects in common between
                         the two label lists. The ARI score can be calculated as:</p>
-                    <img src="./assets/img/tutorial/formula/ARI.png"/><div class="row"></div>
+                    <img src="./assets/img/tutorial/formula/ARI.png" style="width: 380px;"/><div class="row"></div>
                     <p>where `n(ij)` are values from the contingency table, `a_i` is the sum of the ith row of the contingency table, `b_j` is the sum of the `j`th column of the contingency table. Two more common index criteria, FMI and JI, also provide
                         the evaluation of similarity between the two cell type lists, and can be calculated by the following equations, respectively:
                     </p>
-                    <img src="./assets/img/tutorial/formula/FMI.png"/><div class="row"></div>
-                    <img src="./assets/img/tutorial/formula/JI.png"/><div class="row"></div>
+                    <img src="./assets/img/tutorial/formula/FMI.png" style="width: 260px;" /><div class="row"></div>
+                    <img src="./assets/img/tutorial/formula/JI.png" style="width: 180px;"/><div class="row"></div>
                     <p><b>Silhouette</b> refers to a method of interpretation and validation of consistency within clusters of data. The technique provides a succinct graphical representation of how well each object l cluster. The silhouette value is a measure
                         of how similar an object is to its luster (cohesion) compared to other clusters (separation). The silhouette ranges from -1 to +1, where a high value indicates that the object is well matched to its cluster and poorly matched to
                         neighboring clusters. The silhouette score can be calculated by:</p>
-                    <img src="./assets/img/tutorial/formula/SI.png"/><div class="row"></div>
+                    <img src="./assets/img/tutorial/formula/SI.png" style="width: 430px;"/><div class="row"></div>
                     <p>where `a(i)` be the average distance between `a` sample `i` and all the rest samples in the same cluster, and `b(i)` be the smallest average distance of `i` to all samples.</p>
 
                     <br>
@@ -83,7 +83,7 @@
                     motif in provided genomic sequences, (iii) motif comparison and clustering of identified motifs, and (iv) co-occurrence analyses of query motifs in given promoter sequences.</p>
                 <br>
                 <p>MEME suite: supports motif-based analysis of DNA, RNA and protein sequences. It provides motif discovery algorithms using both probabilistic and discrete models, which have complementary strengths. It also allows the discovery of motifs
-                    with arbitrary insertions and deletions (GLAM2). In addition to motif discovery, the MEME Suite provides tools for scanning sequences for matches to motifs (FIMO, MAST and GLAM2Scan), scanning for clusters of motifs (MCAST), comparing
+                    with arbitrary insertions and deletions (GLAM2). In addition to motif discovery, the MEME Suite provides tools for scanning sequences for matches to motifs (FIMO, MAST, and GLAM2Scan), scanning for clusters of motifs (MCAST), comparing
                     motifs to known motifs (Tomtom), finding preferred spacings between motifs (SpaMo), predicting the biological roles of motifs (GOMo), measuring the positional enrichment of sequences for known motifs (CentriMo), and analyzing ChIP-seq
                     and other large datasets (MEME-ChIP).</p>
                 <br>
@@ -109,29 +109,29 @@
                 <p>Each regulon is a set of genes that correspond to the predicted motif based on the motif scanning and prediction (see <a href="#Q4"><b>FAQ above</b></a>). For each active regulon, its regulon activity score (RAS) in one cell was calculated
                     based on the rank of the expression value in that cell for all genes involved in the active regulon. The regulon specificity score (RSS) for one cell type can then be calculated according to the entropy of RAS of cells inside the cell
                     type compared to outside the cell type. An RSS ranges from 0 to 1 and a higher value represents more significant specificity of this regulon in that cell type. All active regulons and regulons are ranked and rearranged by the RSS p-value
-                    in an ascending order.</p>
+                    in ascending order.</p>
                 <p>Specifically, for each active regulon, the RAS in a cell is calculated using the Wilcoxon rank sum test (wmwTest function in the BioQC R package) to rank the expression value of genes in the regulon to the rest genes. This method output
                     more regulons and also faster than the AUCell method used in SCENIC and not dependent on selecting thresholds. The procedure of calculating the specificity of an active regulon under one cell type is adopted based on an entropy-based
                     strategy which is previously used for gene expression data analysis. For each active regulon, we use a vector to represent the distribution of RAS in the cell population:
 					</p>
-                    <img src="./assets/img/tutorial/formula/RSS1.png" style="width:150px"/><div class="row"></div>
+                    <img src="./assets/img/tutorial/formula/RSS1.png" style="width:160px"/><div class="row"></div>
                     <p>where n is the total number of the cells. </p>
                     <p>We assign a weight of two to the RAS if the cell belongs to the specific cell type:</p>
-					<img src="./assets/img/tutorial/formula/RSS2.png" style="width:360px"/><div class="row"></div>
+					<img src="./assets/img/tutorial/formula/RSS2.png" style="width:430px"/><div class="row"></div>
                     <p>and RAS are normalized so that:</p>
-					<img src="./assets/img/tutorial/formula/RSS3.png" style="width:120px"/><div class="row"></div>
+					<img src="./assets/img/tutorial/formula/RSS3.png" style="width:110px"/><div class="row"></div>
                     <p>Then we used a vector to indicate whether a cell belongs to a specific cell type:</p>
-					<img src="./assets/img/tutorial/formula/RSS4.png" style="width:150px"/><div class="row"></div>
+					<img src="./assets/img/tutorial/formula/RSS4.png" style="width:170px"/><div class="row"></div>
 					
-                    <p>where</p><img src="./assets/img/tutorial/formula/RSS5.png" style="width:360px"/>
+                    <p>where</p><img src="./assets/img/tutorial/formula/RSS5.png" style="width:420px"/>
                     <div class="row"></div>
                     <p>The vector is also normalized so that:</p>
-					<img src="./assets/img/tutorial/formula/RSS6.png" style="width:120px"/><div class="row"></div>
+					<img src="./assets/img/tutorial/formula/RSS6.png" style="width:110px"/><div class="row"></div>
                     <p>Next, we evaluate the Jensen-Shannon Divergence (JSD), which is a commonly used metric for quantifying the difference between two probability distributions, defined as:</p>
-                    <img src="./assets/img/tutorial/formula/RSS7.png" style="width:360px"/><div class="row"></div>
-                    <p>where </p><img src="./assets/img/tutorial/formula/RSS_hp.png" style="width:150px"/><div class="row"></div><p> represents the Shannon entropy of a probability distribution P. The range of JSD values is between 0 and 1, where 0 means identical distribution and 1 means extreme difference. </p>
+                    <img src="./assets/img/tutorial/formula/RSS7.png" style="width:370px"/><div class="row"></div>
+                    <p>where </p><img src="./assets/img/tutorial/formula/RSS_hp.png" style="width:160px"/><div class="row"></div><p> represents the Shannon entropy of a probability distribution P. The range of JSD values is between 0 and 1, where 0 means identical distribution and 1 means extreme difference. </p>
                     <p>Finally, the RSS is defined by converting JSD to a similarity score:</p>
-					<img src="./assets/img/tutorial/formula/RSS8.png"/><div class="row"></div>
+					<img src="./assets/img/tutorial/formula/RSS8.png" style="width: 300px;"/><div class="row"></div>
                 </p>
 
                 <br>
@@ -143,9 +143,9 @@
             <h3 class="question"><a id="Q18" style="color:black;">How does IRIS3 select cell-type-specific regulons from active regulons?</a></h3>
             <div class="answer">
                 <p>To calculate the empirical p-value of an RSS in one cell type, we adapt a bootstrap simulation strategy:</p>
-                <img src="./assets/img/tutorial/formula/RSS9.png"/><div class="row"></div>
+                <img src="./assets/img/tutorial/formula/RSS9.png" style="width: 400px;"/><div class="row"></div>
                 <p>where the `RSS(sim)` is the RSS calculated as above using random genes. The number of random genes was set to 40 considering the average gene number in all active regulons we tested. N was set to 10,000 times. </p>
-                <p>For any active regulons, if its RSS is greater than 95% of the random RSSs in the corresponding cell type (`p"-"value lt 0.05`), we consider it as a cell-type-specific regulon. All active regulons and cell-type-specific regulons are ranked and rearranged by the RSS p-value in an
+                <p>For any active regulons, if its RSS is greater than 95% of the random RSSs in the corresponding cell type (`p"-"value lt 0.05`), we consider it as a cell-type-specific regulon. All active regulons and cell-type-specific regulons are ranked and rearranged by the RSS p-value in
                     ascending order, so that the most significant will be displayed in the first place. Active regulons with small RSS can still be significant if the overall gene expression within the cell type is low.</p>
                 <p>An example RSS significance test shows different RSS distribution in a dataset:</p> <img src="./assets/img/tutorial/rss_bootstrap.png"> <br>
             </div>
@@ -158,7 +158,7 @@
                 <p>Genes can be regulated only if their promoter regions are located in the open chromatin area that is available for the regulator to bind. We downloaded several ATAC-Seq data of human (74 tissue) and mouse (117) from <a href="http://cistrome.org/db/#/"><b>CistromeDB</a></b>.
                     Specifically, we compare all motifs in a regulon to the peak regions from the ATAC-Seq. If a motif instance overlaps with the peak region, it will be considered as an open chromatin region enriched motif which is available for the binding
                     of the corresponding TF. Genes in the regulon and supported by the ATAC-Seq are then validated as a true CTS-gene. However, such chromatin activities (peaks) are diverse in different cell types, or even cells. The bulk ATAC-Seq data we
-                    found for different tissues/cell types cannot provide accurate validation to CTS-genes. Thus, such function is only additionally provided to users to have a general glance. In the future, we are expecting to have single-cell ATAC-Seq
+                    found for different tissues/cell types cannot provide accurate validation to CTS-genes. Thus, such a function is only additionally provided to users to have a general glance. In the future, we are expecting to have single-cell ATAC-Seq
                     data pairing with scRNA-Seq data for credible gene validations in regulons. </p>
                 <br>
             </div>
@@ -166,7 +166,7 @@
         </div>
 
         <div class="qa">
-            <h3 class="question"><a id="Q19" style="color:black;">How does IRIS3 use TAD to retrive additional genes?</a></h3>
+            <h3 class="question"><a id="Q19" style="color:black;">How does IRIS3 use TAD to retrieve additional genes?</a></h3>
             <div class="answer">
                 <p>Considering the computational efficiency, the region for motif finding in IRIS3 is limited to 1000-2000 bp region upstream to each gene, and motifs outside of the region may not be found. To amend such a deficiency, we integrated <b>TAD (Topologically Associated Domain)</b> data resulted from Hi-C to trace back genes in the active gene modules of a cell type but not in the regulon. Genes in the same TAD are more likely to be regulated together due to the topological folding structure of such a region. We first downloaded 19 human tissue and five mouse tissues TAD files, respectively, and identified all genes for each TAD region per file. TAD regions are selected if any genes in a regulon are found in the TAD gene list. The remaining TAD supported genes are used to search in the active gene modules of that regulon and output all matched genes as TAD supplementary genes.</p>
                 <br>
@@ -177,8 +177,8 @@
         <div class="qa">
             <h3 class="question"><a id="Q8" style="color:black;">How does IRIS3 perform normalization for Cell-gene-regulon heatmaps?</a></h3>
             <div class="answer">
-                <p>To better illustrate the expression value of the gene sets, we applied a <a href="https://f1000research.com/articles/5-2122/v1"><b>log-normalization</b></a> for heatmap interpretation:</p>
-                <img src="./assets/img/tutorial/formula/norm_heatmap.png"/><div class="row"></div>
+                <p>To better illustrate the expression value of the gene sets, we applied a <a href="https://f1000research.com/articles/5-2122/v2"><b>log-normalization</b></a> for heatmap interpretation:</p>
+                <img src="./assets/img/tutorial/formula/norm_heatmap.png" style="width: 400px;"/><div class="row"></div>
                 <p>Where, `VN_i` indicates the normalized value for gene `i`,`VE_i` indicates the expression value of gene `i`, and `n` is the number of total cells. The heatmap comparison of pre-normalized and normalized values are shown below.</p>
                 <img src="./assets/img/tutorial/4.Q8-2.png">
                 <br>
@@ -195,12 +195,20 @@
             </div>
             <div class="clear"></div>
         </div>
+        <div class="qa">
+            <h3 class="question"><a id="Q9" style="color:black;">Why is my heatmap column fonts couldn't be adjusted?</a></h3>
+            <div class="answer">
+                <p>The issue is caused by the default minimal font size set by the browsers. For Chrome users, please go to browser settings -> Customize fonts -> Minimum font size, set this value to 0 and refresh IRIS3 result page. </p>
+                <br>
+            </div>
+            <div class="clear"></div>
+        </div>
 
         <div class="qa">
-            <h3 class="question"><a id="Q10" style="color:black;">Why am I getting 404 error or server expired when open the Enrichr, JASPAR and HOCOMOCO links?</a></h3>
+            <h3 class="question"><a id="Q10" style="color:black;">Why am I getting a 404 error or server expired when opening the Enrichr and HOCOMOCO links?</a></h3>
             <div class="answer">
                 <p>All these three functions use the outside server. Please ensure your browser allows the pop-up windows. Sometimes, an 404 error page or server connection expired message shows up due to the temperal server loading error and once you refresh
-                    the error page or click the link button again, the result page can showup successfully.</p>
+                    the error page or click the link button again, the result page can show up successfully.</p>
                 <br>
             </div>
             <div class="clear"></div>
@@ -211,9 +219,9 @@
             <div class="answer">
                 <p>To evaluate the performance of IRIS3, we compared our regulons with the result predicted by the
                     <a href="https://github.com/aertslab/SCENIC"><b>SCENIC pipeline</b></a>, the default parameters were used for both tools.</p>
-                <img src="./assets/img/tutorial/4.Q10-1.jpg">
+                <img src="./assets/img/tutorial/4.Q10-1.png">
                 <p>All the 19 scRNA-Seq datasets were tested using the default parameter settings in IRIS3 (red) and SCENIC (black). The data were arranged in the increasing order of the number of cells and 10X were grouped and highlighted in the orange
-                    box. Line one: the violin plots of RSS scores in all active regulons; Line 2: the pie charts of the average percentages of regulon in active regulons per cell type; Line 3: box plots of covered marker gene percentage in each regulon; Line
+                    box. Line one: the violin plots of RSS scores in all active regulons; Line 2: the pie charts of the average percentages of regulon in active regulons per cell type; Line 3: box plots of covered differentially expressed gene percentage in each regulon; Line
                     4: the mean precision of KEGG pathway enrichment; Line 5: number of cells.</p>
                 <p><b>Note:</b> The harmonic mean of precision was calculated to represent the performance of an algorithm on a given dataset and parameter setting:</p>
                 <p>`Precision="#of significant regulons"/"#of total predicted regulons"`</p>
@@ -224,14 +232,14 @@
         </div>
 
         <div class="qa">
-            <h3 class="question"><a id="Q12" style="color:black;">What are included in the Download zip file?</a></h3>
+            <h3 class="question"><a id="Q12" style="color:black;">What is included on the Download zip file?</a></h3>
             <div class="answer">
                 <img src="./assets/img/tutorial/4.Q12.png">
-                <p>1. The conds file contains cell names and the gene file contains gene names extracted from each bicluster (file 5), respectively. Each row represent a bicluster. </p>
+                <p>1. The conds file contains cell names and the gene file contains gene names extracted from each bicluster (file 5), respectively. Each row represents a bicluster. </p>
                 <p>2. The cell type prediction result from Seurat</p>
                 <p>3. The gene list for each regulon, grouped by cell types. Each row indicates a regulon.</p>
-                <p>4. The filtered gene expression matrix. Omitted if user chooses not to perform the gene filtering step.</p>
-                <p>5. The biclustering result from QUBIC.</p>
+                <p>4. The filtered gene expression matrix. Omitted if the user chooses not to perform the gene filtering step.</p>
+                <p>5. The biclustering result from QUBIC2.</p>
 
                 <br>
             </div>
@@ -241,7 +249,7 @@
         <div class="qa">
             <h3 class="question"><a id="Q13" style="color:black;">Why I'm staying in the confirmation page when the job has been done?</a></h3>
             <div class="answer">
-                <p>The confirmation page and the result page share the same link address. When click the result link in the email, some users may still be navigated to the confirmation page due to the cache stored in the browser. Just refresh the page or
+                <p>The confirmation page and the result page share the same link address. When clicking the result link in the email, some users may still be navigated to the confirmation page due to the cache stored in the browser. Just refresh the page or
                     wait 15 sec for automatic refresh, and your result will show up.</p>
                 <br>
             </div>
@@ -275,7 +283,7 @@
                     <br>
                     <li>Integrate more sequence analysis, including quality control, alignment, mapping, and normalization in the IRIS3 pipeline to generate the normalized expression data from FASTQ.</li>
                     <br>
-                    <li>An in-development tool, BRIC (biclustering-based gene regulation and cell type prediction from single-cell RNA-Seq data), will be used to replace QUBIC to predict cell types and regulons simultaneously. The BRIC is integrated with (1)
+                    <li>An in-development tool, BRIC (biclustering-based gene regulation and cell type prediction from single-cell RNA-Seq data), will be used to replace QUBIC2 to predict cell types and regulons simultaneously. The BRIC is integrated with (1)
                         a left truncated mixture Gaussian model for the accurate quantification of the sample-specific gene regulatory signals and (2) a dual-core algorithm for more precise biclusters identification.</li>
                     <br>
                     <li>A more powerful in-house deep learning pipeline, DESSO, will be added in IRIS3 as a replacement of DMINDA and MEME to analyze cell-type-specific ChIP-Seq data (integrate the Cistrome database) in support of more accurate regulon prediction.

@@ -1,130 +1,226 @@
 <html class="gr__amp_pharm_mssm_edu">
-
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
     <style type="text/css" abt="234"></style>
-    
-</head>
+  </head>
 
-<body data-gr-c-s-loaded="true">
+  <body data-gr-c-s-loaded="true">
     <div id="the-basics-content">
-        <h1>News</h1>
-        <div class="qa">
-			<h3 class="question">2/29/2020 v1.1.1</h3>
-            <div class="answer">
-                <ul>
-				<b>Changed:</b>
-				<li>We updated our <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics" target="_blank">Tutorial</a> and <a href="https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ" target="_blank">FAQ</a>, the new version contains more detailed steps and descriptions.
-				</li>
-				</ul>
-				<ul>
-				<b>Fixed:</b>
-				<li>
-				Removed the formula javascript library, as sometimes the formula failed to display; we have replaced the formulas with new figures.
-				</li>
-				<li>Tooltip in the submit page sometimes failed to display on MacBook pro resolution.
-				</li>
-				 </ul>
-            </div>
-			<h3 class="question">2/15/2020. v1.1.0</h3>
-            <div class="answer">
-                <ul>
-				<b>New features: Highcharts</b>
-				<li>We integrated <a href="https://www.highcharts.com/" target="_blank">highcharts.js</a> to display UMAP plot interactively.
-				</li>
-				<li>Users hover the mouse on a point will display the follwing tooltips: 1)cluster index. 2)cluster name. 3)cell name 4) UMAP coordinates.
-				</li>
-				<li>The color palette is synced with previous UMAP plots and heatmaps.
-				</li>
-				<li>Point size is automatically adjusted by number of cells in that dataset.
-				</li>
-				</ul>
-				<ul>
-				<b>New homepage: </b>
-				<li>We have re-designed the <a href="https://bmbl.bmi.osumc.edu/iris3/index.php" target="_blank">homepage</a>, including new layout and new abstract figure.
-				</li>
-				<li>Set the website theme color to KARACHA (#B47157) from <a href="https://nipponcolors.com/#karacha" target="_blank">NIPPON COLORS</a>. 
-				</li>
-				<li>Added <a href="https://www.revolvermaps.com/livestats/5qjeof23o10/" target="_blank">RevolverMaps</a> widget to display real-time visitor statistics for IRIS3.
-				</li>
-				</ul>
-				<ul>
-				<b>Changed:</b>
-				<li>Removed unused assets.
-				</li>
-				<li>Removed unused variable in scripts.
-				</li>
-				</ul>
-				<ul>
-				<b>Fixed:</b>
-				<li>Keep Seurat label start from 1 instead of 0.
-				</li>
-				<li>E-mail validation sometimes failed when using Safari browser on MacOS.
-				</li>
-				<li>Display a default trajectory plot if the plots failed to generated due to the dataset size too large.
-				</li>
-				
-				</ul>
-            </div>
-			<h3 class="question">1/15/2020. v1.0.2</h3>
-            <div class="answer">
-                <ul>
-				<b>Added:</b>
-				<li>A waiting page when loading results, incidating the server is parsing results, and estimate how many seconds to complete.
-				</li>
-				<li>Hint to select species if submit button not clickable.
-				</li>
-				<li>New overview figure.
-				</li>
-				<li>Pre-calculate script to speed up loading result.
-				</li>
-				</ul>
-				<ul>
-				<b>Fixed:</b>
-				<li>Upload very large file memory issue.
-				</li>
-				<li>Show submit button after upload.
-				</li>
-				<li>Only display 15 cells as preview.
-				</li>
-				<li>Remove unused assets.
-				</li>
-				</ul>
-            </div>
-			<h3 class="question">12/16/2019. v1.0.1</h3>
-            <div class="answer">
-				<ul>
-				<b>Added:</b>
-				<li>In result page, highlight TF name, UMAP loading image.
-				</li>
-				<li>Display species info at job settings section.
-				</li>
-				<li>In submit pageSkip upload preview if file too large.
-				</li>
-				<li>Pre-calculate script to speed up loading result.
-				</li>
-				</ul>
-				<ul>
-				<b>Fixed:</b>
-				<li>Keep UMAP plot, Clustergrammer heatmap same color palette.
-				</li>
-				<li>Generate combined motif on empty cell type folder.
-				</li>
-				<li>Preview notes for the number of cells.
-				</li>
-				<li>Correctly save PDF plots.
-				</li>
-				</ul>
-            </div>
-            <h3 class="question">11/10/2019. v1.0</h3>
-            <div class="answer">
-                <p>We are excited to present you the IRIS3 server 1.0! Please feel free to contact us if you encounter any issues. </p>
-            </div>
-
-            <div class="clear"></div>
+      <h1>News</h1>
+      <div class="qa">
+        <h3 class="question">4/3/2020 v1.2.0</h3>
+        <div class="answer">
+          <ul>
+            <b>Changed:</b>
+            <li>
+              We updated our
+              <a
+                href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics"
+                target="_blank"
+                >Tutorial</a
+              >
+              and
+              <a
+                href="https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ"
+                target="_blank"
+                >FAQ</a
+              >, the new version contains more detailed steps for new designed
+              pages.
+            </li>
+            <li>
+              We updated the download files list for interactive UMAP plot.
+            </li>
+            <li>
+              We added the job running status and cell clustering results are
+              available to preview on the submission waiting page, we also added
+              a “Terminate your job” button for users to stop the current job,
+              in the event that the clustering result does not make sense or to
+              save time for parameter tuning.
+            </li>
+            <li>
+              We have improved the layout of the results page by splitting it
+              into four sections: (i) cell clustering page, including
+              preprocessing results, interactive UMAP, differentially expressed
+              genes, trajectory plot, and clustering evaluations; (ii) the
+              cell-gene-regulon Clustergrammer heatmap page, (iii) regulon
+              details per cell type page, and (iv) job information page. The
+              heatmap is now closed by default, and users can choose to turn it
+              on by clicking on the corresponding cell type buttons.
+            </li>
+            <li>
+              We have changed “marker genes” into “differentially expressed
+              genes” (DEGs for short) throughout the webserver.
+            </li>
+            <li>
+              We enabled users to choose different number of PCs, number of
+              highly variable genes, and clustering resolution for Seurat cell
+              clustering.
+            </li>
+            <li>
+              In calculating the regulon specificity score(RSS), the p-value for
+              RSS in each cell cluster is adjusted by multiplying the number of
+              the TFs (annotated by HOCOMOCO) that are also identified as
+              differentially expressed genes by Seurat.
+            </li>
+          </ul>
+          <ul>
+            <b>Fixed:</b>
+            <li>
+              Fixed email sometimes failed to send.
+            </li>
+            <li>
+              Fixed some test jobs not available to show.
+            </li>
+          </ul>
         </div>
-	<hr/>
-   </div>
-</body>
+        <h3 class="question">2/29/2020 v1.1.1</h3>
+        <div class="answer">
+          <ul>
+            <b>Changed:</b>
+            <li>
+              We updated our
+              <a
+                href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics"
+                target="_blank"
+                >Tutorial</a
+              >
+              and
+              <a
+                href="https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ"
+                target="_blank"
+                >FAQ</a
+              >, the new version contains more detailed steps and descriptions.
+            </li>
+          </ul>
+          <ul>
+            <b>Fixed:</b>
+            <li>
+              Removed the formula javascript library, since sometimes the
+              formula failed to display; we have replaced the formulas with new
+              figures.
+            </li>
+            <li>
+              Tooltip in the submit page sometimes failed to display on MacBook
+              pro resolution.
+            </li>
+          </ul>
+        </div>
+        <h3 class="question">2/15/2020. v1.1.0</h3>
+        <div class="answer">
+          <ul>
+            <b>New features: Highcharts</b>
+            <li>
+              We integrated
+              <a href="https://www.highcharts.com/" target="_blank"
+                >highcharts.js</a
+              >
+              to display UMAP plot interactively.
+            </li>
+            <li>
+              Users hover the mouse on a point will display the follwing
+              tooltips: 1)cluster index. 2)cluster name. 3)cell name 4) UMAP
+              coordinates.
+            </li>
+            <li>
+              The color palette is synced with previous UMAP plots and heatmaps.
+            </li>
+            <li>
+              Point size is automatically adjusted by number of cells in that
+              dataset.
+            </li>
+          </ul>
+          <ul>
+            <b>New homepage: </b>
+            <li>
+              We have re-designed the
+              <a
+                href="https://bmbl.bmi.osumc.edu/iris3/index.php"
+                target="_blank"
+                >homepage</a
+              >, including new layout and new abstract figure.
+            </li>
+            <li>
+              Set the website theme color to KARACHA (#B47157) from
+              <a href="https://nipponcolors.com/#karacha" target="_blank"
+                >NIPPON COLORS</a
+              >.
+            </li>
+            <li>
+              Added
+              <a
+                href="https://www.revolvermaps.com/livestats/5qjeof23o10/"
+                target="_blank"
+                >RevolverMaps</a
+              >
+              widget to display real-time visitor statistics for IRIS3.
+            </li>
+          </ul>
+          <ul>
+            <b>Changed:</b>
+            <li>Removed unused assets.</li>
+            <li>Removed unused variable in scripts.</li>
+          </ul>
+          <ul>
+            <b>Fixed:</b>
+            <li>Keep Seurat label start from 1 instead of 0.</li>
+            <li>
+              E-mail validation sometimes failed when using Safari browser on
+              MacOS.
+            </li>
+            <li>
+              Display a default trajectory plot if the plots failed to generated
+              due to the dataset size too large.
+            </li>
+          </ul>
+        </div>
+        <h3 class="question">1/15/2020. v1.0.2</h3>
+        <div class="answer">
+          <ul>
+            <b>Added:</b>
+            <li>
+              A waiting page when loading results, incidating the server is
+              parsing results, and estimate how many seconds to complete.
+            </li>
+            <li>Hint to select species if submit button not clickable.</li>
+            <li>New overview figure.</li>
+            <li>Pre-calculate script to speed up loading result.</li>
+          </ul>
+          <ul>
+            <b>Fixed:</b>
+            <li>Upload very large file memory issue.</li>
+            <li>Show submit button after upload.</li>
+            <li>Only display 15 cells as preview.</li>
+            <li>Remove unused assets.</li>
+          </ul>
+        </div>
+        <h3 class="question">12/16/2019. v1.0.1</h3>
+        <div class="answer">
+          <ul>
+            <b>Added:</b>
+            <li>In result page, highlight TF name, UMAP loading image.</li>
+            <li>Display species info at job settings section.</li>
+            <li>In submit pageSkip upload preview if file too large.</li>
+            <li>Pre-calculate script to speed up loading result.</li>
+          </ul>
+          <ul>
+            <b>Fixed:</b>
+            <li>Keep UMAP plot, Clustergrammer heatmap same color palette.</li>
+            <li>Generate combined motif on empty cell type folder.</li>
+            <li>Preview notes for the number of cells.</li>
+            <li>Correctly save PDF plots.</li>
+          </ul>
+        </div>
+        <h3 class="question">11/10/2019. v1.0</h3>
+        <div class="answer">
+          <p>
+            We are excited to present you the IRIS3 server 1.0! Please feel free
+            to contact us if you encounter any issues.
+          </p>
+        </div>
 
+        <div class="clear"></div>
+      </div>
+      <hr />
+    </div>
+  </body>
 </html>

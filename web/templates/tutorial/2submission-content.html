@@ -1,55 +1,116 @@
 <html class="gr__amp_pharm_mssm_edu">
-
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
     <style type="text/css" abt="234"></style>
-</head>
+  </head>
 
-<body data-gr-c-s-loaded="true">
+  <body data-gr-c-s-loaded="true">
     <div id="the-basics-content">
-        <h1>How to submit a job</h1>
-        <div class="qa">
-            <h3 class="question">General submission</h3>
-            <div class="answer">
-                <img src="./assets/img/tutorial/2.1submit.jpg" style="width:100%">
+      <h1>How to submit a job</h1>
+      <div class="qa">
+        <h3 class="question">General submission</h3>
+        <div class="answer">
+          <img src="./assets/img/tutorial/2.1submit.jpg" style="width:100%" />
 
-                <p><b>1.</b> Example data can be chosen or downloaded from the drop-down selections.Three example data can be downloaded to check the input format, or directly load the example expression matrix.  </p><p>Note: If the user directly loads the example data and leave all settings as default, it will be directed to the example result page without waiting for the program running. Any other changes will be regarded as a new job.
-				</p>
+          <p>
+            <b>1.</b> Example data can be chosen or downloaded from the
+            drop-down selections.Three example data can be downloaded to check
+            the input format, or directly load the example expression matrix.
+          </p>
+          <p>
+            Note: If the user directly loads the example data and leave all
+            settings as default, it will be directed to the example result page
+            without waiting for the program running. Any other changes will be
+            regarded as a new job.
+          </p>
 
-                <p><b>2.</b> Upload your expression file(s) by selecting or dragging the file from local to the drop-zone.
-                </p><p>Note: The maximum number of upload files is 3, typically designed for your 10X genomics raw gene-barcodes matrix files. Note that do not unzip your files, otherwise, our server will consider you uploading a text format gene expression file and will try to display the preview.
-				</p>
-                <p><b>3.</b> Choose the species. Either Human or Mouse. 
-<p>Note 1: only selecting species after your file is completely uploaded.</p><p>Note 2: choosing the wrong species may lead to low gene matching rate or occur errors. </p>
-                    <p><b>4.</b> Advanced options. See below for details.</p>
+          <p>
+            <b>2.</b> Upload your expression file(s) by selecting or dragging
+            the file from local to the drop-zone.
+          </p>
+          <p>
+            Note: The maximum number of upload files is 3, typically designed
+            for your 10X genomics raw gene-barcodes matrix files. Note that do
+            not unzip your files, otherwise, our server will consider you
+            uploading a text format gene expression file and will try to display
+            the preview.
+          </p>
+          <p><b>3.</b> Choose the species. Either Human or Mouse.</p>
+          <p>
+            Note 1: only selecting species after your file is completely
+            uploaded.
+          </p>
+          <p>
+            Note 2: choosing the wrong species may lead to low gene matching
+            rate or occur errors.
+          </p>
+          <p><b>4.</b> Advanced options. See below for details.</p>
 
-                    <p><b>5.</b> An email is not required to submit the job; however, we strongly suggest you provide your email to receive a notification once the job is completed.</p>
-                    <p><b>6.</b> Submit the job once everything is ready.</p>
-					<p><b>7.</b> Check our example result page.</p>
-                    
-                    <img style="width:100%" src="./assets/img/tutorial/2.2conformation.png">
-                    <br>
-                    <br>
-            </div>
+          <p>
+            <b>5.</b> An email is not required to submit the job; however, we
+            strongly suggest you provide your email to receive a notification
+            once the job is completed.
+          </p>
+          <p><b>6.</b> Submit the job once everything is ready.</p>
+          <p><b>7.</b> Check our example result page.</p>
+
+          <img
+            style="width:100%"
+            src="./assets/img/tutorial/2.2conformation.jpg"
+          />
+          <br />
+          <p><b>1.</b> Process of the current job.</p>
+          <p><b>2.</b> You can terminate the job by clicking on this button.</p>
+          <p>
+            <b>3.</b> Once the prediction of cell clusters is completed, the
+            results will show here.
+          </p>
+
+          <br />
         </div>
-        <div class="qa">
-            <h3 class="question">Advanced options</h3>
-            <div class="answer">
-                <img src="./assets/img/tutorial/2.4advance.jpg">
-                <br>
-				<p><b>1.</b> Control the output biclusters from QUBIC. Details can be <a href="https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ&amp;q=2" target="_blank">found here.</a></p>
-				<p><b>2.</b>Resolution for clustering in Seurat (form 0-1). A larger number will generate more clusters and a smaller number will generate fewer clusters. Default: 0.8.</p>
-				<p><b>3.</b> The upstream promoter region is open to users to decide the region for motif finding.  Wider range may cause require longer computational time. Default: 1000 bp.
-                </p>
-                <p><b>4.</b> Quick selecting a recommended parameter, either a set of parameters with less running time or using default parameters but longer running time. </p>
-                <p><b>5.</b> Enable imputation step using DrImpute with all default parameters in the pre-processing step. Default: disabled.</p>
-                <p><b>6.</b> Enable dual strategy for QUBIC2 biclustering optimization. Time-consuming. Not recommended for 10X data. Default: disabled.</p>
-                <p><b>7.</b> Provide cell labels for CTSR identification. This file contains two columns: cell names and cell labels. Regulons will be predicted based on the provided cell labels. </p>
-				<p><b>8.</b> Upload a gene module file for additional analysis. The uploaded file can include single/multiple columns, and each column represents a gene module. </p>
+      </div>
+      <div class="qa">
+        <h3 class="question">Advanced options</h3>
+        <div class="answer">
+          <img src="./assets/img/tutorial/2.4advance.jpg" />
+          <br />
 
-            </div>
+          <p>
+            <b>1.</b> Enable imputation step using DrImpute with all default
+            parameters in the pre-processing step. Default: disabled.
+          </p>
+          <p><b>2.</b> Control the output of clustering in Seurat.</p>
+          <p>
+            <b>3.</b> Control the output biclusters from QUBIC. Details can be
+            <a
+              href="https://bmbl.bmi.osumc.edu/iris3/more.php#4FAQ&amp;q=2"
+              target="_blank"
+              >found here.</a
+            >
+          </p>
+
+          <p>
+            <b>4.</b> The upstream promoter region is open to users to decide
+            the region for motif finding. Wider range may cause require longer
+            computational time. Default: 1000 bp.
+          </p>
+          <p>
+            <b>5.</b> Quick selecting a recommended parameter, either a set of
+            parameters with less running time or using default parameters but
+            longer running time.
+          </p>
+          <p>
+            <b>6.</b> Provide cell labels for CTSR identification. This file
+            contains two columns: cell names and cell labels. Regulons will be
+            predicted based on the provided cell labels.
+          </p>
+          <p>
+            <b>7.</b> Upload a gene module file for additional analysis. The
+            uploaded file can include single/multiple columns, and each column
+            represents a gene module.
+          </p>
         </div>
+      </div>
     </div>
-</body>
-
+  </body>
 </html>
