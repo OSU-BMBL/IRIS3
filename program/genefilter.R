@@ -101,17 +101,18 @@ read_data<-function(x=NULL,read.method=NULL,sep="\t",...){
           }
           try(system(paste("unzip -o", expr_file, "-d tmp")),silent = T)
           try(system(paste("tar xzvf", expr_file, "--directory tmp")),silent = T)
-          
-          this_files <- list.files("tmp")[1]
+          max_file <- which.max(file.info(list.files("tmp",full.names = T))[,1])
+          this_files <- list.files("tmp",full.names = T)[max_file]
           if(is.na(this_files) || file_ext(this_files) == "tar") {
-            system("rm tmp/*")
+            system("rm -R tmp/*")
             try(system(paste("gunzip -c", expr_file, "> tmp/out.txt")),silent = T)
           }
-          this_files <- list.files("tmp",full.names = T)[1]
+          max_file <- which.max(file.info(list.files("tmp",full.names = T))[,1])
+          this_files <- list.files("tmp",full.names = T)[max_file]
           this_delim <- reader::get.delim(this_files)
           tmp_x<-read.delim(paste0(this_files),header = T,row.names = NULL,check.names = F,sep=this_delim)
           upload_type <<- "CellGene"
-          system("rm tmp/*")
+          system("rm -R tmp/*")
           return(tmp_x)
         }
         
