@@ -175,7 +175,7 @@ gene_module_file=$gene_module_file
 jobid=$jobid
 motif_min_length=12
 motif_max_length=12
-#perl $BASE/program/prepare_email1.pl \$jobid\n
+perl $BASE/program/prepare_email1.pl \$jobid\n
 Rscript $BASE/program/genefilter.R \$jobid \$wd\$exp_file $delim \$label_file $delim_label $is_imputation $resolution_seurat $n_pca $n_variable_features $label_use_predict
 echo gene_module_detection > running_status.txt\n
 $BASE/program/qubic2/qubic -i \$wd\$jobid\_filtered_expression.txt -k $k_arg -o $o_arg -f $f_arg $is_c
@@ -219,8 +219,8 @@ Rscript $BASE/program/process_tomtom_result.R \$jobid\n
 mkdir json
 $BASE/program/build_clustergrammar.sh \$wd \$jobid $label_use_predict\n
 
-zip -R \$wd\$jobid '*.regulon_gene_id.txt' '*.regulon_gene_symbol.txt' '*.regulon_rank.txt' '*.regulon_activity_score.txt' '*_cell_label.txt' '*.blocks' '*_blocks.conds.txt' '*_blocks.gene.txt' '*_filtered_expression.txt' '*_gene_id_name.txt' '*_marker_genes.txt' 'cell_cluster_unique_diffrenetially_Expressed_genes.txt' '*_combine_regulon.txt'\n
-#perl $BASE/program/prepare_email.pl \$jobid\n
+zip -R \$wd\$jobid '*.regulon_gene_id.txt' '*.regulon_gene_symbol.txt' '*.regulon_rank.txt' '*_silh.txt' '*umap_embeddings.txt' '*.regulon_activity_score.txt' '*_cell_label.txt' '*.blocks' '*_blocks.conds.txt' '*_blocks.gene.txt' '*_filtered_expression.txt' '*_gene_id_name.txt' '*_marker_genes.txt' 'cell_cluster_unique_diffrenetially_expressed_genes.txt' '*_combine_regulon.txt'\n
+perl $BASE/program/prepare_email.pl \$jobid\n
 echo 'finish'> done\n  
 #chmod -R 755 .
 ");
@@ -229,7 +229,7 @@ echo 'finish'> done\n
 	session_destroy();
 	#system("chmod -R 755 $workdir2");
 	system("cp $workdir/../index.php $workdir");
-	system("cd $workdir; nohup sh qsub.sh > output.txt &");
+	#system("cd $workdir; nohup sh qsub.sh > output.txt &");
 	##shell_exec("$workdir/qsub.sh>$workdir/output.txt &");
 	#header("Location: results.php?jobid=$jobid");
 	header("Location: results.php?jobid=$jobid");
