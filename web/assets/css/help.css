@@ -178,7 +178,7 @@ h6 {
 #content #the-basics-content img {
   float: left;
   margin: 0em 1em 1em 0em;
-  width: 320px;
+  width: 420px;
   height: auto;
   transition: width 0.5s, height 0.5s;
   -moz-transition: width 0.5s, height 0.5s;

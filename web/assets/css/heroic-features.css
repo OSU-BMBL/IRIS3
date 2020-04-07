@@ -1263,6 +1263,30 @@ textarea {
   opacity: 0.5;
 }
 
+.result-header-tutorial {
+  font-size: 14px;
+}
+.result-header-tutorial:hover {
+  color: #b47157 !important;
+  font-size: 14px;
+}
+/*hide heatmap Enrichr function*/
+.enrichr_logo {
+  display: none;
+}
+
+.wait_message {
+  padding-left: 15px;
+}
+.toggle_row_order > .sidebar_button_text {
+  background-color: #2e6da4;
+}
+.toggle_col_order > .sidebar_button_text {
+  background-color: #2e6da4;
+}
+.gene_search_button > .sidebar_text {
+  background-color: #2e6da4;
+}
 /*########fountain library########*/
 #fountainG {
   position: fixed;
