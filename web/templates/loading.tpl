@@ -661,10 +661,12 @@ function terminate_job(item) {
 				var this_ct = root_id.match(/\d+/g)[0]
 				$(root_id + '> .wait_message').html('Loading heatmap ... <img src="static/images/busy.gif">')
 				$('#heatmap-header-'+this_ct).css('display','block')
-				$('#heatmap-hint').css('display','none')
+				//$('#heatmap-hint').css('display','none')
 				$('#main_CT'+this_ct).css('display','')
 				make_clust(json_file, root_id)
 				flag.push(root_id)
+				
+				$('#heatmap-hint').html('<p style="font-size:14px;font-weight:400;">Gene symbols may not appear when the number of rows is too large, please scroll the wheel on your mouse up to zoom in when the issue occurs.</p>')
 			}
 		});
 

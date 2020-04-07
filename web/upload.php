@@ -32,13 +32,21 @@ if (!empty($_FILES)) {
 	#echo($mime_type);
 	switch($mime_type) {
 	case "application/x-gzip":
-		$new_array['type'][] = 'gzip';
+        $new_array['index'][] = '1';
+		$new_array['data'][] = '1';
+		$new_array['gene_num'][] = 100;
+        $new_array['count_zero'][] = 50;
+        $new_array['type'][] = 'gzip';
 		$fp = fopen("$workdir/upload_type.txt", 'w');
 		fwrite($fp,"TenX.folder\n");
 		fclose($fp);
 		break;
 	case "application/zip":
-		$new_array['type'][] = 'zip';
+        $new_array['index'][] = '1';
+		$new_array['data'][] = '1';
+		$new_array['gene_num'][] = 100;
+        $new_array['count_zero'][] = 50;
+        $new_array['type'][] = 'zip';
 		$fp = fopen("$workdir/upload_type.txt", 'w');
 		fwrite($fp,"TenX.folder\n");
 		fclose($fp);
@@ -189,11 +197,11 @@ if (!empty($_FILES)) {
     if (!file_exists($workdir)) {
         mkdir($workdir);
     }
-    system("cp ./upload/Yan_2013_expression.csv $workdir");
-    system("cp ./upload/Yan_2013_label.csv $workdir");
-    $expfile = 'Yan_2013_expression.csv';
+    system("cp ./upload/Zeisel_expression.csv $workdir");
+    system("cp ./upload/Zeisel_index_label.csv $workdir");
+    $expfile = 'Zeisel_expression.csv';
     $_SESSION['expfile'] = $expfile;
-    $labelfile = 'Yan_2013_label.csv';
+    $labelfile = 'Zeisel_index_label.csv';
     $_SESSION['labelfile'] = $labelfile;
     #$gene_module_file = 'Yan_2013_example_gene_module.csv';
     #$_SESSION['gene_module_file'] = $gene_module_file;

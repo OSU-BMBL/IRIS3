@@ -187,6 +187,16 @@ function addPreviewTable(response, metadata = true, type) {
         )
       )
       break
+    default:
+      $('#preview_' + type).append(
+        $('<div>', {
+          class: 'px-2 py-0'
+        }).html(
+          '<br><span class="bold highlight">NOTE: The preview function for your upload dataset has been disabled. ' +
+            '</span></div>'
+        )
+      )
+      break
   }
   $('#preview_' + type).append(
     $('<div>', {
@@ -221,7 +231,7 @@ var addTable = function(dataset, type) {
           dataset['cell_num'][1] +
           ' cells</span> and <span class="highlight">' +
           dataset['gene_num'][0] +
-          ' genes</span>. Check that the preview is correct, select the species then click submit button or upload additional files in the advanced options. Refresh the page to re-submit your dataset.</label>'
+          ' genes</span>. Check that the preview is correct, select the species then click submit button or upload additional files in the advanced options. Please refresh the page if you would like to re-submit your dataset.</label>'
       )
     )
   } else if (dataset['type'][0] == 'hdf') {
