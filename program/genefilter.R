@@ -60,11 +60,11 @@ label_file
 load_test_data <- function(){
   rm(list = ls(all = TRUE))
   # 
-  # setwd("/var/www/html/iris3/data/20200404101108/")
-  expr_file = "Yan_2013_expression.zip"
-  expr_file = "Yan_2013_expression.7z"
-  expr_file = "Yan_2013_expression.csv.gz"
-  jobid <- "20200404101108"
+  # setwd("/var/www/html/iris3/data/20200407122143/")
+  expr_file = "randomized.tsv.gz"
+  expr_file = "123.zip"
+  expr_file = "GSE140816_CTL.zip"
+  jobid <- "20200407122143"
   delim <- ";"
   label_file<-'1'
   delimiter <- ','
@@ -101,19 +101,45 @@ read_data<-function(x=NULL,read.method=NULL,sep="\t",...){
           }
           try(system(paste("unzip -o", expr_file, "-d tmp")),silent = T)
           try(system(paste("tar xzvf", expr_file, "--directory tmp")),silent = T)
-          max_file <- which.max(file.info(list.files("tmp",full.names = T))[,1])
-          this_files <- list.files("tmp",full.names = T)[max_file]
-          if(is.na(this_files) || file_ext(this_files) == "tar") {
+          
+          # check if the file is gz instead of tar.gz
+          max_file <- which.max(file.info(list.files("tmp",full.names = T,recursive = T))[,1])
+          this_files <- list.files("tmp",full.names = T,recursive = T)[max_file]
+          if(is.na(this_files) || file_ext(this_files) == "tar" || length(this_files) == 0) {
             system("rm -R tmp/*")
-            try(system(paste("gunzip -c", expr_file, "> tmp/out.txt")),silent = T)
+            this_filename <- gsub(".gz","",basename(expr_file))
+            try(system(paste("gunzip -c ", expr_file, " > tmp/",this_filename,sep="")),silent = T)
+            max_file <- which.max(file.info(list.files("tmp",full.names = T,recursive = T))[,1])
+            this_files <- list.files("tmp",full.names = T,recursive = T)[max_file]
+            this_delim <- reader::get.delim(this_files)
+            tmp_z <- tryCatch(read.delim(paste0(this_files),header = T,row.names = NULL,check.names = F,sep=this_delim),error = function(e) 0)
+            upload_type <<- "CellGene"
+            return(tmp_z)
           }
-          max_file <- which.max(file.info(list.files("tmp",full.names = T))[,1])
-          this_files <- list.files("tmp",full.names = T)[max_file]
-          this_delim <- reader::get.delim(this_files)
-          tmp_x<-read.delim(paste0(this_files),header = T,row.names = NULL,check.names = F,sep=this_delim)
-          upload_type <<- "CellGene"
-          system("rm -R tmp/*")
-          return(tmp_x)
+          
+          max_file <- which.max(file.info(list.files("tmp",full.names = T,recursive = T))[,1])
+          this_files <- list.files("tmp",full.names = T,recursive = T)[max_file]
+          
+          
+          # incase folder contains 10X files
+          tmp_x <- tryCatch(Read10X(gsub(basename(this_files),"",this_files)),error = function(e) 0)
+          
+          if (typeof(tmp_x) == "S4") {
+            system("rm -R tmp/*")
+            return(tmp_x)
+          } else if(file_ext(this_files) == "h5" || file_ext(this_files) == "hdf5") {
+            tmp_y <- tryCatch(Read10X_h5(this_files),error = function(e) 0)
+            upload_type <<- "TenX.h5"
+            system("rm -R tmp/*")
+            return(tmp_y)
+          } else {
+            this_delim <- reader::get.delim(this_files)
+            tmp_z <- tryCatch(read.delim(paste0(this_files),header = T,row.names = NULL,check.names = F,sep=this_delim),error = function(e) 0)
+            upload_type <<- "CellGene"
+            system("rm -R tmp/*")
+            return(tmp_z)
+          }
+          
         }
         
         tryCatch(file.rename(all_files[barcode_file],paste("barcodes",gsub(".*barcodes","",all_files[barcode_file]),sep = "")),error = function(e) 0)
@@ -296,7 +322,7 @@ my.object<-CreateSeuratObject(expFile)
 
 if (upload_type == "TenX.folder" | upload_type == "TenX.h5"){
   my.object[["percent.mt"]] <- PercentageFeatureSet(my.object, pattern = "^MT-")
-  my.object <- (subset(my.object, subset = nFeature_RNA > 200 & nFeature_RNA < 4000 & percent.mt < 5))
+  my.object <- (subset(my.object, subset = nCount_RNA > 200 & nFeature_RNA < 5000 & percent.mt < 5))
 }
 
 ## get raw data################################  
@@ -515,11 +541,18 @@ for(i in 1: length(my.cluster)){
   my.marker_json <- list(NULL)
   names(my.marker_json) <- 'data'
   colnames(this_marker) <- NULL
-  this_marker[,6] <- paste("CT",this_marker[,6],sep = "")
-  this_marker <- this_marker[,c(6,7,1:5)]
-  my.marker_json$data <- this_marker
-  my.marker_json <- toJSON(my.marker_json,pretty = T, simplifyDataFrame =F)
-  write(my.marker_json, paste("json/",jobid,"_CT_",i,"_dge.json",sep=""))
+  if(nrow(this_marker) > 0) {
+    this_marker[,6] <- paste("CT",this_marker[,6],sep = "")
+    this_marker <- this_marker[,c(6,7,1:5)]
+    my.marker_json$data <- this_marker
+    my.marker_json <- toJSON(my.marker_json,pretty = T, simplifyDataFrame =F)
+    write(my.marker_json, paste("json/",jobid,"_CT_",i,"_dge.json",sep=""))
+  } else {
+    this_marker <- list(c(paste0("CT",i),"Not found",NA,NA,NA,NA,NA))
+    my.marker_json$data <- this_marker
+    my.marker_json <- toJSON(my.marker_json,pretty = T, simplifyDataFrame =F)
+    write(my.marker_json, paste("json/",jobid,"_CT_",i,"_dge.json",sep=""))
+  }
 }
 
 
