@@ -129,10 +129,16 @@ get_pvalue <- function(df){
     result_pvalue[i] <- tmp_pvalue
     
   }
-  ## use benjamini-Hochberg (B&H) correction?
   #t1 <- sgof::BH(result_pvalue)
-  #result_pvalue <- t1$Adjusted.pvalues[order(match(t1$data,result_pvalue))]
-  
+  #result_pvalue <- t1$Adjusted.pvalues[order(order(result_pvalue))]
+  result_pvalue <- result_pvalue * count_cluster
+  result_pvalue <- unlist(sapply(result_pvalue, function(x){
+    if(x > 1) {
+      return(1)
+      #return(x/count_cluster)
+    } 
+    return(x)
+  }))
   return (list(pvalue=result_pvalue,cell_type=seq(1:count_cluster)))
 }
 
@@ -254,14 +260,18 @@ for (j in 1:count_cluster) {
   names(uniq_li) <- seq_along(uniq_li) #preserve index of the non-null values
   uniq_li <- compact(unlist(uniq_li))
   while (is.null(uniq_li)) { # if result is null, increase pvalue to make at least have bicusters in cell type
-    pvalue_thres <- pvalue_thres  + 0.01
+    pvalue_thres <- pvalue_thres  + 0.001
     uniq_li <- sapply(pv, get_bic_in_ct,num=j)
     names(uniq_li) <- seq_along(uniq_li) #preserve index of the non-null values
     uniq_li <- compact(unlist(uniq_li))
-	if(pvalue_thres > 1){
-      break
+    if(pvalue_thres == 1){
+      uniq_li <- uniq_li[1]
     }
-  }
+    
+    if(pvalue_thres > 1){
+        break
+      }
+    }
   
   #uniq_bic <- gene_file[names(uniq_li),]%>%
   #  t%>%
