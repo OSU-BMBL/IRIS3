@@ -81,6 +81,8 @@ for (i in 1:length(alldir)) {
   if(length(regulon_motif) > 0){
     motif_list <- unlist(lapply(strsplit(regulon_motif,"\\t"), function(x){x[[2]]}))
     rank_list <- unlist(lapply(strsplit(regulon_rank,"\\t"), function(x){x[[6]]}))
+    rss_pvalue_list <- as.numeric(unlist(lapply(strsplit(regulon_rank,"\\t"), function(x){x[[5]]})))
+    
     motif_list <- lapply(strsplit(motif_list,","), function(x){
       paste("ct",x[[1]],"bic",x[[2]],"m",x[[3]],sep = "")
     })
@@ -88,21 +90,23 @@ for (i in 1:length(alldir)) {
       which(total_motif_name[,1] %in% x)    
     }))
     tf_names <- total_motif_name[tf_idx,2]
-    tf_rss <- tibble(index=seq(1:length(rank_list)),tf=total_motif_name[tf_idx,2],rss=rank_list)
+    tf_rss <- tibble(index=seq(1:length(rank_list)),tf=total_motif_name[tf_idx,2],rss=rank_list,ctsr=rss_pvalue_list < 0.05)
+    num_ctsr <- length(which(rss_pvalue_list < 0.05))
     total_tf_name_list <- append(total_tf_name_list,total_motif_name[tf_idx,2])
-    rss_plot <- ggplot(tf_rss, aes(x=index, y=as.numeric(rss), label=ifelse(index<6,as.character(tf),''))) +
-      geom_point(color=ifelse(tf_rss$index<6,"#2775b6",'grey'),size=3) + 
+    rss_plot <- ggplot(tf_rss, aes(x=index, y=as.numeric(rss), label=ifelse(index<num_ctsr,as.character(tf),''))) +
+      geom_point(color=ifelse(tf_rss$index<num_ctsr,"#2775b6",'grey'),size=3) + 
       scale_x_continuous("Regulon",breaks = scales::pretty_breaks(n = 4)) +
-      geom_text_repel(point.padding =0.2) +
+      geom_text_repel(point.padding = 0.2) +
       scale_y_continuous("Regulon specificity score",breaks = scales::pretty_breaks(n = 7)) +
       theme_linedraw() +
-      theme(text = element_text(size=16))
+      theme(text = element_text(size=14), legend.position="right")
     
-    png(paste("regulon_id/ct",i,"_rss_scatter.png",sep = ""),width=1200, height=2000,res = 300)
+    png(paste("regulon_id/ct",i,"_rss_scatter.png",sep = ""),width=3500, height=2000,res = 300)
     print(rss_plot)
     quiet(dev.off())
   }
 }
+
 
 total_rank_list <- list()
 total_gene_symbol_list <- list()
