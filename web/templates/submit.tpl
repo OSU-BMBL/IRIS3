@@ -767,10 +767,10 @@ $(document).ready(function() {
                 </label>
 							</div>
 						  <div class="form-check col-sm-12 ">
-							<button type="button" id="fast_version_btn" class="btn btn-default extra-button" data-toggle="collapse" onclick="use_fast_version(this);" >Fast version</button><span style="margin-left:5px;margin-right:50px" class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title=" This option uses  fast version. This sets f=0.5, k=20, o=100, promoter region=500 bp, disable imputation, and dual strategy. This runs faster but generage less regulons."> </span> 
+							<button type="button" id="fast_version_btn" class="btn btn-default extra-button" data-toggle="collapse" onclick="use_fast_version(this);" >Fast version</button><span style="margin-left:5px;margin-right:50px" class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title=" This option uses  fast version. This sets f=0.5, k=20, o=100, promoter region=500 bp. This runs faster but generage less regulons."> </span> 
 						
 						
-							<button type="button" id="fast_version_btn" class="btn btn-default extra-button" data-toggle="collapse" onclick="use_accurate_version(this);">Default version</button><span style="margin-left:5px" class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title="(Default)This option uses  parameters in our publications. This sets f=0.7, k=20, o=500, and promoter region=1000. Please also enable imputation if uploading 10X hdf5 or gene-barcodes matrices files, enable dual strategy if uploading C1 gene expression matrix text file. This runs slower but genreate more regulons."> </span> 
+							<button type="button" id="fast_version_btn" class="btn btn-default extra-button" data-toggle="collapse" onclick="use_accurate_version(this);">Default version</button><span style="margin-left:5px" class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title="(Default)This option uses  parameters in our publications. This sets f=0.7, k=20, o=500, and promoter region=1000. This runs slower but genreate more regulons."> </span> 
 						</div>
 					</div>
 							<hr/>

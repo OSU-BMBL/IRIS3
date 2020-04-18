@@ -53,7 +53,7 @@
             <div class="answer">
                 <p>The gene expression data is first loaded, and a Seurat object is created. Genes with zero values in more than 0.1% cells and cells with zero values in 200 genes are removed to obtain reliable and robust <a href="https://www.nature.com/articles/nmeth.4612"><strong>analytical performances</strong></a>.
                     Data normalization status is auto-detection by considering integers as non-normalized values, whereas decimals are normalized. The unnormalized data will be normalized by scran. Gene imputation is set up using DrImpute with default
-                    settings. Although optional and time-consuming, it is highly recommended to perform imputation for 10X data. Finally, the expression values are log-normalized to rescale the data to match its neighbors.</p>
+                    settings. Finally, the expression values are log-normalized to rescale the data to match its neighbors.</p>
             </div>
             <div class="clear"></div>
         </div>
@@ -71,7 +71,7 @@
                 <p>The pre-processed data from <em>Step I</em> is analyzed by our in-house biclustering tool, QUBIC2, for gene module detection. Each of the identified biclusters represents a group of co-expressed genes under a specific subset of cells.</p>
                 <p>Two unique features are addressed in QUBIC2: <strong>(1)</strong> it can identify all statistically significant biclusters including biclusters with the so-called 'scaling patterns', a problem considered to be rather challenging; and <strong>(2)</strong>                    the algorithm solves such general biclustering problems very efficiently, capable of solving biclustering problems with tens-of-thousands of genes under to thousands of conditions in a few minutes.</p>
                 <p><strong>Three major parameters control the output biclusters in IRIS3:</strong></p>
-                <p><strong><em>a. Bicluster overlap rate</em></strong> controls the level (from 0 to 1) of overlaps between the to-be-identified biclusters. 0 means no overlap and 1 indicates complete overlap. The default value is 0.5.</p>
+                <p><strong><em>a. Bicluster overlap rate</em></strong> controls the level (from 0 to 1) of overlaps between the to-be-identified biclusters. 0 means no overlap and 1 indicates complete overlap. The default value is 0.7.</p>
                 <p><strong><em>b. Maximum bicluster number</em></strong> controls the maximum number of to-be-identified biclusters. The default value is 500. A smaller value may sufficiently decrease the running time but may identify less regulons.</p>
                 <p><strong><em>c. Minimum cell number</em></strong> The minimum column width of the bicluster block. The default is 20.</p>
 

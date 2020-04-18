@@ -42,7 +42,7 @@ $param_file = fopen("$DATAPATH/$jobid/info.txt", "r");
 					$is_c = "No";
 				}
 			} else if($split_line[0] == "is_imputation"){
-				if( $split_line[1] == 1) {
+				if( $split_line[1] == 1 || strcmp($split_line[1], "Yes") > 0) {
 					$is_imputation = "Yes";
 				} else{
 					$is_imputation = "No";
