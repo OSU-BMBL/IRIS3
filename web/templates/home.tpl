@@ -119,8 +119,8 @@
                             <i class="fa fa-rocket"></i>
                         </div>-->
                 <h3 class="box-title">News</h3>
-                <p>Posted: 04/03/2020</p>
-                <p>We updated our Tutorial, Submit, and Result page, along with bug fix.</p><br>
+                <p>Posted: 04/18/2020</p>
+                <p>We updated our Tutorial, and Result page, along with bug fixes.</p><br>
                 <p>
                   <a
                     class="enroll-button"
