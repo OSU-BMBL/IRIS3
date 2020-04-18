@@ -1,5 +1,5 @@
  {{block name="extra_js"}} {{/block}} {{block name="extra_style"}} {{/block}} {{block name="main"}}
-<a href="https://forms.gle/V5acxpBPZoqyKEcM6" class="take_survey" target="_blank">Take a Survey<i class="fa fa-poll-h"></i></a>
+<a href="https://osu.az1.qualtrics.com/jfe/form/SV_6KihVYPtHj7FxGJ" class="take_survey" target="_blank">Take a Survey<i class="fa fa-poll-h"></i></a>
 <script src="assets/js/pace.js"></script>
 <script src="assets/js/code/highcharts.js"></script>
 <script src="assets/js/code/modules/boost.js"></script>
@@ -795,7 +795,7 @@ function terminate_job(item) {
 
 		
  </script>
- <a href="https://forms.gle/V5acxpBPZoqyKEcM6" class="take_survey" target="_blank">Take a survey<i class="fa fa-poll-h"></i></a>
+ <a href="https://osu.az1.qualtrics.com/jfe/form/SV_6KihVYPtHj7FxGJ" class="take_survey" target="_blank">Take a survey<i class="fa fa-poll-h"></i></a>
 <main role="main" class="container" style="min-height: calc(100vh - 182px);">
     <div id="content">
         <div class="container">
@@ -1161,7 +1161,7 @@ function terminate_job(item) {
 																																							<div class="CT-result-img">
 																																								<div class="col-sm-12">
 																																								<h4 style="text-align:center;margin-top:50px"> Regulon Specificity Score Scatter Plot for Cell Cluster {{$sec0+1}}</h4>
-																																									<div class="row text-center"><img style="width: 33%;" src="data/{{$jobid}}/regulon_id/ct{{$sec0+1}}_rss_scatter.png"/></div>
+																																									<div class="row text-center"><img style="width: 95%;" src="data/{{$jobid}}/regulon_id/ct{{$sec0+1}}_rss_scatter.png"/></div>
 																																								</div>
 																																							</div>
 																																							</div>
@@ -1185,8 +1185,8 @@ function terminate_job(item) {
 																																																									{{section name=sec1 loop=$regulon_result[$sec0]}} 
 																																							<li>
 																																							<table class="table table-sm page_item{{$sec0+1}}" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:0"><tbody>
-																																							<tr><td colspan="2"> <div class='regulon-heading'> {{$regulon_result[$sec0][sec1][0]}} {{if $regulon_rank_result[$sec0][sec1][4] < 0.05}}(CTSR) {{/if}}</div></td></tr>
-																																							<tr><td class="gene-score">Regulon specificity score: {{$regulon_rank_result[$sec0][sec1][5]|string_format:"%.8f"}} (p-value{{if $regulon_rank_result[$sec0][sec1][4]|string_format:"%.5f" == 0}}&lt;1.0e-4{{else}}: {{$regulon_rank_result[$sec0][sec1][4]|string_format:"%.1e"}}{{/if}})</td><td class="gene-score">Number of genes: {{$regulon_result[$sec0][sec1]|@count-1}}</td><td class="gene-score">Number of differentially expressed genes: {{$regulon_rank_result[$sec0][sec1]|@count-6}}</td></tr>
+																																							<tr><td colspan="2"> <div class='regulon-heading' {{if $regulon_rank_result[$sec0][sec1][4] > 0.05}}style="background-color:grey;"{{/if}}> {{$regulon_result[$sec0][sec1][0]}} {{if $regulon_rank_result[$sec0][sec1][4] < 0.05}}(CTSR) {{/if}} {{if $regulon_rank_result[$sec0][sec1][4] > 0.05}}(insignificant) {{/if}} {{if $regulon_rank_result[$sec0][sec1][4]|string_format:"%.5f" == 0}}(p-value&lt;1.0e-4){{else if $regulon_rank_result[$sec0][sec1][4]|string_format:"%.5f" > 0.05}}{{else}}(p-value: {{$regulon_rank_result[$sec0][sec1][4]|string_format:"%.1e"}}){{/if}}</div></td></tr>
+																																							<tr><td class="gene-score">Regulon specificity score: {{$regulon_rank_result[$sec0][sec1][5]|string_format:"%.8f"}} </td><td class="gene-score">Number of genes: {{$regulon_result[$sec0][sec1]|@count-1}}</td><td class="gene-score">Number of differentially expressed genes: {{$regulon_rank_result[$sec0][sec1]|@count-6}}</td></tr>
 																																																									<tr><td class="gene-table">
 																																																											<div style="width:100%; font-size:14px;">
 																																									<table class="table table-hover table-sm" ><tbody>
@@ -1230,30 +1230,30 @@ function terminate_job(item) {
 																																			<tr><td class="motif-table">
 																																									<div class="row">
 																																									<div class="col-md-3"><label class="motif-text">TF: </label> <a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" class="motif-text" target="_blank">{{$tomtom_result.$motif_num_jaspar[0][1]|regex_replace:"/_.+/":""}}</a>
-																																									<a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" target="_blank"><img class="motif-logo lozad " data-src="http://hocomoco11.autosome.ru/final_bundle/hocomoco11/full/{{$main_species|upper}}/mono/logo_large/{{$tomtom_result.$motif_num_jaspar[0][1]}}_direct.png"/></a><p class="motif-score">p-value: {{$tomtom_result.$motif_num_jaspar[0][3]|string_format:"%.2e"}}</p><p class="motif-score">e-value: {{$tomtom_result.$motif_num_jaspar[0][4]|string_format:"%.2e"}}</p><p class="motif-score">q-value: {{$tomtom_result.$motif_num_jaspar[0][5]|string_format:"%.2e"}}</p></div>
+																																									<a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" target="_blank"><img class="motif-logo lozad " data-src="http://hocomoco11.autosome.ru/final_bundle/hocomoco11/full/{{$main_species|upper}}/mono/logo_large/{{$tomtom_result.$motif_num_jaspar[0][1]}}_direct.png"/></a><!--<p class="motif-score">p-value: {{$tomtom_result.$motif_num_jaspar[0][3]|string_format:"%.2e"}}</p><p class="motif-score">e-value: {{$tomtom_result.$motif_num_jaspar[0][4]|string_format:"%.2e"}}</p><p class="motif-score">q-value: {{$tomtom_result.$motif_num_jaspar[0][5]|string_format:"%.2e"}}</p>--></div>
 																																										
 																																<div class="col-md-9"> 
 																																<!--
 																																<input class="btn btn-default tf-button" type="button" value="TF-alternative regulon" onClick="window.open('/iris3/heatmap.php?jobid={{$jobid}}&file={{$tomtom_result.$motif_num_jaspar[0][1]|regex_replace:"/_.+/":""}}.json');"/>-->
 																																<table id="tomtom_table" class="table table-hover tomtom_table table-sm" cellpadding="0" cellspacing="0" width="100%">
-																																<thead><tr><td>Motif name</td><td>Motif logo</td><td>Motif p-value</td><td>Motif z-score</td><td>Motif details</td><td>Motif comparison</td></tr></thead>
+																																<thead><tr><td>Motif name</td><td>Motif logo</td><!--<td>Motif p-value</td><td>Motif z-score</td>--><td>Motif details</td><td>Motif comparison</td></tr></thead>
 																																<tbody>
 																																{{section name=sec3  start=1 loop=$regulon_motif_result[$sec0][sec1]}}
 																																{{assign var="this_motif" value=","|explode:$regulon_motif_result[$sec0][sec1][sec3]}}
 																																<tr><td >{{$regulon_result[$sec0][sec1][0]}}-Motif-{{$smarty.section.sec3.index}}
 																																							</td><td>
 																																<a href="motif_detail.php?jobid={{$jobid}}&ct={{$this_motif[0]}}&bic={{$this_motif[1]}}&id={{$this_motif[2]}}" target="_blank"><img class="motif-predict-logo lozad " data-src="data/{{$jobid}}/logo/ct{{$this_motif[0]}}bic{{$this_motif[1]}}m{{$this_motif[2]}}.fsa.png"/></a></td>
-																																<td class="tomtom_pvalue">
+																																<!--<td class="tomtom_pvalue">
 																																{{$motif_rank_result[$sec0][sec4][0]}}
 																																{{section name=sec4  start=0 loop=$motif_rank_result[$sec0]}}
-																																{{if $regulon_motif_result[$sec0][sec1][sec3] == $motif_rank_result[$sec0][sec4][0]}}
-																																{{$motif_rank_result[$sec0][sec4][1]|string_format:"%.2e"}}</td>
-																																{{if $motif_rank_result[$sec0][sec4][3]|string_format:"%.2f" < 10}}
-																																<td> {{$motif_rank_result[$sec0][sec4][3]|string_format:"%.2f"}}</td>
-																																{{else}} <td> NA</td>
-																																{{/if}}
-																																{{/if}}
-																																{{/section}}
+																																	{{if $regulon_motif_result[$sec0][sec1][sec3] == $motif_rank_result[$sec0][sec4][0]}}
+																																	{{$motif_rank_result[$sec0][sec4][1]|string_format:"%.2e"}}</td>
+																																		{{if $motif_rank_result[$sec0][sec4][3]|string_format:"%.2f" < 10}}
+																																		<td> {{$motif_rank_result[$sec0][sec4][3]|string_format:"%.2f"}}</td>
+																																		{{else}} <td> NA</td>
+																																		{{/if}}
+																																	{{/if}}
+																																{{/section}}-->
 																																
 																																<td><a href="motif_detail.php?jobid={{$jobid}}&ct={{$this_motif[0]}}&bic={{$this_motif[1]}}&id={{$this_motif[2]}}" target="_blank">Open
 																																							</a></td><td><a href="data/{{$jobid}}/tomtom/ct{{$this_motif[0]}}bic{{$this_motif[1]}}m{{$this_motif[2]}}/tomtom.html" target="_blank">Open
@@ -1401,7 +1401,7 @@ function terminate_job(item) {
 																																			<tr><td class="motif-table">
 																																									<div class="row">
 																																									<div class="col-md-3"><label class="motif-text">TF: </label> <a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" class="motif-text" target="_blank">{{$tomtom_result.$motif_num_jaspar[0][1]|regex_replace:"/_.+/":""}}</a>
-																																									<a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" target="_blank"><img class="motif-logo lozad " data-src="http://hocomoco11.autosome.ru/final_bundle/hocomoco11/full/{{$main_species|upper}}/mono/logo_large/{{$tomtom_result.$motif_num_jaspar[0][1]}}_direct.png"/></a><p class="motif-score">p-value: {{$tomtom_result.$motif_num_jaspar[0][3]|string_format:"%.2e"}}</p><p class="motif-score">e-value: {{$tomtom_result.$motif_num_jaspar[0][4]|string_format:"%.2e"}}</p><p class="motif-score">q-value: {{$tomtom_result.$motif_num_jaspar[0][5]|string_format:"%.2e"}}</p></div>
+																																									<a href="http://hocomoco11.autosome.ru/motif/{{$tomtom_result.$motif_num_jaspar[0][1]}}" target="_blank"><img class="motif-logo lozad " data-src="http://hocomoco11.autosome.ru/final_bundle/hocomoco11/full/{{$main_species|upper}}/mono/logo_large/{{$tomtom_result.$motif_num_jaspar[0][1]}}_direct.png"/></a><!--<p class="motif-score">p-value: {{$tomtom_result.$motif_num_jaspar[0][3]|string_format:"%.2e"}}</p><p class="motif-score">e-value: {{$tomtom_result.$motif_num_jaspar[0][4]|string_format:"%.2e"}}</p><p class="motif-score">q-value: {{$tomtom_result.$motif_num_jaspar[0][5]|string_format:"%.2e"}}</p>--></div>
 																																										
 																																<div class="col-md-9"> 
 																																
@@ -1539,20 +1539,15 @@ function terminate_job(item) {
 					<div class="flatPanel panel-heading" style="padding: 20px 20px"><strong>Job ID: {{$jobid}}</strong></div>
 						<div class="panel-body">
 					<div style="text-align: left;">
-                        <strong><h3>Sorry, there has been an error.</h3></strong>
-						<p>We accept human and mouse expression matrix for submission</p>
-						<ul>
+												<strong><h3>Sorry, there has been an error.</h3></strong>
+												<p>Please check with your <span style="color: red;">input data format</span> and <span style="color: red;">species</span> information: </p><p>1. The required input is gene expression data with three acceptable formats, The expression value should be positive.</p>
+												<ul>
+														<li>A single txt, tsv or csv formatted gene expression matrix. The compressed format (gzip) is accepted.</li>
+														<li>An <a href="https://support.10xgenomics.com/single-cell-atac/software/pipelines/latest/advanced/h5_matrices" target="_blank"><strong>hdf5 feature barcode matrix</strong></a></li>
+														<li>The <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/matrices" target="_blank"><strong>three files</strong></a> recording information of barcodes, features, and gene expressions in the 10X genomics
+																output folder. </li>
+												</ul><p>2. Cell label file (Optional): a two-column matrix with the first column as the cell names exactly matching the gene expression file, and the second column as ground-truth cell clusters. </p><p>3. Gene module file (Optional): Each column should reprensents a gene module.</p>
 						
-						<li>
-						Each gene measured in the expression dataset should have an identifier listed in the first column, both Gene Symbols (e.g. HSPA9) and Gene IDs (e.g. ENSG00000113013) are allowed.
-						</li>
-						<li>
-						The selected species is: {{$input_species}}, please check it since we noticed that many errors occur due to the unmatched species information.
-						</li>
-						<li>
-						The minimum cell number parameter is set to {{$k_arg}}, it is important to set a smaller minimal cell numer in a small dataset. E.g. set to 5 for cell number less than 100.
-						</li>
-						</ul>
 						<p>Pleas check our <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics">tutorial</a> for more information. </p>
 						<br>
                     </div>
@@ -1595,7 +1590,7 @@ function terminate_job(item) {
 					<div class="flatPanel panel-heading" style="padding: 20px 20px"><strong>Job ID: {{$jobid}}</strong></div>
 						<div class="panel-body">
 					<div style="text-align: left;">
-                        <strong><h3>Sorry, there has been an error:</h3></strong> <p style="color:red">iris3 did not find enough bi-clusters in your data.</p>
+                        <strong><h3>Sorry, there has been an error:</h3></strong> <p style="color:red">IRIS3 did not find enough bi-clusters in your data.</p>
 						<ul>
 						
 						<li>
@@ -1650,7 +1645,13 @@ function terminate_job(item) {
 					<div class="flatPanel panel-heading" style="padding: 20px 20px"><strong>Job ID: {{$jobid}}</strong></div>
 						<div class="panel-body">
 					<div style="text-align: left;">
-                        <strong><h3>Sorry, there has been an error</h3></strong> <p style="color:red">Please check with your data format (Make sure to unzip your input data into txt csv or tsv format.): <br>1. Gene expression matrix: Gene expression matrix (GEMAT) file with genes as rows and cells as columns. The expression value should be positive.<br>2. Cell label file (Optional): a two-column matrix with the first column as the cell names exactly matching the gene expression file, and the second column as ground-truth cell clusters. <br>3. Gene module file (Optional): Each column should reprensents a gene module.</p>
+                        <strong><h3>Sorry, there has been an error</h3></strong> <p>Please check with your <span style="color: red;">input data format</span> and <span style="color: red;">species</span> information: <p>1. The required input is gene expression data with three acceptable formats, The expression value should be positive.</p>
+												<ul>
+														<li>A single txt, tsv or csv formatted gene expression matrix. The compressed format (gzip) is accepted.</li>
+														<li>An <a href="https://support.10xgenomics.com/single-cell-atac/software/pipelines/latest/advanced/h5_matrices" target="_blank"><strong>hdf5 feature barcode matrix</strong></a></li>
+														<li>The <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/matrices" target="_blank"><strong>three files</strong></a> recording information of barcodes, features, and gene expressions in the 10X genomics
+																output folder. </li>
+												</ul><p>2. Cell label file (Optional): a two-column matrix with the first column as the cell names exactly matching the gene expression file, and the second column as ground-truth cell clusters. </p><p>3. Gene module file (Optional): Each column should reprensents a gene module.</p>
 						<br>For further question, please contact qin.ma@osumc.edu<br>
 						<br>
                     </div>
@@ -1693,7 +1694,13 @@ function terminate_job(item) {
 					<div class="flatPanel panel-heading" style="padding: 20px 20px"><strong>Job ID: {{$jobid}}</strong></div>
 						<div class="panel-body">
 					<div style="text-align: left;">
-                        <strong><h3>Sorry, there has been an error</h3></strong> <p style="color:red">Please check with your data format (Make sure to unzip your input data into txt csv or tsv format.): <br>1. Gene expression matrix: Gene expression matrix (GEMAT) file with genes as rows and cells as columns. The expression value should be positive.<br>2. Cell label file (Optional): a two-column matrix with the first column as the cell names exactly matching the gene expression file, and the second column as ground-truth cell clusters. <br>3. Gene module file (Optional): Each column should reprensents a gene module.</p>
+                        <strong><h3>Sorry, there has been an error</h3></strong> <p>Please check with your <span style="color: red;">input data format</span> and <span style="color: red;">species</span> information: <p>1. The required input is gene expression data with three acceptable formats, The expression value should be positive.</p>
+												<ul>
+														<li>A single txt, tsv or csv formatted gene expression matrix. The compressed format (gzip) is accepted.</li>
+														<li>An <a href="https://support.10xgenomics.com/single-cell-atac/software/pipelines/latest/advanced/h5_matrices" target="_blank"><strong>hdf5 feature barcode matrix</strong></a></li>
+														<li>The <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/matrices" target="_blank"><strong>three files</strong></a> recording information of barcodes, features, and gene expressions in the 10X genomics
+																output folder. </li>
+												</ul><p>2. Cell label file (Optional): a two-column matrix with the first column as the cell names exactly matching the gene expression file, and the second column as ground-truth cell clusters. </p><p>3. Gene module file (Optional): Each column should reprensents a gene module.</p>
 						<br>For further question, please contact qin.ma@osumc.edu<br>
 						<br>
                     </div>
