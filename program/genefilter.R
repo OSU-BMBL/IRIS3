@@ -42,7 +42,7 @@ resolution_seurat <- args[7] # resolution for seurat clustering
 n_pc <- args[8] # number of principle components
 n_variable_feature <- args[9] # number of highly variable genes 
 label_use_predict <- args[10] # 0 for using Seurat clusters, 2 for using user's label,
-
+remove_ribosome <- args[11] # Yes or No
 
 if(is.na(delim)){
   delim <- ','
@@ -60,12 +60,12 @@ label_file
 load_test_data <- function(){
   rm(list = ls(all = TRUE))
   # 
-  # setwd("/var/www/html/iris3/data/20200407122143/")
+  # setwd("/var/www/html/iris3/data/2020041904607/")
   expr_file = "randomized.tsv.gz"
   expr_file = "123.zip"
-  expr_file = "GSE140816_CTL.zip"
-  jobid <- "20200407122143"
-  delim <- ";"
+  expr_file = "Rosenzweig_expression.csv"
+  jobid <- "2020041904607"
+  delim <- ","
   label_file<-'1'
   delimiter <- ','
   is_imputation <- 'No'
@@ -73,6 +73,7 @@ load_test_data <- function(){
   n_variable_feature <- "5000"
   resolution_seurat <- 0.8
   label_use_predict <- '0'
+  remove_ribosome <- 'Yes'
 }
 
 ##############################
@@ -318,7 +319,16 @@ filter_cell_func <- function(this){
   }
 }
 
-my.object<-CreateSeuratObject(expFile)
+## remove ribosome genes first if user selected#################################
+if(exists("remove_ribosome")) {
+  if (remove_ribosome == "Yes") {
+    expFile <- expFile[- grep("^Rp[sl][[:digit:]]", rownames(expFile)),]
+  }
+}
+
+
+my.object <- CreateSeuratObject(expFile)
+
 
 if (upload_type == "TenX.folder" | upload_type == "TenX.h5"){
   my.object[["percent.mt"]] <- PercentageFeatureSet(my.object, pattern = "^MT-")
@@ -435,7 +445,7 @@ if(as.numeric(n_pc) > ncol(my.object)) {
 my.object<-RunPCA(my.object,rev.pca = F,features = VariableFeatures(object = my.object), npcs = as.numeric(n_pc))
 
 
-my.object<-FindNeighbors(my.object,dims = 1:10)
+my.object<-FindNeighbors(my.object,dims = 1:as.numeric(n_pc))
 #resolution_seurat=0.4
 my.object<-FindClusters(my.object, resolution = as.numeric(resolution_seurat))
 if (length(levels(my.object$seurat_clusters)) == 1) {

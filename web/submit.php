@@ -59,6 +59,7 @@ if (isset($_POST['submit']))
 	$workdir = "./data/$jobid";
 	mkdir($workdir);
 	$is_imputation = $_POST['is_imputation'];
+	$remove_ribosome = $_POST['remove_ribosome'];
 	$is_c = $_POST['is_c'];
 	if($is_imputation =="") {
 		$is_imputation = '0';
@@ -113,8 +114,8 @@ if (isset($_POST['submit']))
 		fwrite($fp,"CellGene\n");
 		fclose($fp);
 	}
-	if($k_arg == '20' && $f_arg == '0.7' && $o_arg == '500' && $label_use_predict == '2' && $is_imputation == 'No' && $promoter_arg == '1000' && $n_pca == '10' && $n_variable_features == '5000' && $expfile=='Zeisel_expression.csv' && $labelfile == 'Zeisel_index_label.csv'){
-		header("Location: results.php?jobid=20200224113319");
+	if($k_arg == '20' && $f_arg == '0.7' && $o_arg == '5000' && $label_use_predict == '2' && $is_imputation == 'No' && $remove_ribosome == "No" && $promoter_arg == '1000' && $n_pca == '10' && $n_variable_features == '5000' && $expfile=='Zeisel_expression.csv' && $labelfile == 'Zeisel_index_label.csv'){
+		header("Location: results.php?jobid=2020041684528");
 	}  else {
 	system("touch $workdir/email.txt");
 	#system("chmod 755 $workdir/email.txt");
@@ -155,7 +156,7 @@ if (isset($_POST['submit']))
 	}
 	}
 	$fp = fopen("$workdir/info.txt", 'w');
-	fwrite($fp,"is_load_exp,$is_load_exp\nk_arg,$k_arg\nf_arg,$f_arg\no_arg,$o_arg\nresolution_seurat,$resolution_seurat\nn_variable_features,$n_variable_features\nn_pca,$n_pca\nlabel_use_predict,$label_use_predict\nexpfile,$expfile\nlabelfile,$labelfile\ngene_module_file,$gene_module_file\nis_imputation,$is_imputation\nis_c,$is_c\npromoter_arg,$promoter_arg\nbic_inference,$label_use_predict");
+	fwrite($fp,"is_load_exp,$is_load_exp\nk_arg,$k_arg\nf_arg,$f_arg\no_arg,$o_arg\nresolution_seurat,$resolution_seurat\nn_variable_features,$n_variable_features\nn_pca,$n_pca\nlabel_use_predict,$label_use_predict\nexpfile,$expfile\nlabelfile,$labelfile\ngene_module_file,$gene_module_file\nis_imputation,$is_imputation\nremove_ribosome,$remove_ribosome\nis_c,$is_c\npromoter_arg,$promoter_arg\nbic_inference,$label_use_predict");
 	fclose($fp);
 	$fp = fopen("$workdir/running_status.txt", 'w');
 	fwrite($fp,"preprocessing");
@@ -176,7 +177,7 @@ jobid=$jobid
 motif_min_length=12
 motif_max_length=12
 perl $BASE/program/prepare_email1.pl \$jobid\n
-Rscript $BASE/program/genefilter.R \$jobid \$wd\$exp_file $delim \$label_file $delim_label $is_imputation $resolution_seurat $n_pca $n_variable_features $label_use_predict
+Rscript $BASE/program/genefilter.R \$jobid \$wd\$exp_file $delim \$label_file $delim_label $is_imputation $resolution_seurat $n_pca $n_variable_features $label_use_predict $remove_ribosome
 echo gene_module_detection > running_status.txt\n
 $BASE/program/qubic2/qubic -i \$wd\$jobid\_filtered_expression.txt -k $k_arg -o $o_arg -f $f_arg $is_c
 for file in *blocks
@@ -215,7 +216,7 @@ $BASE/program/get_atac_overlap.sh \$wd
 Rscript $BASE/program/prepare_heatmap.R \$wd \$jobid $label_use_predict\n
 Rscript $BASE/program/get_alternative_regulon.R \$jobid\n
 Rscript $BASE/program/generate_rss_scatter.R \$jobid\n
-Rscript $BASE/program/process_tomtom_result.R \$jobid\n
+Rscript $BASE/program/process_tomtom_result.R \$jobid\n 
 mkdir json
 $BASE/program/build_clustergrammar.sh \$wd \$jobid $label_use_predict\n
 
@@ -229,7 +230,7 @@ echo 'finish'> done\n
 	session_destroy();
 	#system("chmod -R 755 $workdir2");
 	system("cp $workdir/../index.php $workdir");
-	#system("cd $workdir; nohup sh qsub.sh > output.txt &");
+  system("cd $workdir; nohup sh qsub.sh > output.txt &");
 	##shell_exec("$workdir/qsub.sh>$workdir/output.txt &");
 	#header("Location: results.php?jobid=$jobid");
 	header("Location: results.php?jobid=$jobid");

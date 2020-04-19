@@ -580,6 +580,19 @@ $(document).ready(function() {
 									</div>
                 </div>
               <h4 class="font-italic text-left">Seurat:</h4>
+			  <div class="form-group row">
+									<div class="col-md-4">
+										<label class="form-check-label" for="remove_ribosome">Remove ribosome genes.
+							 <span class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title="Remove ribosome genes. Default: disabled."> </span> 
+						    	</label>
+									</div>
+									<div class="col-md-4">
+										<select  id="remove_ribosome" class="selectpicker" name="remove_ribosome" data-width="auto">
+											<option>Yes</option>
+											<option data-subtext="Default" selected="selected">No</option>
+										</select>
+									</div>
+                </div>
 							<div class="form-group row">
 									<div class="col-md-4">
 										<label for="ex3">Number of principle components used in downstream analyses. <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Determine the ‘dimensionality’ of the dataset, the top principal components represent a robust compression of the dataset. Default: 10."> </span>
@@ -846,7 +859,7 @@ $(document).ready(function() {
 			<input type="hidden" id="is_load_exp" name="is_load_exp" value="0">
 			<input type="hidden" id="is_load_label" name="is_load_label" value="0">
 			<input type="hidden" id="is_load_gene_module" name="is_load_gene_module" value="0">
-			<input class="btn btn-submit" type="button" value="Example output" onClick="javascript:location.href = '/iris3/results.php?jobid=20200224113319';" />
+			<input class="btn btn-submit" type="button" value="Example output" onClick="javascript:location.href = '/iris3/results.php?jobid=2020041684528';" />
 			<div class="row"><label id="hint_select_species"></label></div>
 		</div>
 		<div class="form-group">
