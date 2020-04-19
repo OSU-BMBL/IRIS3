@@ -8,10 +8,11 @@ library(ggrepel)
 library(xml2)
 library(XML)
 library(seqinr)
+library(grid)
 
 args <- commandArgs(TRUE)
 jobid <- args[1] # job id
-#jobid <-20191026133824 
+#jobid <-20200418142514 
 wd <- paste("/var/www/html/iris3/data/",jobid,sep="")
 setwd(wd)
 
@@ -90,16 +91,21 @@ for (i in 1:length(alldir)) {
       which(total_motif_name[,1] %in% x)    
     }))
     tf_names <- total_motif_name[tf_idx,2]
-    tf_rss <- tibble(index=seq(1:length(rank_list)),tf=total_motif_name[tf_idx,2],rss=rank_list,ctsr=rss_pvalue_list < 0.05)
+    legend_color <- c(rep("CTSR",length(tf_idx)-1),"insignificant")
+    tf_rss <- tibble(index=seq(1:length(rank_list)),tf=total_motif_name[tf_idx,2],rss=rank_list,ctsr=rss_pvalue_list < 0.05, col=legend_color)
+    #tf_rss <- tibble(index=seq(1:length(rank_list)),tf=total_motif_name[tf_idx,2],rss=rank_list,ctsr=rss_pvalue_list < 0.05)
+
     num_ctsr <- length(which(rss_pvalue_list < 0.05))
     total_tf_name_list <- append(total_tf_name_list,total_motif_name[tf_idx,2])
-    rss_plot <- ggplot(tf_rss, aes(x=index, y=as.numeric(rss), label=ifelse(index<num_ctsr,as.character(tf),''))) +
-      geom_point(color=ifelse(tf_rss$index<num_ctsr,"#2775b6",'grey'),size=3) + 
+    rss_plot <- ggplot(tf_rss, aes(x=index, y=as.numeric(rss), label=ifelse(index<=num_ctsr,as.character(tf),''))) +
+      geom_point(aes(color = col),fill="blue", show.legend = TRUE, size=3) +
+      scale_color_manual(values=c('#2775b6','grey'))+
+      geom_point(color=ifelse(tf_rss$index<=num_ctsr,"#2775b6",'grey'),size=3) + 
       scale_x_continuous("Regulon",breaks = scales::pretty_breaks(n = 4)) +
       geom_text_repel(point.padding = 0.2) +
       scale_y_continuous("Regulon specificity score",breaks = scales::pretty_breaks(n = 7)) +
       theme_linedraw() +
-      theme(text = element_text(size=14), legend.position="right")
+      theme(text = element_text(size=14), legend.position="bottom", legend.title = element_blank())
     
     png(paste("regulon_id/ct",i,"_rss_scatter.png",sep = ""),width=3500, height=2000,res = 300)
     print(rss_plot)
