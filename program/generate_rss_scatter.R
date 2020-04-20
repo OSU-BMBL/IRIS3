@@ -32,7 +32,7 @@ sort_dir <- function(dir) {
   
 }
 
-alldir <- list.dirs(path = wd)
+alldir <- list.dirs(path = wd, recursive=F)
 alldir <- grep("*_bic$",alldir,value=T)
 alldir <- sort_dir(alldir)
 

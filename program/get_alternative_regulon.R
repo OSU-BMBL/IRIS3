@@ -92,7 +92,7 @@ for (i in 1:length(total_rank)) {
 }
 
 
-alldir <- list.dirs(path = wd)
+alldir <- list.dirs(path = wd, recursive=F)
 alldir <- grep("*_bic$",alldir,value=T)
 alldir <- sort_dir(alldir)
 short_dir <- grep("*_bic$",list.dirs(path = wd,full.names = F),value=T) 

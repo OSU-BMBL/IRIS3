@@ -25,10 +25,10 @@ sort_dir <- function(dir) {
 }
 
 wd <- getwd()
-alldir <- list.dirs(path = wd)
+alldir <- list.dirs(path = wd, recursive = F)
 alldir <- grep("*_bic$",alldir,value=T)
 alldir <- sort_dir(alldir)
-short_dir <- grep("*_bic$",list.dirs(path = wd,full.names = F),value=T) 
+short_dir <- grep("*_bic$",list.dirs(path = wd,full.names = F,recursive = F),value=T) 
 short_dir<- sort_dir(short_dir)
 gene_id_name <- read.table(paste(jobid,"_gene_id_name.txt",sep=""))
 #i=7;j=1;k=m=3
