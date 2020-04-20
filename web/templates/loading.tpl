@@ -1,4 +1,4 @@
- {{block name="extra_js"}} {{/block}} {{block name="extra_style"}} {{/block}} {{block name="main"}}
+{{block name="extra_js"}} {{/block}} {{block name="extra_style"}} {{/block}} {{block name="main"}}
 <a href="https://osu.az1.qualtrics.com/jfe/form/SV_6KihVYPtHj7FxGJ" class="take_survey" target="_blank">Take a Survey<i class="fa fa-poll-h"></i></a>
 <script src="assets/js/pace.js"></script>
 <script src="assets/js/code/highcharts.js"></script>
@@ -728,7 +728,7 @@ function terminate_job(item) {
             },
             scatter: {
               marker: {
-                radius: {{if $total_cell_num < 200}} 5 {{else if $total_cell_num < 500}} 4 {{else if $total_cell_num < 1000}} 3 {{else if $total_cell_num < 5000}} 2 {{else}} 1.2 {{/if}},
+                radius: {{if $total_cell_num < 200}} 4 {{else if $total_cell_num < 500}} 3.5 {{else if $total_cell_num < 1000}} 2.8 {{else if $total_cell_num < 5000}} 2 {{else}} 1.2 {{/if}},
                 states: {
                   hover: {
                     enabled: true,
@@ -1022,6 +1022,7 @@ function terminate_job(item) {
 																														{{/if}}
 																													<th>Number of cells</th>
                                                         <th>Number of regulons</th>
+																												<th>Number of CTSRs</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -1037,6 +1038,7 @@ function terminate_job(item) {
 																												<td style="padding: 0px;">{{$predict_label_array[ct_idx]}}</td>
 																												{{/if}}
 																												<td style="padding: 0px;">{{$count_regulon_in_ct[ct_idx]}}</td>
+																												<td style="padding: 0px;">{{$count_ctsr_in_ct[ct_idx]}}</td>
 																												</tr>
 																										{{/section}}
                                                 </tbody>
@@ -1162,8 +1164,9 @@ function terminate_job(item) {
 																																								<div class="col-sm-12">
 																																								<h4 style="text-align:center;margin-top:50px"> Regulon Specificity Score Scatter Plot for Cell Cluster {{$sec0+1}}</h4>
 																																									<div class="row text-center"><img style="width: 95%;" src="data/{{$jobid}}/regulon_id/ct{{$sec0+1}}_rss_scatter.png"/></div>
+																																								<p style="margin-left:0.5em;margin-bottom:1em;">Note: The RSS of a regulon is calculated by comparing the activity of its component genes in the current cell type to all the rest cells. For example, CT1-R1 (CTSR) means the Regulon #1 is specifically active in cell type #1 based on its significant RSS (adjusted p-value &gt;0.05). </p>
 																																								</div>
-																																							</div>
+																																							</div> 
 																																							</div>
 																																								<div class="row" >
 																																								<div class="form-group col-md-12 col-sm-12" style="height:100%">
@@ -1173,7 +1176,7 @@ function terminate_job(item) {
 																																																							<tbody> 
 																																						-->
 																																				<div id="regulon_pagination{{$sec0+1}}">
-																																				<label style="margin-left: 0.5em;">Search: <input type="text" class="search regulon_search" placeholder="" autofocus/></label>
+																																				<label style="margin-left: 0.5em; width:20%">Search: <input type="text" class="search regulon_search" placeholder="" autofocus/></label>
 																																				<a class="ct-panel-a"  href="/iris3/data/{{$jobid}}/{{$jobid}}_CT_{{$sec0+1}}_bic.regulon_gene_symbol.txt" target="_blank">
 																																					<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#">Download CT-{{$sec0+1}} regulon-gene list (Gene Symbol) 
 																																					</button> </a>
@@ -1479,6 +1482,9 @@ function terminate_job(item) {
 																																	<p for="reportsList">Enable imputation: {{$is_imputation}}</p>
 																															</div>
 																															<div class="form-group col-md-6 col-sm-6">
+																																	<p for="reportsList">Remove ribosome genes: {{$remove_ribosome}}</p>
+																															</div>
+																															<div class="form-group col-md-6 col-sm-6">
 																																<p>Number of principle components: {{$n_pca}}</p>
 																														</div>
 																														<div class="form-group col-md-6 col-sm-6">
@@ -1560,6 +1566,9 @@ function terminate_job(item) {
                                 <div class="form-group col-md-6 col-sm-6">
                                     <p for="reportsList">Enable imputation: {{$is_imputation}}</p>
                                 </div>
+																<div class="form-group col-md-6 col-sm-6">
+																	<p for="reportsList">Remove ribosome genes: {{$remove_ribosome}}</p>
+																</div>
                                 <div class="form-group col-md-6 col-sm-6">
                                     <p>Enable dual strategy: {{$is_c}}</p>
                                 </div>
@@ -1615,7 +1624,10 @@ function terminate_job(item) {
                                 <div class="form-group col-md-6 col-sm-6">
                                     <p for="reportsList">Enable imputation: {{$is_imputation}}</p>
                                 </div>
-                                <div class="form-group col-md-6 col-sm-6">
+																<div class="form-group col-md-6 col-sm-6">
+																	<p for="reportsList">Remove ribosome genes: {{$remove_ribosome}}</p>
+																</div>
+																<div class="form-group col-md-6 col-sm-6">
                                     <p>Enable dual strategy: {{$is_c}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
@@ -1664,6 +1676,9 @@ function terminate_job(item) {
                                 <div class="form-group col-md-6 col-sm-6">
                                     <p for="reportsList">Enable imputation: {{$is_imputation}}</p>
                                 </div>
+																<div class="form-group col-md-6 col-sm-6">
+																	<p for="reportsList">Remove ribosome genes: {{$remove_ribosome}}</p>
+																</div>
                                 <div class="form-group col-md-6 col-sm-6">
                                     <p>Enable dual strategy: {{$is_c}}</p>
                                 </div>
@@ -1713,6 +1728,9 @@ function terminate_job(item) {
                                 <div class="form-group col-md-6 col-sm-6">
                                     <p for="reportsList">Enable imputation: {{$is_imputation}}</p>
                                 </div>
+																<div class="form-group col-md-6 col-sm-6">
+																	<p for="reportsList">Remove ribosome genes: {{$remove_ribosome}}</p>
+																</div>
                                 <div class="form-group col-md-6 col-sm-6">
                                     <p>Enable dual strategy: {{$is_c}}</p>
                                 </div>
@@ -1774,63 +1792,63 @@ function terminate_job(item) {
 							<hr/>
 							<strong>Job status: (Cell clustering results will be available to preview after step II)</strong><br>
 							{{if $running_status == 'preprocessing'}}
-							<p>Step I: Pre-processing.(Running)<img src="static/images/busy.gif" /> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Terminate your job</button>
-							<p class="waiting_job_status">Step II: Cell cluster prediction.</p>
+							<p>Step I: Data pre-processing.(Running)<img src="static/images/busy.gif" /> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Terminate your job</button>
+							<p class="waiting_job_status">Step II: Cell clustering.</p>
 							<p class="waiting_job_status">Step III: Gene module detection.</p>
-							<p class="waiting_job_status">Step IV: Gene module assignment.</p>
+							<p class="waiting_job_status">Step IV: Active gene module determination.</p>
 							<p class="waiting_job_status">Step V: Motif finding and comparison.</p>
-							<p class="waiting_job_status">Step VI: Active regulon determination.</p>
-							<p class="waiting_job_status">Step VII: Regulon inference.</p>
+							<p class="waiting_job_status">Step VI: Regulon determination.</p>
+							<p class="waiting_job_status">Step VII: CTSR inference.</p>
 							{{else if $running_status == 'cell_cluster_prediction'}}
-							<p>Step I: Pre-processing.(Complete)</p>
-							<p>Step II: Cell cluster prediction.(Running)<img src="static/images/busy.gif" /> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Terminate your job</button>
+							<p>Step I: Data pre-processing.(Complete)</p>
+							<p>Step II: Cell clustering.(Running)<img src="static/images/busy.gif" /> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Terminate your job</button>
 							<p class="waiting_job_status">Step III: Gene module detection.</p>
-							<p class="waiting_job_status">Step IV: Gene module assignment.</p>
+							<p class="waiting_job_status">Step IV: Active gene module determination.</p>
 							<p class="waiting_job_status">Step V: Motif finding and comparison.</p>
-							<p class="waiting_job_status">Step VI: Active regulon determination.</p>
-							<p class="waiting_job_status">Step VII: Regulon inference.</p>
+							<p class="waiting_job_status">Step VI: Regulon determination.</p>
+							<p class="waiting_job_status">Step VII: CTSR inference.</p>
 							{{else if $running_status == 'gene_module_detection'}}
-							<p>Step I: Pre-processing.(Complete)</p>
-							<p>Step II: Cell cluster prediction.(Complete)</p>
+							<p>Step I: Data pre-processing.(Complete)</p>
+							<p>Step II: Cell clustering.(Complete)</p>
 							<p>Step III: Gene module detection.(Running)<img src="static/images/busy.gif" /> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Terminate your job</button>
-							<p class="waiting_job_status">Step IV: Gene module assignment.</p>
+							<p class="waiting_job_status">Step IV: Active gene module determination.</p>
 							<p class="waiting_job_status">Step V: Motif finding and comparison.</p>
-							<p class="waiting_job_status">Step VI: Active regulon determination.</p>
-							<p class="waiting_job_status">Step VII: Regulon inference.</p>
+							<p class="waiting_job_status">Step VI: Regulon determination.</p>
+							<p class="waiting_job_status">Step VII: CTSR inference.</p>
 							{{else if $running_status == 'gene_module_assignment'}}
-							<p>Step I: Pre-processing.(Complete)</p>
-							<p>Step II: Cell cluster prediction.(Complete)</p>
+							<p>Step I: Data pre-processing.(Complete)</p>
+							<p>Step II: Cell clustering.(Complete)</p>
 							<p>Step III: Gene module detection.(Complete)</p>
-							<p>Step IV: Gene module assignment.(Running)<img src="static/images/busy.gif" /> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Terminate your job</button>
+							<p>Step IV: Active gene module determination.(Running)<img src="static/images/busy.gif" /> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Terminate your job</button>
 							<p class="waiting_job_status">Step V: Motif finding and comparison.</p>
-							<p class="waiting_job_status">Step VI: Active regulon determination.</p>
-							<p class="waiting_job_status">Step VII: Regulon inference.</p>
+							<p class="waiting_job_status">Step VI: Regulon determination.</p>
+							<p class="waiting_job_status">Step VII: CTSR inference.</p>
 							{{else if $running_status == 'motif_finding_and_comparison'}}
-							<p>Step I: Pre-processing.(Complete)</p>
-							<p>Step II: Cell cluster prediction.(Complete)</p>
+							<p>Step I: Data pre-processing.(Complete)</p>
+							<p>Step II: Cell clustering.(Complete)</p>
 							<p>Step III: Gene module detection.(Complete)</p>
-							<p>Step IV: Gene module assignment.(Complete)</p>
+							<p>Step IV: Active gene module determination.(Complete)</p>
 							<p>Step V: Motif finding and comparison.(Running)<img src="static/images/busy.gif" /> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Terminate your job</button>
-							<p class="waiting_job_status">Step VI: Active regulon determination.</p>
-							<p class="waiting_job_status">Step VII: Regulon inference.</p>
+							<p class="waiting_job_status">Step VI: Regulon determination.</p>
+							<p class="waiting_job_status">Step VII: CTSR inference.</p>
 							{{else if $running_status == 'active_regulon_determination'}}
-							<p>Step I: Pre-processing.(Complete)</p>
-							<p>Step II: Cell cluster prediction.(Complete)</p>
+							<p>Step I: Data pre-processing.(Complete)</p>
+							<p>Step II: Cell clustering.(Complete)</p>
 							<p>Step III: Gene module detection.(Complete)</p>
-							<p>Step IV: Gene module assignment.(Complete)</p>
+							<p>Step IV: Active gene module determination.(Complete)</p>
 							<p>Step V: Motif finding and comparison.(Complete)</p>
-							<p>Step VI: Active regulon determination.(Running)<img src="static/images/busy.gif" /> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Terminate your job</button>
-							<p class="waiting_job_status">Step VII: Regulon inference.</p>
+							<p>Step VI: Regulon determination.(Running)<img src="static/images/busy.gif" /> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Terminate your job</button>
+							<p class="waiting_job_status">Step VII: CTSR inference.</p>
 							{{else if $running_status == 'regulon_inference'}}
-							<p>Step I: Pre-processing.(Complete)</p>
-							<p>Step II: Cell cluster prediction.(Complete)</p>
+							<p>Step I: Data Pre-processing.(Complete)</p>
+							<p>Step II: Cell clustering.(Complete)</p>
 							<p>Step III: Gene module detection.(Complete)</p>
-							<p>Step IV: Gene module assignment.(Complete)</p>
+							<p>Step IV: Active gene module determination.(Complete)</p>
 							<p>Step V: Motif finding and comparison.(Complete)</p>
-							<p>Step VI: Active regulon determination.(Complete)</p>
-							<p>Step VII: Regulon inference.(Running)<img src="static/images/busy.gif" /> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Terminate your job</button>
+							<p>Step VI: Regulon determination.(Complete)</p>
+							<p>Step VII: CTSR inference.(Running)<img src="static/images/busy.gif" /> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Terminate your job</button>
 							{{/if}}
-							
+							 
               <p>This page will be automatically refreshed every <b>180</b> seconds.</p>
 							<hr/>
 							{{if $running_status == 'preprocessing' or $running_status == 'cell_cluster_prediction'}}
@@ -1841,6 +1859,9 @@ function terminate_job(item) {
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6">
                                     <p for="reportsList">Enable imputation: {{$is_imputation}}</p>
+																</div>
+																<div class="form-group col-md-6 col-sm-6">
+																	<p for="reportsList">Remove ribosome genes: {{$remove_ribosome}}</p>
 																</div>
 																<div class="form-group col-md-6 col-sm-6">
 																	<p>Number of principle components: {{$n_pca}}</p>
@@ -1972,6 +1993,9 @@ function terminate_job(item) {
 																		<div class="col-md-12 col-sm-12">
 																			<div class="form-group col-md-6 col-sm-6">
 																					<p for="reportsList">Enable imputation: {{$is_imputation}}</p>
+																			</div>
+																			<div class="form-group col-md-6 col-sm-6">
+																				<p for="reportsList">Remove ribosome genes: {{$remove_ribosome}}</p>
 																			</div>
 																			<div class="form-group col-md-6 col-sm-6">
 																				<p>Number of principle components: {{$n_pca}}</p>
