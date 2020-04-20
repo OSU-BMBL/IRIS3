@@ -583,7 +583,7 @@ $(document).ready(function() {
 			  <div class="form-group row">
 									<div class="col-md-4">
 										<label class="form-check-label" for="remove_ribosome">Remove ribosome genes.
-							 <span class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title="Remove ribosome genes. Default: disabled."> </span> 
+							 <span class="glyphicon glyphicon-question-sign" data-container="body" data-toggle="tooltip" data-original-title="Determine whether you want to remove ribosome genes in pre-processing step. Default: disabled."> </span> 
 						    	</label>
 									</div>
 									<div class="col-md-4">

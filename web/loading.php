@@ -47,7 +47,13 @@ $param_file = fopen("$DATAPATH/$jobid/info.txt", "r");
 				} else{
 					$is_imputation = "No";
 				}
-			} else if($split_line[0] == "promoter_arg"){
+			} else if($split_line[0] == "remove_ribosome"){
+				if( $split_line[1] == 1 || strcmp($split_line[1], "Yes") > 0) {
+					$remove_ribosome = "Yes";
+				} else{
+					$remove_ribosome = "No";
+				}
+			}else if($split_line[0] == "promoter_arg"){
 				$promoter_arg = $split_line[1];
 			} else if($split_line[0] == "o_arg"){
 				$o_arg = $split_line[1];
@@ -108,6 +114,15 @@ $param_file = fopen("$DATAPATH/$jobid/info.txt", "r");
 		// error opening the file.
 	} 
 }
+
+if(empty($remove_ribosome)){
+	$remove_ribosome = "No";
+}
+
+if(strcmp($expfile_name, "matrix.mtx") > 0){
+	$expfile_name = "Gene-barcode matrices (three gzip files)";
+}
+
 if (file_exists("$DATAPATH/$jobid/json/$jobid"."_umap.json")){
 	$all_json = scandir("$DATAPATH/$jobid/json");
   $dge_json_file = preg_grep('/dge\.json/', $all_json);
@@ -299,6 +314,7 @@ if(sizeof($module_gene_name_file)){
 
 $info_file = fopen("$DATAPATH/$jobid/$jobid"."_info.txt", "r");
 $count_regulon_in_ct = array(); 
+$count_ctsr_in_ct = array(); 
 if ($info_file) {
     while (($line = fgets($info_file)) !== false) {
         $split_line = explode (",", $line);
@@ -345,6 +361,10 @@ if ($info_file) {
 	print_r("Info file not found");
     // error opening the file.
 } 
+
+if(empty($total_cell_num)) {
+	$total_cell_num = 5000;
+}
 
 $predict_label_array = array();
 if (file_exists("$DATAPATH/$jobid/$jobid"."_sc3_label.txt") && !file_exists("$DATAPATH/$jobid/$jobid"."_predict_label.txt")){
@@ -496,10 +516,17 @@ foreach ($regulon_motif_file as $key=>$this_regulon_motif_file){
 	
 foreach ($regulon_rank_file as $key=>$this_regulon_rank_file){
 	$status = "1";
+	$this_ctsr = 0;
 	$fp = fopen("$DATAPATH/$jobid/$this_regulon_rank_file", 'r');
 	if ($fp){
 	while (($line = fgetcsv($fp, 0, "\t")) !== FALSE) 
-		if ($line) {$regulon_rank_result[$key][] = array_map('trim',$line);}
+		if ($line) {
+			$regulon_rank_result[$key][] = array_map('trim',$line);
+			if($line[4] < 0.05) {
+				$this_ctsr = $this_ctsr + 1;
+			}
+		}
+		array_push($count_ctsr_in_ct,$this_ctsr);
 	} else{
 		die("Unable to open file");
 	}
@@ -620,6 +647,7 @@ $smarty->assign('input_species',$input_species);
 $smarty->assign('status',$status);
 $smarty->assign('jobid',$jobid);
 $smarty->assign('count_regulon_in_ct',$count_regulon_in_ct);
+$smarty->assign('count_ctsr_in_ct',$count_ctsr_in_ct);
 $smarty->assign('regulon_result',$regulon_result);
 $smarty->assign('regulon_id_result',$regulon_id_result);
 $smarty->assign('regulon_motif_result',$regulon_motif_result);
@@ -637,6 +665,7 @@ $smarty->assign('k_arg',$k_arg);
 $smarty->assign('o_arg',$o_arg);
 $smarty->assign('is_c',$is_c);
 $smarty->assign('is_imputation',$is_imputation);
+$smarty->assign('remove_ribosome',$remove_ribosome);
 $smarty->assign('promoter_arg',$promoter_arg);
 $smarty->assign('ARI',$ARI);
 $smarty->assign('RI',$RI);
