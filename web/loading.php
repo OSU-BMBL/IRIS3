@@ -7,6 +7,11 @@ require_once("lib/spyc.php");
 //require_once("lib/hmmer.php");
 $jobid=$_GET['jobid'];
 
+$pvalue=$_GET['pvalue'];
+if(empty($pvalue)) {
+	$pvalue="0.05";
+}
+
 $log1="";
 $log2="";
 $log="";
@@ -117,6 +122,9 @@ $param_file = fopen("$DATAPATH/$jobid/info.txt", "r");
 
 if(empty($remove_ribosome)){
 	$remove_ribosome = "No";
+}
+if(empty($promoter_arg)){
+	$promoter_arg = "1000";
 }
 
 if(strcmp($expfile_name, "matrix.mtx") > 0){
@@ -522,7 +530,7 @@ foreach ($regulon_rank_file as $key=>$this_regulon_rank_file){
 	while (($line = fgetcsv($fp, 0, "\t")) !== FALSE) 
 		if ($line) {
 			$regulon_rank_result[$key][] = array_map('trim',$line);
-			if($line[4] < 0.05) {
+			if($line[4] < floatval($pvalue)) {
 				$this_ctsr = $this_ctsr + 1;
 			}
 		}
@@ -646,6 +654,7 @@ $smarty->assign('main_species',$main_species);
 $smarty->assign('input_species',$input_species);
 $smarty->assign('status',$status);
 $smarty->assign('jobid',$jobid);
+$smarty->assign('pvalue',$pvalue);
 $smarty->assign('count_regulon_in_ct',$count_regulon_in_ct);
 $smarty->assign('count_ctsr_in_ct',$count_ctsr_in_ct);
 $smarty->assign('regulon_result',$regulon_result);

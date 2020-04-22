@@ -5,6 +5,10 @@ require("config/tools.php");
         
 $page = $_SERVER['PHP_SELF'];
 $jobid=$_GET['jobid'];
+$pvalue=$_GET['pvalue'];
+if(empty($pvalue)) {
+	$pvalue="0.05";
+}
 if (file_exists("$DATAPATH/$jobid/$jobid"."_info.txt")){
     $info_file = fopen("$DATAPATH/$jobid/$jobid"."_info.txt", "r");
     $count_regulon_in_ct = array(); 
@@ -22,11 +26,12 @@ if (file_exists("$DATAPATH/$jobid/$jobid"."_info.txt")){
     } 
 }
 $total_regulon = $total_regulon / 18;
-$wait_time = (round($total_regulon)%5 === 0) ? round($total_regulon) : round(($total_regulon+2.5)/5)*5;
+$wait_time = (round($total_regulon)%5 === 0) ? round($total_regulon)+5 : round(($total_regulon+2.5)/5)*6+5;
 if ($wait_time == "") {
     $wait_time = "10-20";
 }
-
+$smarty->assign('jobid',$jobid);
+$smarty->assign('pvalue',$pvalue);
 $smarty->assign('page', $page);
 $smarty->assign('wait_time',$wait_time);
 $smarty->display('results.tpl');

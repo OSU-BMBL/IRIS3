@@ -6,6 +6,7 @@
 <script src="assets/js/code/modules/exporting.js"></script>
 <script src="assets/js/code/modules/export-data.js"></script>
 <script src="assets/js/code/modules/accessibility.js"></script>
+<script src="assets/js/bootstrap-select.min.js"></script>
 
 <script>
 var flag = [];
@@ -35,9 +36,9 @@ function terminate_job(item) {
 		if (jobid[0].startsWith("20")) {
 			console.log("terminate job: " + jobid)
 			$.ajax({
-			url: "terminate_job.php?jobid=" + jobid ,
+			url: "terminate_job.php?jobid=" + jobid[0] ,
 			type: 'POST',
-			data: {'id': jobid},
+			data: {'id': jobid[0]},
 			dataType: 'json',
 			success: function(response) {
 			},
@@ -57,7 +58,7 @@ function terminate_job(item) {
 		table_id = "table-"+regulon_id
 		species = document.getElementById("species").innerHTML
 		match_species =  species.match(/[^Species: ].+/gm)[0]
-		jobid = location.search.match(/\d+/gm)
+		jobid = location.search.match(/\d+/gm)[0]
 		table_content_id = "table-content-"+regulon_id
 		table_jquery_id="#"+table_content_id
 		console.log("prepare_peak.php?jobid="+jobid+"&regulon_id="+regulon_id+"&species="+match_species+"&table="+table_content_id)
@@ -126,7 +127,7 @@ function terminate_job(item) {
 		table_id = "tad-table-"+regulon_id
 		species = document.getElementById("species").innerHTML
 		match_species =  species.match(/[^Species: ].+/gm)[0]
-		jobid = location.search.match(/\d+/gm)
+		jobid = location.search.match(/\d+/gm)[0]
 		table_content_id = "tad-table-content-"+regulon_id
 		table_jquery_id="#"+table_content_id
 		id_name = "#"+$(item).attr("id")
@@ -222,7 +223,7 @@ function terminate_job(item) {
 		table_id = "dorothea-table-"+regulon_id
 		species = document.getElementById("species").innerHTML
 		match_species =  species.match(/[^Species: ].+/gm)[0]
-		jobid = location.search.match(/\d+/gm)
+		jobid = location.search.match(/\d+/gm)[0]
 		table_content_id = "dorothea-table-content-"+regulon_id
 		table_jquery_id="#"+table_content_id
 		id_name = "#"+$(item).attr("id")
@@ -326,7 +327,7 @@ function terminate_job(item) {
 	table_id = "similar-table-" + regulon_id
 	species = document.getElementById("species").innerHTML
 	match_species = species.match(/[^Species: ].+/gm)[0]
-	jobid = location.search.match(/\d+/gm)
+	jobid = location.search.match(/\d+/gm)[0]
 	table_content_id = "similar-table-content-" + regulon_id
 	table_jquery_id = "#" + table_content_id
 	if (!$.fn.DataTable.isDataTable(table_jquery_id)) {
@@ -365,7 +366,7 @@ function terminate_job(item) {
     regulon_id.lastIndexOf("S")
 	)
 	table_id = "regulon-table-" + regulon_id
-	jobid = location.search.match(/\d+/gm)
+	jobid = location.search.match(/\d+/gm)[0]
 	table_content_id = "regulon-table-content-" + regulon_id
 	table_jquery_id = "#" + table_content_id
 	//id_name = "#"+$(item).attr("id")
@@ -398,7 +399,7 @@ function terminate_job(item) {
     trajectory_regulon_id.lastIndexOf("S")
 	)
 	trajectory_id = "trajectory-table-" + trajectory_regulon_id
-	jobid = location.search.match(/\d+/gm)
+	jobid = location.search.match(/\d+/gm)[0]
 	trajectory_content_id = "trajectory-table-content-" + trajectory_regulon_id
 	trajectory_jquery_id = "#" + trajectory_content_id
 	$.ajax({
@@ -429,7 +430,7 @@ function terminate_job(item) {
 	)
 	gene_symbol = $(item).attr("id").substring($(item).attr("id").lastIndexOf("_")+1)
 	table_id = "gene-tsne-" + gene_regulon_id
-	jobid = location.search.match(/\d+/gm)
+	jobid = location.search.match(/\d+/gm)[0]
 	table_content_id = "gene-tsne-content-" + gene_regulon_id
 	table_jquery_id = "#" + table_content_id
 	
@@ -570,7 +571,7 @@ function terminate_job(item) {
 	}
 	
 	$(document).ready(function() {
-
+		$('.selectpicker').selectpicker();
 		$('.enrichr_logo').css('display','none')
 
 		$('#tablePreview').DataTable({
@@ -1160,11 +1161,21 @@ function terminate_job(item) {
 																																						<div id="nav_scroll"></div>
 																																						<div class="flatPanel panel panel-default">
 																																							<div class="row">
+																																							<div class="col-md-12">
+																																								<label style="margin:0.6em; font-weight:400;" class="form-check-label" for="rss_pvalue">Regulon specificity score p-value threshold:
+																																							</label>
+																																							<select  id="rss_pvalue{{$sec0+1}}" class="selectpicker" name="rss_pvalue{{$sec0+1}}" data-width="auto">
+																																								<option {{if $pvalue == 0.001}}selected="selected"{{/if}}>0.001</option>
+																																								<option {{if $pvalue == 0.01}}selected="selected"{{/if}}>0.01</option>
+																																								<option data-subtext="Default" {{if $pvalue == 0.05}}selected="selected"{{/if}}>0.05</option>
+																																								</select>
+																																								<input style=""class="btn btn-default" type="button" value="Reload page using selected p-value" onClick="javascript:location.href = '/iris3/results.php?jobid={{$jobid}}&pvalue=' + $('#rss_pvalue{{$sec0+1}}').val();" />
+																																							</div>
 																																							<div class="CT-result-img">
 																																								<div class="col-sm-12">
 																																								<h4 style="text-align:center;margin-top:50px"> Regulon Specificity Score Scatter Plot for Cell Cluster {{$sec0+1}}</h4>
-																																									<div class="row text-center"><img style="width: 95%;" src="data/{{$jobid}}/regulon_id/ct{{$sec0+1}}_rss_scatter.png"/></div>
-																																								<p style="margin-left:0.5em;margin-bottom:1em;">Note: The RSS of a regulon is calculated by comparing the activity of its component genes in the current cell type to all the rest cells. For example, CT1-R1 (CTSR) means the Regulon #1 is specifically active in cell type #1 based on its significant RSS (adjusted p-value &gt;0.05). </p>
+																																									<div class="row text-center"><img style="width: 95%;" src="data/{{$jobid}}/regulon_id/ct{{$sec0+1}}_rss_scatter_{{$pvalue}}.png"/></div>
+																																								<p style="margin-left:0.5em;margin-bottom:1em;">Note: The RSS of a regulon is calculated by comparing the activity of its component genes in the current cell type to all the rest cells. For example, CT1-R1 (CTSR) means the Regulon #1 is specifically active in cell type #1 based on its significant RSS (adjusted p-value &gt; {{$pvalue}}). </p>
 																																								</div>
 																																							</div> 
 																																							</div>
@@ -1188,7 +1199,7 @@ function terminate_job(item) {
 																																																									{{section name=sec1 loop=$regulon_result[$sec0]}} 
 																																							<li>
 																																							<table class="table table-sm page_item{{$sec0+1}}" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:0"><tbody>
-																																							<tr><td colspan="2"> <div class='regulon-heading' {{if $regulon_rank_result[$sec0][sec1][4] > 0.05}}style="background-color:grey;"{{/if}}> {{$regulon_result[$sec0][sec1][0]}} {{if $regulon_rank_result[$sec0][sec1][4] < 0.05}}(CTSR) {{/if}} {{if $regulon_rank_result[$sec0][sec1][4] > 0.05}}(insignificant) {{/if}} {{if $regulon_rank_result[$sec0][sec1][4]|string_format:"%.5f" == 0}}(p-value&lt;1.0e-4){{else if $regulon_rank_result[$sec0][sec1][4]|string_format:"%.5f" > 0.05}}{{else}}(p-value: {{$regulon_rank_result[$sec0][sec1][4]|string_format:"%.1e"}}){{/if}}</div></td></tr>
+																																							<tr><td colspan="2"> <div class='regulon-heading' {{if $regulon_rank_result[$sec0][sec1][4] > $pvalue}}style="background-color:grey;"{{/if}}> {{$regulon_result[$sec0][sec1][0]}} {{if $regulon_rank_result[$sec0][sec1][4] < $pvalue}}(CTSR) {{/if}} {{if $regulon_rank_result[$sec0][sec1][4] > $pvalue}}(insignificant) {{/if}} {{if $regulon_rank_result[$sec0][sec1][4]|string_format:"%.5f" == 0}}(p-value&lt;1.0e-4){{else if $regulon_rank_result[$sec0][sec1][4]|string_format:"%.5f" > $pvalue}}{{else}}(p-value: {{$regulon_rank_result[$sec0][sec1][4]|string_format:"%.1e"}}){{/if}}</div></td></tr>
 																																							<tr><td class="gene-score">Regulon specificity score: {{$regulon_rank_result[$sec0][sec1][5]|string_format:"%.8f"}} </td><td class="gene-score">Number of genes: {{$regulon_result[$sec0][sec1]|@count-1}}</td><td class="gene-score">Number of differentially expressed genes: {{$regulon_rank_result[$sec0][sec1]|@count-6}}</td></tr>
 																																																									<tr><td class="gene-table">
 																																																											<div style="width:100%; font-size:14px;">

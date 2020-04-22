@@ -77,17 +77,32 @@
 {{block name="main"}}
 
 <script>
-jobid = location.search.match(/\d+/gm)
-$(document).ready(function () {
+jobid = '{{$jobid}}'
+pvalue = '{{$pvalue}}'
+if(pvalue == '0.05') {
+    $(document).ready(function () {
+        $.ajax({
+        type: "POST",
+        url: "loading.php?jobid=" + jobid,
+        success: function (result) {
+            //console.log(result)
+            $('#result').html(result);
+        }
+    })
+    });
+} else {
+    $(document).ready(function () {
     $.ajax({
     type: "POST",
-    url: "loading.php?jobid=" + jobid,
+    url: "loading.php?jobid=" + jobid + "&pvalue={{$pvalue}}",
     success: function (result) {
         //console.log(result)
         $('#result').html(result);
     }
 })
 });
+}
+
 </script>
     <main role="main" style="min-height: calc(100vh - 182px);">
       <div class="container">
