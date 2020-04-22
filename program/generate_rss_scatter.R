@@ -12,7 +12,7 @@ library(grid)
 
 args <- commandArgs(TRUE)
 jobid <- args[1] # job id
-#jobid <-20200418142514 
+#jobid <-2020041684528 
 wd <- paste("/var/www/html/iris3/data/",jobid,sep="")
 setwd(wd)
 
@@ -32,7 +32,7 @@ sort_dir <- function(dir) {
   
 }
 
-alldir <- list.dirs(path = wd, recursive=F)
+alldir <- list.dirs(path = wd, recursive = F)
 alldir <- grep("*_bic$",alldir,value=T)
 alldir <- sort_dir(alldir)
 
@@ -92,24 +92,25 @@ for (i in 1:length(alldir)) {
     }))
     tf_names <- total_motif_name[tf_idx,2]
     legend_color <- c(rep("CTSR",length(tf_idx)-1),"insignificant")
-    tf_rss <- tibble(index=seq(1:length(rank_list)),tf=total_motif_name[tf_idx,2],rss=rank_list,ctsr=rss_pvalue_list < 0.05, col=legend_color)
-    #tf_rss <- tibble(index=seq(1:length(rank_list)),tf=total_motif_name[tf_idx,2],rss=rank_list,ctsr=rss_pvalue_list < 0.05)
-
-    num_ctsr <- length(which(rss_pvalue_list < 0.05))
-    total_tf_name_list <- append(total_tf_name_list,total_motif_name[tf_idx,2])
-    rss_plot <- ggplot(tf_rss, aes(x=index, y=as.numeric(rss), label=ifelse(index<=num_ctsr,as.character(tf),''))) +
-      geom_point(aes(color = col),fill="blue", show.legend = TRUE, size=3) +
-      scale_color_manual(values=c('#2775b6','grey'))+
-      geom_point(color=ifelse(tf_rss$index<=num_ctsr,"#2775b6",'grey'),size=3) + 
-      scale_x_continuous("Regulon",breaks = scales::pretty_breaks(n = 4)) +
-      geom_text_repel(point.padding = 0.2) +
-      scale_y_continuous("Regulon specificity score",breaks = scales::pretty_breaks(n = 7)) +
-      theme_linedraw() +
-      theme(text = element_text(size=14), legend.position="bottom", legend.title = element_blank())
-    
-    png(paste("regulon_id/ct",i,"_rss_scatter.png",sep = ""),width=3500, height=2000,res = 300)
-    print(rss_plot)
-    quiet(dev.off())
+    pval_list <- c(0.001,0.01,0.05)
+    for (j in pval_list){
+      tf_rss <- tibble(index=seq(1:length(rank_list)),tf=total_motif_name[tf_idx,2],rss=rank_list,ctsr=rss_pvalue_list < j, col=legend_color)
+      num_ctsr <- length(which(rss_pvalue_list < j))
+      total_tf_name_list <- append(total_tf_name_list,total_motif_name[tf_idx,2])
+      rss_plot <- ggplot(tf_rss, aes(x=index, y=as.numeric(rss), label=ifelse(index<=num_ctsr,as.character(tf),''))) +
+        geom_point(aes(color = col),fill="blue", show.legend = TRUE, size=3) +
+        scale_color_manual(values=c('#2775b6','grey'))+
+        geom_point(color=ifelse(tf_rss$index<=num_ctsr,"#2775b6",'grey'),size=3) + 
+        scale_x_continuous("Regulon",breaks = scales::pretty_breaks(n = 4)) +
+        geom_text_repel(point.padding = 0.2) +
+        scale_y_continuous("Regulon specificity score",breaks = scales::pretty_breaks(n = 7)) +
+        theme_linedraw() +
+        theme(text = element_text(size=14), legend.position="bottom", legend.title = element_blank())
+      
+      png(paste("regulon_id/ct",i,"_rss_scatter_",j,".png",sep = ""),width=3500, height=2000,res = 300)
+      print(rss_plot)
+      quiet(dev.off())
+    }
   }
 }
 
@@ -158,3 +159,4 @@ combine_result[,9] <- sapply(total_gene_id_list, paste,collapse=",")
 combine_result <- combine_result[,c(1,7,6,5,8,9)]
 colnames(combine_result) <- c("index","tf_name","rss","rss_pval","gene_symbol","gene_id")
 write.table(combine_result,paste(jobid,"_combine_regulon.txt",sep = ""), sep="\t",row.names = F,col.names = T,quote = F)
+
