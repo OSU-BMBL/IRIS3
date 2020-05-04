@@ -60,20 +60,20 @@ label_file
 load_test_data <- function(){
   rm(list = ls(all = TRUE))
   # 
-  # setwd("/var/www/html/iris3/data/2020041904607/")
+  # setwd("/var/www/html/iris3/data/20200502110650/")
   expr_file = "randomized.tsv.gz"
   expr_file = "123.zip"
-  expr_file = "Rosenzweig_expression.csv"
-  jobid <- "2020041904607"
-  delim <- ","
-  label_file<-'1'
-  delimiter <- ','
+  expr_file = "GSE103334_FPKM_CKP25__2000Gene.txt"
+  jobid <- "20200502110650"
+  delim <- "\t"
+  label_file<-'GSE103334_celllabel_seurat.txt'
+  delimiter <- '\t'
   is_imputation <- 'No'
   n_pc <- "10"
   n_variable_feature <- "5000"
   resolution_seurat <- 0.8
-  label_use_predict <- '0'
-  remove_ribosome <- 'Yes'
+  label_use_predict <- '2'
+  remove_ribosome <- 'No'
 }
 
 ##############################
@@ -230,6 +230,10 @@ if (upload_type == "CellGene"){
     expFile <- expFile[-which(duplicated.default(expFile[,1])==T),]
   }	
   
+  ##Filter rows if gene name equals to NA
+  if(length(which(is.na(expFile[,1]))) > 0){
+    expFile <- expFile[-which(is.na(expFile[,1])),]
+  }
   rownames(expFile) <- expFile[,1]
   expFile<- expFile[,-1]
 }
@@ -295,7 +299,7 @@ if (main_identifier == "ENSEMBL") {
 expFile <- expFile[!duplicated(expFile[,1]),]
 rownames(expFile) <- expFile[,1]
 expFile <- expFile[,-1]
-
+#expFile1 <- expFile
 ## remove rows with empty gene name
 if(length(which(rownames(expFile)=="")) > 0){
   expFile <- expFile[-which(rownames(expFile)==""),]
@@ -322,7 +326,9 @@ filter_cell_func <- function(this){
 ## remove ribosome genes first if user selected#################################
 if(exists("remove_ribosome")) {
   if (remove_ribosome == "Yes") {
-    expFile <- expFile[- grep("^Rp[sl][[:digit:]]", rownames(expFile)),]
+    if(length(grep("^Rp[sl][[:digit:]]", rownames(expFile))) > 0) {
+      expFile <- expFile[-grep("^Rp[sl][[:digit:]]", rownames(expFile)),]
+    }
   }
 }
 
@@ -424,6 +430,7 @@ if (label_file == 0 | label_file==1){
     delimiter <- ' '
   }
   cell_info <- read.table(label_file,check.names = FALSE, header=TRUE,sep = delimiter)
+  cell_info[,1] <-  gsub('([[:punct:]])|\\s+','_',cell_info[,1])
   cell_info[,2] <- as.factor(cell_info[,2])
 }
 rm(exp_data)
@@ -479,7 +486,7 @@ umap_embeddings <- Embeddings(object = my.object[['umap']])
 
 dist.matrix <- dist(x = Embeddings(object = my.object[['pca']]))
 sil <- silhouette(x = as.numeric(x = cell_info), dist = dist.matrix)
-if (!is.na(sil)){
+if (any(!is.na(sil))){
   silh_out <- cbind(cell_info,cell_names,sil[,3])
   silh_out <- silh_out[order(as.numeric(silh_out[,1])),]
 } else {
@@ -500,12 +507,11 @@ write.table(silh_out,paste(jobid,"_silh.txt",sep=""),sep = ",",quote = F,col.nam
 
 if (label_use_predict =='2'){
   cell_info <- read.table(label_file,check.names = FALSE, header=TRUE,sep = delimiter,stringsAsFactors = F)
+  cell_info[,1] <-  gsub('([[:punct:]])|\\s+','_',cell_info[,1])
   cell_info <- cell_info[order(cell_info[,1]),]
   ## check if user's label has valid number of rows, if not just use predicted value
   if (nrow(cell_info) == nrow(cell_label)){
     original_cell_info <- as.factor(cell_info[,2])
-    #levels(original_cell_info) <- c(5,6,7,4,3,1,2)
-    #levels(original_cell_info) <- c(6,7,5,4,1,2,3)
     #cell_info[,2] <- as.character(original_cell_info)
     my.object <- AddMetaData(my.object, as.character(original_cell_info), col.name = "Provided.idents")
     cell_info[,2] <- as.numeric(as.factor(cell_info[,2]))
@@ -776,6 +782,7 @@ quiet(dev.off())
 
 if (label_use_predict =='1' | label_use_predict =='2'){
   cell_info <- read.table(label_file,check.names = FALSE, header=TRUE,sep = delimiter)
+  cell_info[,1] <-  gsub('([[:punct:]])|\\s+','_',cell_info[,1])
   cell_info <- cell_info[order(cell_info[,1]),]
   ## check if user's label has valid number of rows, if not just use predicted value
   original_cell_info <- as.factor(cell_info[,2])
@@ -832,24 +839,26 @@ quiet(dev.off())
 #
 
 #my.trajectory<-SingleCellExperiment(assays=List(counts=GetAssayData(object = my.object[['RNA']],slot="counts")))
-my.trajectory<-SingleCellExperiment(
-  assays = list(
-    counts = GetAssayData(object = my.object[['RNA']],slot="counts")
-  ), 
-  colData = Idents(my.object)
-)
-SummarizedExperiment::assays(my.trajectory)$norm<-GetAssayData(object = my.object,slot = "data")
-
-dm<-DiffusionMap(t(as.matrix(SummarizedExperiment::assays(my.trajectory)$norm)))
-rd2 <- cbind(DC1 = dm$DC1, DC2 = dm$DC2)
-reducedDims(my.trajectory) <- SimpleList(DiffMap = rd2)
-saveRDS(my.trajectory,file="trajectory_obj.rds")
-
-png(paste("regulon_id/overview_ct.trajectory.png",sep = ""),width=2000, height=1500,res = 300)
-Plot.Cluster.Trajectory(customized= T,start.cluster=NULL,add.line = T,end.cluster=NULL,show.constraints=T)
-quiet(dev.off())
-
-pdf(file = paste("regulon_id/overview_ct.trajectory.pdf",sep = ""), width = 10, height = 10,  pointsize = 18, bg = "white")
-Plot.Cluster.Trajectory(customized= T,start.cluster=NULL,add.line = T,end.cluster=NULL,show.constraints=T)
-quiet(dev.off())
+if(ncol(my.object) < 30000){
+  my.trajectory<-SingleCellExperiment(
+    assays = list(
+      counts = GetAssayData(object = my.object[['RNA']],slot="counts")
+    ), 
+    colData = Idents(my.object)
+  )
+  SummarizedExperiment::assays(my.trajectory)$norm<-GetAssayData(object = my.object,slot = "data")
+  
+  dm<-DiffusionMap(t(as.matrix(SummarizedExperiment::assays(my.trajectory)$norm)))
+  rd2 <- cbind(DC1 = dm$DC1, DC2 = dm$DC2)
+  reducedDims(my.trajectory) <- SimpleList(DiffMap = rd2)
+  saveRDS(my.trajectory,file="trajectory_obj.rds")
+  
+  png(paste("regulon_id/overview_ct.trajectory.png",sep = ""),width=2000, height=1500,res = 300)
+  Plot.Cluster.Trajectory(customized= T,start.cluster=NULL,add.line = T,end.cluster=NULL,show.constraints=T)
+  quiet(dev.off())
+  
+  pdf(file = paste("regulon_id/overview_ct.trajectory.pdf",sep = ""), width = 10, height = 10,  pointsize = 18, bg = "white")
+  Plot.Cluster.Trajectory(customized= T,start.cluster=NULL,add.line = T,end.cluster=NULL,show.constraints=T)
+  quiet(dev.off())
+}
 

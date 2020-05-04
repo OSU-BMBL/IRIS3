@@ -53,6 +53,7 @@ if (srcFile == '1') {
   user_label_file <- predict_cluster
 } else {
   user_label_file <- read.delim(srcFile,header=T,sep=delim,check.names = FALSE)
+  user_label_file[,1] <-  gsub('([[:punct:]])|\\s+','_',user_label_file[,1])
 }
 
 
