@@ -12,7 +12,7 @@ library(grid)
 
 args <- commandArgs(TRUE)
 jobid <- args[1] # job id
-#jobid <-2020041684528 
+#jobid <-2020050344856 
 wd <- paste("/var/www/html/iris3/data/",jobid,sep="")
 setwd(wd)
 
@@ -93,10 +93,10 @@ for (i in 1:length(alldir)) {
     tf_names <- total_motif_name[tf_idx,2]
     legend_color <- c(rep("CTSR",length(tf_idx)-1),"insignificant")
     pval_list <- c(0.001,0.01,0.05)
+    total_tf_name_list <- append(total_tf_name_list,total_motif_name[tf_idx,2])
     for (j in pval_list){
       tf_rss <- tibble(index=seq(1:length(rank_list)),tf=total_motif_name[tf_idx,2],rss=rank_list,ctsr=rss_pvalue_list < j, col=legend_color)
       num_ctsr <- length(which(rss_pvalue_list < j))
-      total_tf_name_list <- append(total_tf_name_list,total_motif_name[tf_idx,2])
       rss_plot <- ggplot(tf_rss, aes(x=index, y=as.numeric(rss), label=ifelse(index<=num_ctsr,as.character(tf),''))) +
         geom_point(aes(color = col),fill="blue", show.legend = TRUE, size=3) +
         scale_color_manual(values=c('#2775b6','grey'))+
