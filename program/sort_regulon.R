@@ -376,11 +376,11 @@ for (i in 1:total_ct) {
         gene_id_list <- mapply(function(X,Y,Z){
           id <- which(Y %in% X)
           return(unique(append(Z[id],Z)))
-        },X=marker,Y=gene_name_list,Z=gene_id_list)
+        },X=marker,Y=gene_name_list,Z=gene_id_list,SIMPLIFY = F)
         
         gene_name_list <- mapply(function(X,Y){
           return(unique(append(X,Y)))
-        },X=marker,Y=gene_name_list)
+        },X=marker,Y=gene_name_list,SIMPLIFY = F)
         
         
         #motif_list <- motif_list[rss_rank]
