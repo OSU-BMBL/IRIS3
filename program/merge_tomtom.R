@@ -12,9 +12,9 @@ jobid <- args[2]
 motif_length <- args[3]
 setwd(wd)
 getwd()
-#setwd("/var/www/html/CeRIS/data/20191107110621")
+#setwd("/var/www/html/iris3/data/20200512152820")
 #wd <- getwd()
-#jobid <-20191107110621 
+#jobid <-20200512152820 
 #motif_length <- 12
 sort_dir <- function(dir) {
   tmp <- sort(dir)
@@ -183,6 +183,7 @@ for (i in 1:length(alldir)) {
       regulon_idx <- regulon_idx + 1
     }
   } else {
+    regulon_idx <- 0
     cat("",file=res_symbol)
   }
   count_num_regulon <- count_num_regulon + regulon_idx 
@@ -200,4 +201,3 @@ tmp_list <- unlist(sapply(tmp_list, function(x){
 remove_motifs <- paste("tomtom/",list.files("tomtom")[!list.files("tomtom") %in% tmp_list],sep = "")
 unlink(remove_motifs, recursive = TRUE)
 ## remove unused motifs
-
