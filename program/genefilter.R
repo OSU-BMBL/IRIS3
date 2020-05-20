@@ -236,6 +236,8 @@ if (upload_type == "CellGene"){
   }
   rownames(expFile) <- expFile[,1]
   expFile<- expFile[,-1]
+} else{
+  expFile <- as.matrix(expFile)
 }
 
 total_cell_num <- ncol(expFile)
