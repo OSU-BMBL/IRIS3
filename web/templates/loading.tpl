@@ -1517,7 +1517,7 @@ function terminate_job(item) {
 																																	<p>Bicluster overlap rate: {{$f_arg}}</p>
 																															</div>
 																							<div class="form-group col-md-6 col-sm-6">
-																																	<p>Regulon prediction using {{$label_use_predict}}</p>
+																																	<p>Cell clustering method: {{$label_use_predict}}</p>
 																															</div>
 																							<div class="form-group col-md-6 col-sm-6">
 																																	<p>Upstream promoter region: {{$promoter_arg}}</p>
@@ -1593,7 +1593,7 @@ function terminate_job(item) {
                                     <p>Bicluster overlap rate: {{$f_arg}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
-                                    <p>Regulon prediction using {{$label_use_predict}}</p>
+                                    <p>Cell clustering method: {{$label_use_predict}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Upstream promoter region: {{$promoter_arg}}</p>
@@ -1651,7 +1651,7 @@ function terminate_job(item) {
                                     <p>Bicluster overlap rate: {{$f_arg}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
-                                    <p>Regulon prediction using {{$label_use_predict}}</p>
+                                    <p>Cell clustering method: {{$label_use_predict}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Upstream promoter region: {{$promoter_arg}}</p>
@@ -1703,7 +1703,7 @@ function terminate_job(item) {
                                     <p>Bicluster overlap rate: {{$f_arg}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
-                                    <p>Regulon prediction using {{$label_use_predict}}</p>
+                                    <p>Cell clustering method: {{$label_use_predict}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Upstream promoter region: {{$promoter_arg}}</p>
@@ -1755,7 +1755,7 @@ function terminate_job(item) {
                                     <p>Bicluster overlap rate: {{$f_arg}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
-                                    <p>Regulon prediction using {{$label_use_predict}}</p>
+                                    <p>Cell clustering method: {{$label_use_predict}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Upstream promoter region: {{$promoter_arg}}</p>
@@ -1896,7 +1896,7 @@ function terminate_job(item) {
                                     <p>Bicluster overlap rate: {{$f_arg}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
-                                    <p>Regulon prediction using {{$label_use_predict}}</p>
+                                    <p>Cell clustering method: {{$label_use_predict}}</p>
                                 </div>
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Upstream promoter region: {{$promoter_arg}}</p>
@@ -1913,8 +1913,8 @@ function terminate_job(item) {
 							<strong>You may preview the available results:</strong><br>
 														<div class="panel-heading">
 															<ul class="nav nav-tabs">
-																	<li class="active"><a href="#preview-tab1default" data-toggle="tab">UMAP interactive plot</a></li>
-																	<li><a href="#preview-tab2default" data-toggle="tab">Cell cluster static plots</a></li>
+																	<li class="active"><a href="#preview-tab1default" data-toggle="tab">Cell cluster plot (interactive)</a></li>
+																	<li><a href="#preview-tab2default" data-toggle="tab">Cell cluster plot (static)</a></li>
 																	<li><a href="#preview-tab3default" data-toggle="tab">Differentially expressed genes</a></li>
 																	<li><a href="#preview-tab4default" data-toggle="tab">Job information</a></li>
 															</ul>
@@ -2030,7 +2030,7 @@ function terminate_job(item) {
 																					<p>Bicluster overlap rate: {{$f_arg}}</p>
 																			</div>
 																			<div class="form-group col-md-6 col-sm-6">
-																					<p>Regulon prediction using {{$label_use_predict}}</p>
+																					<p>Cell clustering method: {{$label_use_predict}}</p>
 																			</div>
 																			<div class="form-group col-md-6 col-sm-6">
 																					<p>Upstream promoter region: {{$promoter_arg}}</p>
