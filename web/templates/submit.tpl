@@ -204,7 +204,7 @@ function addPreviewTable(response, metadata = true, type) {
     }).html(
       '<span class="bold highlight">NOTE: Your upload file type: ' +
         upload_type +
-        '</span></label><br/>'
+        '</span></label><br/><span class="bold highlight">NOTE: IRIS3 does not allow submitting jobs simultaneously while multiple tabs/pages opened, please submit your job one at a time, otherwise conflicts may occur.</span>'
     )
   )
 }
