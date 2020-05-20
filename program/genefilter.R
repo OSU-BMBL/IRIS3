@@ -185,6 +185,16 @@ upload_type <- as.character(read.table("upload_type.txt",stringsAsFactors = F)[1
 #upload_type <- "CellGene"
 #expFile <- read_data(x = expr_file,read.method = "CellGene",sep = delim)
 expFile <- read_data(x = expr_file,read.method = upload_type,sep = delim)
+
+if(ncol(expFile) < 4) {
+  upload_type <- "TenX.folder"
+  tmp_expFile <- read_data(x = expr_file,read.method = upload_type,sep = delim)
+  if(ncol(tmp_expFile) > ncol(expFile)){
+    expFile <- tmp_expFile
+    rm(tmp_expFile)
+  }
+}
+
 if(class(expFile) == "list"){
   expFile <- expFile[[1]]
 }
