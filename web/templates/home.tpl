@@ -119,8 +119,12 @@
                             <i class="fa fa-rocket"></i>
                         </div>-->
                 <h3 class="box-title">News</h3>
-                <p>Posted: 04/18/2020</p>
-                <p>We updated our Tutorial, and Result page, along with bug fixes.</p><br>
+                <p>Posted: 05/02/2020</p>
+                <p>IRIS3 has been officially accepted by Nucleic Acids Research! <a
+                href="https://cpb-us-w2.wpmucdn.com/u.osu.edu/dist/0/72768/files/2020/05/gkaa394.pdf"
+                target="_blank"
+                >Check our manuscript here</a
+              >.</p><br>
                 <p>
                   <a
                     class="enroll-button"
