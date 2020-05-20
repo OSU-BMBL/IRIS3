@@ -257,7 +257,9 @@ rankings <- calc_ranking(exp_data)
 
 #total_ras <- calc_ras(expr = exp_data,genes=total_gene_list,method = "wmw_test")
 total_ras <- calc_ras(expr = exp_data,genes=total_gene_list,method = "wmw_test",rankings = rankings)
-
+if(class(total_ras) == "numeric"){
+  total_ras <- t(as.matrix(total_ras))
+}
 rm(exp_data)
 #gc()
 # set Inf RAS to column max value
