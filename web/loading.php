@@ -127,7 +127,7 @@ if(empty($promoter_arg)){
 	$promoter_arg = "1000";
 }
 
-if(strcmp($expfile_name, "matrix.mtx") > 0){
+if($expfile_name==="matrix.mtx"){
 	$expfile_name = "Gene-barcode matrices (three gzip files)";
 }
 
@@ -511,8 +511,8 @@ foreach ($regulon_motif_file as $key=>$this_regulon_motif_file){
 	while (($line = fgetcsv($fp, 0, "\t")) !== FALSE) 
 		if ($line) {
 			$tmp =array_map('trim',$line);
-			if (count($tmp) > 15) {
-				$tmp = array_slice($tmp, 0, 15, true);
+			if (count($tmp) > 2) {
+				$tmp = array_slice($tmp, 0, 2, true);
 			}
 			$regulon_motif_result[$key][] = $tmp;
 			}

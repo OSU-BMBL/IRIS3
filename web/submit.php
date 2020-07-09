@@ -71,12 +71,13 @@ if (isset($_POST['submit']))
 	}
 	$email = $_POST['email'];
 	$c_arg = '1.0';
-	$c_arg = '20';
+	$q_arg = '0.06';
 	$f_arg = '0.5';
 	$o_arg = '100';
 	$resolution_seurat = $_POST['resolution_seurat'];
 	$promoter_arg = '1000';
 	$c_arg = $_POST['c_arg'];
+	$q_arg = $_POST['q_arg'];
 	$f_arg = $_POST['f_arg'];
 	$o_arg = $_POST['o_arg'];
 	$k_arg = $_POST['k_arg'];
@@ -114,7 +115,7 @@ if (isset($_POST['submit']))
 		fwrite($fp,"CellGene\n");
 		fclose($fp);
 	}
-	if($k_arg == '20' && $f_arg == '0.7' && $o_arg == '5000' && $label_use_predict == '2' && $is_imputation == 'No' && $remove_ribosome == "No" && $promoter_arg == '1000' && $n_pca == '10' && $n_variable_features == '5000' && $expfile=='Zeisel_expression.csv' && $labelfile == 'Zeisel_index_label.csv'){
+	if($k_arg == '20' && $f_arg == '0.7' && $o_arg == '500' && $label_use_predict == '2' && $is_imputation == 'No' && $remove_ribosome == "No" && $promoter_arg == '1000' && $n_pca == '10' && $n_variable_features == '5000' && $expfile=='Zeisel_expression.csv' && $labelfile == 'Zeisel_index_label.csv'){
 		header("Location: results.php?jobid=2020041684528");
 	}  else {
 	system("touch $workdir/email.txt");
@@ -179,7 +180,9 @@ motif_max_length=12
 perl $BASE/program/prepare_email1.pl \$jobid\n
 Rscript $BASE/program/genefilter.R \$jobid \$wd\$exp_file $delim \$label_file $delim_label $is_imputation $resolution_seurat $n_pca $n_variable_features $label_use_predict $remove_ribosome
 echo gene_module_detection > running_status.txt\n
-$BASE/program/qubic2/qubic -i \$wd\$jobid\_filtered_expression.txt -k $k_arg -o $o_arg -f $f_arg $is_c
+#unzip $expfile
+#cp \$(basename \"$expfile\" .zip).txt \$wd\$jobid\_filtered_expression.txt
+$BASE/program/qubic2/qubic -i \$wd\$jobid\_filtered_expression.txt -q $q_arg -c $c_arg -k $k_arg -o $o_arg -f $f_arg $is_c
 for file in *blocks
 do
 grep Conds \$file |cut -d ':' -f2 >\"$(basename \$jobid\_blocks.conds.txt)\"
