@@ -9,10 +9,10 @@ delim <- args[3] #label file delimiter
 label_use_predict <- 0 #default 0
 label_use_predict <- args[4] # 1 for have label use sc3, 2 for have label use label, 0 for no label use sc3
 
-# setwd("/var/www/html/iris3/data/2019102483326")
-# srcFile = "Pollen_cell_label.csv"
-# jobid <- "2019102483326"
-# delim <- ","
+# setwd("/var/www/html/iris3/data/20200707215720")
+# srcFile = "outfileWT.txt"
+# jobid <- "20200707215720"
+# delim <- "\t"
 # label_use_predict <- 2
 if(delim == 'tab'){
   delim <- '\t'
@@ -54,6 +54,10 @@ if (srcFile == '1') {
 } else {
   user_label_file <- read.delim(srcFile,header=T,sep=delim,check.names = FALSE)
   user_label_file[,1] <-  gsub('([[:punct:]])|\\s+','_',user_label_file[,1])
+  if(nrow(predict_cluster) == nrow(user_label_file) + 1){
+    user_label_file <- read.delim(srcFile,header=F,sep=delim,check.names = FALSE)
+    user_label_file[,1] <-  gsub('([[:punct:]])|\\s+','_',user_label_file[,1])
+  }
 }
 
 
@@ -186,7 +190,7 @@ if (label_use_predict == 2 | label_use_predict == 1) {
   colnames(links) <- c("type","value")
   links <- separate(data = links, col = type, into = c("type1", "type2"), sep = "\\^&")
   i=1
-
+  
   #new_index <- order(as.numeric(str_extract_all(links$type1, "[0-9]+")))
   #if (length(new_index) > 1){
   #  links <- links[new_index,]

@@ -60,18 +60,18 @@ label_file
 load_test_data <- function(){
   rm(list = ls(all = TRUE))
   # 
-  # setwd("/var/www/html/iris3/data/20200502110650/")
+  # setwd("/var/www/html/iris3/data/20200707215720/")
   expr_file = "randomized.tsv.gz"
   expr_file = "123.zip"
-  expr_file = "GSE103334_FPKM_CKP25__2000Gene.txt"
-  jobid <- "20200502110650"
+  expr_file = "sc.10xcountsWT.matrix.txt"
+  jobid <- "20200707215720"
   delim <- "\t"
-  label_file<-'GSE103334_celllabel_seurat.txt'
+  label_file<-'outfileWT.txt'
   delimiter <- '\t'
   is_imputation <- 'No'
   n_pc <- "10"
   n_variable_feature <- "5000"
-  resolution_seurat <- 0.8
+  resolution_seurat <- 0.2
   label_use_predict <- '2'
   remove_ribosome <- 'No'
 }
@@ -296,7 +296,9 @@ all_match <- AnnotationDbi::select(main_db, keys = rownames(expFile), columns = 
 expFile <- merge(expFile,all_match,by.x=0,by.y=main_identifier)
 dim(expFile)
 expFile <- na.omit(expFile)
-
+#expFile1 <- expFile
+#expFile <- expFile1
+#expFile[1:5,1:5]
 ## merge expression values with same gene names
 if (main_identifier == "ENSEMBL") {
   expFile <- expFile[,-1]
@@ -444,7 +446,14 @@ if (label_file == 0 | label_file==1){
   cell_info <- read.table(label_file,check.names = FALSE, header=TRUE,sep = delimiter)
   cell_info[,1] <-  gsub('([[:punct:]])|\\s+','_',cell_info[,1])
   cell_info[,2] <- as.factor(cell_info[,2])
+  ## when users did not provide header
+  if(nrow(cell_info) == ncol(exp_data) - 1) {
+    cell_info <- read.table(label_file,check.names = FALSE, header=F,sep = delimiter)
+    cell_info[,1] <-  gsub('([[:punct:]])|\\s+','_',cell_info[,1])
+    cell_info[,2] <- as.factor(cell_info[,2])
+  }
 }
+
 rm(exp_data)
 
 if(n_variable_feature == "all" | as.numeric(n_variable_feature) > nrow(my.object)) {
@@ -521,6 +530,12 @@ if (label_use_predict =='2'){
   cell_info <- read.table(label_file,check.names = FALSE, header=TRUE,sep = delimiter,stringsAsFactors = F)
   cell_info[,1] <-  gsub('([[:punct:]])|\\s+','_',cell_info[,1])
   cell_info <- cell_info[order(cell_info[,1]),]
+  ## when users did not provide header
+  if(nrow(cell_info) == ncol(exp_data) - 1) {
+    cell_info <- read.table(label_file,check.names = FALSE, header=F,sep = delimiter)
+    cell_info[,1] <-  gsub('([[:punct:]])|\\s+','_',cell_info[,1])
+    cell_info[,2] <- as.factor(cell_info[,2])
+  }
   ## check if user's label has valid number of rows, if not just use predicted value
   if (nrow(cell_info) == nrow(cell_label)){
     original_cell_info <- as.factor(cell_info[,2])
@@ -796,6 +811,12 @@ if (label_use_predict =='1' | label_use_predict =='2'){
   cell_info <- read.table(label_file,check.names = FALSE, header=TRUE,sep = delimiter)
   cell_info[,1] <-  gsub('([[:punct:]])|\\s+','_',cell_info[,1])
   cell_info <- cell_info[order(cell_info[,1]),]
+  ## when users did not provide header
+  if(nrow(cell_info) == ncol(exp_data) - 1) {
+    cell_info <- read.table(label_file,check.names = FALSE, header=F,sep = delimiter)
+    cell_info[,1] <-  gsub('([[:punct:]])|\\s+','_',cell_info[,1])
+    cell_info[,2] <- as.factor(cell_info[,2])
+  }
   ## check if user's label has valid number of rows, if not just use predicted value
   original_cell_info <- as.factor(cell_info[,2])
   cell_info[,2] <- as.factor(cell_info[,2])

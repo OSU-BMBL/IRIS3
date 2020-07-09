@@ -62,11 +62,11 @@ getwd()
 expFile <- paste(jobid,"_filtered_expression.txt",sep="")
 label_file <- paste(jobid,"_cell_label.txt",sep = "")
 
-# jobid <-20191216203506
+# jobid <-20200608171818
 # wd <- paste("/var/www/html/iris3/data/",jobid,sep="")
-# gene_module_file <- 'iris3_example_gene_module.csv'
+# gene_module_file <- '1'
 # delim_gene_module <- ','
-# promoter_len <- 250
+# promoter_len <- 1000
 conds_file_handle <- file(paste(jobid,"_blocks.conds.txt",sep = ""),"r")
 conds_file <- readLines(conds_file_handle)
 close(conds_file_handle)
@@ -83,7 +83,7 @@ gene_file <- lapply(gene_file, function(x) x[-1])
 len <- sapply(gene_file,length)
 
 filter_bic_index <- sapply(gene_file, function(x){
-  if (length(x) <= 500 & length(x) > 3){
+  if (length(x) <= 1000 & length(x) > 3){
     return (T)
   } else {
     return (F)
@@ -106,7 +106,7 @@ gene_name <- as.character(read.table(paste(jobid,"_gene_name.txt",sep = ""),head
 #  drop_na()%>%
 #  mutate(id=as.numeric(str_extract(id,"[0-9]+")))%>%
 #  select(conds,id)
-  
+
 colnames(cell_label) <- c("cell","label")
 count_cluster <- length(levels(as.factor(cell_label$label)))
 
@@ -225,12 +225,12 @@ if(length(species_file) == 2) {
 #i=1
 
 
-gene_df <- select(main_db, keys = gene_name, columns = c("ENSEMBL","SYMBOL"),keytype = "SYMBOL")
+gene_df <- AnnotationDbi::select(main_db, keys = gene_name, columns = c("ENSEMBL","SYMBOL"),keytype = "SYMBOL")
 gene_df <- gene_df[!duplicated(gene_df[,1]),]
 gene_df <- na.omit(gene_df)
 
 if(length(species_file) == 2) {
-  tryCatch(tmp <- select(second_db, keys = gene_name, columns = c("ENSEMBL","SYMBOL"),keytype = "SYMBOL")
+  tryCatch(tmp <- AnnotationDbi::select(second_db, keys = gene_name, columns = c("ENSEMBL","SYMBOL"),keytype = "SYMBOL")
            ,error = function(e) tmp <<- list())
   if (length(na.omit(tmp)) != 0) {
     tmp <- tmp[!duplicated(tmp[,1]),]
@@ -269,9 +269,9 @@ for (j in 1:count_cluster) {
     }
     
     if(pvalue_thres > 1){
-        break
-      }
+      break
     }
+  }
   
   #uniq_bic <- gene_file[names(uniq_li),]%>%
   #  t%>%
@@ -329,7 +329,9 @@ for (j in 1:count_cluster) {
     this_genes <- this_genes[!is.na(this_genes)]
     
     if(length(this_genes) > 0){
-      all_match <- select(main_db, keys = this_genes, columns = c("SYMBOL","ENSEMBL","ENTREZID"),keytype = "SYMBOL")
+      all_match <- tryCatch(AnnotationDbi::select(main_db, keys = this_genes, columns = c("SYMBOL","ENSEMBL","ENTREZID"),keytype = "SYMBOL"), error=function(x){
+        data.frame(0,0,0)
+      })
       all_match <- all_match[!duplicated(all_match[,3]),]
       all_match <- na.omit(all_match)
       this_genes_id <- all_match[!duplicated(all_match[,3]),3]
@@ -339,7 +341,7 @@ for (j in 1:count_cluster) {
       names(result) <- all_match[match(names(result),all_match[,3]),2]
       if(length(species_file) == 2) {
         #this_genes <- c("TRP53","TNF",'TLR2',"TNIK","Rdh1")
-        tryCatch(all_match <- select(second_db, keys = this_genes, columns = c("SYMBOL","ENSEMBL","ENTREZID"),keytype = "SYMBOL")
+        tryCatch(all_match <- AnnotationDbi::select(second_db, keys = this_genes, columns = c("SYMBOL","ENSEMBL","ENTREZID"),keytype = "SYMBOL")
                  ,error = function(e) all_match <<- list())
         if (length(na.omit(all_match)) != 0) {
           all_match <- all_match[!duplicated(all_match[,3]),]
@@ -357,7 +359,21 @@ for (j in 1:count_cluster) {
       if(length(result) < 350 & length(result) > 3){
         writeXStringSet(result, paste(new_dir,"/","bic",k,".txt.fa",sep=""),format = "fasta",width=promoter_len)
         #write.table(tmp, paste(new_dir,"/",colnames(tmp),".txt.fa",sep=""),sep="\t",quote = F ,col.names=FALSE,row.names=FALSE)
-      }
+      } else if (length(result) >= 350 ){
+        this_bin <- length(result) %/% 4
+        small_idx <- seq(1,length(result),by=this_bin)
+        for (p in 1:length(small_idx)) {
+          l1 <- small_idx[p]
+          if(p == length(small_idx)) {
+            l2 <- length(result)
+          } else {
+            l2 <- small_idx[p+1]
+          }
+          this_result <- result[l1:l2,]
+          this_k <- k + p  + 500
+          writeXStringSet(this_result, paste(new_dir,"/","bic",this_k,".txt.fa",sep=""),format = "fasta",width=promoter_len)
+        }
+      } 
     }
   }
 }
@@ -380,7 +396,7 @@ if(nchar(gene_module_file) > 1 && !is.na(gene_module_file)){
       this_genes <- this_genes[!is.na(this_genes)]
       
       if(length(this_genes) > 0){
-        all_match <- select(main_db, keys = this_genes, columns = c("SYMBOL","ENSEMBL","ENTREZID"),keytype = "SYMBOL")
+        all_match <- AnnotationDbi::select(main_db, keys = this_genes, columns = c("SYMBOL","ENSEMBL","ENTREZID"),keytype = "SYMBOL")
         all_match <- all_match[!duplicated(all_match[,3]),]
         all_match <- na.omit(all_match)
         this_genes_id <- all_match[!duplicated(all_match[,3]),3]
