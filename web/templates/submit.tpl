@@ -267,7 +267,7 @@ $(document).ready(function() {
   })
   dz_exp = $('#dropzone_exp').dropzone({
     dictDefaultMessage:
-      'Drag or click upload your gene expression matrix, supported format: <br>1. Gene expression matrix (txt, tsv, csv). <br>2. HDF5 feature barcode batrix (hdf5).<br>3. Gene-barcode matrices (3 gzip files in your 10X output directory). <br>4. Compressed format supported (gzip).',
+      'Drag or click upload your gene expression matrix, supported format: <br>1. Gene expression matrix (txt, tsv, csv). <br>2. HDF5 feature barcode batrix (hdf5).<br>3. Gene-barcode matrices (3 gzip files in your 10X output directory). <br>Note: You may upload compressed files (gzip).',
     acceptedFiles: '.txt,.csv,.tsv,.gz,.zip,.h5,.hdf5,.zip',
     url: 'upload.php',
     maxFiles: 3,
@@ -732,13 +732,17 @@ $(document).ready(function() {
 									</div>
 									<div class="col-md-4">
 										<select id="k_arg_id" class="selectpicker" name="k_arg" data-width="auto">
-                      <option>3</option>
+											<option>3</option>
 											<option>5</option>
-                      <option>7</option>
+                      <option>6</option>
+											<option>7</option>
+                      <option>8</option>
+                      <option>9</option>
 											<option>10</option>
 											<option>15</option>
 											<option data-subtext="Default" selected="selected">20</option>
-											<option>30</option>
+											<option>25</option>
+                      <option>30</option>
 											<option>40</option>
 											<option>50</option>
 											<option>60</option>
@@ -748,12 +752,41 @@ $(document).ready(function() {
 											<option>100</option>
 										</select>
 									</div>
-									<!--
-									<div class="col-md-3">
-									<a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics&q=3" target="_blank">More details for QUBIC parameters.</a>
-									</div>-->
 								</div>
-								
+							
+								<br>
+								<div class="row">
+									<div class="col-md-4">
+										<label for="ex2">Discretization level. <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="discretization parameter. Default is 0.06."> </span>
+										</label>
+									</div>
+									<div class="col-md-4">
+										<select id="q_arg_id" class="selectpicker" name="q_arg" data-width="auto">
+											
+                      <option>0.03</option>
+                      <option>0.04</option>
+											<option>0.05</option>
+											<option data-subtext="Default" selected="selected">0.06</option>
+											<option>0.07</option>
+											<option>0.08</option>
+											<option>0.09</option>
+										</select>
+									</div>
+								</div><br>
+								<div class="row">
+									<div class="col-md-4">
+										<label for="ex2">Consistency level. <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Consistency parameter. Default is 1."> </span>
+										</label>
+									</div>
+									<div class="col-md-4">
+										<select id="c_arg_id" class="selectpicker" name="c_arg" data-width="auto">
+											<option>0.9</option>
+											<option>0.95</option>
+                      <option data-subtext="Default" selected="selected">1.0</option>
+											
+										</select>
+									</div>
+								</div>
 							</div>
 							<h4 class="font-italic text-left">DMINDA2 & MEME:</h4>
 							<div class="form-group  row">

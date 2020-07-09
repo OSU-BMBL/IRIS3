@@ -1562,7 +1562,7 @@ function terminate_job(item) {
 														<li>A single txt, tsv or csv formatted gene expression matrix. The compressed format (gzip) is accepted.</li>
 														<li>An <a href="https://support.10xgenomics.com/single-cell-atac/software/pipelines/latest/advanced/h5_matrices" target="_blank"><strong>hdf5 feature barcode matrix</strong></a></li>
 														<li>The <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/matrices" target="_blank"><strong>three files</strong></a> recording information of barcodes, features, and gene expressions in the 10X genomics
-																output folder. </li>
+																output folder, all three files should be the raw compressed format. </li>
 												</ul><p>2. Cell label file (Optional): a two-column matrix with the first column as the cell names exactly matching the gene expression file, and the second column as ground-truth cell clusters. </p><p>3. Gene module file (Optional): Each column should reprensents a gene module.</p>
 						
 						<p>Pleas check our <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics">tutorial</a> for more information. </p>
@@ -1673,7 +1673,7 @@ function terminate_job(item) {
 														<li>A single txt, tsv or csv formatted gene expression matrix. The compressed format (gzip) is accepted.</li>
 														<li>An <a href="https://support.10xgenomics.com/single-cell-atac/software/pipelines/latest/advanced/h5_matrices" target="_blank"><strong>hdf5 feature barcode matrix</strong></a></li>
 														<li>The <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/matrices" target="_blank"><strong>three files</strong></a> recording information of barcodes, features, and gene expressions in the 10X genomics
-																output folder. </li>
+																output folder, all three files should be the raw compressed format. </li>
 												</ul><p>2. Cell label file (Optional): a two-column matrix with the first column as the cell names exactly matching the gene expression file, and the second column as ground-truth cell clusters. </p><p>3. Gene module file (Optional): Each column should reprensents a gene module.</p>
 						<br>For further question, please contact qin.ma@osumc.edu<br>
 						<br>
@@ -1725,7 +1725,7 @@ function terminate_job(item) {
 														<li>A single txt, tsv or csv formatted gene expression matrix. The compressed format (gzip) is accepted.</li>
 														<li>An <a href="https://support.10xgenomics.com/single-cell-atac/software/pipelines/latest/advanced/h5_matrices" target="_blank"><strong>hdf5 feature barcode matrix</strong></a></li>
 														<li>The <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/matrices" target="_blank"><strong>three files</strong></a> recording information of barcodes, features, and gene expressions in the 10X genomics
-																output folder. </li>
+																output folder, all three files should be the raw compressed format. </li>
 												</ul><p>2. Cell label file (Optional): a two-column matrix with the first column as the cell names exactly matching the gene expression file, and the second column as ground-truth cell clusters. </p><p>3. Gene module file (Optional): Each column should reprensents a gene module.</p>
 						<br>For further question, please contact qin.ma@osumc.edu<br>
 						<br>
