@@ -2,17 +2,17 @@
 
 
 args <- commandArgs(TRUE)
-srcFile <- args[1] # raw user filename
+label_file <- args[1] # raw user filename
 jobid <- args[2] # job id
 delim <- args[3] #label file delimiter 
 
 label_use_predict <- 0 #default 0
 label_use_predict <- args[4] # 1 for have label use sc3, 2 for have label use label, 0 for no label use sc3
 
-# setwd("/var/www/html/iris3/data/20200707215720")
-# srcFile = "outfileWT.txt"
-# jobid <- "20200707215720"
-# delim <- "\t"
+# setwd("/var/www/html/iris3/data/2020071042004")
+# label_file = "outfileWT.txt"
+# jobid <- "2020071042004"
+# delim <- ","
 # label_use_predict <- 2
 if(delim == 'tab'){
   delim <- '\t'
@@ -45,18 +45,24 @@ suppressPackageStartupMessages(library(stringr))
 
 
 predict_cluster <- read.table(paste(jobid,"_predict_label.txt",sep=""),header=T,sep='\t',check.names = FALSE)
-# srcFile <- 'Zeisel_cell_label.csv'
+# label_file <- 'Zeisel_cell_label.csv'
 
 #2nd input
-#user_label <- read.delim(srcFile,header=T,sep=delim,check.names = FALSE)
-if (srcFile == '1') {
+#user_label <- read.delim(label_file,header=T,sep=delim,check.names = FALSE)
+if (label_file == '1') {
   user_label_file <- predict_cluster
 } else {
-  user_label_file <- read.delim(srcFile,header=T,sep=delim,check.names = FALSE)
+  user_label_file <- read.delim(label_file,header=T,sep=delim,check.names = FALSE)
   user_label_file[,1] <-  gsub('([[:punct:]])|\\s+','_',user_label_file[,1])
   if(nrow(predict_cluster) == nrow(user_label_file) + 1){
-    user_label_file <- read.delim(srcFile,header=F,sep=delim,check.names = FALSE)
+    user_label_file <- read.delim(label_file,header=F,sep=delim,check.names = FALSE)
     user_label_file[,1] <-  gsub('([[:punct:]])|\\s+','_',user_label_file[,1])
+  }
+  ## when users uploads label with #1,2,3 as rownames
+  if(ncol(user_label_file) > 2 && user_label_file[1,1] == 1) {
+    user_label_file <- read.table(label_file,check.names = FALSE, header=T,sep = delimiter, row.names = 1)
+    user_label_file[,1] <-  gsub('([[:punct:]])|\\s+','_',user_label_file[,1])
+    user_label_file[,2] <- as.factor(user_label_file[,2])
   }
 }
 

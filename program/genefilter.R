@@ -60,14 +60,14 @@ label_file
 load_test_data <- function(){
   rm(list = ls(all = TRUE))
   # 
-  # setwd("/var/www/html/iris3/data/20200707215720/")
+  # setwd("/var/www/html/iris3/data/2020071042004/")
   expr_file = "randomized.tsv.gz"
   expr_file = "123.zip"
-  expr_file = "sc.10xcountsWT.matrix.txt"
-  jobid <- "20200707215720"
-  delim <- "\t"
-  label_file<-'outfileWT.txt'
-  delimiter <- '\t'
+  expr_file = "human_gene_count.csv"
+  jobid <- "2020071042004"
+  delim <- ","
+  label_file<-'meta_human.csv'
+  delimiter <- ','
   is_imputation <- 'No'
   n_pc <- "10"
   n_variable_feature <- "5000"
@@ -452,9 +452,15 @@ if (label_file == 0 | label_file==1){
     cell_info[,1] <-  gsub('([[:punct:]])|\\s+','_',cell_info[,1])
     cell_info[,2] <- as.factor(cell_info[,2])
   }
+  ## when users uploads label with #1,2,3 as rownames
+  if(ncol(cell_info) > 2 && cell_info[1,1] == 1) {
+    cell_info <- read.table(label_file,check.names = FALSE, header=T,sep = delimiter, row.names = 1)
+    cell_info[,1] <-  gsub('([[:punct:]])|\\s+','_',cell_info[,1])
+    cell_info[,2] <- as.factor(cell_info[,2])
+  }
 }
 
-rm(exp_data)
+#rm(exp_data)
 
 if(n_variable_feature == "all" | as.numeric(n_variable_feature) > nrow(my.object)) {
   n_variable_feature <- nrow(my.object)
@@ -533,6 +539,12 @@ if (label_use_predict =='2'){
   ## when users did not provide header
   if(nrow(cell_info) == ncol(exp_data) - 1) {
     cell_info <- read.table(label_file,check.names = FALSE, header=F,sep = delimiter)
+    cell_info[,1] <-  gsub('([[:punct:]])|\\s+','_',cell_info[,1])
+    cell_info[,2] <- as.factor(cell_info[,2])
+  }
+  ## when users uploads label with #1,2,3 as rownames
+  if(ncol(cell_info) > 2 && cell_info[1,1] == 1) {
+    cell_info <- read.table(label_file,check.names = FALSE, header=T,sep = delimiter, row.names = 1)
     cell_info[,1] <-  gsub('([[:punct:]])|\\s+','_',cell_info[,1])
     cell_info[,2] <- as.factor(cell_info[,2])
   }
@@ -814,6 +826,12 @@ if (label_use_predict =='1' | label_use_predict =='2'){
   ## when users did not provide header
   if(nrow(cell_info) == ncol(exp_data) - 1) {
     cell_info <- read.table(label_file,check.names = FALSE, header=F,sep = delimiter)
+    cell_info[,1] <-  gsub('([[:punct:]])|\\s+','_',cell_info[,1])
+    cell_info[,2] <- as.factor(cell_info[,2])
+  }
+  ## when users uploads label with #1,2,3 as rownames
+  if(ncol(cell_info) > 2 && cell_info[1,1] == 1) {
+    cell_info <- read.table(label_file,check.names = FALSE, header=T,sep = delimiter, row.names = 1)
     cell_info[,1] <-  gsub('([[:punct:]])|\\s+','_',cell_info[,1])
     cell_info[,2] <- as.factor(cell_info[,2])
   }
