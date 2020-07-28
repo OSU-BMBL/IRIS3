@@ -247,7 +247,13 @@ if (upload_type == "CellGene"){
   rownames(expFile) <- expFile[,1]
   expFile<- expFile[,-1]
 } else{
-  expFile <- as.matrix(expFile)
+  ## User uploads unfiltered matrix, 730k cells.
+  if(ncol(expFile > 50000)) {
+    my.object <- CreateSeuratObject(expFile, min.cells = 3, min.features = 200)
+    expFile <- as.matrix(GetAssayData(my.object, slot = "counts"))
+  } else {
+    expFile <- as.matrix(expFile)
+  }
 }
 
 total_cell_num <- ncol(expFile)
