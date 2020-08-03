@@ -59,6 +59,9 @@ $email_content = "<table class='body' style='border-collapse: separate; mso-tabl
 </tr>
 </tbody>
 </table>
+<p>We also recommend you to cite the following paper:</p>
+
+<p>Anjun Ma, Cankun Wang, Yuzhou Chang, Faith H. Brennan, Adam McDermaid, Bingqiang Liu, Chi Zhang, Phillip G. Popovich, Qin Ma. IRIS3: Integrated Cell-type-specific Regulon Inference Server from Single-cell RNA-Seq. <em>Nucleic Acids Research</em>, 2020. <a href='https://pubmed.ncbi.nlm.nih.gov/32421805/' target='_blank' rel='noopener' style='text-decoration:none;'><strong> (PMID:32421805)</strong></a></p>
 
 
 </td>
