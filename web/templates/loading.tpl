@@ -1489,7 +1489,12 @@ function terminate_job(item) {
 																							<div class="row">
 																							<h4 class="font-italic text-left"></h4>
 																													<div class="col-md-12 col-sm-12">
-																															<div class="form-group col-md-6 col-sm-6">
+																														{{if $integration_method_arg !==""}}
+																														<div class="form-group col-md-6 col-sm-6">
+																															<p for="reportsList">Integration method: {{$integration_method_arg}}</p>
+																													</div>
+																											{{/if}}
+																											<div class="form-group col-md-6 col-sm-6">
 																																	<p for="reportsList">Enable imputation: {{$is_imputation}}</p>
 																															</div>
 																															<div class="form-group col-md-6 col-sm-6">
@@ -1526,7 +1531,14 @@ function terminate_job(item) {
 																																	<p>Email: {{$email_line}}</p>
 																															</div>
 																															<div class="form-group col-md-6 col-sm-6"> 
-																																	<p>Uploaded files: </p><p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
+																																	<p>Uploaded files: </p>
+																																	{{if $integration_input[0] !==""}}
+																																	{{foreach from=$integration_input item=input_item key=input}}	
+																																		 <p>{{$input_item}}</p>
+																																	{{/foreach}}
+																																	{{else}}
+																																	<p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
+																																	{{/if}}
 																															</div>
 																													</div>
 																						</div>
@@ -1574,7 +1586,12 @@ function terminate_job(item) {
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Species: {{$input_species}}</p>
                                 </div>
-                                <div class="form-group col-md-6 col-sm-6">
+                                {{if $integration_method_arg !==""}}
+																						<div class="form-group col-md-6 col-sm-6">
+																							<p for="reportsList">Integration method: {{$integration_method_arg}}</p>
+																					</div>
+																			{{/if}}
+																			<div class="form-group col-md-6 col-sm-6">
                                     <p for="reportsList">Enable imputation: {{$is_imputation}}</p>
                                 </div>
 																<div class="form-group col-md-6 col-sm-6">
@@ -1602,7 +1619,14 @@ function terminate_job(item) {
                                     <p>Email: {{$email_line}}</p>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6"> 
-                                    <p>Uploaded files: </p><p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
+                                    <p>Uploaded files: </p>{{if $integration_input[0] !==""}}
+																		{{foreach from=$integration_input item=input_item key=input}}	
+																			 <p>{{$input_item}}</p>
+																		{{/foreach}}
+																		{{else}}
+																		<p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
+																		{{/if}}
+
                                 </div>
                             </div>
 					</div>
@@ -1632,7 +1656,12 @@ function terminate_job(item) {
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Species: {{$input_species}}</p>
                                 </div>
-                                <div class="form-group col-md-6 col-sm-6">
+                                {{if $integration_method_arg !==""}}
+																						<div class="form-group col-md-6 col-sm-6">
+																							<p for="reportsList">Integration method: {{$integration_method_arg}}</p>
+																					</div>
+																			{{/if}}
+																			<div class="form-group col-md-6 col-sm-6">
                                     <p for="reportsList">Enable imputation: {{$is_imputation}}</p>
                                 </div>
 																<div class="form-group col-md-6 col-sm-6">
@@ -1660,7 +1689,13 @@ function terminate_job(item) {
                                     <p>Email: {{$email_line}}</p>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6"> 
-                                    <p>Uploaded files: </p><p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
+                                    <p>Uploaded files: </p>{{if $integration_input[0] !==""}}
+																		{{foreach from=$integration_input item=input_item key=input}}	
+																			 <p>{{$input_item}}</p>
+																		{{/foreach}}
+																		{{else}}
+																		<p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
+																		{{/if}}
                                 </div>
                             </div>
 					</div>
@@ -1684,7 +1719,12 @@ function terminate_job(item) {
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Species: {{$input_species}}</p>
                                 </div>
-                                <div class="form-group col-md-6 col-sm-6">
+                                {{if $integration_method_arg !==""}}
+																						<div class="form-group col-md-6 col-sm-6">
+																							<p for="reportsList">Integration method: {{$integration_method_arg}}</p>
+																					</div>
+																			{{/if}}
+																			<div class="form-group col-md-6 col-sm-6">
                                     <p for="reportsList">Enable imputation: {{$is_imputation}}</p>
                                 </div>
 																<div class="form-group col-md-6 col-sm-6">
@@ -1712,7 +1752,13 @@ function terminate_job(item) {
                                     <p>Email: {{$email_line}}</p>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6"> 
-                                    <p>Uploaded files: </p><p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
+                                    <p>Uploaded files: </p>{{if $integration_input[0] !==""}}
+																		{{foreach from=$integration_input item=input_item key=input}}	
+																			 <p>{{$input_item}}</p>
+																		{{/foreach}}
+																		{{else}}
+																		<p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
+																		{{/if}}
                                 </div>
                             </div>
 					</div>
@@ -1736,7 +1782,12 @@ function terminate_job(item) {
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Species: {{$input_species}}</p>
                                 </div>
-                                <div class="form-group col-md-6 col-sm-6">
+                                {{if $integration_method_arg !==""}}
+																						<div class="form-group col-md-6 col-sm-6">
+																							<p for="reportsList">Integration method: {{$integration_method_arg}}</p>
+																					</div>
+																			{{/if}}
+																			<div class="form-group col-md-6 col-sm-6">
                                     <p for="reportsList">Enable imputation: {{$is_imputation}}</p>
                                 </div>
 																<div class="form-group col-md-6 col-sm-6">
@@ -1764,7 +1815,13 @@ function terminate_job(item) {
                                     <p>Email: {{$email_line}}</p>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6"> 
-                                    <p>Uploaded files: </p><p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
+                                    <p>Uploaded files: </p>{{if $integration_input[0] !==""}}
+																		{{foreach from=$integration_input item=input_item key=input}}	
+																			 <p>{{$input_item}}</p>
+																		{{/foreach}}
+																		{{else}}
+																		<p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
+																		{{/if}}
                                 </div>
                             </div>
 					</div>
@@ -1868,7 +1925,12 @@ function terminate_job(item) {
 								<div class="form-group col-md-6 col-sm-6">
                                     <p>Species: {{$input_species}}</p>
                                 </div>
-                                <div class="form-group col-md-6 col-sm-6">
+                                {{if $integration_method_arg !==""}}
+																						<div class="form-group col-md-6 col-sm-6">
+																							<p for="reportsList">Integration method: {{$integration_method_arg}}</p>
+																					</div>
+																			{{/if}}
+																			<div class="form-group col-md-6 col-sm-6">
                                     <p for="reportsList">Enable imputation: {{$is_imputation}}</p>
 																</div>
 																<div class="form-group col-md-6 col-sm-6">
@@ -1905,7 +1967,7 @@ function terminate_job(item) {
                                     <p>Email: {{$email_line}}</p>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6"> 
-                                    <p>Uploaded files: </p><p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
+                                    <p>Uploaded files6: </p><p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
                                 </div>
                 </div>
 
@@ -2002,6 +2064,11 @@ function terminate_job(item) {
 																<div class="tab-pane fade" id="preview-tab4default"><div class="flatPanel panel panel-default">
 																	<div class="panel-body">
 																		<div class="col-md-12 col-sm-12">
+																			{{if $integration_method_arg !==""}}
+																						<div class="form-group col-md-6 col-sm-6">
+																							<p for="reportsList">Integration method: {{$integration_method_arg}}</p>
+																					</div>
+																			{{/if}}
 																			<div class="form-group col-md-6 col-sm-6">
 																					<p for="reportsList">Enable imputation: {{$is_imputation}}</p>
 																			</div>
@@ -2039,7 +2106,14 @@ function terminate_job(item) {
 																					<p>Email: {{$email_line}}</p>
 																			</div>
 																			<div class="form-group col-md-6 col-sm-6"> 
-																					<p>Uploaded files: </p><p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
+																					<p>Uploaded files: </p>
+																					{{if $integration_input[0] !==""}}
+																					{{foreach from=$integration_input item=input_item key=input}}	
+																						 <p>{{$input_item}}</p>
+																					{{/foreach}}
+																					{{else}}
+																					<p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
+																					{{/if}}
 																			</div>
 																	</div>
 																</div>

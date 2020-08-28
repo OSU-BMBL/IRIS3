@@ -25,8 +25,8 @@ if (file_exists("$DATAPATH/$jobid/$jobid"."_info.txt")){
         // error opening the file.
     } 
 }
-$total_regulon = $total_regulon / 18;
-$wait_time = (round($total_regulon)%5 === 0) ? round($total_regulon)+5 : round(($total_regulon+2.5)/5)*6+5;
+$total_regulon = $total_regulon / 20;
+$wait_time = (round($total_regulon)%5 === 0) ? round($total_regulon)+5 : round(($total_regulon+2.5)/5)*5+5;
 if ($wait_time == "") {
     $wait_time = "10-20";
 }

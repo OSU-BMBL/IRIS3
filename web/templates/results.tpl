@@ -72,8 +72,6 @@
       {{/block}}
 
 
-  
-
 {{block name="main"}}
 
 <script>

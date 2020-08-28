@@ -12,6 +12,8 @@ if(empty($pvalue)) {
 	$pvalue="0.05";
 }
 
+$integration_method_arg="";
+$integration_input=array('');
 $log1="";
 $log2="";
 $log="";
@@ -29,6 +31,21 @@ $regulon_file = array();
 if (file_exists("$DATAPATH/$jobid/running_status.txt")){
 	$running_status = `head -n1 "$DATAPATH/$jobid/running_status.txt"`;
 	$running_status = preg_replace( "/\r|\n/", "", $running_status);
+}
+
+if (file_exists("$DATAPATH/$jobid/integration_input.txt")){
+	$integration_input=array();
+	$input_file = fopen("$DATAPATH/$jobid/integration_input.txt", "r");
+	if ($input_file) {
+		while (($line = fgets($input_file)) !== false) {
+			array_push($integration_input,$line);
+		}
+
+		fclose($input_file);
+	} else {
+		//print_r("email file not found");
+		// error opening the file.
+	} 
 }
 
 if (file_exists("$DATAPATH/$jobid/info.txt")){
@@ -110,7 +127,9 @@ $param_file = fopen("$DATAPATH/$jobid/info.txt", "r");
 				} else{
 					$if_allowSave = "Yes";
 				}
-			}
+			} else if($split_line[0] == "integration_method_arg"){
+				$integration_method_arg = $split_line[1];
+			} 
 		}
 
 		fclose($param_file);
@@ -635,6 +654,7 @@ set_exception_handler('exception_handler');
 	header("Refresh: 60;url='results.php?jobid=$jobid'");
 }
 
+$smarty->assign('integration_input', $integration_input);
 $smarty->assign('running_status',$running_status);
 $smarty->assign('filter_gene_num',$filter_gene_num);
 $smarty->assign('total_gene_num',$total_gene_num);
@@ -692,6 +712,7 @@ $smarty->assign('purity',$purity);
 $smarty->assign('motif_program',$motif_program);
 $smarty->assign('label_use_predict',$label_use_predict);
 $smarty->assign('n_variable_features',$n_variable_features);
+$smarty->assign('integration_method_arg',$integration_method_arg);
 $smarty->assign('n_pca',$n_pca);
 $smarty->assign('resolution_seurat',$resolution_seurat);
 $smarty->assign('expfile_name',$expfile_name);
@@ -711,7 +732,6 @@ $smarty->assign('sankey_nodes', $sankey_nodes);
 $smarty->assign('sankey_label_order', $sankey_label_order);
 $smarty->assign('sankey_nodes_count', $sankey_nodes_count);
 $smarty->assign('predict_label_array', $predict_label_array);
-
 
 $smarty->setCacheLifetime(3600000);
 $smarty->display('loading.tpl');

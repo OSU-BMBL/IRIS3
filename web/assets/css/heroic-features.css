@@ -1287,6 +1287,17 @@ textarea {
 .gene_search_button > .sidebar_text {
   background-color: #2e6da4;
 }
+
+.dropzone_exp {
+  background-size: 100% 100% !important;
+  margin: 10px 0 0 0;
+  border: 2px dashed #c9c9c9 !important;
+  border-radius: 0.25rem !important;
+  min-height: 150px !important;
+  padding: 10px 20px 0 20px !important;
+  margin: 10px 20px 0 0 !important;
+}
+
 /*########fountain library########*/
 #fountainG {
   position: fixed;
