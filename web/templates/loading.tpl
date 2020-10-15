@@ -1501,7 +1501,7 @@ function terminate_job(item) {
 																																	<p for="reportsList">Remove ribosome genes: {{$remove_ribosome}}</p>
 																															</div>
 																															<div class="form-group col-md-6 col-sm-6">
-																																<p>Number of principal components: {{$n_pca}}</p>
+																																<p>Number of principle components: {{$n_pca}}</p>
 																														</div>
 																														<div class="form-group col-md-6 col-sm-6">
 																																	<p>Number of highly variable features: {{$n_variable_features}}</p>
@@ -1937,7 +1937,7 @@ function terminate_job(item) {
 																	<p for="reportsList">Remove ribosome genes: {{$remove_ribosome}}</p>
 																</div>
 																<div class="form-group col-md-6 col-sm-6">
-																	<p>Number of principal components: {{$n_pca}}</p>
+																	<p>Number of principle components: {{$n_pca}}</p>
 															</div>
 															<div class="form-group col-md-6 col-sm-6">
 																		<p>Number of highly variable features: {{$n_variable_features}}</p>
@@ -1967,13 +1967,7 @@ function terminate_job(item) {
                                     <p>Email: {{$email_line}}</p>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6"> 
-                                    <p>Uploaded files: </p>{{if $integration_input[0] !==""}}
-																		{{foreach from=$integration_input item=input_item key=input}}	
-																			 <p>{{$input_item}}</p>
-																		{{/foreach}}
-																		{{else}}
-																		<p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
-																		{{/if}}
+                                    <p>Uploaded files6: </p><p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
                                 </div>
                 </div>
 
@@ -2082,7 +2076,7 @@ function terminate_job(item) {
 																				<p for="reportsList">Remove ribosome genes: {{$remove_ribosome}}</p>
 																			</div>
 																			<div class="form-group col-md-6 col-sm-6">
-																				<p>Number of principal components: {{$n_pca}}</p>
+																				<p>Number of principle components: {{$n_pca}}</p>
 																		</div>
 																		<div class="form-group col-md-6 col-sm-6">
 																					<p>Number of highly variable features: {{$n_variable_features}}</p>
