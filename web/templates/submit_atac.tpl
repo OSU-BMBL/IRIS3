@@ -76,7 +76,7 @@ function detectEnableSubmit(){
   var selectedD = $('#species_arg').selectpicker('val')
   var integrationD = $('#integration_method_arg').selectpicker('val')
 
-  if (selectedD  && integrationD) {
+  if (selectedD && (exp_file_status.length === totalSample) && integrationD) {
     if($('#hint_select_species').children().attr('style') !== 'color:red'){
       $('#submit_btn').attr('disabled', false)
     }
@@ -89,7 +89,7 @@ function detectEnableSubmit(){
 function initDropzoneExp(id,sampleIndex) {
     this_dropzone_instance = $('#'+id).dropzone({
       dictDefaultMessage:
-      'Sample '+ sampleIndex + '. Drag or click to upload your gene expression matrix, supported format:  <br>1. Gene expression matrix (txt, tsv, csv). <br>2. HDF5 feature barcode matrix (hdf5).<br>3. Gene-barcode matrices (3 gzip files in your 10X output directory). <br>Note: You may upload compressed files (gzip). ',
+      'Dataset '+ sampleIndex + '. Drag or click to upload your datasets, supported format:  <br>1. Count matrix (txt, tsv, csv). <br>2. HDF5 feature barcode matrix (hdf5).<br>3. Feature-barcode matrices (3 gzip files in your 10X output directory). <br>Note: You may upload compressed files (gzip). ',
     acceptedFiles: '.txt,.csv,.tsv,.gz,.zip,.h5,.hdf5,.zip',
     url: 'upload_integration.php',
     maxFiles: 3,
@@ -552,29 +552,22 @@ $(document).ready(function() {
   <form method="POST" action="{{$URL}}" encType="multipart/form-data" id="needs-validation">
     
     <div class="text-center"> <a href="submit.php"><button type="button" class="btn btn-light btn-lg">Single scRNA-seq dataset</button></a>
-      <a href="submit_integration.php"><button type="button" class="btn btn-submit btn-lg">Multiple scRNA-seq dataset integration</button></a>
-      <a href="submit_atac.php"><button type="button" class="btn btn-light btn-lg">scRNA-seq & scATAC-seq integration</button></a> </div>
-		<h2 class="text-center">Job submission - Multiple scRNA-seq dataset integration</h2>
+      <a href="submit_integration.php"><button type="button" class="btn btn-light btn-lg">Multiple scRNA-seq dataset integration</button></a>
+      <a href="submit_atac.php"><button type="button" class="btn btn-submit btn-lg">scRNA-seq & scATAC-seq integration</button></a> </div>
+		<h2 class="text-center">Job submission - scRNA-seq & scATAC-seq integration</h2>
 		<div class="form-group row">
 			<div class="form-check col-sm-12 ">
-				<label class="form-check-label" for="expfile">Upload datasets: <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Users can provide 10X hdf5 or gene-barcode matrices to our server, the file usually named as filtered_feature_bc_matrix.h5 or in the filtered_feature_bc_matrix folder. "> </span>
+				<label class="form-check-label" for="expfile">Upload datasets: <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="A gene expression file with genes as rows and cells as columns. Users can provide 10X hdf5 or feature-barcode matrices to our server, the file usually named as filtered_feature_bc_matrix.h5 or in the filtered_feature_bc_matrix folder. "> </span>
 				</label>
 			</div>
 			<div class="form-check col-sm-2  ">
 				<div class="dropdown"  id="drop_exp">
-					<!--<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="border:1px solid #c9c9c9;border-radius:.25rem!important">Example <span class="caret"></span>
+				<!--	<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="border:1px solid #c9c9c9;border-radius:.25rem!important">Example <span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-						<li><a id="load_exp" class="dropdown-item" href="#">Load example integration dataset</a>
+						<li><a id="load_exp" class="dropdown-item" href="#">Load example dataset</a>
 						</li>
 						</li>
-						<li><a class="dropdown-item" href="storage/5k_pbmc_protein_v3_filtered_feature_bc_matrix.h5" >Download example HDF5 feature barcode matrix (10X 5K Human PMBCs)</a>
-						</li>
-						<li><a class="dropdown-item" href="storage/genes.tsv.gz" >Download example gene-barcode matrices (10X 2700 Human PMBCs) (genes.tsv.gz)</a>
-						</li>
-						<li><a class="dropdown-item" href="storage/barcodes.tsv.gz" >Download example gene-barcode matrices (10X 2700 Human PMBCs) (barcodes.tsv.gz)</a>
-						</li>
-						<li><a class="dropdown-item" href="storage/matrix.mtx.gz" >Download example gene-barcode matrices (10X 2700 Human PMBCs) (matrix.mtx.gz)</a>
 						</li>
 					</ul>-->
 				</div>
@@ -592,17 +585,15 @@ $(document).ready(function() {
 				</div>
 			</div>-->
 			<div id="dropzoneExpDiv"class="col-sm-12">
-      <div id="dropzone_option1" class="dropzone_exp col-sm-2 dropzone border-grey rounded dz-clickable" ><span>Sample name: </span><input name="dropzone_sample_name1" type="text" id="dropzone_sample_name1" size="20" value="sample1"/> <br><button type="button" id="reset_btn_1" data-tag="1" class="btn btn-light" onclick="resetCurrentRow(this);" style="margin-top:40px">Reset row</button></div>
+      <div id="dropzone_option1" class="dropzone_exp col-sm-2 dropzone border-grey rounded dz-clickable" ><span>scRNA-seq dataset: </span><input name="dropzone_sample_name1" type="text" id="dropzone_sample_name1" size="20" value="sample1"/> <br><button type="button" id="reset_btn_1" data-tag="1" class="btn btn-light" onclick="resetCurrentRow(this);" style="margin-top:40px">Reset row</button></div>
       <div id="dropzone_exp1" class="col-sm-9 dropzone border-grey rounded dz-clickable dropzone_exp" ></div>
-      <div id="dropzone_option2" class="dropzone_exp col-sm-2 dropzone border-grey rounded dz-clickable" ><span>Sample name: </span><input name="dropzone_sample_name2" type="text" id="dropzone_sample_name2" size="20" value="sample2"/> <br><button type="button" id="reset_btn_2" data-tag="2" class="btn btn-light" onclick="resetCurrentRow(this);" style="margin-top:40px">Reset row</button></div>
+      <div id="dropzone_option2" class="dropzone_exp col-sm-2 dropzone border-grey rounded dz-clickable" ><span>scATAC-seq dataset: </span><input name="dropzone_sample_name2" type="text" id="dropzone_sample_name2" size="20" value="sample2"/> <br><button type="button" id="reset_btn_2" data-tag="2" class="btn btn-light" onclick="resetCurrentRow(this);" style="margin-top:40px">Reset row</button></div>
       <div id="dropzone_exp2" class="col-sm-9 dropzone border-grey rounded dz-clickable dropzone_exp" ></div>
       </div>
       
       <div id="loader_exp"></div>
     </div>
     
-    <div class="text-center"> <button type="button" class="btn btn-submit" onclick="add_row(this);">Add more rows (+)</button>
-      <button type="button" class="btn btn-light" onclick="remove_row(this);">Remove last row (-)</button></div>
 
 		<div class="form-group row">
 		<div class="form-check col-sm-6 ">
@@ -897,6 +888,8 @@ $(document).ready(function() {
 												</button>
 												<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 													<li><a id="load_label" class="dropdown-item" href="#dropzone_label">Load example file</a>
+													</li>
+													<li><a class="dropdown-item" href="/iris3/storage/Yan_2013_label.csv" download>Download cell label file (Yan et al, 2013)</a>
 													</li>
 													<li><a class="dropdown-item" href="/iris3/storage/Zeisel_index_label.csv" download>Download cell label file (Zeisel et al, 2015)</a>
 													</li>
