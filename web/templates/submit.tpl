@@ -267,7 +267,7 @@ $(document).ready(function() {
   })
   dz_exp = $('#dropzone_exp').dropzone({
     dictDefaultMessage:
-      'Drag or click upload your gene expression matrix, supported format: <br>1. Gene expression matrix (txt, tsv, csv). <br>2. HDF5 feature barcode batrix (hdf5).<br>3. Gene-barcode matrices (3 gzip files in your 10X output directory). <br>Note: You may upload compressed files (gzip).',
+      'Drag or click upload your gene expression matrix, supported format: <br>1. Gene expression matrix (txt, tsv, csv). <br>2. HDF5 feature barcode matrix (hdf5).<br>3. Gene-barcode matrices (3 gzip files in your 10X output directory). <br>Note: You may upload compressed files (gzip).',
     acceptedFiles: '.txt,.csv,.tsv,.gz,.zip,.h5,.hdf5,.zip',
     url: 'upload.php',
     maxFiles: 3,
@@ -485,7 +485,11 @@ $(document).ready(function() {
 <main role="main" class="container" style="min-height: calc(100vh - 182px);">
 	<hr>
 	<!--<div class="starter-template">-->
-	<form method="POST" action="{{$URL}}" encType="multipart/form-data" id="needs-validation">
+  <form method="POST" action="{{$URL}}" encType="multipart/form-data" id="needs-validation">
+    <div class="text-center"> <a href="submit.php"><button type="button" class="btn btn-submit  btn-lg">Single scRNA-seq dataset</button></a>
+      <a href="submit_integration.php"><button type="button" class="btn  btn-light btn-lg">Multiple scRNA-seq dataset integration</button></a>
+      <a href="submit_atac.php"><button type="button" class="btn btn-light btn-lg">scRNA-seq & scATAC-seq integration</button></a> </div>
+
 		<h2 class="text-center">Job Submission</h2>
 		<div class="form-group row">
 			<div class="form-check col-sm-12 ">
@@ -595,7 +599,7 @@ $(document).ready(function() {
                 </div>
 							<div class="form-group row">
 									<div class="col-md-4">
-										<label for="ex3">Number of principle components used in downstream analyses. <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Determine the ‘dimensionality’ of the dataset, the top principal components represent a robust compression of the dataset. Default: 10."> </span>
+										<label for="ex3">Number of principal components used in downstream analyses. <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Determine the ‘dimensionality’ of the dataset, the top principal components represent a robust compression of the dataset. Default: 10."> </span>
 										</label>
 									</div>
 									<div class="col-md-4">
@@ -821,8 +825,8 @@ $(document).ready(function() {
 					</div>
 							<hr/>
 							<h4 class="font-italic text-left">Optional choices</h4>
-							<label class="form-check-label" for="is_imputation">Upload cell label:
-							 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Provide cell labels for regulon identification. This file contains two columns: cell names and cell labels. Regulons will be predicted based on the provided cell labels. "> </span>
+							<label class="form-check-label" for="is_imputation">Upload cell label (Labels should be at least two factors):
+							 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Provide cell labels for regulon identification (Cell label should be at least two factors). This file contains two columns: cell names and cell labels. Regulons will be predicted based on the provided cell labels. "> </span>
 							</label>
 							
 							<div id="upload_label">
