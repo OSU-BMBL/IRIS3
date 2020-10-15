@@ -60,18 +60,16 @@ label_file
 load_test_data <- function(){
   rm(list = ls(all = TRUE))
   # 
-  # setwd("/var/www/html/iris3/data/2020071042004/")
-  expr_file = "randomized.tsv.gz"
-  expr_file = "123.zip"
-  expr_file = "human_gene_count.csv"
-  jobid <- "2020071042004"
+  # setwd("/var/www/html/iris3/data/20201014225331/")
+  expr_file = "ipf_Basal_expr.csv"
+  jobid <- "20201014225331"
   delim <- ","
-  label_file<-'meta_human.csv'
+  label_file<-'ipf_Basal_cellinfo.csv'
   delimiter <- ','
   is_imputation <- 'No'
   n_pc <- "10"
   n_variable_feature <- "5000"
-  resolution_seurat <- 0.2
+  resolution_seurat <- 0.8
   label_use_predict <- '2'
   remove_ribosome <- 'No'
 }
@@ -99,7 +97,7 @@ read_data<-function(x=NULL,read.method=NULL,sep="\t",...){
           dir.create("tmp",showWarnings = F)
           if (file_ext(expr_file) == "7z") {
             try(system(paste("7za x", expr_file, "-aoa -otmp")),silent = T)
-          }
+          } 
           try(system(paste("unzip -o", expr_file, "-d tmp")),silent = T)
           try(system(paste("tar xzvf", expr_file, "--directory tmp")),silent = T)
           
@@ -121,7 +119,6 @@ read_data<-function(x=NULL,read.method=NULL,sep="\t",...){
           max_file <- which.max(file.info(list.files("tmp",full.names = T,recursive = T))[,1])
           this_files <- list.files("tmp",full.names = T,recursive = T)[max_file]
           
-          
           # incase folder contains 10X files
           tmp_x <- tryCatch(Read10X(gsub(basename(this_files),"",this_files)),error = function(e) 0)
           
@@ -135,7 +132,7 @@ read_data<-function(x=NULL,read.method=NULL,sep="\t",...){
             return(tmp_y)
           } else {
             this_delim <- reader::get.delim(this_files)
-            tmp_z <- tryCatch(read.delim(paste0(this_files),header = T,row.names = NULL,check.names = F,sep=this_delim),error = function(e) 0)
+            tmp_z <- tryCatch(read.delim(paste0(this_files),row.names = NULL,check.names = F,sep=this_delim),error = function(e) 0)
             upload_type <<- "CellGene"
             system("rm -R tmp/*")
             return(tmp_z)
@@ -182,18 +179,21 @@ upload_type <- as.character(read.table("upload_type.txt",stringsAsFactors = F)[1
 
 #expFile <- read_data(x = getwd(),read.method = "TenX.folder",sep = delim)
 #expFile <- read_data(x = expr_file,read.method = "TenX.h5",sep = delim)
-#upload_type <- "CellGene"
+#upload_type <- "TenX.h5"
 #expFile <- read_data(x = expr_file,read.method = "CellGene",sep = delim)
 expFile <- read_data(x = expr_file,read.method = upload_type,sep = delim)
 
-if(ncol(expFile) < 4) {
-  upload_type <- "TenX.folder"
-  tmp_expFile <- read_data(x = expr_file,read.method = upload_type,sep = delim)
-  if(ncol(tmp_expFile) > ncol(expFile)){
-    expFile <- tmp_expFile
-    rm(tmp_expFile)
+if(!is.list(expFile)){
+  if(ncol(expFile) < 4 ) {
+    upload_type <- "TenX.folder"
+    tmp_expFile <- read_data(x = expr_file,read.method = upload_type,sep = delim)
+    if(ncol(tmp_expFile) > ncol(expFile)){
+      expFile <- tmp_expFile
+      rm(tmp_expFile)
+    }
   }
 }
+
 
 if(class(expFile) == "list"){
   expFile <- expFile[[1]]
@@ -554,6 +554,12 @@ if (label_use_predict =='2'){
     cell_info[,1] <-  gsub('([[:punct:]])|\\s+','_',cell_info[,1])
     cell_info[,2] <- as.factor(cell_info[,2])
   }
+  
+  ## If user's label has only one factor, throw an error that at least two factors label is needed.
+  if(length(unique(cell_info[,2])) == 1) {
+    writeLines(paste0("Error: Uploaded cell label must have at least two factors, you have only provided one factor: ", unique(cell_info[,2][1])), 'error_message.txt')
+  }
+  
   ## check if user's label has valid number of rows, if not just use predicted value
   if (nrow(cell_info) == nrow(cell_label)){
     original_cell_info <- as.factor(cell_info[,2])
@@ -580,6 +586,9 @@ Idents(my.object) <- my.object$Customized.idents
 my.cluster<-as.character(sort(unique(as.numeric(Idents(my.object)))))
 my.marker<-FindAllMarkers(my.object,only.pos = T)
 
+if(is.null(my.marker$p_val_adj)) {
+  my.marker<-FindAllMarkers(my.object,only.pos = T,logfc.threshold = 0.01,min.pct = 0.01)
+}
 mt <- my.marker[order(my.marker$p_val_adj), ]
 d <- by(mt, mt["cluster"], head, n=100)
 my.marker <- Reduce(rbind, d)
