@@ -60,27 +60,128 @@ label_file
 
 load_test_data <- function(){
   rm(list = ls(all = TRUE))
-  # 
-  setwd("/var/www/html/iris3/data/20200827122603")
-  jobid <- "20200827122603"
+  # setwd("C:/Users/flyku/Desktop/liyang")
+  setwd("/var/www/html/iris3/data/20200916202630")
+  jobid <- "20200916202630"
   delim <- ","
-  label_file <- 1
-  delimiter <- ','
+  label_file <- "1"
+  delimiter <- '\t'
   is_imputation <- 'No'
   n_pc <- "10"
   n_variable_feature <- "5000"
-  resolution_seurat <- 0.2
+  resolution_seurat <- 0.5
   label_use_predict <- '0'
   remove_ribosome <- 'No'
-  integration_method <- 'Harmony'
+  integration_method <- 'Seurat'
 }
 
+
 ##############################
+# define a fucntion for reading in 10X hd5f data and cell gene matrix by input (TenX) or (CellGene)
+read_data<-function(x=NULL,read.method=NULL,sep="\t",...){
+  if(!is.null(x)){
+    if(!is.null(read.method)){
+      if(read.method !="TenX.h5"&&read.method!="CellGene"&&read.method!="TenX.folder"){
+        stop("wrong 'read.method' argument, please choose 'TenX.h5','TenX.folder', or 'CellGene'!")}
+      if(read.method == "TenX.h5"){
+        tmp_x<-Read10X_h5(x)
+        return(tmp_x)
+      }else if(read.method =="TenX.folder"){
+        
+        all_files <- list.files(getwd())
+        barcode_file <- grep("barcodes",all_files)
+        matrix_file <- grep("matrix",all_files)
+        gene_file <- grep("genes",all_files)
+        feature_file <- grep("features",all_files)
+        
+        #Check users upload single zipped file, by counting detected filename, if less than 3 we think users uploads zipped file
+        if((length(barcode_file) + length(matrix_file) + length(gene_file) + length(feature_file)) < 3) {
+          dir.create("tmp",showWarnings = F)
+          if (file_ext(x) == "7z") {
+            try(system(paste("7za x", x, "-aoa -otmp")),silent = T)
+          }
+          try(system(paste("unzip -o", x, "-d tmp")),silent = T)
+          try(system(paste("tar xzvf", x, "--directory tmp")),silent = T)
+          
+          # check if the file is gz instead of tar.gz
+          max_file <- which.max(file.info(list.files("tmp",full.names = T,recursive = T))[,1])
+          this_files <- list.files("tmp",full.names = T,recursive = T)[max_file]
+          if(is.na(this_files) || file_ext(this_files) == "tar" || length(this_files) == 0) {
+            system("rm -R tmp/*")
+            this_filename <- gsub(".gz","",basename(x))
+            try(system(paste("gunzip -c ", x, " > tmp/",this_filename,sep="")),silent = T)
+            max_file <- which.max(file.info(list.files("tmp",full.names = T,recursive = T))[,1])
+            this_files <- list.files("tmp",full.names = T,recursive = T)[max_file]
+            this_delim <- reader::get.delim(this_files)
+            tmp_z <- tryCatch(read.delim(paste0(this_files),header = T,row.names = NULL,check.names = F,sep=this_delim),error = function(e) 0)
+            upload_type <<- "CellGene"
+            return(tmp_z)
+          }
+          
+          max_file <- which.max(file.info(list.files("tmp",full.names = T,recursive = T))[,1])
+          this_files <- list.files("tmp",full.names = T,recursive = T)[max_file]
+          
+          
+          # incase folder contains 10X files
+          tmp_x <- tryCatch(Read10X(gsub(basename(this_files),"",this_files)),error = function(e) 0)
+          
+          if (typeof(tmp_x) == "S4") {
+            system("rm -R tmp/*")
+            return(tmp_x)
+          } else if(file_ext(this_files) == "h5" || file_ext(this_files) == "hdf5") {
+            tmp_y <- tryCatch(Read10X_h5(this_files),error = function(e) 0)
+            upload_type <<- "TenX.h5"
+            system("rm -R tmp/*")
+            return(tmp_y)
+          } else {
+            this_delim <- reader::get.delim(this_files)
+            tmp_z <- tryCatch(read.delim(paste0(this_files),header = T,row.names = NULL,check.names = F,sep=this_delim),error = function(e) 0)
+            upload_type <<- "CellGene"
+            system("rm -R tmp/*")
+            return(tmp_z)
+          }
+          
+        }
+        
+        tryCatch(file.rename(all_files[barcode_file],paste("barcodes",gsub(".*barcodes","",all_files[barcode_file]),sep = "")),error = function(e) 0)
+        tryCatch(file.rename(all_files[matrix_file],paste("matrix",gsub(".*matrix","",all_files[matrix_file]),sep = "")),error = function(e) 0)
+        tryCatch(file.rename(all_files[gene_file],paste("genes",gsub(".*genes","",all_files[gene_file]),sep = "")),error = function(e) 0)
+        tryCatch(file.rename(all_files[feature_file],paste("features",gsub(".*features","",all_files[features]),sep = "")),error = function(e) 0)
+        
+        tmp_x<-tryCatch(Read10X(getwd()),error = function(e) {
+          all_files <- list.files(getwd())
+          barcode_file <- grep("barcodes",all_files)
+          matrix_file <- grep("matrix",all_files)
+          gene_file <- grep("genes",all_files)
+          feature_file <- grep("features",all_files)
+          try(system(paste("gunzip",(all_files[barcode_file]))),silent = T)
+          try(system(paste("gunzip",(all_files[matrix_file]))),silent = T)
+          try(system(paste("gunzip",(all_files[gene_file]))),silent = T)
+          try(system(paste("gunzip",(all_files[feature_file]))),silent = T)
+          try(system(paste("unzip",(all_files[barcode_file]))),silent = T)
+          try(system(paste("unzip",(all_files[matrix_file]))),silent = T)
+          try(system(paste("unzip",(all_files[gene_file]))),silent = T)
+          try(system(paste("unzip",(all_files[feature_file]))),silent = T)
+        })
+        tmp_x<-tryCatch(Read10X(getwd()),error = function(e){
+          0
+        })
+        return(tmp_x)
+      } else if(read.method == "CellGene"){# read in cell * gene matrix, if there is error report, back to 18 line to run again.
+        tmp_x<-read.delim(x,header = T,row.names = NULL,check.names = F,sep=sep,...)
+        
+        return(tmp_x)
+      }
+    }
+  }else {stop("Missing 'x' argument, please input correct data")}
+}
+##############################
+
 
 getwd()
 
 input_dir <- list.dirs("input")[-1]
-input_files <- list.files("input",recursive = T,pattern = "genes*")
+input_gene_file <- list.files("input",recursive = T,pattern = "genes.tsv.gz$")
 
 all_files <- list.files("input",recursive = T)
 
@@ -89,21 +190,32 @@ writeLines(all_files, fileConn)
 close(fileConn)
 
 # For old files named as genes.tsv.gz
-if(length(input_files) > 0) {
-  for (i in 1:length(input_files)) {
-    tmp_dir <- strsplit(input_files,"/")[[1]][1]
-    system(paste0("cp input/",input_files[i], " input/",tmp_dir,"/features.tsv.gz"))
+if(length(input_gene_file) > 0) {
+  for (i in 1:length(input_gene_file)) {
+    tmp_dir <- strsplit(input_gene_file,"/")[[1]][1]
+    system(paste0("cp input/",input_gene_file[i], " input/",tmp_dir,"/features.tsv.gz"))
   }
 }
 
 
 
 raw_sample <- list()
+current_tmp_type <- ""
 for (i in 1:length(input_dir)) {
   # First try to load 10X folder, then 10X h5
-  tmp <- tryCatch(Read10X(input_dir[i]),error=function(e){
+  tmp <- tryCatch(Read10X(input_dir[i]),error=function(e1){
     h5_file_name <- list.files(input_dir[i], pattern = "h5|hdf5",full.names = T)[1]
-    return(Read10X_h5(h5_file_name))
+    csv_file_name <- list.files(input_dir[i], pattern = "csv|tsv",full.names = T)[1]
+    zip_csv_file_name <- list.files(input_dir[i], pattern = ".gz|.tar.gz|.zip",full.names = T)[1]
+    if(!is.na(h5_file_name)) {
+      return(Read10X_h5(h5_file_name))
+    } else if (!is.na(csv_file_name)) {
+      current_tmp_type <<- "CellGene"
+      return(read_data(csv_file_name, read.method = "CellGene",sep = get.delim(csv_file_name)))
+    } else if (!is.na(zip_csv_file_name)) {
+      current_tmp_type <<- "CellGene"
+      return(read_data(zip_csv_file_name, read.method = "TenX.folder",sep = ","))
+    }
   })
   
   # Prevent multi mordality in a single file
@@ -111,17 +223,54 @@ for (i in 1:length(input_dir)) {
     tmp <- tmp[[1]]
   }
   
+  if (current_tmp_type == "CellGene"){
+    ## case: gene with id with ENSG########.X, remove part after dot, e.g:
+    ## a <- c("ENSG00000064545.10","ENSG000031230064545","ENMUSG00003213004545.31234s")
+    match_index <- grep("^ENSG.+\\.[0-9]",ignore.case = T,tmp[,1])
+    if (length(match_index) > 0){
+      match_rownames <- tmp[match_index,1]
+      tmp[,1] <- as.character(tmp[,1])
+      tmp[match_index,1] <- gsub('\\..+','',match_rownames)
+    }
+    
+    ## case above but for mouse: ENSMUSGXXXXX.X
+    match_index <- grep("^ENSMUSG.+\\.[0-9]",ignore.case = T,tmp[,1])
+    if (length(match_index) > 0){
+      match_rownames <- tmp[match_index,1]
+      tmp[,1] <- as.character(tmp[,1])
+      tmp[match_index,1] <- gsub('\\..+','',match_rownames)
+    }
+    
+    ## case: genes with format like (AADACL3|chr1|12776118), remove part after |, e.g:
+    ## a <- c("AADACL3|chr1|12776118","KLHDC8A|chr1|205305648","KIF21B|chr1|200938514")
+    match_index <- grep("^[a-z].+\\|",ignore.case = T,tmp[,1])
+    if (length(match_index) > 0){
+      match_rownames <- tmp[match_index,1]
+      tmp[,1] <- as.character(tmp[,1])
+      tmp[match_index,1] <- gsub('\\|.+','',match_rownames)
+    }
+    
+    ##remove duplicated rows with same gene 
+    if(length(which(duplicated.default(tmp[,1]))) > 0 ){
+      tmp <- tmp[-which(duplicated.default(tmp[,1])==T),]
+    }	
+    
+    ##Filter rows if gene name equals to NA
+    if(length(which(is.na(tmp[,1]))) > 0){
+      tmp <- tmp[-which(is.na(tmp[,1])),]
+    }
+    rownames(tmp) <- tmp[,1]
+    tmp<- tmp[,-1]
+  }
+  
   ## Rename column incase specital characters
   colnames(tmp) <-  gsub('([[:punct:]])|\\s+','_',colnames(tmp))
   colnames(tmp) <- paste0("s",i,"_",colnames(tmp))
-  ##check if [1,1] is empty
-  if(colnames(tmp)[1] == ""){
-    colnames(tmp)[1] = "Gene_ID"
-  }
+  
   
   # For testing, subset the matrix
-  tmp <- tmp[1:10000,1:1000]
-  # Prevent users upload raw feature barcode matrix
+  # tmp <- tmp[1:10000,1:1000]
+  # Prevent users upload raw feature barcode matrix, which contains 730k cells
   if (ncol(tmp) > 700000) {
     raw_sample[i] <- CreateSeuratObject(tmp, assay = "RNA", min.cells = 3, min.features = 200, project = paste0("Sample",i))
   } else {
@@ -151,6 +300,7 @@ get_rowname_type <- function (l, db){
 # detect species
 # detect which types of identifer in rownames, 1)HGNC gene symbol 2)ensembl geneid 3) ncbi entrez id
 # convert to symbol
+#species_file <- 'Human'
 species_file <- as.character(read.table("species.txt",header = F,stringsAsFactors = F)[,1])
 
 # deprecated databases, about 10% of the gene id missing which cause a lot of genes filtered
@@ -170,27 +320,10 @@ main_db <- db[which(names(db)%in%main_species)][[1]]
 main_identifier <- as.character(gene_identifier[1,which.max(gene_identifier[2,])])
 
 all_match <- AnnotationDbi::select(main_db, keys = rownames(expFile), columns = c("SYMBOL","ENSEMBL"),keytype = main_identifier)
+all_match <- na.omit(all_match)
 
-expFile <- merge(expFile,all_match,by.x=0,by.y=main_identifier)
-dim(expFile)
-expFile <- na.omit(expFile)
-#expFile1 <- expFile
-#expFile <- expFile1
-#expFile[1:5,1:5]
-## merge expression values with same gene names
-if (main_identifier == "ENSEMBL") {
-  expFile <- expFile[,-1]
-  expFile <- aggregate(. ~ SYMBOL, expFile, sum)
-} else if (main_identifier == "ENSEMBLTRANS") {
-  expFile <- expFile[,c(-1,-(ncol(expFile)))]
-  expFile <- aggregate(. ~ SYMBOL, expFile, sum)
-} else {
-  expFile <- expFile[,-(ncol(expFile))]
-  expFile <- aggregate(. ~ Row.names, expFile, sum)
-}
-expFile <- expFile[!duplicated(expFile[,1]),]
-rownames(expFile) <- expFile[,1]
-expFile <- expFile[,-1]
+# Removed old merging method since it is very likely to exceed R matrix size limit when performing data integration
+expFile <- expFile[rownames(expFile) %in% all_match[,1],]
 
 ## remove rows with empty gene name
 if(length(which(rownames(expFile)=="")) > 0){
@@ -227,7 +360,7 @@ if(exists("remove_ribosome")) {
 
 my.object <- CreateSeuratObject(expFile)
 my.object[["percent.mt"]] <- PercentageFeatureSet(my.object, pattern = "^MT-")
-my.object <- (subset(my.object, subset = nCount_RNA > 200 & nFeature_RNA < 5000 & percent.mt < 5))
+my.object <- (subset(my.object, subset = nCount_RNA > 200 & nFeature_RNA < 5000 & percent.mt < 15))
 
 ## calculate filtering rate
 #filter_gene_num <- nrow(expFile)-nrow(my.object)
@@ -248,12 +381,11 @@ write(paste("filter_cell_num,",as.character(filter_cell_num),sep=""),file=paste(
 write(paste("total_cell_num,",as.character(total_cell_num),sep=""),file=paste(jobid,"_info.txt",sep=""),append=TRUE)
 write(paste("filter_cell_rate,",as.character(filter_cell_rate),sep=""),file=paste(jobid,"_info.txt",sep=""),append=TRUE)
 write(paste("main_species,",main_species,sep=""),file=paste(jobid,"_info.txt",sep=""),append=TRUE)
-cell_names <- colnames(my.object)
 gene_name <- rownames(my.object)
 write.table(gene_name,paste(jobid,"_gene_name.txt",sep = ""), sep="\t",row.names = F,col.names = F,quote = F)
 cat("cell_cluster_prediction", file="running_status.txt")
 #rm(expFile)
-rm(sce)
+
 rm(db)
 
 if (label_file == 0 | label_file==1){
@@ -331,11 +463,13 @@ if(integration_method == "Seurat") {
   DefaultAssay(my.object) <- "RNA"
 }
 
+DefaultAssay(my.object) <- "RNA"
 exp_data <- GetAssayData(object = my.object,slot = "data")
 write.table(data.frame("Gene"=rownames(exp_data),exp_data,check.names = F),paste(jobid,"_filtered_expression.txt",sep = ""), row.names = F,sep="\t",quote=FALSE)
 rm(exp_data)
-
+DefaultAssay(my.object) <- "integrated"
 #DimPlot(my.object,reduction = "umap")
+cell_names <- colnames(my.object)
 
 levels(my.object$seurat_clusters) <- 1:length(levels(my.object$seurat_clusters))
 cell_info <- my.object$seurat_clusters
@@ -349,8 +483,17 @@ write.table(cell_label,paste(jobid,"_predict_label.txt",sep = ""),quote = F,row.
 #dist.matrix <- dist(x = Embeddings(object = my.object[['pca']])[,1:30])
 umap_embeddings <- Embeddings(object = my.object[['umap']])
 
-dist.matrix <- dist(x = Embeddings(object = my.object[['pca']]))
-sil <- silhouette(x = as.numeric(x = cell_info), dist = dist.matrix)
+if (ncol(my.object) > 10000) {
+  this_bin <- ncol(my.object) %/% 10000
+  small_cell_idx <- seq(1,ncol(my.object),by=this_bin)
+  dist.matrix <- dist(x = Embeddings(object = my.object[['pca']])[small_cell_idx,])
+  sil <- silhouette(x = as.numeric(x = cell_info[small_cell_idx]), dist = dist.matrix)
+} else {
+  dist.matrix <- dist(x = Embeddings(object = my.object[['pca']]))
+  sil <- silhouette(x = as.numeric(x = cell_info), dist = dist.matrix)
+}
+
+
 if (any(!is.na(sil))){
   silh_out <- cbind(cell_info,cell_names,sil[,3])
   silh_out <- silh_out[order(as.numeric(silh_out[,1])),]
@@ -369,7 +512,8 @@ write.table(silh_out,paste(jobid,"_silh.txt",sep=""),sep = ",",quote = F,col.nam
 
 #write.table(cell_label,paste(jobid,"_cell_label.txt",sep = ""),quote = F,row.names = F,sep = "\t")
 #DimPlot(my.object,reduction = 'umap')
-
+#saveRDS(my.object,"my.object.rds")
+#my.object <- readRDS("my.object.rds")
 if (label_use_predict =='2'){
   cell_info <- read.table(label_file,check.names = FALSE, header=TRUE,sep = delimiter,stringsAsFactors = F)
   cell_info[,1] <-  gsub('([[:punct:]])|\\s+','_',cell_info[,1])
@@ -395,9 +539,14 @@ if (label_use_predict =='2'){
     rownames(cell_info) <- cell_info[,1]
     cell_info <- cell_info[,-1]
   } else {
-    cell_info <-  my.object$seurat_clusters 
-    my.object <- AddMetaData(my.object, cell_info, col.name = "Provided.idents")
-    #cell_info <- as.factor(mydata1$MMdetail)
+    original_cell_name_in_object <- str_remove(colnames(my.object), "s[0-9]+_")
+    filter_cell_info <- dplyr::filter(cell_info, cell_info[,1] %in% original_cell_name_in_object)
+    cell_info <- filter_cell_info[match(original_cell_name_in_object, filter_cell_info[,1]),2]
+    #filter_cell_info[1:10,1]
+    #cell_info[1:10,]
+    #colnames(my.object)[1:10]
+    #original_cell_name_in_object[1:10]
+    my.object <- AddMetaData(my.object, as.character(cell_info), col.name = "Provided.idents")
   }
 } else {
   my.object <- AddMetaData(my.object, cell_label[,2], col.name = "Provided.idents")
@@ -405,12 +554,13 @@ if (label_use_predict =='2'){
 
 my.object <-AddMetaData(my.object,cell_info,col.name = "Customized.idents")
 my.object$Customized.idents <- as.factor(my.object$Customized.idents)
-Idents(my.object) <- my.object$Customized.idents
+
+#Plot.cluster2D(reduction.method = "umap",customized = T,pt_size = pt_size)
 
 #DimPlot(my.object,reduction = 'umap')
 ## get marker genes
 my.cluster<-as.character(sort(unique(as.numeric(Idents(my.object)))))
-my.marker<-FindAllMarkers(my.object,only.pos = T)
+my.marker<-FindAllMarkers(my.object,only.pos = T,min.pct = 0.25, logfc.threshold = 0.5)
 
 mt <- my.marker[order(my.marker$p_val_adj), ]
 d <- by(mt, mt["cluster"], head, n=100)
@@ -599,7 +749,6 @@ Get.cluster.Trajectory<-function(customized=T,start.cluster=NULL,end.cluster=NUL
   return(my.trajectory)
 }
 
-
 Plot.Cluster.Trajectory<-function(customized=T,add.line=TRUE,start.cluster=NULL,end.cluster=NULL,show.constraints=F,...){
   tmp.trajectory.cluster<-Get.cluster.Trajectory(customized = customized,start.cluster=start.cluster,end.cluster=end.cluster)
   my.classification.color<-as.character(palette36.colors(36))[-2]
@@ -673,11 +822,10 @@ if (label_use_predict =='1' | label_use_predict =='2'){
     cell_info[,1] <-  gsub('([[:punct:]])|\\s+','_',cell_info[,1])
     cell_info[,2] <- as.factor(cell_info[,2])
   }
-  ## check if user's label has valid number of rows, if not just use predicted value
-  original_cell_info <- as.factor(cell_info[,2])
-  cell_info[,2] <- as.factor(cell_info[,2])
-  rownames(cell_info) <- cell_info[,1]
-  cell_info <- cell_info[,-1]
+  
+  original_cell_name_in_object <- str_remove(colnames(my.object), "s[0-9]+_")
+  filter_cell_info <- dplyr::filter(cell_info, cell_info[,1] %in% original_cell_name_in_object)
+  cell_info <- filter_cell_info[match(original_cell_name_in_object, filter_cell_info[,1]),2]
   
   #levels(my.object$Customized.idents) <- levels(original_cell_info)[c(5,6,7,4,1,2,3)]
   my.object<-AddMetaData(my.object,cell_info,col.name = "Customized.idents")
