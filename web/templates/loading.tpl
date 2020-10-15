@@ -1501,7 +1501,7 @@ function terminate_job(item) {
 																																	<p for="reportsList">Remove ribosome genes: {{$remove_ribosome}}</p>
 																															</div>
 																															<div class="form-group col-md-6 col-sm-6">
-																																<p>Number of principle components: {{$n_pca}}</p>
+																																<p>Number of principal components: {{$n_pca}}</p>
 																														</div>
 																														<div class="form-group col-md-6 col-sm-6">
 																																	<p>Number of highly variable features: {{$n_variable_features}}</p>
@@ -1576,6 +1576,67 @@ function terminate_job(item) {
 														<li>The <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/matrices" target="_blank"><strong>three files</strong></a> recording information of barcodes, features, and gene expressions in the 10X genomics
 																output folder, all three files should be the raw compressed format. </li>
 												</ul><p>2. Cell label file (Optional): a two-column matrix with the first column as the cell names exactly matching the gene expression file, and the second column as ground-truth cell clusters. </p><p>3. Gene module file (Optional): Each column should reprensents a gene module.</p>
+						
+						<p>Pleas check our <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics">tutorial</a> for more information. </p>
+						<br>
+                    </div>
+					
+					<strong>Job settings:</strong><br>
+                            <div class="col-md-12 col-sm-12">
+								<div class="form-group col-md-6 col-sm-6">
+                                    <p>Species: {{$input_species}}</p>
+                                </div>
+                                {{if $integration_method_arg !==""}}
+																						<div class="form-group col-md-6 col-sm-6">
+																							<p for="reportsList">Integration method: {{$integration_method_arg}}</p>
+																					</div>
+																			{{/if}}
+																			<div class="form-group col-md-6 col-sm-6">
+                                    <p for="reportsList">Enable imputation: {{$is_imputation}}</p>
+                                </div>
+																<div class="form-group col-md-6 col-sm-6">
+																	<p for="reportsList">Remove ribosome genes: {{$remove_ribosome}}</p>
+																</div>
+                                <div class="form-group col-md-6 col-sm-6">
+                                    <p>Enable dual strategy: {{$is_c}}</p>
+                                </div>
+								<div class="form-group col-md-6 col-sm-6">
+                                    <p for="reportsList">Minimum cell number: {{$k_arg}}</p>
+                                </div>
+                                <div class="form-group col-md-6 col-sm-6">
+                                    <p>Maximum bicluster number: {{$o_arg}}</p>
+                                </div>
+                                <div class="form-group col-md-6 col-sm-6">
+                                    <p>Bicluster overlap rate: {{$f_arg}}</p>
+                                </div>
+								<div class="form-group col-md-6 col-sm-6">
+                                    <p>Cell clustering method: {{$label_use_predict}}</p>
+                                </div>
+								<div class="form-group col-md-6 col-sm-6">
+                                    <p>Upstream promoter region: {{$promoter_arg}}</p>
+                                </div>
+								<div class="form-group col-md-6 col-sm-6"> 
+                                    <p>Email: {{$email_line}}</p>
+                                </div>
+                                <div class="form-group col-md-6 col-sm-6"> 
+                                    <p>Uploaded files: </p>{{if $integration_input[0] !==""}}
+																		{{foreach from=$integration_input item=input_item key=input}}	
+																			 <p>{{$input_item}}</p>
+																		{{/foreach}}
+																		{{else}}
+																		<p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
+																		{{/if}}
+
+                                </div>
+                            </div>
+					</div>
+					{{elseif $status==="other"}}
+					<div class="flatPanel panel-heading" style="padding: 20px 20px"><strong>Job ID: {{$jobid}}</strong></div>
+						<div class="panel-body">
+					<div style="text-align: left;">
+												<strong><h3>Sorry, there has been an error.</h3></strong>
+												<p><span style="color: red;">{{$error_message}}</p>
+												
 						
 						<p>Pleas check our <a href="https://bmbl.bmi.osumc.edu/iris3/tutorial.php#1basics">tutorial</a> for more information. </p>
 						<br>
@@ -1937,7 +1998,7 @@ function terminate_job(item) {
 																	<p for="reportsList">Remove ribosome genes: {{$remove_ribosome}}</p>
 																</div>
 																<div class="form-group col-md-6 col-sm-6">
-																	<p>Number of principle components: {{$n_pca}}</p>
+																	<p>Number of principal components: {{$n_pca}}</p>
 															</div>
 															<div class="form-group col-md-6 col-sm-6">
 																		<p>Number of highly variable features: {{$n_variable_features}}</p>
@@ -1967,7 +2028,13 @@ function terminate_job(item) {
                                     <p>Email: {{$email_line}}</p>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6"> 
-                                    <p>Uploaded files6: </p><p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
+                                    <p>Uploaded files: </p>{{if $integration_input[0] !==""}}
+																		{{foreach from=$integration_input item=input_item key=input}}	
+																			 <p>{{$input_item}}</p>
+																		{{/foreach}}
+																		{{else}}
+																		<p>{{$expfile_name}}</p><p>{{$labelfile_name}}</p><p>{{$gene_module_file_name}}</p>
+																		{{/if}}
                                 </div>
                 </div>
 
@@ -2076,7 +2143,7 @@ function terminate_job(item) {
 																				<p for="reportsList">Remove ribosome genes: {{$remove_ribosome}}</p>
 																			</div>
 																			<div class="form-group col-md-6 col-sm-6">
-																				<p>Number of principle components: {{$n_pca}}</p>
+																				<p>Number of principal components: {{$n_pca}}</p>
 																		</div>
 																		<div class="form-group col-md-6 col-sm-6">
 																					<p>Number of highly variable features: {{$n_variable_features}}</p>

@@ -33,6 +33,11 @@ if (file_exists("$DATAPATH/$jobid/running_status.txt")){
 	$running_status = preg_replace( "/\r|\n/", "", $running_status);
 }
 
+if (file_exists("$DATAPATH/$jobid/error_message.txt")){
+	$error_message = `head -n1 "$DATAPATH/$jobid/error_message.txt"`;
+	$error_message = preg_replace( "/\r|\n/", "", $error_message);
+}
+
 if (file_exists("$DATAPATH/$jobid/integration_input.txt")){
 	$integration_input=array();
 	$input_file = fopen("$DATAPATH/$jobid/integration_input.txt", "r");
@@ -641,7 +646,9 @@ function exception_handler($exception) {
 }
 
 set_exception_handler('exception_handler');
-}else if (file_exists($done_file) && !file_exists($delete_flag) && file_exists("$DATAPATH/$jobid/$jobid"."_CT_1_regulon_gene_id.txt") && !file_exists("$DATAPATH/$jobid/$jobid"."_CT_1_bic/bic1.txt.fa.closures")) {
+} else if (file_exists("$DATAPATH/$jobid/error_message.txt")) {
+	$status= "other";
+} else if (file_exists($done_file) && !file_exists($delete_flag) && file_exists("$DATAPATH/$jobid/$jobid"."_CT_1_regulon_gene_id.txt") && !file_exists("$DATAPATH/$jobid/$jobid"."_CT_1_bic/bic1.txt.fa.closures")) {
 	$status= "error_bic";
 }else if (file_exists($done_file) && !file_exists($delete_flag) && !file_exists("$DATAPATH/$jobid/$jobid"."_cell_label.txt")) {
 	$status= "error_num_cells";
@@ -725,6 +732,7 @@ $smarty->assign('LINKPATH', $LINKPATH);
 $smarty->assign('silh_trace',$silh_trace);
 $smarty->assign('silh_y',$silh_y);
 $smarty->assign('silh_x',$silh_x);
+$smarty->assign('error_message',$error_message);
 $smarty->assign('sankey_src',$sankey_src);
 $smarty->assign('sankey_target',$sankey_target);
 $smarty->assign('sankey_value', $sankey_value);
