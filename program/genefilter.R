@@ -82,7 +82,10 @@ read_data<-function(x=NULL,read.method=NULL,sep="\t",...){
       if(read.method !="TenX.h5"&&read.method!="CellGene"&&read.method!="TenX.folder"){
         stop("wrong 'read.method' argument, please choose 'TenX.h5','TenX.folder', or 'CellGene'!")}
       if(read.method == "TenX.h5"){
-        tmp_x<-Read10X_h5(x)
+        tmp_x <- tryCatch(Read10X_h5(x),error = function(e) {
+          writeLines(paste0("Error: Unable to read 10X h5 data: ",x,' \n',e), 'error_message.txt')
+          return(e)
+        })
         return(tmp_x)
       }else if(read.method =="TenX.folder"){
         
