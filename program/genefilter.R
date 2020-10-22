@@ -60,11 +60,11 @@ label_file
 load_test_data <- function(){
   rm(list = ls(all = TRUE))
   # 
-  # setwd("/var/www/html/iris3/data/20201014225331/")
-  expr_file = "ipf_Basal_expr.csv"
-  jobid <- "20201014225331"
-  delim <- ","
-  label_file<-'ipf_Basal_cellinfo.csv'
+  # setwd("/var/www/html/iris3/data/20201021225212/")
+  expr_file = "AD00101_expr.txt.gz"
+  jobid <- "20201021225212"
+  delim <- "\t"
+  label_file<-'AD00101_cell_label.txt'
   delimiter <- ','
   is_imputation <- 'No'
   n_pc <- "10"
@@ -101,8 +101,13 @@ read_data<-function(x=NULL,read.method=NULL,sep="\t",...){
           if (file_ext(expr_file) == "7z") {
             try(system(paste("7za x", expr_file, "-aoa -otmp")),silent = T)
           } 
+          #if (file_ext(expr_file) == "gz") {
+          #  this_filename <- gsub(".gz","",basename(expr_file))
+          #  try(system(paste("gunzip -c ", expr_file, " > tmp/",this_filename,sep="")),silent = T)
+          #} 
+          
           try(system(paste("unzip -o", expr_file, "-d tmp")),silent = T)
-          try(system(paste("tar xzvf", expr_file, "--directory tmp")),silent = T)
+          # try(system(paste("tar xzvf", expr_file, "--directory tmp")),silent = T)
           
           # check if the file is gz instead of tar.gz
           max_file <- which.max(file.info(list.files("tmp",full.names = T,recursive = T))[,1])
