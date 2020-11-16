@@ -1070,7 +1070,7 @@ function terminate_job(item) {
 																																								<strong>No regulon found in CT{{$sec0+1}} </strong>
 																																								<ol>
 																																								This may be caused by You can re-submit your data and change IRIS3 parameters to possibly solve this issue:
-																																								<li>Decrease clustering resolution in Suerat, e.g.: 0.5.
+																																								<li>Decrease clustering resolution in Seurat, e.g.: 0.5.
 																																								</li>
 																																								<li>Set a smaller minimal cell numer in biclusters in QUBIC2. E.g. set to 5 for cell number less than 100.
 																																								</li>
@@ -1141,7 +1141,7 @@ function terminate_job(item) {
 																																								<strong>No regulon found in CT{{$sec0+1}} </strong>
 																																								<ol>
 																																								This may be caused by You can re-submit your data and change IRIS3 parameters to possibly solve this issue:
-																																								<li>Decrease clustering resolution in Suerat, e.g.: 0.5.
+																																								<li>Decrease clustering resolution in Seurat, e.g.: 0.5.
 																																								</li>
 																																								<li>Set a smaller minimal cell numer in biclusters in QUBIC2. E.g. set to 5 for cell number less than 100.
 																																								</li>
