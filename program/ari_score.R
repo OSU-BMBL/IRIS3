@@ -9,9 +9,9 @@ delim <- args[3] #label file delimiter
 label_use_predict <- 0 #default 0
 label_use_predict <- args[4] # 1 for have label use sc3, 2 for have label use label, 0 for no label use sc3
 
-# setwd("/var/www/html/iris3/data/2020071042004")
-# label_file = "outfileWT.txt"
-# jobid <- "2020071042004"
+# setwd("/var/www/html/iris3/data/20201227230847i")
+# label_file = "NSCCless_CELL_two_label.csv"
+# jobid <- "20201227230847i"
 # delim <- ","
 # label_use_predict <- 2
 if(delim == 'tab'){
@@ -88,6 +88,13 @@ colnames(predict_cluster) <- c("cell_name","cluster")
 colnames(user_label) <- c("cell_name","label")
 
 write.table(predict_cluster, paste(jobid,"_predict_label.txt",sep = ""),sep = "\t", row.names = F,col.names = T,quote = F)
+
+if(grepl('i', jobid, fixed = TRUE)) {
+  t1 <- match(sub("s[0-9]+_","",predict_cluster[,1]),user_label[,1])
+  t1 <- as.vector(na.omit(t1))
+  user_label <- user_label[t1,]
+  user_label[,1] <- predict_cluster[,1]
+}
 
 if (label_use_predict == 2) {
   is_evaluation <- 'yes'

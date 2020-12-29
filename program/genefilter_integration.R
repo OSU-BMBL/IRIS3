@@ -61,16 +61,16 @@ label_file
 load_test_data <- function(){
   rm(list = ls(all = TRUE))
   # setwd("C:/Users/flyku/Desktop/liyang")
-  setwd("/var/www/html/iris3/data/20200916202630")
-  jobid <- "20200916202630"
+  setwd("/var/www/html/iris3/data/20201227230847i")
+  jobid <- "20201227230847i"
   delim <- ","
-  label_file <- "1"
-  delimiter <- '\t'
+  label_file <- "NSCCless_CELL_two_label.csv"
+  delimiter <- ','
   is_imputation <- 'No'
   n_pc <- "10"
   n_variable_feature <- "5000"
-  resolution_seurat <- 0.5
-  label_use_predict <- '0'
+  resolution_seurat <- 0.1
+  label_use_predict <- '2'
   remove_ribosome <- 'No'
   integration_method <- 'Seurat'
 }
@@ -360,7 +360,12 @@ if(exists("remove_ribosome")) {
 
 my.object <- CreateSeuratObject(expFile)
 my.object[["percent.mt"]] <- PercentageFeatureSet(my.object, pattern = "^MT-")
-my.object <- (subset(my.object, subset = nCount_RNA > 200 & nFeature_RNA < 5000 & percent.mt < 15))
+#
+if(label_file == 0) {
+  my.object <- (subset(my.object, subset = nCount_RNA > 200 & nFeature_RNA < 5000 & percent.mt < 15))
+}
+
+
 
 ## calculate filtering rate
 #filter_gene_num <- nrow(expFile)-nrow(my.object)
@@ -412,6 +417,17 @@ if (label_file == 0 | label_file==1){
     cell_info[,1] <-  gsub('([[:punct:]])|\\s+','_',cell_info[,1])
     cell_info[,2] <- as.factor(cell_info[,2])
   }
+  
+  ## when cell label does not match number expression numbers
+  #if(ncol(my.object) < nrow(cell_info)) {
+  #  #t1 <- match(cell_info[,1],sub("s[0-9]+_","",colnames(my.object)))
+  #  t1 <- match(sub("s[0-9]+_","",colnames(my.object)),cell_info[,1])
+  #  t1 <- as.vector(na.omit(t1))
+  #  cell_info <- cell_info[t1,]
+  #  #cell_info[1:10,]
+  #  #colnames(my.object)[1:10]
+  #  #write.table(cell_info,paste(jobid,"_filter_label.txt",sep = ""),quote = F,row.names = F,sep = "\t")
+  #}
 }
 
 
@@ -472,12 +488,15 @@ DefaultAssay(my.object) <- "integrated"
 cell_names <- colnames(my.object)
 
 levels(my.object$seurat_clusters) <- 1:length(levels(my.object$seurat_clusters))
+
+
 cell_info <- my.object$seurat_clusters
 cell_info <- as.factor(as.numeric(cell_info))
 cell_label <- cbind(cell_names,cell_info)
 colnames(cell_label) <- c("cell_name","label")
 cell_label <- cell_label[order(cell_label[,1]),]
 write.table(cell_label,paste(jobid,"_predict_label.txt",sep = ""),quote = F,row.names = F,sep = "\t")
+
 
 
 #dist.matrix <- dist(x = Embeddings(object = my.object[['pca']])[,1:30])
@@ -532,16 +551,22 @@ if (label_use_predict =='2'){
   }
   ## check if user's label has valid number of rows, if not just use predicted value
   if (nrow(cell_info) == nrow(cell_label)){
+    t1 <- match(sub("s[0-9]+_","",colnames(my.object)),cell_info[,1])
+    t1 <- as.vector(na.omit(t1))
+    cell_info <- cell_info[t1,]
+    
     original_cell_info <- as.factor(cell_info[,2])
     #cell_info[,2] <- as.character(original_cell_info)
+    #colnames(my.object)[1:10]
+    #cell_info[1:10,]
     my.object <- AddMetaData(my.object, as.character(original_cell_info), col.name = "Provided.idents")
     cell_info[,2] <- as.numeric(as.factor(cell_info[,2]))
     rownames(cell_info) <- cell_info[,1]
     cell_info <- cell_info[,-1]
   } else {
-    original_cell_name_in_object <- str_remove(colnames(my.object), "s[0-9]+_")
-    filter_cell_info <- dplyr::filter(cell_info, cell_info[,1] %in% original_cell_name_in_object)
-    cell_info <- filter_cell_info[match(original_cell_name_in_object, filter_cell_info[,1]),2]
+    t1 <- match(sub("s[0-9]+_","",colnames(my.object)),cell_info[,1])
+    t1 <- as.vector(na.omit(t1))
+    cell_info <- cell_info[t1,]
     #filter_cell_info[1:10,1]
     #cell_info[1:10,]
     #colnames(my.object)[1:10]
@@ -556,7 +581,7 @@ my.object <-AddMetaData(my.object,cell_info,col.name = "Customized.idents")
 my.object$Customized.idents <- as.factor(my.object$Customized.idents)
 
 #Plot.cluster2D(reduction.method = "umap",customized = T,pt_size = pt_size)
-
+Idents(my.object) <- my.object$Customized.idents
 #DimPlot(my.object,reduction = 'umap')
 ## get marker genes
 my.cluster<-as.character(sort(unique(as.numeric(Idents(my.object)))))
@@ -788,11 +813,11 @@ x <- c(0,90,124,317,1000,2368,3005,4816,8298,50000,500000,5000000)
 y <- c(1,1,0.89,0.33,0.30,0.25,0.235,0.205,0.18,0.1,0.1,0.1)
 get_point_size <- approxfun(x, y)
 
+
 pt_size <- get_point_size(ncol(my.object)) 
 png(paste("regulon_id/overview_ct.png",sep = ""),width=2000, height=1500,res = 300)
 Plot.cluster2D(reduction.method = "umap",customized = T,pt_size = pt_size)
 quiet(dev.off())
-
 
 png(width=2000, height=1500,res = 300, file=paste("regulon_id/overview_predict_ct.png",sep = ""))
 Plot.cluster2D(reduction.method = "umap",customized = F, pt_size = pt_size, reverse_color = T)
@@ -823,9 +848,9 @@ if (label_use_predict =='1' | label_use_predict =='2'){
     cell_info[,2] <- as.factor(cell_info[,2])
   }
   
-  original_cell_name_in_object <- str_remove(colnames(my.object), "s[0-9]+_")
-  filter_cell_info <- dplyr::filter(cell_info, cell_info[,1] %in% original_cell_name_in_object)
-  cell_info <- filter_cell_info[match(original_cell_name_in_object, filter_cell_info[,1]),2]
+  t1 <- match(sub("s[0-9]+_","",colnames(my.object)),cell_info[,1])
+  t1 <- as.vector(na.omit(t1))
+  cell_info <- cell_info[t1,2]
   
   #levels(my.object$Customized.idents) <- levels(original_cell_info)[c(5,6,7,4,1,2,3)]
   my.object<-AddMetaData(my.object,cell_info,col.name = "Customized.idents")
