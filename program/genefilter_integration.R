@@ -61,15 +61,15 @@ label_file
 load_test_data <- function(){
   rm(list = ls(all = TRUE))
   # setwd("C:/Users/flyku/Desktop/liyang")
-  setwd("/var/www/html/iris3/data/20201227230847i")
-  jobid <- "20201227230847i"
+  setwd("/var/www/html/iris3/data/20210117115300")
+  jobid <- "20210117115300"
   delim <- ","
-  label_file <- "NSCCless_CELL_two_label.csv"
-  delimiter <- ','
+  label_file <- "combined_cell_labels.txt"
+  delimiter <- '\t'
   is_imputation <- 'No'
   n_pc <- "10"
   n_variable_feature <- "5000"
-  resolution_seurat <- 0.1
+  resolution_seurat <- 0.8
   label_use_predict <- '2'
   remove_ribosome <- 'No'
   integration_method <- 'Seurat'
@@ -205,17 +205,18 @@ for (i in 1:length(input_dir)) {
   # First try to load 10X folder, then 10X h5
   tmp <- tryCatch(Read10X(input_dir[i]),error=function(e1){
     h5_file_name <- list.files(input_dir[i], pattern = "h5|hdf5",full.names = T)[1]
-    csv_file_name <- list.files(input_dir[i], pattern = "csv|tsv",full.names = T)[1]
+    csv_file_name <- list.files(input_dir[i], pattern = "csv|tsv|txt",full.names = T)[1]
     zip_csv_file_name <- list.files(input_dir[i], pattern = ".gz|.tar.gz|.zip",full.names = T)[1]
+    n_files <- length(list.files(input_dir[i],full.names = T))
     if(!is.na(h5_file_name)) {
       return(Read10X_h5(h5_file_name))
-    } else if (!is.na(csv_file_name)) {
+    } else if (!is.na(zip_csv_file_name) & n_files == 3) {
+      current_tmp_type <<- "CellGene"
+      return (Read10X(input_dir[i]))
+    } else if (!is.na(csv_file_name) & n_files != 3) {
       current_tmp_type <<- "CellGene"
       return(read_data(csv_file_name, read.method = "CellGene",sep = get.delim(csv_file_name)))
-    } else if (!is.na(zip_csv_file_name)) {
-      current_tmp_type <<- "CellGene"
-      return(read_data(zip_csv_file_name, read.method = "TenX.folder",sep = ","))
-    }
+    } 
   })
   
   # Prevent multi mordality in a single file
@@ -271,7 +272,7 @@ for (i in 1:length(input_dir)) {
   # For testing, subset the matrix
   # tmp <- tmp[1:10000,1:1000]
   # Prevent users upload raw feature barcode matrix, which contains 730k cells
-  if (ncol(tmp) > 700000) {
+  if (ncol(tmp) > 100000) {
     raw_sample[i] <- CreateSeuratObject(tmp, assay = "RNA", min.cells = 3, min.features = 200, project = paste0("Sample",i))
   } else {
     raw_sample[i] <- CreateSeuratObject(tmp, assay = "RNA", project = paste0("Sample",i))
@@ -549,6 +550,7 @@ if (label_use_predict =='2'){
     cell_info[,1] <-  gsub('([[:punct:]])|\\s+','_',cell_info[,1])
     cell_info[,2] <- as.factor(cell_info[,2])
   }
+  
   ## check if user's label has valid number of rows, if not just use predicted value
   if (nrow(cell_info) == nrow(cell_label)){
     t1 <- match(sub("s[0-9]+_","",colnames(my.object)),cell_info[,1])
@@ -586,6 +588,9 @@ Idents(my.object) <- my.object$Customized.idents
 ## get marker genes
 my.cluster<-as.character(sort(unique(as.numeric(Idents(my.object)))))
 my.marker<-FindAllMarkers(my.object,only.pos = T,min.pct = 0.25, logfc.threshold = 0.5)
+if(nrow(my.marker) == 0 ){
+  my.marker<-FindAllMarkers(my.object,only.pos = T,min.pct = 0.1, logfc.threshold = 0.1)
+}
 
 mt <- my.marker[order(my.marker$p_val_adj), ]
 d <- by(mt, mt["cluster"], head, n=100)
