@@ -89,7 +89,8 @@ colnames(user_label) <- c("cell_name","label")
 
 write.table(predict_cluster, paste(jobid,"_predict_label.txt",sep = ""),sep = "\t", row.names = F,col.names = T,quote = F)
 
-if(grepl('i', jobid, fixed = TRUE)) {
+
+if(label_use_predict == "2" & (grepl('i', jobid, fixed = TRUE) | dir.exists("input"))) {
   t1 <- match(sub("s[0-9]+_","",predict_cluster[,1]),user_label[,1])
   t1 <- as.vector(na.omit(t1))
   user_label <- user_label[t1,]
