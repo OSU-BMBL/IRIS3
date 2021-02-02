@@ -261,7 +261,7 @@ if(class(total_ras) == "numeric"){
   total_ras <- t(as.matrix(total_ras))
 }
 rm(exp_data)
-#gc()
+gc()
 # set Inf RAS to column max value
 for (j in 1:ncol(total_ras)) {
   this_ras <- total_ras[which(total_ras[,j] < Inf),j]
@@ -329,7 +329,7 @@ for (i in 1:total_ct) {
     this_bootstrap_rss <- bootstrap_rss %>%
       as_tibble()%>%
       dplyr::filter(CT==i)%>%
-      pull(RSS)
+      dplyr::pull(RSS)
     
     rss_list <- calc_rss(label_data=label_data,score_vec = ras,num_ct = i)
     rss_list <- as.list(rss_list)
