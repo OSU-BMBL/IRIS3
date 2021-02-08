@@ -359,7 +359,7 @@ for (j in 1:count_cluster) {
       if(length(result) < 350 & length(result) > 3){
         writeXStringSet(result, paste(new_dir,"/","bic",k,".txt.fa",sep=""),format = "fasta",width=promoter_len)
         #write.table(tmp, paste(new_dir,"/",colnames(tmp),".txt.fa",sep=""),sep="\t",quote = F ,col.names=FALSE,row.names=FALSE)
-      } else if (length(result) >= 350 ){
+      } else if (length(result) >= 300 ){
         this_bin <- length(result) %/% 4
         small_idx <- seq(1,length(result),by=this_bin)
         for (p in 1:length(small_idx)) {

@@ -1,17 +1,12 @@
 install_all <- function(){
   bioc_packages <- c(
-    "BSgenome.Celegans.UCSC.ce11", "TxDb.Celegans.UCSC.ce11.refGene",
     "BSgenome.Hsapiens.UCSC.hg38", "TxDb.Hsapiens.UCSC.hg38.knownGene",
     "BSgenome.Mmusculus.UCSC.mm10", "TxDb.Mmusculus.UCSC.mm10.knownGene",
-    "BSgenome.Scerevisiae.UCSC.sacCer3", "TxDb.Scerevisiae.UCSC.sacCer3.sgdGene",
-    "BSgenome.Drerio.UCSC.danRer10","TxDb.Drerio.UCSC.danRer10.refGene",
-    "BSgenome.Dmelanogaster.UCSC.dm6","TxDb.Dmelanogaster.UCSC.dm6.ensGene",
-    "org.Ce.eg.db", "org.Dm.eg.db", "org.Dr.eg.db", "org.Sc.sgd.db", "org.Mm.eg.db","org.Hs.eg.db",
-    "monocle","GenomicAlignments","ensembldb","kebabs"
-    
+    "org.Mm.eg.db","org.Hs.eg.db",
+    "monocle","GenomicAlignments","ensembldb"
   )
   cran_packages <- c(
-    "seqinr","base","stringr","Seurat","tidyverse","rlist","hdf5r","Matrix","plotly","RColorBrewer","Polychrome","ggplot2"
+    "seqinr","base","stringr","Seurat","tidyverse","rlist","hdf5r","Matrix","RColorBrewer","Polychrome","ggplot2"
   )
   bioc_np <- bioc_packages[!(bioc_packages %in% installed.packages()[,"Package"])]
   cran_np <- cran_packages[!(cran_packages %in% installed.packages()[,"Package"])]

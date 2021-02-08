@@ -17,8 +17,8 @@ wd <- args[1] # filtered expression file name
 jobid <- args[2] # user job id
 # wd<-getwd()
 ####test
-# wd <- "/var/www/html/iris3/data/20200418125257"
-# jobid <-20200418125257 
+# wd <- "/var/www/html/iris3/data/2021011983232"
+# jobid <-2021011983232 
 # setwd(wd)
 
 quiet <- function(x) { 

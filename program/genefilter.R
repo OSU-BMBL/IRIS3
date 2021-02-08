@@ -49,7 +49,7 @@ if(is.na(delim)){
 } else if(delim == 'tab'){
   delim <- '\t'
 } else if(delim == 'space'){
-  delim <- ' '
+  delim <- ''
 } else if(delim == 'semicolon'){
   delim <- ';'
 }else {

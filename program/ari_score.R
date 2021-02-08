@@ -9,11 +9,11 @@ delim <- args[3] #label file delimiter
 label_use_predict <- 0 #default 0
 label_use_predict <- args[4] # 1 for have label use sc3, 2 for have label use label, 0 for no label use sc3
 
-# setwd("/var/www/html/iris3/data/20201227230847i")
-# label_file = "NSCCless_CELL_two_label.csv"
-# jobid <- "20201227230847i"
+# setwd("/var/www/html/iris3/data/2021011983232")
+# label_file = "1"
+# jobid <- "2021011983232"
 # delim <- ","
-# label_use_predict <- 2
+# label_use_predict <- 0
 if(delim == 'tab'){
   delim <- '\t'
 }
