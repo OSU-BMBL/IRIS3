@@ -575,7 +575,7 @@ if (label_use_predict =='2'){
     my.object <- AddMetaData(my.object, as.character(original_cell_info), col.name = "Provided.idents")
     cell_info[,2] <- as.numeric(as.factor(cell_info[,2]))
     rownames(cell_info) <- cell_info[,1]
-    cell_info <- cell_info[,-1]
+    cell_info <- cell_info[, 2]
   } else {
     cell_info <-  my.object$seurat_clusters 
     my.object <- AddMetaData(my.object, cell_info, col.name = "Provided.idents")
