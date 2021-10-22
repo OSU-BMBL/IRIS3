@@ -43,6 +43,7 @@ n_pc <- args[8] # number of principle components
 n_variable_feature <- args[9] # number of highly variable genes 
 label_use_predict <- args[10] # 0 for using Seurat clusters, 2 for using user's label,
 remove_ribosome <- args[11] # Yes or No
+is_trajectory <- args[12] # Yes or No
 
 if(is.na(delim)){
   delim <- ','
@@ -60,11 +61,11 @@ label_file
 load_test_data <- function(){
   rm(list = ls(all = TRUE))
   # 
-  # setwd("/var/www/html/iris3/data/20201021225212/")
-  expr_file = "AD00101_expr.txt.gz"
-  jobid <- "20201021225212"
-  delim <- "\t"
-  label_file<-'AD00101_cell_label.txt'
+  # setwd("/var/www/html/iris3/data/2021082825932/")
+  expr_file = "Zei_expression.csv"
+  jobid <- "20210824104157"
+  delim <- ","
+  label_file<-'Zei_index_label.csv'
   delimiter <- ','
   is_imputation <- 'No'
   n_pc <- "10"
@@ -72,6 +73,7 @@ load_test_data <- function(){
   resolution_seurat <- 0.8
   label_use_predict <- '2'
   remove_ribosome <- 'No'
+  is_trajectory <- 'No'
 }
 
 ##############################
@@ -367,7 +369,7 @@ my.object <- CreateSeuratObject(expFile)
 if (upload_type == "TenX.folder" | upload_type == "TenX.h5"){
   my.object[["percent.mt"]] <- PercentageFeatureSet(my.object, pattern = "^MT-")
   my.object <- (subset(my.object, subset = nCount_RNA > 200 & nFeature_RNA < 5000 & percent.mt < 5))
-}
+} 
 
 ## get raw data################################  
 my.count.data<-GetAssayData(object = my.object[['RNA']],slot="counts")
@@ -377,10 +379,8 @@ sce<-SingleCellExperiment(list(counts=my.count.data))
 ## if all values are integers, perform normalization, otherwise skip to imputation
 if(all(as.numeric(unlist(my.count.data[nrow(my.count.data),]))%%1==0)){
   ## normalization##############################
-  sce <- tryCatch(computeSumFactors(sce),error = function(e1) {
-    tryCatch(normalizeSCE(sce),error = function(e2){
-      LogNormalize(my.count.data)
-    })
+  sce <- tryCatch(normalizeSCE(sce),error = function(e2){
+    LogNormalize(my.count.data)
   })
   if (class(sce)[1] == "dgCMatrix") {
     my.normalized.data <- sce
@@ -913,7 +913,7 @@ quiet(dev.off())
 #
 
 #my.trajectory<-SingleCellExperiment(assays=List(counts=GetAssayData(object = my.object[['RNA']],slot="counts")))
-if(ncol(my.object) < 30000){
+if(ncol(my.object) < 30000 & is_trajectory == "Yes"){
   my.trajectory<-SingleCellExperiment(
     assays = list(
       counts = GetAssayData(object = my.object[['RNA']],slot="counts")
@@ -935,4 +935,3 @@ if(ncol(my.object) < 30000){
   Plot.Cluster.Trajectory(customized= T,start.cluster=NULL,add.line = T,end.cluster=NULL,show.constraints=T)
   quiet(dev.off())
 }
-

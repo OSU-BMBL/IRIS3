@@ -488,7 +488,7 @@ $(document).ready(function() {
   <form method="POST" action="{{$URL}}" encType="multipart/form-data" id="needs-validation">
     <div class="text-center"> <a href="submit.php"><button type="button" class="btn btn-submit  btn-lg">Single scRNA-seq dataset</button></a>
       <a href="submit_integration.php"><button type="button" class="btn  btn-light btn-lg">Multiple scRNA-seq dataset integration</button></a>
-      <a href="submit_atac.php"><button type="button" class="btn btn-light btn-lg">scRNA-seq & scATAC-seq integration</button></a> </div>
+      <!--<a href="submit_atac.php"><button type="button" class="btn btn-light btn-lg">scRNA-seq & scATAC-seq integration</button></a>--> </div>
 
 		<h2 class="text-center">Job Submission</h2>
 		<div class="form-group row">
@@ -683,7 +683,6 @@ $(document).ready(function() {
                 <h4 class="font-italic text-left">QUBIC2:</h4>
             <div class="form-group row">
               <div class="col-md-4">
-                <!--<input class="form-check-input" type="checkbox" name="is_c" id="is_c" value="1">-->
                 <label class="form-check-label" for="is_c">Enable dual strategy in bi-clustering.
                   <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Enable dual strategy for QUBIC2 biclustering optimization. Time consuming. Not recommended for 10X data. Default: disabled."> </span> 
                  </label>
@@ -807,6 +806,21 @@ $(document).ready(function() {
 										<option>750</option>
 										<option data-subtext="Default" selected="selected">1000</option>
 										<option>2000</option>
+									</select>
+								</div>
+              </div>
+              <h4 class="font-italic text-left">Slingshot:</h4>
+							<div class="form-group  row">
+								<div class="col-md-4">
+									<label for="ex2">Enable trajectory inference.
+									 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Enable trajectory inference by Slingshot. (Default: Yes)"> </span> 
+									</label>
+									
+								</div>
+								<div class="col-md-4">
+								<select id="is_trajectory" class="selectpicker" name="is_trajectory" data-width="auto">
+										<option data-subtext="Default" selected="selected">Yes</option>
+										<option>No</option>
 									</select>
 								</div>
               </div>

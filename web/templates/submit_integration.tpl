@@ -553,7 +553,7 @@ $(document).ready(function() {
     
     <div class="text-center"> <a href="submit.php"><button type="button" class="btn btn-light btn-lg">Single scRNA-seq dataset</button></a>
       <a href="submit_integration.php"><button type="button" class="btn btn-submit btn-lg">Multiple scRNA-seq dataset integration</button></a>
-      <a href="submit_atac.php"><button type="button" class="btn btn-light btn-lg">scRNA-seq & scATAC-seq integration</button></a> </div>
+      <!--<a href="submit_atac.php"><button type="button" class="btn btn-light btn-lg">scRNA-seq & scATAC-seq integration</button></a>--> </div>
 		<h2 class="text-center">Job submission - Multiple scRNA-seq dataset integration</h2>
 		<div class="form-group row">
 			<div class="form-check col-sm-12 ">

@@ -59,10 +59,14 @@ if (isset($_POST['submit']))
 	$workdir = "./data/$jobid";
 	mkdir($workdir);
 	$is_imputation = $_POST['is_imputation'];
+	$is_trajectory = $_POST['is_trajectory'];
 	$remove_ribosome = $_POST['remove_ribosome'];
 	$is_c = $_POST['is_c'];
 	if($is_imputation =="") {
 		$is_imputation = '0';
+	}
+	if($is_trajectory =="") {
+		$is_trajectory = '0';
 	}
 	if($is_c =="Yes") {
 		$is_c = '-C';
@@ -157,7 +161,7 @@ if (isset($_POST['submit']))
 	}
 	}
 	$fp = fopen("$workdir/info.txt", 'w');
-	fwrite($fp,"is_load_exp,$is_load_exp\nk_arg,$k_arg\nf_arg,$f_arg\no_arg,$o_arg\nresolution_seurat,$resolution_seurat\nn_variable_features,$n_variable_features\nn_pca,$n_pca\nlabel_use_predict,$label_use_predict\nexpfile,$expfile\nlabelfile,$labelfile\ngene_module_file,$gene_module_file\nis_imputation,$is_imputation\nremove_ribosome,$remove_ribosome\nis_c,$is_c\npromoter_arg,$promoter_arg\nbic_inference,$label_use_predict");
+	fwrite($fp,"is_load_exp,$is_load_exp\nk_arg,$k_arg\nf_arg,$f_arg\no_arg,$o_arg\nresolution_seurat,$resolution_seurat\nn_variable_features,$n_variable_features\nn_pca,$n_pca\nlabel_use_predict,$label_use_predict\nexpfile,$expfile\nlabelfile,$labelfile\ngene_module_file,$gene_module_file\nis_imputation,$is_imputation\nremove_ribosome,$remove_ribosome\nis_c,$is_c\npromoter_arg,$promoter_arg\nbic_inference,$label_use_predict\nis_trajectory,$is_trajectory");
 	fclose($fp);
 	$fp = fopen("$workdir/running_status.txt", 'w');
 	fwrite($fp,"preprocessing");
@@ -178,7 +182,7 @@ jobid=$jobid
 motif_min_length=12
 motif_max_length=12
 perl $BASE/program/prepare_email1.pl \$jobid\n
-Rscript $BASE/program/genefilter.R \$jobid \$wd\$exp_file $delim \$label_file $delim_label $is_imputation $resolution_seurat $n_pca $n_variable_features $label_use_predict $remove_ribosome
+Rscript $BASE/program/genefilter.R \$jobid \$wd\$exp_file $delim \$label_file $delim_label $is_imputation $resolution_seurat $n_pca $n_variable_features $label_use_predict $remove_ribosome $is_trajectory
 echo gene_module_detection > running_status.txt\n
 #unzip $expfile
 #cp \$(basename \"$expfile\" .zip).txt \$wd\$jobid\_filtered_expression.txt
@@ -223,17 +227,20 @@ Rscript $BASE/program/process_tomtom_result.R \$jobid\n
 mkdir json
 $BASE/program/build_clustergrammar.sh \$wd \$jobid $label_use_predict\n
 
-zip -R \$wd\$jobid '*.regulon_gene_id.txt' '*.regulon_gene_symbol.txt' '*.regulon_rank.txt' '*_silh.txt' '*umap_embeddings.txt' '*.regulon_activity_score.txt' '*_cell_label.txt' '*.blocks' '*_blocks.conds.txt' '*_blocks.gene.txt' '*_filtered_expression.txt' '*_gene_id_name.txt' '*_marker_genes.txt' 'cell_cluster_unique_diffrenetially_expressed_genes.txt' '*_combine_regulon.txt'\n
+zip -R \$wd\$jobid 'seurat_obj.rds' '*.regulon_gene_id.txt' '*.regulon_gene_symbol.txt' '*.regulon_rank.txt' '*_silh.txt' '*umap_embeddings.txt' '*.regulon_activity_score.txt' '*_cell_label.txt' '*.blocks' '*_blocks.conds.txt' '*_blocks.gene.txt' '*_filtered_expression.txt' '*_gene_id_name.txt' '*_marker_genes.txt' 'cell_cluster_unique_diffrenetially_expressed_genes.txt' '*_combine_regulon.txt'\n
 perl $BASE/program/prepare_email.pl \$jobid\n
 echo 'finish'> done\n  
 #chmod -R 755 .
+rm \$wd\$jobid\_filtered_expression.txt
+rm \$wd\$jobid\_filtered_expression.txt.chars
+
 ");
 
 	fclose($fp);
 	session_destroy();
 	#system("chmod -R 755 $workdir2");
 	system("cp $workdir/../index.php $workdir");
-  system("cd $workdir; nohup sh qsub.sh > output.txt &");
+    system("cd $workdir; nohup sh qsub.sh > output.txt &");
 	##shell_exec("$workdir/qsub.sh>$workdir/output.txt &");
 	#header("Location: results.php?jobid=$jobid");
 	header("Location: results.php?jobid=$jobid");
