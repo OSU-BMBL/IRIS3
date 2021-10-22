@@ -35,13 +35,13 @@ if(window.location.hash == ""){
 					</a>
 					<div class="submenu" id="submenu-1basics"></div>
 				</li>
-				<li>
+				<!--<li>
 					<a href="#2log">
 						<span class="section">Update log</span>
 						
 					</a>
 					<div class="submenu" id="submenu-2submission"></div>
-				</li>
+				</li>-->
 								
 			</ul>
 			
