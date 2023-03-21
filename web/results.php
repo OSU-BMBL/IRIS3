@@ -4,7 +4,8 @@ require("config/common.php");
 require("config/tools.php");
         
 $page = $_SERVER['PHP_SELF'];
-$jobid=$_GET['jobid'];
+#$jobid=$_GET['jobid'];
+$jobid = preg_replace("/\D+/", "", $_GET['jobid']);
 $pvalue=$_GET['pvalue'];
 if(empty($pvalue)) {
 	$pvalue="0.05";

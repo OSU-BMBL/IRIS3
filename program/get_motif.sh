@@ -1,11 +1,12 @@
 #!/bin/bash
-cores=16
+cores=20
 dir=$1
 min_length=$2
 max_length=$3
 is_meme=$4
 files="$(find $dir -maxdepth 2 -name "bic*fa" -print)"
 meme_index="$(find $dir -maxdepth 2 -name "bic*fa" -print|wc -l)"
+meme_index=$((meme_index+10))
 echo "$files"
 while read -r species; do 
 	for file in $files ;

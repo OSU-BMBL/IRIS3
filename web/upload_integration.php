@@ -42,9 +42,11 @@ if (!empty($_FILES)) {
     }
     $_SESSION['jobid'] = $jobid;
     $workdir = "./data/$jobid/";
+    $upload_dir = "/var/www/html_archive/iris3_upload/$jobid/";
     if (!file_exists($workdir)) {
         mkdir($workdir);
-        mkdir($workdir."/input");
+        mkdir($upload_dir);
+        mkdir($upload_dir."/input");
     }
     #check php.ini reach maximum upload size
     $temp_file = $_FILES['file']['tmp_name'];
@@ -56,7 +58,7 @@ if (!empty($_FILES)) {
         $new_array['index'][] = '1';
 		
         $new_array['gene_num'][] = 100;
-        if (is_dir($workdir."input/sample".$sample_index)){
+        if (is_dir($upload_dir."input/sample".$sample_index)){
             $new_array['data'][] = '0';
         }   else{
             $new_array['data'][] = "1";
@@ -68,7 +70,7 @@ if (!empty($_FILES)) {
 		break;
 	case "application/zip":
         $new_array['index'][] = '1';
-		if (is_dir($workdir."/input/sample".$sample_index)){
+		if (is_dir($upload_dir."/input/sample".$sample_index)){
             $new_array['data'][] = '00';
         }   else{
             $new_array['data'][] = '10';
@@ -167,23 +169,25 @@ if (!empty($_FILES)) {
         $expfile = str_replace(" ", "_", $expfile);
         $expfile = str_replace(array('(', ')'), '_', $expfile);
         $_SESSION['expfile'] = $expfile;
-        if (!file_exists($workdir.'/input/sample'.$sample_index)) {
-            mkdir($workdir.'/input/sample'.$sample_index, 0777, true);
+
+        if (!file_exists($upload_dir.'/input/sample'.$sample_index)) {
+            mkdir($upload_dir.'/input/sample'.$sample_index, 0755, true);
         }
-        $location = $workdir.'/input/sample'.$sample_index.'/'.$expfile;
+        #$location = $workdir.'/input/sample'.$sample_index.'/'.$expfile;
+        $location = $upload_dir.'/input/sample'.$sample_index.'/'.$expfile;
         move_uploaded_file($temp_file, $location);
     } else if ($filetype == "dropzone_label") {
         $labelfile = $_FILES['file']['name'];
         $labelfile = str_replace(" ", "_", $labelfile);
         $labelfile = str_replace(array('(', ')'), '_', $labelfile);
-        $location = $workdir . $labelfile;
+        $location = $upload_dir . $labelfile;
         $_SESSION['labelfile'] = $labelfile;
         move_uploaded_file($temp_file, $location);
     } else if ($filetype == "dropzone_gene_module") {
         $gene_module_file = $_FILES['file']['name'];
         $gene_module_file = str_replace(" ", "_", $gene_module_file);
         $gene_module_file = str_replace(array('(', ')'), '_', $gene_module_file);
-        $location = $workdir . $gene_module_file;
+        $location = $upload_dir . $gene_module_file;
         $_SESSION['gene_module_file'] = $gene_module_file;
         move_uploaded_file($temp_file, $location);
     } else {
@@ -232,8 +236,8 @@ if (!empty($_FILES)) {
     if (!file_exists($workdir)) {
         mkdir($workdir);
     }
-    system("cp ./upload/Zeisel_expression.csv $workdir");
-    system("cp ./upload/Zeisel_index_label.csv $workdir");
+    system("cp ./upload/Zeisel_expression.csv $upload_dir");
+    system("cp ./upload/Zeisel_index_label.csv $upload_dir");
     $expfile = 'Zeisel_expression.csv';
     $_SESSION['expfile'] = $expfile;
     $labelfile = 'Zeisel_index_label.csv';

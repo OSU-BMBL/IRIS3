@@ -9,9 +9,9 @@ delim <- args[3] #label file delimiter
 label_use_predict <- 0 #default 0
 label_use_predict <- args[4] # 1 for have label use sc3, 2 for have label use label, 0 for no label use sc3
 
-# setwd("/var/www/html/iris3/data/2021011983232")
-# label_file = "1"
-# jobid <- "2021011983232"
+# setwd("/var/www/html/iris3/data/20230318174612")
+# label_file = "/var/www/html_archive/iris3_upload/20230318174612/1"
+# jobid <- "20230318174612"
 # delim <- ","
 # label_use_predict <- 0
 if(delim == 'tab'){
@@ -49,7 +49,7 @@ predict_cluster <- read.table(paste(jobid,"_predict_label.txt",sep=""),header=T,
 
 #2nd input
 #user_label <- read.delim(label_file,header=T,sep=delim,check.names = FALSE)
-if (label_file == '1') {
+if (label_file == '1' | !file.exists(label_file)) {
   user_label_file <- predict_cluster
 } else {
   user_label_file <- read.delim(label_file,header=T,sep=delim,check.names = FALSE)
@@ -60,7 +60,7 @@ if (label_file == '1') {
   }
   ## when users uploads label with #1,2,3 as rownames
   if(ncol(user_label_file) > 2 && user_label_file[1,1] == 1) {
-    user_label_file <- read.table(label_file,check.names = FALSE, header=T,sep = delimiter, row.names = 1)
+    user_label_file <- read.table(label_file,check.names = FALSE, header=T,sep = delim, row.names = 1)
     user_label_file[,1] <-  gsub('([[:punct:]])|\\s+','_',user_label_file[,1])
     user_label_file[,2] <- as.factor(user_label_file[,2])
   }

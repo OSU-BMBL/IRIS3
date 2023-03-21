@@ -35,7 +35,7 @@
     <script src="assets/js/pace.js"></script>
     </head>
     
-    <a href="https://forms.gle/V5acxpBPZoqyKEcM6" class="take_survey" target="_blank">Take a Survey<i class="fa fa-poll-h"></i></a>
+    <a href="https://osu.az1.qualtrics.com/jfe/form/SV_6KihVYPtHj7FxGJ" class="take_survey" target="_blank">Take a Survey<i class="fa fa-poll-h"></i></a>
     <a href="#scroolup" class="scrolltotop"><i class="fa fa-long-arrow-up"></i></a>
         <div class="header-top-area" id="scroolup">
             <div class="mainmenu-area" id="mainmenu-area">
@@ -80,6 +80,7 @@
                         <div class="footer-copyright text-center wow fadeIn">
                             <p class="m-0 text-center text">© <script>document.write(new Date().getFullYear());</script> <a href="https://u.osu.edu/bmbl/">BMBL</a> | <a href="mailto:qin.ma@osumc.edu" title="qin.ma@osumc.edu">Contact us: qin.ma@osumc.edu</a>  </p>
 							<p class="m-0 text-center text">This website is free and open to all users and there is no login requirement.</p>
+                            <p>Cite us: Ma, A., et al. (2020). IRIS3: integrated cell-type-specific regulon inference server from single-cell RNA-Seq, Nucleic Acids Research, gkaa394.</p>
                         </div>
                     </div>
                 </div>

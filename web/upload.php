@@ -12,6 +12,8 @@ function detectDelimiter($csvFile) {
     }
     return array_search(max($delimiters), $delimiters);
 }
+$filetype = $_POST['filetype'];
+$_SESSION['filetype'] = $filetype;
 $json = $_POST['filename'];
 if (!empty($_FILES)) {
     session_start();
@@ -22,8 +24,10 @@ if (!empty($_FILES)) {
     }
     $_SESSION['jobid'] = $jobid;
     $workdir = "./data/$jobid/";
+    $upload_dir = "/var/www/html_archive/iris3_upload/$jobid/";
     if (!file_exists($workdir)) {
         mkdir($workdir);
+        mkdir($upload_dir);
     }
     #check php.ini reach maximum upload size
     $temp_file = $_FILES['file']['tmp_name'];
@@ -117,10 +121,11 @@ if (!empty($_FILES)) {
         }
 		
 		
-		
-		$fp = fopen("$workdir/upload_type.txt", 'w');
-		fwrite($fp,"CellGene\n");
-		fclose($fp);
+		if($filetype == "dropzone_exp") {
+            $fp = fopen("$workdir/upload_type.txt", 'w');
+            fwrite($fp,"CellGene\n");
+            fclose($fp);
+        }
 		break;
 	case "application/x-hdf":
 		$new_array['index'][] = '1';
@@ -138,27 +143,29 @@ if (!empty($_FILES)) {
 	}
 
     #$response = json_encode($array);
-    $filetype = $_POST['filetype'];
-    $_SESSION['filetype'] = $filetype;
+
     if ($filetype == "dropzone_exp") {
         $expfile = $_FILES['file']['name'];
         $expfile = str_replace(" ", "_", $expfile);
         $expfile = str_replace(array('(', ')'), '_', $expfile);
         $_SESSION['expfile'] = $expfile;
-        $location = $workdir . $expfile;
+        #$location = $workdir . $expfile;
+        $location = $upload_dir . $expfile;
         move_uploaded_file($temp_file, $location);
     } else if ($filetype == "dropzone_label") {
         $labelfile = $_FILES['file']['name'];
         $labelfile = str_replace(" ", "_", $labelfile);
         $labelfile = str_replace(array('(', ')'), '_', $labelfile);
-        $location = $workdir . $labelfile;
+        #$location = $workdir . $labelfile;
+        $location = $upload_dir . $labelfile;
         $_SESSION['labelfile'] = $labelfile;
         move_uploaded_file($temp_file, $location);
     } else if ($filetype == "dropzone_gene_module") {
         $gene_module_file = $_FILES['file']['name'];
         $gene_module_file = str_replace(" ", "_", $gene_module_file);
         $gene_module_file = str_replace(array('(', ')'), '_', $gene_module_file);
-        $location = $workdir . $gene_module_file;
+        #$location = $workdir . $gene_module_file;
+        $location = $upload_dir . $gene_module_file;
         $_SESSION['gene_module_file'] = $gene_module_file;
         move_uploaded_file($temp_file, $location);
     } else {

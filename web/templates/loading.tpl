@@ -1561,7 +1561,9 @@ function terminate_job(item) {
 					<div class="flatPanel panel-heading" style="padding: 20px 20px"><strong>Job ID: {{$jobid}}</strong></div>
                 <div class="panel-body">
 					<div style="text-align: left;">
-                        <p>Job ID not found</p>
+                        <p>Job ID not found  
+												<button type="button" class="btn btn-default" onClick="window.location.reload()">Refresh</button></p>
+												
                     </div>
 					</div>
 					{{elseif $status==="error"}}

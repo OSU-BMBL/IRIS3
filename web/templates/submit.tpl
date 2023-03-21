@@ -864,11 +864,12 @@ $(document).ready(function() {
 										</div>
 									</div>
 							</div>
+              <!--
 							<label class="form-check-label" for="is_imputation">Upload gene module:
 							 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-original-title="Upload a gene module file for additional analysis. The uploaded file can includes single/multiple columns, and each column represents a gene module."> </span> 
 							</label>
 							
-			
+			        
 							<div id="upload_gene_module">
 									<div class="form-group row">
 										<div class="col-sm-4">
@@ -876,8 +877,7 @@ $(document).ready(function() {
 												<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="border:1px solid #c9c9c9;border-radius:.25rem!important">Example <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-													<!--<li><a id="load_gene_module" class="dropdown-item" href="#dropzone_label">Load example file</a>
-													</li>-->
+													
 													<li><a class="dropdown-item" href="/iris3/storage/example_gene_module.csv" download>Download example gene module file</a>
 													</li>
 												</ul>
@@ -887,7 +887,7 @@ $(document).ready(function() {
 			<div id="preview_gene_module"></div>
 										</div>
 									</div>
-							</div>
+							</div>-->
 							
 							
 						</div>

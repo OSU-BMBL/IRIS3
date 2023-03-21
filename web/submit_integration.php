@@ -125,9 +125,9 @@ if (isset($_POST['submit']))
     fclose($fp);
 
 	$workdir2 = "./data/$jobid/";
-	
+	$upload_dir = "/var/www/html_archive/iris3_upload/$jobid/";
 
-	$delim = detectDelimiter("$workdir2/$expfile");
+	$delim = detectDelimiter("$upload_dir/$expfile");
 	if($delim=="\t"){
 		$delim = "tab";
 	} else if($delim==" "){
@@ -137,7 +137,7 @@ if (isset($_POST['submit']))
 	} else {
 		$delim = ",";
 	}
-	$delim_label = detectDelimiter("$workdir2/$labelfile");
+	$delim_label = detectDelimiter("$upload_dir/$labelfile");
 		if($delim_label=="\t"){
 		$delim_label = "tab";
 	}
@@ -145,7 +145,7 @@ if (isset($_POST['submit']))
 		$delim_label = "space";
 	}
 	if ($gene_module_file != "") {
-	$delim_gene_module = detectDelimiter("$workdir2/$gene_module_file");
+	$delim_gene_module = detectDelimiter("$upload_dir/$gene_module_file");
 	if($delim_gene_module=="\t"){
 		$delim_gene_module = "tab";
 	}
@@ -175,7 +175,8 @@ jobid=$jobid
 motif_min_length=12
 motif_max_length=12
 #perl $BASE/program/prepare_email1.pl \$jobid\n
-Rscript $BASE/program/genefilter_integration.R \$jobid \$wd\$exp_file $delim \$label_file $delim_label $is_imputation $resolution_seurat $n_pca $n_variable_features $label_use_predict $remove_ribosome $integration_method_arg
+Rscript $BASE/program/genefilter_integration.R \$jobid $upload_dir $delim \$label_file $delim_label $is_imputation $resolution_seurat $n_pca $n_variable_features $label_use_predict $remove_ribosome $integration_method_arg
+rm -r \$upload_dir/input
 echo gene_module_detection > running_status.txt\n
 $BASE/program/qubic2/qubic -i \$wd\$jobid\_filtered_expression.txt -q $q_arg -c $c_arg -k $k_arg -o $o_arg -f $f_arg $is_c
 for file in *blocks
@@ -187,6 +188,7 @@ do
 grep Genes \$file |cut -d ':' -f2 >\"$(basename \$jobid\_blocks.gene.txt)\"
 done
 Rscript $BASE/program/ari_score.R \$label_file \$jobid $delim_label $label_use_predict
+rm \$wd\$labelfile
 echo gene_module_assignment > running_status.txt\n
 Rscript $BASE/program/cts_gene_list.R \$wd \$jobid $promoter_arg $gene_module_file $delim_gene_module \n
 echo motif_finding_and_comparison > running_status.txt\n

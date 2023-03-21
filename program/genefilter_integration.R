@@ -32,7 +32,7 @@ suppressPackageStartupMessages(library(harmony))
 
 args <- commandArgs(TRUE)
 jobid <- args[1] # user job id
-expr_file <- args[2] # raw user filename
+upload_dir <- args[2] # upload dir
 delim <- args[3] #delimiter for expr matrix
 label_file <- 1
 label_file <- args[4] # user label file name or 1
@@ -63,6 +63,7 @@ load_test_data <- function(){
   # setwd("C:/Users/flyku/Desktop/liyang")
   setwd("/var/www/html/iris3/data/20210117115300")
   jobid <- "20210117115300"
+  upload_dir <- ""
   delim <- ","
   label_file <- "combined_cell_labels.txt"
   delimiter <- '\t'
@@ -180,20 +181,20 @@ read_data<-function(x=NULL,read.method=NULL,sep="\t",...){
 
 getwd()
 
-input_dir <- list.dirs("input")[-1]
-input_gene_file <- list.files("input",recursive = T,pattern = "genes.tsv.gz$")
+input_dir <- list.dirs(paste0(upload_dir, "input"), full.names = T)[-1]
+input_gene_file <- list.files(paste0(upload_dir, "input"),recursive = T,pattern = "genes.tsv.gz$", full.names = T)
 
-all_files <- list.files("input",recursive = T)
+all_files <- list.files(paste0(upload_dir, "input"),recursive = T, full.names = T)
 
 fileConn<-file("integration_input.txt")
-writeLines(all_files, fileConn)
+writeLines(basename(all_files), fileConn)
 close(fileConn)
 
 # For old files named as genes.tsv.gz
 if(length(input_gene_file) > 0) {
   for (i in 1:length(input_gene_file)) {
-    tmp_dir <- strsplit(input_gene_file,"/")[[1]][1]
-    system(paste0("cp input/",input_gene_file[i], " input/",tmp_dir,"/features.tsv.gz"))
+    tmp_dir <- dirname(input_gene_file[i])
+    system(paste0("cp ", upload_dir, "input/",input_gene_file[i], " ",tmp_dir,"/features.tsv.gz"))
   }
 }
 

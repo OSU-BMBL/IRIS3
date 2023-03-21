@@ -254,7 +254,7 @@ if (upload_type == "CellGene"){
   if(length(which(is.na(expFile[,1]))) > 0){
     expFile <- expFile[-which(is.na(expFile[,1])),]
   }
-  rownames(expFile) <- expFile[,1]
+  rownames(expFile) <- noquote(expFile[,1])
   expFile<- expFile[,-1]
 } else{
   ## User uploads unfiltered matrix, 730k cells.
@@ -267,6 +267,7 @@ if (upload_type == "CellGene"){
 }
 
 total_cell_num <- ncol(expFile)
+expFile[1:15,1:5]
 
 
 # detect rownames gene list with identifer by the largest number of matches: 1) gene symbol. 2)ensembl geneid. 3) ncbi entrez id. 4)
@@ -448,7 +449,7 @@ rm(expFile)
 rm(sce)
 rm(db)
 
-if (label_file == 0 | label_file==1){
+if (basename(label_file) == 0 | basename(label_file)==1){
   cell_info <- colnames(exp_data)
 } else {
   if(delimiter == 'tab'){

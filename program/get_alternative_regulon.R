@@ -5,7 +5,6 @@
 library(scales)
 library(sgof)
 library(ggplot2)
-library(dabestr)
 require(xml2)
 require(XML)
 library(seqinr)

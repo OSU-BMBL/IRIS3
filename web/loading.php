@@ -5,8 +5,8 @@ require_once("config/smarty.php");
 require_once("lib/spyc.php");
 //error_reporting(E_ERROR | E_PARSE);
 //require_once("lib/hmmer.php");
-$jobid=$_GET['jobid'];
-
+#$jobid=$_GET['jobid'];
+$jobid = preg_replace("/\D+/", "", $_GET['jobid']);
 $pvalue=$_GET['pvalue'];
 if(empty($pvalue)) {
 	$pvalue="0.05";
@@ -34,7 +34,7 @@ if (file_exists("$DATAPATH/$jobid/running_status.txt")){
 }
 
 if (file_exists("$DATAPATH/$jobid/error_message.txt")){
-	$error_message = `head -n1 "$DATAPATH/$jobid/error_message.txt"`;
+	$error_message = `head -n20 "$DATAPATH/$jobid/error_message.txt"`;
 	$error_message = preg_replace( "/\r|\n/", "", $error_message);
 }
 
