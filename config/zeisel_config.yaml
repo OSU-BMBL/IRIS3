@@ -1,0 +1,29 @@
+# IRIS3 config for Zeisel mouse brain dataset
+input:
+  expression_file: /data/zeisel_seurat.rds
+  expression_format: rds
+  label_column: seurat_clusters  # Use Seurat clusters since cell_type failed
+
+species: Mouse
+
+preprocessing:
+  resolution_seurat: 0.8
+  n_pcs: 20
+  n_variable_features: 5000
+
+biclustering:
+  k: 20
+  q: 0.06
+  o: 100
+
+motif:
+  promoter_length: 1000
+  use_meme: true
+  num_motifs: 3
+
+execution:
+  threads: 8
+  job_id: zeisel
+
+output:
+  keep_intermediates: false

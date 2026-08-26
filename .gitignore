@@ -2,3 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
+__pycache__/
+*.py[cod]

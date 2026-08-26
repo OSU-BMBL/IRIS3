@@ -22,7 +22,7 @@ wait
 
 
 files="$(find $dir -maxdepth 2 -name "*.fsa" -print)"
-$count = 0
+count=0
 for file in $files ;
 do
 	while :; do
@@ -34,7 +34,7 @@ do
 	done
 	#if grep -q $(basename "$file" .fsa) "total_motif_list.txt"; then
 	echo "$count"
-	$count = $count + 1
+	((count++))
 	perl /var/www/html/iris3/program/dminda/motif_tools/align2uniprobe.pl $file | perl /var/www/html/iris3/program/dminda/motif_tools/uniprobe2meme > $file.meme &
 	#mkdir tomtom/$(basename "$file" .fsa)
 	#mkdir tomtom/$(basename "$file" .fsa)/HOCOMOCO

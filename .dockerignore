@@ -1,0 +1,57 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv
+venv
+env
+.pytest_cache
+*.egg-info
+dist
+build
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Output and data
+output/
+data/
+*.h5
+*.h5ad
+*.rds
+
+# Web server files (not needed for CLI)
+web/
+html/
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Tests
+tests/
+.coverage
+htmlcov/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+nohup.out
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+temp/

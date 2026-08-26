@@ -1,0 +1,29 @@
+# Test config for Seurat object input
+input:
+  expression_file: /data/seurat_obj.rds
+  expression_format: rds
+  label_column: cell_label  # Use cell_label from previous pipeline run
+
+species: Human
+
+preprocessing:
+  resolution_seurat: 0.8
+  n_pcs: 10
+  n_variable_features: 5000
+
+biclustering:
+  k: 20
+  q: 0.06
+  o: 100
+
+motif:
+  promoter_length: 1000
+  use_meme: true
+  num_motifs: 3
+
+execution:
+  threads: 4
+  job_id: seurat_test
+
+output:
+  keep_intermediates: false

@@ -1,0 +1,52 @@
+# IRIS3 Docker Compose Configuration
+#
+# Usage:
+#   docker compose run iris3 run /data/config.yaml -o /output
+#   docker compose run iris3 quick /data/expression.csv --species Human -o /output
+#
+# Or build and run interactively:
+#   docker compose run --rm iris3 bash
+
+services:
+  iris3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      # Mount your data directory
+      - ./data:/data:ro
+      # Mount output directory (writable)
+      - ./output:/output
+      # Optional: mount custom config
+      - ./config:/config:ro
+    working_dir: /output
+    environment:
+      # Number of threads for parallel processing
+      - IRIS3_THREADS=8
+      # R library path (set automatically)
+      - R_LIBS_USER=/usr/local/lib/R/site-library
+    # Resource limits (adjust as needed)
+    deploy:
+      resources:
+        limits:
+          cpus: '8'
+          memory: 32G
+        reservations:
+          cpus: '2'
+          memory: 8G
+
+  # Development service with mounted source code
+  iris3-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./data:/data:ro
+      - ./output:/output
+      - ./iris3:/app/iris3:ro
+      - ./r_modules:/app/r_modules:ro
+      - ./config:/config:ro
+    working_dir: /output
+    environment:
+      - IRIS3_THREADS=8
+      - IRIS3_DEBUG=1

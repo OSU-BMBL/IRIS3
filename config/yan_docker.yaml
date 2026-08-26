@@ -1,0 +1,38 @@
+# IRIS3 Docker Configuration for Yan 2013 Human Embryo Data
+# Use with: docker run -v $(pwd)/data:/data -v $(pwd)/output:/output iris3 run /app/config/yan_docker.yaml -o /output/yan
+
+input:
+  expression_file: "/data/Yan_2013_expression.csv"
+  expression_format: "auto"
+  delimiter: ","
+  label_file: "/data/Yan_2013_label.csv"
+  label_delimiter: ","
+
+species: "Human"
+
+preprocessing:
+  resolution_seurat: 0.8
+  n_pcs: 10
+  n_variable_features: 2000
+  enable_imputation: false
+  remove_ribosome: false
+  enable_trajectory: false
+  use_provided_labels: true
+
+biclustering:
+  k: 15
+  q: 0.06
+  f: 0.7
+  o: 200
+  enable_continuous: false
+
+motif:
+  promoter_length: 1000
+  min_motif_length: 12
+  max_motif_length: 12
+  use_meme: true
+  num_motifs: 3
+
+execution:
+  threads: 16
+  checkpoint_interval: 1

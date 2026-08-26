@@ -1,0 +1,62 @@
+# IRIS3 Example Configuration
+# Use with: iris3 run config/example_config.yaml -o output/
+
+input:
+  # Required: Path to expression matrix
+  expression_file: "data/Zeisel_expression.csv"
+  # Format: auto, csv, tsv, h5, 10x_folder
+  expression_format: "auto"
+  # Delimiter for CSV/TSV files
+  delimiter: ","
+  # Optional: Cell labels file (if not provided, uses Seurat clustering)
+  label_file: "data/Zeisel_index_label.csv"
+  # Optional: Custom gene modules file
+  gene_module_file: null
+
+# Required: Species (Human or Mouse)
+species: "Mouse"
+
+preprocessing:
+  # Seurat clustering resolution (0.1-5.0)
+  resolution_seurat: 0.8
+  # Number of principal components
+  n_pcs: 10
+  # Number of highly variable features
+  n_variable_features: 5000
+  # Enable DrImpute imputation
+  enable_imputation: false
+  # Remove ribosomal genes
+  remove_ribosome: false
+  # Enable trajectory analysis (Slingshot/Monocle)
+  enable_trajectory: false
+  # Use provided labels (true) or Seurat clustering (false)
+  use_provided_labels: true
+
+biclustering:
+  # QUBIC2 consistency threshold
+  k: 20
+  # Quantile threshold
+  q: 0.06
+  # Filter proportion
+  f: 0.7
+  # Max output biclusters
+  o: 500
+  # Enable continuous mode (-C flag)
+  enable_continuous: false
+
+motif:
+  # Promoter region length (bp upstream of TSS)
+  promoter_length: 1000
+  # Motif length range
+  min_motif_length: 12
+  max_motif_length: 12
+  # Use MEME (true) or BoBro only (false)
+  use_meme: true
+  # Number of motifs per module
+  num_motifs: 3
+
+execution:
+  # Number of parallel threads
+  threads: 8
+  # Checkpoint interval (save state every N steps, 0 to disable)
+  checkpoint_interval: 1
